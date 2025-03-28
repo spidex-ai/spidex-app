@@ -6,7 +6,7 @@ const Layout = ({ isLandingPage }: { isLandingPage: boolean }) => {
   return (
     <div className={`min-h-screen flex ${!isLandingPage ? 'font-inter bg-background-grey' : 'bg-background-paper'}`}>
       <Sidebar />
-      <main className="flex-1 pl-20 pt-10 bg-background">
+      <main className="flex-1 pt-10 pr-20 bg-background pl-[350px]">
           <Outlet />
           <Toaster />
       </main>

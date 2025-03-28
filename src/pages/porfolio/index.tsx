@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Porfolio = () => {
+const Porfolio: React.FC = () => {
   return (
     <div>Porfolio</div>
   )

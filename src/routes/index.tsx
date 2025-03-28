@@ -4,6 +4,7 @@ import Layout from '@/components/Layout/Layout';
 import Token from '@/pages/token';
 import Account from '@/pages/account';
 import Porfolio from '@/pages/porfolio';
+import ComponentBase from '@/pages/ui';
 
 const router = createBrowserRouter([
   {
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
       {
         path: 'porfolio',
         element: <Porfolio />,
+      },
+      {
+        path: 'base-component',
+        element: <ComponentBase />,
       }
     ],
   },

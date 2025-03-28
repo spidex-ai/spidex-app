@@ -1,8 +1,12 @@
 import React from 'react'
-
-const Account = () => {
+import { GradientOutlineButton } from '@/components/Button';
+import ConnectWallet from '@/components/Layout/ConnectWallet';
+const Account: React.FC = () => {
   return (
-    <div>Account</div>
+    <div>
+      <GradientOutlineButton />
+      <ConnectWallet />
+    </div>
   )
 }
 

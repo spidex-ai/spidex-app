@@ -52,6 +52,13 @@ import ChatIconBlink from "./icons/chat-icon-blink.svg?react";
 import TokenWhiteIcon from "./icons/token-icon-white.svg?react";
 import ProfileWhiteIcon from "./icons/profile-icon-white.svg?react";
 import SendIcon from "./icons/send-icon.svg?react";
+import LogoAgentIcon from "./icons/logo-agent-icon.svg?react";
+import TradingAgentIcon from "./icons/trading-agent-icon.svg?react";
+import MarketAgentIcon from "./icons/market-agent-icon.svg?react";
+import PortfolioAgentIcon from "./icons/porfolio-agent-icon.svg?react"; 
+import IntelligenceAgentIcon from "./icons/intelligence-agent-icon.svg?react"; 
+import AdaIcon from "./icons/ada-icon.svg?react";
+import UnMarkIcon from "./icons/unmark-icon.svg?react";
 
 export {
   LargeWorld,
@@ -108,4 +115,11 @@ export {
   TokenWhiteIcon, 
   ProfileWhiteIcon,
   SendIcon,
+  LogoAgentIcon,
+  TradingAgentIcon,
+  MarketAgentIcon,
+  PortfolioAgentIcon,
+  IntelligenceAgentIcon,
+  AdaIcon,
+  UnMarkIcon
 };
