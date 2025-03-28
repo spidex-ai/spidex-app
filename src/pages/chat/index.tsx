@@ -1,6 +1,7 @@
+import React from 'react';
 import { GradientOutlineButton } from '@/components/Button';
 import ConnectWallet from '@/components/Layout/ConnectWallet';
-export default function Chat() {
+const Chat: React.FC = () => {
   return (
     <div>
       <ConnectWallet />
@@ -8,3 +9,5 @@ export default function Chat() {
     </div>
   )
 }
+
+export default Chat

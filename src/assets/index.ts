@@ -44,6 +44,14 @@ import SendRight from "./icons/send-right.svg?react";
 import Hamburger from "./icons/hamburger.svg?react";
 import RocketLaunch from "./icons/rocket-lauch.svg?react";
 import Ada from "./icons/ada.svg?react";
+import CollapseIcon from "./icons/collapse.svg?react";
+import PlusBlinkIcon from "./icons/plus-blink.svg?react";
+import ArrowGrayIconDown from "./icons/arrow-gray-icon-down.svg?react"; 
+import ArrowGrayIcon from "./icons/arrow-gray-icon.svg?react";
+import ChatIconBlink from "./icons/chat-icon-blink.svg?react";
+import TokenWhiteIcon from "./icons/token-icon-white.svg?react";
+import ProfileWhiteIcon from "./icons/profile-icon-white.svg?react";
+import SendIcon from "./icons/send-icon.svg?react";
 
 export {
   LargeWorld,
@@ -92,4 +100,12 @@ export {
   Hamburger,
   RocketLaunch,
   Ada,
+  CollapseIcon,
+  PlusBlinkIcon,
+  ArrowGrayIconDown, 
+  ArrowGrayIcon,
+  ChatIconBlink,
+  TokenWhiteIcon, 
+  ProfileWhiteIcon,
+  SendIcon,
 };

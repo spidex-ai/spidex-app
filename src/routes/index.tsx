@@ -1,6 +1,9 @@
 import Chat from '@/pages/chat';
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 import Layout from '@/components/Layout/Layout';
+import Token from '@/pages/token';
+import Account from '@/pages/account';
+import Porfolio from '@/pages/porfolio';
 
 const router = createBrowserRouter([
   {
@@ -8,14 +11,26 @@ const router = createBrowserRouter([
     element: <Layout isLandingPage={false} />,
     children: [
       {
-        index: true,
+        path: 'chat',
         element: <Chat />,
       },
+      {
+        path: 'token',
+        element: <Token />,
+      },
+      {
+        path: 'account',
+        element: <Account />,
+      },
+      {
+        path: 'porfolio',
+        element: <Porfolio />,
+      }
     ],
   },
   {
     path: '', 
-    element: <Navigate to="/app" replace />
+    element: <Navigate to="/app/chat" replace />
   }
 ]);
 
