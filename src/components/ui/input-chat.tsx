@@ -4,7 +4,7 @@ import SendIcon from "@/assets/icons/send-icon.svg?react";
 
 const InputChat: React.FC = (props: TextareaProps) => {
   return (
-    <Box className="relative max-w-4xl mx-auto">
+    <Box className="relative">
       <Box position="relative">
         <Textarea
         placeholder="Ask Spider anything..."

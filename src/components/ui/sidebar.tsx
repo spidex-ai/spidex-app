@@ -13,6 +13,8 @@ import {
   ProfileWhiteIcon,
 } from "@/assets";
 import { Link } from "react-router-dom";
+import ConnectWallet from "../Layout/ConnectWallet";
+import { XIcon, TelegramIcon } from "@/assets";
 
 const Sidebar: React.FC = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -113,7 +115,7 @@ const Sidebar: React.FC = () => {
                       <Box
                         opacity={isCollapsed ? 0 : 1}
                         transition="all 0.3s ease"
-                        whiteSpace="nowrap" 
+                        whiteSpace="nowrap"
                         overflow="hidden"
                         width={isCollapsed ? 0 : "auto"}
                         display="flex"
@@ -207,6 +209,43 @@ const Sidebar: React.FC = () => {
                   </Box>
                 </Link>
               </Box>
+            </Box>
+          </Box>
+        </Box>
+
+        <Box
+          position="absolute"
+          bottom="20px"
+          left="0"
+          right="0"
+          padding="10px"
+        >
+          <Box h="1px" w="100%" bg="#5D717D99" marginTop="10px" />
+          <Box className={`${isCollapsed ? "flex flex-col items-center" : ""}`}>
+            <Box className="mt-4">
+              <ConnectWallet isCollapsed={isCollapsed} />
+            </Box>
+
+            <Box
+              className={`mt-4 flex items-center gap-2 ${
+                isCollapsed ? "justify-center px-2" : ""
+              }`}
+            >
+              <Box>
+                <XIcon />
+              </Box>
+              {!isCollapsed && <Box>Follow Us</Box>}
+            </Box>
+
+            <Box
+              className={`mt-4 flex items-center gap-2 ${
+                isCollapsed ? "justify-center px-2" : ""
+              }`}
+            >
+              <Box className="cursor-pointer">
+                <TelegramIcon />
+              </Box>
+              {!isCollapsed && <Box>Join Telegram</Box>}
             </Box>
           </Box>
         </Box>

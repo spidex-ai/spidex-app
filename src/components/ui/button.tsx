@@ -53,13 +53,35 @@ export const MainButton = (props: any) => {
 };
 
 export const GradientButton = (props: any) => {
+  const { isLoading, children, ...rest } = props;
   return (
-    <button className="bg-gradient-to-r from-[#009EFF] to-[#BBF985] text-black px-6 md:px-10 py-2 md:py-3 rounded-lg font-semibold hover:opacity-90 transition-all duration-200 cursor-pointer">
+    <button 
+      {...rest}
+    className="bg-gradient-to-r from-[#009EFF] to-[#BBF985] text-black px-6 md:px-10 py-2 md:py-3 rounded-lg font-semibold hover:opacity-90 transition-all duration-200 cursor-pointer"
+    >
       {props.children}
     </button>
   );
 };
 
+export const GradientButtonIcon = (props: any) => {
+  const { isLoading, children, ...rest } = props;
+  return (
+    <button 
+      {...rest}
+    className="bg-gradient-to-r from-[#009EFF] to-[#BBF985] text-black px-2 md:px-2 py-2 md:py-2 rounded-lg font-semibold hover:opacity-90 transition-all duration-200 cursor-pointer"
+    >
+      {props.children}
+    </button>
+  );
+}
+
+export const GradientBorderButton = (props: any) =>  {
+  const { isLoading, children, ...rest } = props;
+  return (
+    <button {...rest} className="gradient-border cursor-pointer">{children}</button>
+  );
+}
 interface AgentButtonProps {
     onClick: () => void;
     icon: React.ReactNode;

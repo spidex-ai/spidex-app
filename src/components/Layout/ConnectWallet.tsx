@@ -1,4 +1,4 @@
-import { Google, Nami, XLogin, Yoroi } from "@/assets";
+import { ConnectWalletIcon, Google, NamiIcon, XLogin, Yoroi } from "@/assets";
 import {
   Box,
   CloseButton,
@@ -34,12 +34,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { useGoogleLogin } from "@/hooks/useSocialLogin";
 import { useSearchParams } from "react-router-dom";
 import { MenuContent, MenuItem, MenuRoot, MenuTrigger } from "../ui/menu";
-import { MainButton } from "../Button";
+import { GradientButton, GradientButtonIcon } from "../ui/button";
 // Define wallet methods
 const WALLET_METHODS = [
   {
     name: "Lace",
-    icon: <Nami />,
+    icon: <NamiIcon />,
     description: "Connect Lace Wallet",
   },
   {
@@ -65,7 +65,12 @@ const SOCIAL_METHODS = [
   },
 ];
 
-const ConnectWallet = () => {
+type ConnectWalletProps = {
+  isCollapsed?: boolean;
+};
+
+const ConnectWallet = (props: ConnectWalletProps) => {
+  const { isCollapsed } = props;
   // Wallet connection state
   const [walletConnecting, setWalletConnecting] = useState<string | null>(null);
   const [isConnecting, setIsConnecting] = useState(false);
@@ -348,7 +353,7 @@ const ConnectWallet = () => {
     return (
       <MenuRoot>
         <MenuTrigger asChild>
-          <MainButton>{formattedAddress}</MainButton>
+          <GradientButton>{formattedAddress}</GradientButton>
         </MenuTrigger>
         <MenuContent>
           <MenuItem value="disconnect" onClick={handleSignOut}>
@@ -362,7 +367,20 @@ const ConnectWallet = () => {
   return (
     <DialogRoot placement="center">
       <DialogTrigger asChild>
-        <MainButton>Connect Wallet</MainButton>
+        {isCollapsed ? (
+          <GradientButtonIcon>
+            <ConnectWalletIcon />
+          </GradientButtonIcon>
+        ) : (
+          <GradientButton>
+            <div className="flex items-center gap-2">
+              <div>
+                <ConnectWalletIcon />
+              </div>
+              <div>Connect Wallet</div>
+            </div>
+          </GradientButton>
+        )}
       </DialogTrigger>
       <Portal>
         <DialogBackdrop />

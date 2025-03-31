@@ -13,7 +13,10 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <ChakraProvider>
       <Provider store={store}>
         <QueryClientProvider client={queryClient}>
-          <App />
+
+            <App />
+
+
         </QueryClientProvider>
       </Provider>
     </ChakraProvider>
