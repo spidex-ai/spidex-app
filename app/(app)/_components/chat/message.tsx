@@ -4,7 +4,7 @@ import React from 'react'
 
 import { usePrivy } from '@privy-io/react-auth';
 
-import { Markdown, Icon, Logo, Avatar, AvatarFallback, AvatarImage } from '@/components/ui';
+import { Markdown, Icon, Avatar, AvatarFallback, AvatarImage, LogoChat } from '@/components/ui';
 
 import Link from './link';
 
@@ -75,7 +75,7 @@ const Message: React.FC<Props> = ({ message, ToolComponent, className, previousM
                             </Avatar>
                             
                         ) : (
-                            <Logo className={cn("h-10 w-10", compressed && "h-6 w-6")} />
+                            <LogoChat className={cn("h-10 w-10", compressed && "h-6 w-6")} />
                         )
                     }
                 </div>

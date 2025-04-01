@@ -17,7 +17,7 @@ const dmMono = DM_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "The Hive",
+  title: "Spidex",
   description: "A modular network of interoperable DeFi agents",
 };
 

@@ -8,6 +8,8 @@ import ChatsGroup from './chats-group';
 import AccountButton from './account-button';
 import PortfolioButton from './portfolio-button';
 import SavedTokensGroup from './saved-tokens-group';
+import Points from './points';
+import RefferalProgram from './referral-program';
 
 const SidebarMenu: React.FC = () => {
     return (
@@ -16,6 +18,8 @@ const SidebarMenu: React.FC = () => {
             <SavedTokensGroup />
             <AccountButton />
             <PortfolioButton />
+            <Points />
+            <RefferalProgram />
         </SidebarMenuUI>
     )
 }

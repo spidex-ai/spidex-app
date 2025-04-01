@@ -22,7 +22,7 @@ import SidebarMenu from './sidebar-menu';
 
 import OpenSidebarTrigger from './open-sidebar-trigger';
 import ClosedSidebarTrigger from './closed-sidebar-trigger';
-import ColorModeToggle from './color-mode-toggle';
+// import ColorModeToggle from './color-mode-toggle';
 import MobileNavbar from './mobile-navbar';
 
 interface Props {
@@ -38,7 +38,7 @@ const Sidebar: React.FC<Props> = ({ children }) => {
                     <div className="flex items-center justify-between">
                         <Logo />
                         <div className="flex items-center gap-2">
-                            <ColorModeToggle />
+                            {/* <ColorModeToggle /> */}
                             <OpenSidebarTrigger />
                         </div>
                     </div>

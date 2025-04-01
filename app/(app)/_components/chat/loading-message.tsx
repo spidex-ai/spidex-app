@@ -4,7 +4,7 @@ import React from 'react'
 
 import { AnimatedShinyText } from '@/components/ui';
 
-import Logo from '@/components/ui/logo';
+import { LogoChat } from '@/components/ui/logo';
 
 import { cn } from '@/lib/utils';
 
@@ -24,7 +24,7 @@ const LoadingMessage: React.FC<Props> = ({ compressed }) => {
             "md:gap-4 md:px-4",
             compressed && "md:gap-2 md:px-2 px-0",
         )}>
-            <Logo 
+            <LogoChat 
                 className={cn(
                     "w-6 h-6 md:w-10 md:h-10",
                 )}
