@@ -19,7 +19,7 @@ export default {
   				'300': '#fff041',
   				'400': '#ffe00d',
   				'500': '#ffd100',
-  				'600': '#d19900',
+  				'600': '#BBF985',
   				'700': '#a66d02',
   				'800': '#89550a',
   				'900': '#74450f',
@@ -30,7 +30,7 @@ export default {
   				dark: '#ffffff'
   			},
   			sidebar: {
-  				DEFAULT: 'hsl(var(--sidebar-background))',
+  				DEFAULT: 'var(--sidebar-background)',
   				foreground: 'hsl(var(--sidebar-foreground))',
   				primary: 'hsl(var(--sidebar-primary))',
   				'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
@@ -38,8 +38,11 @@ export default {
   				'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
   				border: 'hsl(var(--sidebar-border))',
   				ring: 'hsl(var(--sidebar-ring))',
-  				active: 'hsl(var(--sidebar-active))'
-  			}
+  				active: 'var(--sidebar-active)'
+  			},
+			main: {
+				DEFAULT: 'var(--main-background)',
+			}
   		},
   		borderRadius: {
   			lg: 'var(--radius)',

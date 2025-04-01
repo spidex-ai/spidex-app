@@ -79,6 +79,8 @@ const ChatsGroup: React.FC = () => {
         }
     };
 
+    const isActive = pathname.includes('/chat');
+
     return (
         <Collapsible className="group/collapsible" open={isOpen} onOpenChange={setIsOpen}>
             <SidebarMenuItem>
@@ -88,7 +90,7 @@ const ChatsGroup: React.FC = () => {
                     >
                         <SidebarMenuButton 
                             className="justify-between w-full"
-                            isActive={pathname.includes('/chat')}
+                            isActive={isActive}
                         >
                             <div className="flex items-center justify-between w-full">
                                 <div className="flex items-center gap-2">

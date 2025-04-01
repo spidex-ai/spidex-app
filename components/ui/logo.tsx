@@ -13,14 +13,14 @@ export const Logo: React.FC<Props> = ({ className, showText = false, textClassNa
     return (
         <div className="flex items-center gap-2">
             <Image 
-                src="/logo.png" 
+                src="/icons/logo.svg" 
                 alt="Logo" 
                 width={100} 
                 height={100} 
                 className={cn("w-10 h-10 hidden dark:block", className)} 
             />
             <Image 
-                src="/logo.png" 
+                 src="/icons/logo.svg" 
                 alt="Logo" 
                 width={100} 
                 height={100} 
@@ -28,9 +28,30 @@ export const Logo: React.FC<Props> = ({ className, showText = false, textClassNa
             />
             {showText && (
                 <h3 className={cn("text-lg font-bold", textClassName)}>
-                    The Hive
+                    Spidex AI
                 </h3>
             )}
+        </div>
+    )
+}
+
+export const LogoChat: React.FC<Props> = ({ className }) =>{
+    return (
+        <div className="flex items-center gap-2">
+             <Image 
+                src="/icons/logo-chat.svg" 
+                alt="Logo" 
+                width={100} 
+                height={100} 
+                className={cn("w-10 h-10 hidden dark:block", className)} 
+            />
+            <Image 
+                 src="/icons/logo-chat.svg" 
+                alt="Logo" 
+                width={100} 
+                height={100} 
+                className={cn("w-10 h-10 block dark:hidden", className)} 
+            />
         </div>
     )
 }

@@ -25,7 +25,7 @@ export const ColorModeProvider: React.FC<{ children: ReactNode }> = ({ children 
 
     useEffect(() => {
 		const theme = getCookie('theme');
-        setMode(theme === 'dark' ? ColorMode.DARK : ColorMode.LIGHT);
+        setMode(theme === 'light' ? ColorMode.LIGHT : ColorMode.DARK);
 	}, []);
 
     useEffect(() => {

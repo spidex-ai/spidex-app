@@ -6,7 +6,7 @@ import ChatInput from './input';
 import StarterButtons from './starter-buttons';
 
 import { cn } from '@/lib/utils';
-import Logo from '@/components/ui/logo';
+import { LogoChat } from '@/components/ui/logo';
 
 const EmptyChat: React.FC = () => {
 
@@ -17,7 +17,7 @@ const EmptyChat: React.FC = () => {
         )}>
             <div className="flex flex-col items-center justify-center w-full max-w-2xl gap-4 md:gap-8">
                 <div className="flex flex-col gap-4 items-center justify-center">
-                    <Logo className="w-20 h-20" />
+                    <LogoChat className="w-20 h-20" />
                     <div className="flex flex-col gap-1">
                         <h1 className="font-semibold text-center text-2xl">
                             How can <span className="text-brand-600 font-bold inline">We</span> help you?

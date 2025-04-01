@@ -1,9 +1,11 @@
-import {NextRequest} from "next/server";
+// // spidex-app/app/(app)/api/tokens/search/route.ts
+import { NextResponse } from "next/server";
+// import { searchForTokens } from "@/services/search";
 
-import { searchForTokens } from "@/services/search";
-
-export const GET = async (req: NextRequest) => {
-    const q = req.nextUrl.searchParams.get("q");
-    if(!q) return Response.json([]);
-    return Response.json(await searchForTokens(q));
+export const GET = async () => {
+    // const q = req.nextUrl.searchParams.get("q");
+    // if (!q || q.trim() === "") {
+    //     return Response.json({ error: "Query parameter 'q' must be a non-empty string." }, { status: 400 });
+    // }
+    return NextResponse.json({ message: "Tokens GET and added to database" });
 }

@@ -34,7 +34,7 @@ const LoginButton: React.FC = () => {
 
     return (
         <Button
-            variant={'brand'}
+            variant={'default'}
             onClick={() => login()}
             disabled={authenticated}
             className="w-24 h-10"
