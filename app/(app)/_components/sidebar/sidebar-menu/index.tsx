@@ -10,6 +10,7 @@ import PortfolioButton from './portfolio-button';
 import SavedTokensGroup from './saved-tokens-group';
 import Points from './points';
 import RefferalProgram from './referral-program';
+import Portfolio from './portfolio';
 
 const SidebarMenu: React.FC = () => {
     return (
@@ -20,6 +21,7 @@ const SidebarMenu: React.FC = () => {
             <PortfolioButton />
             <Points />
             <RefferalProgram />
+            <Portfolio />
         </SidebarMenuUI>
     )
 }

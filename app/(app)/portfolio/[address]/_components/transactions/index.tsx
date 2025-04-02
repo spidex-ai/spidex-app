@@ -2,8 +2,6 @@
 
 import React from 'react'
 
-import { ArrowLeftRight } from 'lucide-react';
-
 import {
     Card,
     Skeleton,
@@ -20,7 +18,7 @@ import TransactionHash from '@/app/_components/transaction-hash';
 import TokenTransfer from './token-transfer'
 ;
 import { useTransactions } from '@/hooks';
-
+import Image from 'next/image';
 interface Props {
     address: string;
 }
@@ -32,9 +30,8 @@ const Transactions: React.FC<Props> = ({ address }) => {
     return (
         <div className="flex flex-col gap-4">
             <div className="flex items-center gap-2">
-                <ArrowLeftRight
-                    className="w-4 h-4"
-                />
+                <Image src="/icons/transaction-white.svg" width={17} height={15} alt="transactions" className="w-4 h-4" />
+               
                 <h2 className="text-lg font-bold">Transactions</h2>
             </div>
             <Card className="p-2">
@@ -46,7 +43,7 @@ const Transactions: React.FC<Props> = ({ address }) => {
                     ) : (
                         transactions.length > 0 ? (
                             <Table>
-                                <TableHeader>
+                                <TableHeader> 
                                     <TableRow>
                                         <TableHead>Tx Hash</TableHead>
                                         <TableHead className="text-center">Type</TableHead>

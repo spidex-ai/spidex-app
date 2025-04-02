@@ -2,10 +2,9 @@
 
 import React from 'react'
 
-import { Coins } from 'lucide-react';
 
 import Decimal from 'decimal.js';
-
+import Image from 'next/image';
 import {
     Table,
     TableHeader,
@@ -35,7 +34,7 @@ const Tokens: React.FC<Props> = ({ address }) => {
         <div className="flex flex-col gap-4">
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                    <Coins className="w-4 h-4" />
+                    <Image src="/icons/token-white.svg" width={12} height={12} alt="tokens" className="w-4 h-4" />
                     <h2 className="text-lg font-bold">
                         Tokens
                     </h2>

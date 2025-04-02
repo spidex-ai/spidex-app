@@ -5,6 +5,7 @@ import '@/components/utils/suppress-console'
 // import { usePrivy } from '@privy-io/react-auth';
 // import { Skeleton } from '@/components/ui';
 import NotLoggedInAlert from '../../chat/_components/not-logged-in-alert';
+import Information from './informations';
 // import AccountHeading from './heading';
 // import ConnectedAccounts from './connected-accounts';
 
@@ -16,8 +17,8 @@ const Account: React.FC = () => {
 
     return (
         <>
-            <div className="flex flex-col max-w-2xl mx-auto gap-4">
-                <h1 className='text-2xl font-bold'>Account</h1>
+            <div className="flex flex-col min-w-[42rem] mx-auto gap-4">
+                <Information />
                 {/* {user && (
                     <>
                         <AccountHeading user={user} />

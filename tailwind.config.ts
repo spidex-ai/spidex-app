@@ -12,6 +12,13 @@ export default {
   		colors: {
   			background: 'var(--background)',
   			foreground: 'var(--foreground)',
+			border: {
+				main: '#5D717D'
+			},
+			bg: {
+				gray: '#5D717D99',
+				main: '#131E2F'
+			},
   			brand: {
   				'50': '#ffffe7',
   				'100': '#ffffc1',
@@ -27,7 +34,8 @@ export default {
   			},
   			text: {
   				light: '#000000',
-  				dark: '#ffffff'
+  				dark: '#ffffff',
+				gray: '#5D717D'
   			},
   			sidebar: {
   				DEFAULT: 'var(--sidebar-background)',
@@ -38,7 +46,8 @@ export default {
   				'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
   				border: 'hsl(var(--sidebar-border))',
   				ring: 'hsl(var(--sidebar-ring))',
-  				active: 'var(--sidebar-active)'
+  				active: 'var(--sidebar-active)',
+				
   			},
 			main: {
 				DEFAULT: 'var(--main-background)',
