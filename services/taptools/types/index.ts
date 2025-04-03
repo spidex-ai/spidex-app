@@ -232,3 +232,235 @@ export interface AddressUtxo {
     index: number;
     lovelace: string;
 }
+
+export interface NFTAssetSale {
+    buyerStakeAddress: string;
+    price: number;
+    sellerStakeAddress: string;
+    time: number;
+}
+
+export interface NFTCollectionAsset {
+    name: string;
+    rank: number;
+    price: number;
+    image: string;
+}
+
+export interface NFTCollectionHoldersDistribution {
+    '1': number;
+    '2-4': number;
+    '5-9': number;
+    '10-24': number;
+    '25+': number;
+}
+
+export interface NFTCollectionHolderTop {
+    address: string;
+    amount: number;
+}
+
+export interface NFTCollectionHolderTrended {
+    time: number;
+    holders: number;
+}
+
+export interface NFTCollectionListingDepth {
+    count: number;
+    price: number;
+    avg: number;
+    total: number;
+}
+
+export interface NFTCollectionListingIndividual {
+    name: string;
+    image: string;
+    price: number;
+    time: number;
+    market?: string;
+}
+
+export interface NFTCollectionListingTrended {
+    time: number;
+    listings: number;
+    price: number;
+}
+
+export interface NFTCollectionVolumeTrended {
+    time: number;
+    volume: number;
+    sales: number;
+    price: number;
+}
+
+export interface NFTCollectionRarity {
+    [category: string]: {
+        [trait: string]: number;
+    };
+}
+
+export interface NFTCollectionRarityRank {
+    rank: number;
+}
+
+export interface NFTCollectionTraitPrice {
+    [category: string]: {
+        [trait: string]: number;
+    };
+}
+
+export interface NFTMarketVolumeTrended {
+    time: number;
+    value: number;
+}
+
+export interface NFTMarketplaceStats {
+    name: string;
+    volume: number;
+    sales: number;
+    avgSale: number;
+    listings: number;
+    users: number;
+    fees: number;
+    liquidity: number;
+    royalties: number;
+}
+
+export interface NFTTopTimeframe {
+    rank: number;
+    price24hChg: number;
+    price7dChg: number;
+    price30dChg: number;
+    listings: number;
+    logo: string;
+    marketCap: number;
+    name: string;
+    policy: string;
+    price: number;
+    supply: number;
+    volume24h: number;
+    volume7d: number;
+    volume30d: number;
+    volume24hChg: number;
+    volume7dChg: number;
+    volume30dChg: number;
+}
+
+export interface NFTTopVolume {
+    policy: string;
+    name: string;
+    logo: string;
+    price: number;
+    volume: number;
+    listings: number;
+    supply: number;
+    sales: number;
+}
+
+export interface NFTTopVolumeExtended extends NFTTopVolume {
+    pricePctChg: number;
+    volumePctChg: number;
+    listingsPctChg: number;
+    ownersPctChg: number;
+    salesPctChg: number;
+}
+
+export interface TokenDebtLoan {
+    time: number;
+    expiration: number;
+    hash: string;
+    protocol: string;
+    interestToken: string;
+    debtToken: string;
+    collateralToken: string;
+    interestAmount: number;
+    debtAmount: number;
+    collateralAmount: number;
+    interestValue: number;
+    debtValue: number;
+    collateralValue: number;
+    health: number;
+}
+
+export interface TokenDebtOffer {
+    time: number;
+    duration: number;
+    hash: string;
+    protocol: string;
+    interestToken: string;
+    debtToken: string;
+    collateralToken: string;
+    interestAmount: number;
+    debtAmount: number;
+    collateralAmount: number;
+    interestValue: number;
+    debtValue: number;
+    collateralValue: number;
+    health: number;
+}
+
+export interface TokenIndicator {
+    value: number;
+}
+
+export interface WalletPortfolioPosition {
+    adaValue: number;
+    adaBalance: number;
+    numFTs: number;
+    numNFTs: number;
+    liquidValue: number;
+    positionsFt: {
+        ticker: string;
+        balance: number;
+        unit: string;
+        fingerprint: string;
+        price: number;
+        adaValue: number;
+        '24h': number;
+        '7d': number;
+        '30d': number;
+        liquidBalance: number;
+        liquidValue: number;
+    }[];
+    positionsNft: {
+        name: string;
+        policy: string;
+        balance: number;
+        adaValue: number;
+        floorPrice: number;
+        '24h': number;
+        '7d': number;
+        '30d': number;
+        listings: number;
+        liquidValue: number;
+    }[];
+    positionsLp: {
+        ticker: string;
+        unit: string;
+        amountLP: number;
+        tokenA: string;
+        tokenAName: string;
+        tokenAAmount: number;
+        tokenB: string;
+        tokenBName: string;
+        tokenBAmount: number;
+        adaValue: number;
+        exchange: string;
+    }[];
+}
+
+export interface WalletTradeToken {
+    action: string;
+    time: number;
+    tokenA: string;
+    tokenAName: string;
+    tokenAAmount: number;
+    tokenB: string;
+    tokenBName: string;
+    tokenBAmount: number;
+}
+
+export interface WalletValueTrended {
+    time: number;
+    value: number;
+}

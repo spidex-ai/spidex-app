@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useTaptools } from '@/hooks/useTaptools';
-import { TokenTrade } from '@/services/taptools/types';
+import { TokenTrade } from "@/services/taptools/types";
+import React, { useEffect, useState } from "react";
 
 interface TokenTradesProps {
   defaultUnit?: string;
@@ -8,14 +7,14 @@ interface TokenTradesProps {
 }
 
 const TaptoolsTokenTrades: React.FC<TokenTradesProps> = ({
-  defaultUnit = '8fef2d34078659493ce161a6c7fba4b56afefa8535296a5743f6958741414441',
-  defaultTimeframe = '24h'
+  defaultUnit = "8fef2d34078659493ce161a6c7fba4b56afefa8535296a5743f6958741414441",
+  defaultTimeframe = "24h",
 }) => {
   const [unit, setUnit] = useState<string>(defaultUnit);
   const [unitInput, setUnitInput] = useState<string>(defaultUnit);
   const [timeframe, setTimeframe] = useState<string>(defaultTimeframe);
   const [page, setPage] = useState<number>(1);
-  const [perPage, setPerPage] = useState<number>(10);
+  const [perPage] = useState<number>(10);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [trades, setTrades] = useState<TokenTrade[]>([]);
@@ -40,8 +39,8 @@ const TaptoolsTokenTrades: React.FC<TokenTradesProps> = ({
         setTrades(data || []);
         setTotalPages(data.totalPages || 1);
       } catch (err: any) {
-        setError(err.message || 'An error occurred');
-        console.error('Token trades error:', err);
+        setError(err.message || "An error occurred");
+        console.error("Token trades error:", err);
       } finally {
         setLoading(false);
       }
@@ -99,7 +98,7 @@ const TaptoolsTokenTrades: React.FC<TokenTradesProps> = ({
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             disabled={loading}
           >
-            {loading ? 'Loading...' : 'Search'}
+            {loading ? "Loading..." : "Search"}
           </button>
         </div>
       </form>
@@ -107,14 +106,15 @@ const TaptoolsTokenTrades: React.FC<TokenTradesProps> = ({
       {/* Timeframe Selector */}
       <div className="mb-6">
         <div className="flex space-x-2">
-          {['24h', '7d', '30d', 'all'].map((tf) => (
+          {["24h", "7d", "30d", "all"].map((tf) => (
             <button
               key={tf}
               onClick={() => handleTimeframeChange(tf)}
-              className={`px-4 py-2 rounded ${timeframe === tf
-                ? 'bg-blue-500 text-white'
-                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                }`}
+              className={`px-4 py-2 rounded ${
+                timeframe === tf
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+              }`}
             >
               {tf}
             </button>
@@ -130,7 +130,9 @@ const TaptoolsTokenTrades: React.FC<TokenTradesProps> = ({
 
       {/* Trades Table */}
       <div className="bg-white rounded-lg p-4 border border-gray-200 mb-4">
-        <h3 className="text-lg font-semibold mb-3 text-gray-800">Recent Trades</h3>
+        <h3 className="text-lg font-semibold mb-3 text-gray-800">
+          Recent Trades
+        </h3>
         {loading ? (
           <p className="text-gray-500">Loading...</p>
         ) : trades.length > 0 ? (
@@ -147,18 +149,33 @@ const TaptoolsTokenTrades: React.FC<TokenTradesProps> = ({
               </thead>
               <tbody>
                 {trades.map((trade, index) => (
-                  <tr key={index} className={index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
+                  <tr
+                    key={index}
+                    className={index % 2 === 0 ? "bg-gray-50" : "bg-white"}
+                  >
                     <td className="py-2 px-3 text-gray-800">
                       {new Date(trade.time * 1000).toLocaleString()}
                     </td>
                     <td className="py-2 px-3 text-gray-800">
-                      <span className={trade.action === 'buy' ? 'text-green-600' : 'text-red-600'}>
+                      <span
+                        className={
+                          trade.action === "buy"
+                            ? "text-green-600"
+                            : "text-red-600"
+                        }
+                      >
                         {trade.action.toUpperCase()}
                       </span>
                     </td>
-                    <td className="py-2 px-3 text-right text-gray-800">{trade.price} ADA</td>
-                    <td className="py-2 px-3 text-right text-gray-800">{trade.tokenAAmount.toLocaleString()}</td>
-                    <td className="py-2 px-3 text-right text-gray-800">{(trade.price * trade.tokenAAmount).toLocaleString()} ADA</td>
+                    <td className="py-2 px-3 text-right text-gray-800">
+                      {trade.price} ADA
+                    </td>
+                    <td className="py-2 px-3 text-right text-gray-800">
+                      {trade.tokenAAmount.toLocaleString()}
+                    </td>
+                    <td className="py-2 px-3 text-right text-gray-800">
+                      {(trade.price * trade.tokenAAmount).toLocaleString()} ADA
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -175,10 +192,11 @@ const TaptoolsTokenTrades: React.FC<TokenTradesProps> = ({
           <button
             onClick={handlePrevPage}
             disabled={page === 1}
-            className={`px-4 py-2 rounded ${page === 1
-              ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
-              : 'bg-blue-500 text-white hover:bg-blue-700'
-              }`}
+            className={`px-4 py-2 rounded ${
+              page === 1
+                ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                : "bg-blue-500 text-white hover:bg-blue-700"
+            }`}
           >
             Previous
           </button>
@@ -188,10 +206,11 @@ const TaptoolsTokenTrades: React.FC<TokenTradesProps> = ({
           <button
             onClick={handleNextPage}
             disabled={page === totalPages}
-            className={`px-4 py-2 rounded ${page === totalPages
-              ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
-              : 'bg-blue-500 text-white hover:bg-blue-700'
-              }`}
+            className={`px-4 py-2 rounded ${
+              page === totalPages
+                ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                : "bg-blue-500 text-white hover:bg-blue-700"
+            }`}
           >
             Next
           </button>

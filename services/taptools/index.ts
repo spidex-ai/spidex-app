@@ -24,9 +24,33 @@ import {
     NFTCollectionOHLCV,
     NFTCollectionTrade,
     NFTMarketStats,
-    NFTMarketStatsExtended
+    NFTMarketStatsExtended,
+    NFTAssetSale,
+    NFTCollectionAsset,
+    NFTCollectionHoldersDistribution,
+    NFTCollectionHolderTop,
+    NFTCollectionHolderTrended,
+    NFTCollectionListingDepth,
+    NFTCollectionListingIndividual,
+    NFTCollectionListingTrended,
+    NFTCollectionVolumeTrended,
+    NFTCollectionRarity,
+    NFTCollectionRarityRank,
+    NFTCollectionTraitPrice,
+    NFTMarketVolumeTrended,
+    NFTMarketplaceStats,
+    NFTTopTimeframe,
+    NFTTopVolume,
+    NFTTopVolumeExtended,
+    TokenDebtLoan,
+    TokenDebtOffer,
+    TokenIndicator,
+    WalletPortfolioPosition,
+    WalletTradeToken,
+    WalletValueTrended,
+    AddressInfo,
+    AddressUtxo
 } from './types';
-
 
 export class TaptoolsService {
     private client: TaptoolsClient;
@@ -297,6 +321,407 @@ export class TaptoolsService {
         return this.client.get<NFTMarketStatsExtended>('nft/market/stats/extended', { timeframe });
     }
 
+    // NFT Endpoints (Additional)
+
+    /**
+     * Get NFT asset sales history
+     * @param policy - Collection policy ID
+     * @param name - NFT name
+     * @returns Promise with NFT asset sales history
+     */
+    async getNFTAssetSales(policy: string, name: string): Promise<NFTAssetSale[]> {
+        return this.client.get<NFTAssetSale[]>('nft/asset/sales', { policy, name });
+    }
+
+    /**
+     * Get NFT collection assets
+     * @param policy - Collection policy ID
+     * @param sortBy - Sort by (price or rank)
+     * @param order - Sort order (asc or desc)
+     * @param search - Search by name
+     * @param onSale - Filter by on sale status
+     * @param page - Page number
+     * @param perPage - Items per page
+     */
+    async getNFTCollectionAssets(
+        policy: string,
+        sortBy = 'price',
+        order = 'asc',
+        search?: string,
+        onSale = 0,
+        page = 1,
+        perPage = 100
+    ): Promise<NFTCollectionAsset[]> {
+        return this.client.get<NFTCollectionAsset[]>('nft/collection/assets', {
+            policy,
+            sortBy,
+            order,
+            search,
+            onSale,
+            page,
+            perPage
+        });
+    }
+
+    /**
+     * Get NFT collection holders distribution
+     * @param policy - Collection policy ID
+     */
+    async getNFTCollectionHoldersDistribution(policy: string): Promise<NFTCollectionHoldersDistribution> {
+        return this.client.get<NFTCollectionHoldersDistribution>('nft/collection/holders/distribution', { policy });
+    }
+
+    /**
+     * Get NFT collection top holders
+     * @param policy - Collection policy ID
+     * @param page - Page number
+     * @param perPage - Items per page
+     * @param excludeExchanges - Whether to exclude exchange addresses
+     */
+    async getNFTCollectionTopHolders(
+        policy: string,
+        page = 1,
+        perPage = 10,
+        excludeExchanges = 1
+    ): Promise<NFTCollectionHolderTop[]> {
+        return this.client.get<NFTCollectionHolderTop[]>('nft/collection/holders/top', {
+            policy,
+            page,
+            perPage,
+            excludeExchanges
+        });
+    }
+
+    /**
+     * Get NFT collection trended holders
+     * @param policy - Collection policy ID
+     * @param timeframe - Time frame
+     */
+    async getNFTCollectionTrendedHolders(
+        policy: string,
+        timeframe = '30d'
+    ): Promise<NFTCollectionHolderTrended[]> {
+        return this.client.get<NFTCollectionHolderTrended[]>('nft/collection/holders/trended', {
+            policy,
+            timeframe
+        });
+    }
+
+    /**
+     * Get NFT collection listings depth
+     * @param policy - Collection policy ID
+     * @param items - Number of items to return
+     */
+    async getNFTCollectionListingsDepth(
+        policy: string,
+        items = 500
+    ): Promise<NFTCollectionListingDepth[]> {
+        return this.client.get<NFTCollectionListingDepth[]>('nft/collection/listings/depth', {
+            policy,
+            items
+        });
+    }
+
+    /**
+     * Get NFT collection individual listings
+     * @param policy - Collection policy ID
+     * @param sortBy - Sort by field
+     * @param order - Sort order
+     * @param page - Page number
+     * @param perPage - Items per page
+     */
+    async getNFTCollectionIndividualListings(
+        policy: string,
+        sortBy = 'price',
+        order = 'asc',
+        page = 1,
+        perPage = 100
+    ): Promise<NFTCollectionListingIndividual[]> {
+        return this.client.get<NFTCollectionListingIndividual[]>('nft/collection/listings/individual', {
+            policy,
+            sortBy,
+            order,
+            page,
+            perPage
+        });
+    }
+
+    /**
+     * Get NFT collection trended listings
+     * @param policy - Collection policy ID
+     * @param interval - Time interval
+     * @param numIntervals - Number of intervals
+     */
+    async getNFTCollectionTrendedListings(
+        policy: string,
+        interval: string,
+        numIntervals?: number
+    ): Promise<NFTCollectionListingTrended[]> {
+        return this.client.get<NFTCollectionListingTrended[]>('nft/collection/listings/trended', {
+            policy,
+            interval,
+            numIntervals
+        });
+    }
+
+    /**
+     * Get NFT collection trended volume
+     * @param policy - Collection policy ID
+     * @param interval - Time interval
+     * @param numIntervals - Number of intervals
+     */
+    async getNFTCollectionTrendedVolume(
+        policy: string,
+        interval: string,
+        numIntervals?: number
+    ): Promise<NFTCollectionVolumeTrended[]> {
+        return this.client.get<NFTCollectionVolumeTrended[]>('nft/collection/volume/trended', {
+            policy,
+            interval,
+            numIntervals
+        });
+    }
+
+    /**
+     * Get NFT collection rarity
+     * @param policy - Collection policy ID
+     */
+    async getNFTCollectionRarity(policy: string): Promise<NFTCollectionRarity> {
+        return this.client.get<NFTCollectionRarity>('nft/collection/traits/rarity', { policy });
+    }
+
+    /**
+     * Get NFT rarity rank
+     * @param policy - Collection policy ID
+     * @param name - NFT name
+     */
+    async getNFTRarityRank(policy: string, name: string): Promise<NFTCollectionRarityRank> {
+        return this.client.get<NFTCollectionRarityRank>('nft/collection/traits/rarity/rank', { policy, name });
+    }
+
+    /**
+     * Get NFT collection trait prices
+     * @param policy - Collection policy ID
+     * @param name - NFT name (optional)
+     */
+    async getNFTCollectionTraitPrices(policy: string, name?: string): Promise<NFTCollectionTraitPrice> {
+        return this.client.get<NFTCollectionTraitPrice>('nft/collection/traits/price', { policy, name });
+    }
+
+    /**
+     * Get NFT market volume trended
+     * @param timeframe - Time frame
+     */
+    async getNFTMarketVolumeTrended(timeframe = '30d'): Promise<NFTMarketVolumeTrended[]> {
+        return this.client.get<NFTMarketVolumeTrended[]>('nft/market/volume/trended', { timeframe });
+    }
+
+    /**
+     * Get NFT marketplace stats
+     * @param timeframe - Time frame
+     * @param marketplace - Marketplace name
+     * @param lastDay - Filter to last day only
+     */
+    async getNFTMarketplaceStats(
+        timeframe = '7d',
+        marketplace?: string,
+        lastDay = 0
+    ): Promise<NFTMarketplaceStats[]> {
+        return this.client.get<NFTMarketplaceStats[]>('nft/marketplace/stats', {
+            timeframe,
+            marketplace,
+            lastDay
+        });
+    }
+
+    /**
+     * Get NFT top rankings
+     * @param ranking - Ranking criteria
+     * @param items - Number of items
+     */
+    async getNFTTopRankings(ranking: string, items = 25): Promise<NFTTopTimeframe[]> {
+        return this.client.get<NFTTopTimeframe[]>('nft/top/timeframe', { ranking, items });
+    }
+
+    /**
+     * Get NFT top volume collections
+     * @param timeframe - Time frame
+     * @param page - Page number
+     * @param perPage - Items per page
+     */
+    async getNFTTopVolume(
+        timeframe = '24h',
+        page = 1,
+        perPage = 10
+    ): Promise<NFTTopVolume[]> {
+        return this.client.get<NFTTopVolume[]>('nft/top/volume', { timeframe, page, perPage });
+    }
+
+    /**
+     * Get NFT top volume collections (extended)
+     * @param timeframe - Time frame
+     * @param page - Page number
+     * @param perPage - Items per page
+     */
+    async getNFTTopVolumeExtended(
+        timeframe = '24h',
+        page = 1,
+        perPage = 10
+    ): Promise<NFTTopVolumeExtended[]> {
+        return this.client.get<NFTTopVolumeExtended[]>('nft/top/volume/extended', {
+            timeframe,
+            page,
+            perPage
+        });
+    }
+
+    // Token Debt Endpoints
+
+    /**
+     * Get active P2P loans
+     * @param unit - Token unit
+     * @param include - Filter by token usage
+     * @param sortBy - Sort by field
+     * @param order - Sort order
+     * @param page - Page number
+     * @param perPage - Items per page
+     */
+    async getTokenDebtLoans(
+        unit: string,
+        include = 'collateral,debt',
+        sortBy = 'time',
+        order = 'desc',
+        page = 1,
+        perPage = 100
+    ): Promise<TokenDebtLoan[]> {
+        return this.client.get<TokenDebtLoan[]>('token/debt/loans', {
+            unit,
+            include,
+            sortBy,
+            order,
+            page,
+            perPage
+        });
+    }
+
+    /**
+     * Get active P2P loan offers
+     * @param unit - Token unit
+     * @param include - Filter by token usage
+     * @param sortBy - Sort by field
+     * @param order - Sort order
+     * @param page - Page number
+     * @param perPage - Items per page
+     */
+    async getTokenDebtOffers(
+        unit: string,
+        include = 'collateral,debt',
+        sortBy = 'time',
+        order = 'desc',
+        page = 1,
+        perPage = 100
+    ): Promise<TokenDebtOffer[]> {
+        return this.client.get<TokenDebtOffer[]>('token/debt/offers', {
+            unit,
+            include,
+            sortBy,
+            order,
+            page,
+            perPage
+        });
+    }
+
+    /**
+     * Get token price indicators
+     * @param unit - Token unit
+     * @param interval - Time interval
+     * @param items - Number of items
+     * @param indicator - Indicator type
+     * @param length - Data length
+     * @param smoothingFactor - Smoothing factor
+     * @param fastLength - Fast length for MACD
+     * @param slowLength - Slow length for MACD
+     * @param signalLength - Signal length for MACD
+     * @param stdMult - Standard deviation multiplier
+     * @param quote - Quote currency
+     */
+    async getTokenIndicators(
+        unit: string,
+        interval: string,
+        items?: number,
+        indicator = 'ma',
+        length?: number,
+        smoothingFactor?: number,
+        fastLength?: number,
+        slowLength?: number,
+        signalLength?: number,
+        stdMult?: number,
+        quote = 'ADA'
+    ): Promise<TokenIndicator[]> {
+        return this.client.get<TokenIndicator[]>('token/indicators', {
+            unit,
+            interval,
+            items,
+            indicator,
+            length,
+            smoothingFactor,
+            fastLength,
+            slowLength,
+            signalLength,
+            stdMult,
+            quote
+        });
+    }
+
+    // Wallet Portfolio Endpoints
+
+    /**
+     * Get wallet portfolio positions
+     * @param address - Wallet address
+     */
+    async getWalletPortfolioPositions(address: string): Promise<WalletPortfolioPosition> {
+        return this.client.get<WalletPortfolioPosition>('wallet/portfolio/positions', { address });
+    }
+
+    /**
+     * Get wallet token trade history
+     * @param address - Wallet address
+     * @param unit - Token unit
+     * @param page - Page number
+     * @param perPage - Items per page
+     */
+    async getWalletTokenTrades(
+        address: string,
+        unit?: string,
+        page = 1,
+        perPage = 100
+    ): Promise<WalletTradeToken[]> {
+        return this.client.get<WalletTradeToken[]>('wallet/trades/tokens', {
+            address,
+            unit,
+            page,
+            perPage
+        });
+    }
+
+    /**
+     * Get wallet value trended
+     * @param address - Wallet address
+     * @param timeframe - Time frame
+     * @param quote - Quote currency
+     */
+    async getWalletValueTrended(
+        address: string,
+        timeframe = '30d',
+        quote = 'ADA'
+    ): Promise<WalletValueTrended[]> {
+        return this.client.get<WalletValueTrended[]>('wallet/value/trended', {
+            address,
+            timeframe,
+            quote
+        });
+    }
+
     // Onchain Endpoints
 
     /**
@@ -313,8 +738,8 @@ export class TaptoolsService {
      * @param address - Cardano address
      * @returns Promise with address information
      */
-    async getAddressInfo(address: string): Promise<any> {
-        return this.client.get<any>('address/info', { address });
+    async getAddressInfo(address: string): Promise<AddressInfo> {
+        return this.client.get<AddressInfo>('address/info', { address });
     }
 
     /**
@@ -324,8 +749,8 @@ export class TaptoolsService {
      * @param perPage - Items per page (default: 100, max: 100)
      * @returns Promise with address UTXOs
      */
-    async getAddressUTXOs(address: string, page = 1, perPage = 100): Promise<any[]> {
-        return this.client.get<any[]>('address/utxos', { address, page, perPage });
+    async getAddressUTXOs(address: string, page = 1, perPage = 100): Promise<AddressUtxo[]> {
+        return this.client.get<AddressUtxo[]>('address/utxos', { address, page, perPage });
     }
 
     // Market Endpoints
@@ -344,4 +769,4 @@ export class TaptoolsService {
 export const taptoolsService = new TaptoolsService();
 
 // Export types and classes
-export default taptoolsService;
+export default taptoolsService; 
