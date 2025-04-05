@@ -25,6 +25,7 @@ import OpenSidebarTrigger from './open-sidebar-trigger';
 import ClosedSidebarTrigger from './closed-sidebar-trigger';
 // import ColorModeToggle from './color-mode-toggle';
 import MobileNavbar from './mobile-navbar';
+import Image from 'next/image'
 
 interface Props {
     children: React.ReactNode;
@@ -58,10 +59,10 @@ const Sidebar: React.FC<Props> = ({ children }) => {
                                 asChild 
                             >
                                 <Link 
-                                    href={"https://x.com/askthehive_ai"} 
+                                    href={process.env.NEXT_PUBLIC_X_URL || ''} 
                                     target={'_blank'}
                                 >
-                                    <FaXTwitter />
+                                    <Image src="/icons/x-white.svg" alt="twitter" width={15} height={15} />
                                     <span className='truncate'>Follow Us</span>
                                 </Link>
                             </SidebarMenuButton>
@@ -71,11 +72,11 @@ const Sidebar: React.FC<Props> = ({ children }) => {
                                 asChild 
                             >
                                 <Link 
-                                    href={"https://discord.gg/8TVcFvySWG"} 
+                                    href={process.env.NEXT_PUBLIC_TELEGRAM_URL || ''} 
                                     target={'_blank'}
                                 >
-                                    <FaDiscord />
-                                    <span className='truncate'>Join Discord</span>
+                                    <Image src="/icons/tele-white.svg" alt="telegram" width={15} height={15} />
+                                    <span className='truncate'>Join Telegram</span>
                                 </Link>
                             </SidebarMenuButton>
                         </SidebarMenuItem>

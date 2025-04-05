@@ -19,11 +19,14 @@ import {
     DropdownMenuItem,
     useSidebar,
     Skeleton,
+    GradientButtonIcon,
+    GradientButton,
 } from '@/components/ui';
 
 import Balances from './balances';
 
 import { truncateAddress } from '@/lib/wallet';
+import Image from 'next/image';
 
 const AuthButton: React.FC = () => {
 
@@ -32,23 +35,39 @@ const AuthButton: React.FC = () => {
         }
     });
 
-    const { isMobile } = useSidebar();
+    const { isMobile, open } = useSidebar();
 
     if (!ready) return <Skeleton className="w-full h-8" />;
+
+    const handleConnectWallet = () => {
+        console.log('xxxxxxx');
+        
+        if(user) {
+            linkWallet()
+        } else {
+            console.log('xxxxxxx');
+            
+            login()
+        }
+    }
 
     if (!user || !user.wallet) return (
         <SidebarMenu>
             <SidebarMenuItem>
-                <SidebarMenuButton 
-                    variant="brandOutline"
-                    onClick={() => { if(user) { linkWallet() } else { login() } }}
-                    className="w-full justify-center gap-0"
-                >
-                    <LogIn className="h-4 w-4" />
-                    <span className="ml-2">
-                        Connect Wallet
-                    </span>
-                </SidebarMenuButton>
+                {
+                    open ? (
+                        <GradientButton  onClick={handleConnectWallet}>
+                           <div className='flex gap-2'>
+                           <Image src="/icons/connect-wallet.svg" alt="connect-wallet" width={15} height={15} /> 
+                            <div>Connect Wallet</div>
+                           </div>
+                        </GradientButton>
+                    ) : (
+                        <GradientButtonIcon  onClick={handleConnectWallet}>
+                            <Image src="/icons/connect-wallet.svg" alt="connect-wallet" width={15} height={15} />
+                        </GradientButtonIcon>
+                    )
+                }
             </SidebarMenuItem>
         </SidebarMenu>
     )
@@ -58,16 +77,20 @@ const AuthButton: React.FC = () => {
             <SidebarMenuItem>
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <SidebarMenuButton
-                            className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-                            variant="brandOutline"
-                        >
-                            <Wallet className="size-8" />
-                            <span className="ml-2">
-                                {truncateAddress(user.wallet.address)}
-                            </span>
-                        <ChevronsUpDown className="ml-auto size-4" />
-                        </SidebarMenuButton>
+                        {
+                            open ? (
+                                <GradientButton>
+                                    <div>
+                                        <Image src="/icons/wallet.svg" alt="wallet-wallet" width={15} height={15} /> 
+                                        <div>{truncateAddress(user.wallet.address)}</div>
+                                    </div>
+                                </GradientButton>
+                            ) : (
+                                <GradientButtonIcon>
+                                    <Image src="/icons/wallet.svg" alt="wallet-wallet-1" width={15} height={15} />
+                                </GradientButtonIcon>
+                            )
+                        }
                     </DropdownMenuTrigger>
                     <DropdownMenuContent
                         className="w-[--radix-dropdown-menu-trigger-width] min-w-80 rounded-lg"

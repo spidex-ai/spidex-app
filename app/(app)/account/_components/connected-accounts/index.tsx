@@ -16,7 +16,7 @@ const ConnectedAccounts: React.FC<Props> = ({ user }) => {
   const { linkTwitter, linkGoogle } = usePrivy();
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 mt-8">
       <TextGradient className="text-2xl font-bold">
         Connected Accounts
       </TextGradient>

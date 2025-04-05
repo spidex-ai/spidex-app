@@ -19,7 +19,7 @@ import { usePrivy } from '@privy-io/react-auth';
 import FollowUpSuggestions from './follow-up-suggestions';
 
 const ChatInput: React.FC = () => {
-
+    const [isFocused, setIsFocused] = React.useState(false);
     const { user } = usePrivy();
 
     const { input, setInput, onSubmit, isLoading, model, setModel, inputDisabledMessage } = useChat();
@@ -38,6 +38,8 @@ const ChatInput: React.FC = () => {
         <div className="flex flex-col gap-1 w-full">
             <FollowUpSuggestions />
             <form
+                onFocus={() => setIsFocused(true)}
+                onBlur={() => setIsFocused(false)}
                 onSubmit={(e) => {
                     e.preventDefault();
                     onSubmit();
@@ -46,13 +48,15 @@ const ChatInput: React.FC = () => {
                     // Base styles
                     "w-full rounded-md flex flex-col overflow-hidden transition-colors duration-200 ease-in-out border border-transparent shadow-none",
                     // Light mode styles
-                    "bg-neutral-100 focus-within:border-brand-600",
+                    // "bg-neutral-100 focus-within:border-brand-600",
                     // Dark mode styles
-                    "dark:bg-neutral-800/50 dark:focus-within:border-brand-600",
-                    isLoading && "opacity-50 cursor-not-allowed"
+                    "dark:bg-neutral-800/50",
+                    isLoading && "opacity-50 cursor-not-allowed",
+                    `${isFocused ? 'gradient-border-wrapper' : ''}`
                 )}
             >
-                <OptionalTooltip text={inputDisabledMessage}>
+          
+              <OptionalTooltip text={inputDisabledMessage}>
                     <Textarea
                         ref={inputRef}
                         tabIndex={0}
