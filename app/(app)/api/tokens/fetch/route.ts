@@ -1,7 +1,4 @@
-import { NextResponse } from "next/server";
-
-// import { addToken, getToken } from "@/db/services/tokens";
-// import { JupiterTokenData } from "@/services/jupiter";
+import { NextResponse } from 'next/server';
 
 export const POST = async () => {
     // const tokens = await fetch("https://tokens.jup.ag/tokens_with_markets");

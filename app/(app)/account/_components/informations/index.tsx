@@ -2,8 +2,15 @@ import React from "react";
 import Image from "next/image";
 import { GradientBorderButton } from "@/components/ui/button";
 import { TextGradient } from "@/components/ui/text";
+import { type User } from "@privy-io/react-auth";
+interface Props {
+  user: User;
+}
 
-const Information = () => {
+const Information: React.FC<Props> = ({ user }) => {
+  const wallets = user.linkedAccounts.filter(
+    (account) => account.type === "wallet"
+  );
   return (
     <>
       <div className="flex justify-between gap-4">
@@ -37,13 +44,13 @@ const Information = () => {
               <Image
                 src="/icons/example-ava.svg"
                 alt="profile"
-                width={24}
-                height={24}
+                width={40}
+                height={40}
               />
             </div>
             <div>
-              <div>0x45e61e2f23...99990z</div>
-              <div>Joined on 3/19/2025</div>
+              <div>{user?.wallet?.address ? user?.wallet?.address : "No wallet connected"}</div>
+              <div className="text-xs text-text-gray">Joined on {user.createdAt.toLocaleDateString()}</div>
             </div>
           </div>
 
@@ -55,14 +62,24 @@ const Information = () => {
         <div className="h-[1px] w-full my-5 bg-bg-gray" />
         <div>
           <div className="text-xs text-text-gray">User ID</div>
-          <div className="text-xs mt-2">cm8fd5nqk01x4zpzjv7ud3udf</div>
+          <div className="text-xs mt-2">{user.id.slice(10)}</div>
         </div>
 
         <div className="h-[1px] w-full my-5" />
 
         <div>
           <div className="text-xs text-text-gray">Connected Wallet</div>
-          <div className="text-xs mt-2">HTn8zrOU8elEdMvRIrKErdHOx6plJp4LQ</div>
+          {wallets?.length > 0 ? (
+            <>
+              {wallets.map((wallet) => (
+                <div className="text-xs mt-2" key={wallet.address}>
+                  {wallet.address}
+                </div>
+              ))}
+            </>
+          ) : (
+            <div className="text-xs mt-2">No wallets connected</div>
+          )}
         </div>
       </div>
     </>

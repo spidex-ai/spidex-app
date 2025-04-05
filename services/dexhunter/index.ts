@@ -1,6 +1,7 @@
 import { DexHunterClient } from './client';
 import {
-    SearchTokenInfo
+    SearchTokenInfo,
+    TokenDetail
 } from './types';
 
 export class DexHunterService {
@@ -18,6 +19,11 @@ export class DexHunterService {
         const response = await this.client.get<SearchTokenInfo[]>('swap/tokens', { query, verified, page, limit });
         const paginatedData = response.slice(page * limit, (page + 1) * limit).filter(token => token.is_verified === verified);
         return paginatedData;
+    }
+
+    async getTokenDetail(token_id: string): Promise<TokenDetail> {
+        const response = await this.client.get<TokenDetail>(`swap/token/${token_id}`);
+        return response;
     }
 }
 

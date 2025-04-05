@@ -1,50 +1,47 @@
-'use client'
+"use client";
 
-import React from 'react'
+import React from "react";
 
-import { Button } from '@/components/ui'
-
-import type { IconType } from 'react-icons'
+import { GradientBorderButton, Separator } from "@/components/ui";
 
 interface Props {
-    icon: IconType
-    name: string
-    value: string | undefined
-    isConnected: boolean
-    onConnect: () => void
+  icon: React.ReactNode;
+  name: string;
+  value: string | undefined;
+  isConnected: boolean;
+  onConnect: () => void;
+  isSeparator?: boolean;
 }
 
 const ConnectedAccount: React.FC<Props> = ({
-    icon: Icon,
-    name,
-    value,
-    isConnected,
-    onConnect
+  icon: Icon,
+  name,
+  value,
+  isConnected,
+  onConnect,
+  isSeparator = false,
 }) => {
-    return (
-        <div className="flex flex-row gap-2 items-center justify-between w-full">
-            <div className="flex items-center gap-2">
-                <div className="p-2 rounded-md bg-neutral-100 dark:bg-neutral-700">
-                    <Icon />
-                </div>
-                <div className="flex flex-col">
-                    <p className="text-sm font-bold">{name}</p>
-                    <p className="text-xs text-muted-foreground">{value ?? "Not Connected"}</p>
-                </div>
-            </div>
-            {
-                !isConnected && (
-                    <Button 
-                        variant="outline" 
-                        onClick={onConnect}
-                        disabled={isConnected}
-                    >
-                        Connect
-                    </Button>
-                )
-            }
+  return (
+    <>
+      <div className="flex flex-row gap-2 items-center justify-between w-full">
+        <div className="flex items-center gap-2">
+          <div className="">{Icon}</div>
+          <div className="flex flex-col">
+            <p className="text-sm font-bold">{name}</p>
+            <p className="text-xs text-muted-foreground">
+              {value ?? "Not Connected"}
+            </p>
+          </div>
         </div>
-    )
-}
+        {!isConnected && (
+          <GradientBorderButton onClick={onConnect} disabled={isConnected}>
+            Connect
+          </GradientBorderButton>
+        )}
+      </div>
+      {isSeparator && <Separator className="my-4" />}
+    </>
+  );
+};
 
-export default ConnectedAccount
+export default ConnectedAccount;

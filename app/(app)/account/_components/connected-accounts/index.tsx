@@ -1,57 +1,62 @@
-'use client'
+"use client";
 
-import React from 'react'
+import React from "react";
 
-import { FaEnvelope, FaGoogle, FaPhone, FaXTwitter } from 'react-icons/fa6'
+import { usePrivy, type User } from "@privy-io/react-auth";
 
-import { usePrivy, type User } from '@privy-io/react-auth'
-
-import { Card } from '@/components/ui'
-
-import ConnectedAccount from './connected-account'
+import ConnectedAccount from "./connected-account";
+import { TextGradient } from "@/components/ui/text";
+import Image from "next/image";
 
 interface Props {
-    user: User
+  user: User;
 }
 
 const ConnectedAccounts: React.FC<Props> = ({ user }) => {
-    const { linkTwitter, linkGoogle, linkEmail, linkPhone } = usePrivy();
+  const { linkTwitter, linkGoogle } = usePrivy();
 
-    return (
+  return (
+    <div className="flex flex-col gap-4">
+      <TextGradient className="text-2xl font-bold">
+        Connected Accounts
+      </TextGradient>
+      <div className="border boder-1 border-gray-800 p-8 mt-4 rounded-2xl">
         <div className="flex flex-col gap-4">
-            <h1 className="text-2xl font-bold">Connected Accounts</h1>
-            <Card className="flex flex-col gap-4 p-4">
-                <ConnectedAccount 
-                    icon={FaXTwitter}
-                    name="Twitter"
-                    value={user.twitter?.username ?? undefined}
-                    isConnected={!!user.twitter}
-                    onConnect={linkTwitter}
-                />
-                <ConnectedAccount 
-                    icon={FaGoogle}
-                    name="Google"
-                    value={user.google?.email ?? undefined}
-                    isConnected={!!user.google}
-                    onConnect={linkGoogle}
-                />
-                <ConnectedAccount 
-                    icon={FaEnvelope}
-                    name="Email"
-                    value={user.email?.address ?? undefined}
-                    isConnected={!!user.email}
-                    onConnect={linkEmail}
-                />
-                <ConnectedAccount 
-                    icon={FaPhone}
-                    name="Phone"
-                    value={user.phone?.number ?? undefined}
-                    isConnected={!!user.phone}
-                    onConnect={linkPhone}
-                />
-            </Card>
+          <ConnectedAccount
+            icon={
+              <Image
+                src="/icons/x-white.svg"
+                alt="twitter"
+                width={28}
+                height={28}
+              />
+            }
+            name="Twitter"
+            value={user.twitter?.username ?? undefined}
+            isConnected={!!user.twitter}
+            onConnect={linkTwitter}
+            isSeparator={true}
+          />
+          <ConnectedAccount
+            icon={
+              <Image
+                src="/icons/google-white.svg"
+                alt="google"
+                width={28}
+                height={28}
+                className="h-full"
+             
+              />
+            }
+            name="Google"
+            value={user.google?.email ?? undefined}
+            isConnected={!!user.google}
+            onConnect={linkGoogle}
+          />
         </div>
-    )
-}
+      </div>
+    </div>
+  );
+};
 
 export default ConnectedAccounts;

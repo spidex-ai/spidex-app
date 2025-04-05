@@ -10,3 +10,14 @@ export interface SearchTokenInfo {
     price: number
     logo?: string
 }
+
+
+export interface TokenDetail {
+    token_id: string
+    token_ascii: string
+    ticker: string
+    is_verified: boolean
+    logo: string
+    total_supply: number 
+    decimals: number
+}

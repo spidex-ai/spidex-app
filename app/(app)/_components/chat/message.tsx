@@ -85,7 +85,7 @@ const Message: React.FC<Props> = ({ message, ToolComponent, className, previousM
                     previousMessageSameRole && "hidden md:hidden",
                     isUser ? "text-neutral-900 dark:text-neutral-100" : "text-brand-600 dark:text-brand-600"
                 )}>
-                    {message.role === 'user' ? 'You' : 'The Hive'}
+                    {message.role === 'user' ? 'You' : 'The Spidex'}
                 </p>
             </div>
             <div className={cn("pt-2 w-full max-w-full md:flex-1 md:w-0 overflow-hidden flex flex-col gap-2", compressed && "gap-0 md:w-full pt-0")}>

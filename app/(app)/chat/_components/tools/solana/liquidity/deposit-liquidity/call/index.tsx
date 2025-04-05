@@ -27,7 +27,7 @@ const DepositLiquidityCall: React.FC<Props> = ({ toolCallId, args }) => {
     useEffect(() => {
         if(pool && pool.type !== "Standard") {
             addToolResult(toolCallId, {
-                message: `The Hive does not support ${pool?.type} pools yet.`,
+                message: `The Spidex does not support ${pool?.type} pools yet.`,
             });
         }
     }, [pool]);
@@ -46,7 +46,7 @@ const DepositLiquidityCall: React.FC<Props> = ({ toolCallId, args }) => {
                             />
                         ) : (
                             <div>
-                                <p>The Hive does not support {pool.type} pools yet.</p>
+                                <p>The Spidex does not support {pool.type} pools yet.</p>
                             </div>
                         )
                     ) : (

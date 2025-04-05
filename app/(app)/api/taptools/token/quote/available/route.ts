@@ -3,6 +3,7 @@ import { taptoolsService } from '@/services/taptools';
 
 export async function GET(request: NextRequest) {
   try {
+    console.log(request)
     const data = await taptoolsService.getAvailableQuotes();
     return NextResponse.json(data);
   } catch (error: any) {
