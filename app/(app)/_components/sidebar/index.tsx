@@ -14,6 +14,7 @@ import {
     SidebarMenuButton,
     SidebarSeparator,
     SidebarMenu as SidebarMenuUI,
+    useSidebar,
 } from '@/components/ui'
 
 import AuthButton from './auth-button';
@@ -30,6 +31,7 @@ interface Props {
 }
 
 const Sidebar: React.FC<Props> = ({ children }) => {
+
 
     return (
         <>

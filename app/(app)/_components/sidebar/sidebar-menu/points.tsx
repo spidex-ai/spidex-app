@@ -7,7 +7,7 @@ import Image from 'next/image';
 const Points: React.FC = () => {
 
     const pathname = usePathname();
-
+    const isActive = pathname?.includes('/points');
     return (
         <Link href='/points'>
             <SidebarMenuItem>
@@ -15,13 +15,14 @@ const Points: React.FC = () => {
                     isActive={pathname?.includes('/points') ?? false}
                 >
                     <h1 className="flex items-center gap-2 font-semibold">
-                        <Image 
-                            src={'/icons/points-white.svg'} 
-                            width={5}
-                            height={5}
-                            alt="points"
-                            className='w-4 h-4'
-                        />
+                       
+                        {
+                            isActive ? (
+                                <Image src="/icons/rewards-blink.svg" alt="points" width={5} height={5} className='w-4 h-4'/>
+                            ) : (
+                                <Image src="/icons/points-white.svg" alt="points" width={5} height={5} className='w-4 h-4'/>
+                            )   
+                        }
                         Points
                     </h1>
                 </SidebarMenuButton>

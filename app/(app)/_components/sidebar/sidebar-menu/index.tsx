@@ -2,7 +2,7 @@
 
 import React from 'react'
 
-import { SidebarMenu as SidebarMenuUI } from '@/components/ui';
+import { SidebarMenu as SidebarMenuUI, useSidebar } from '@/components/ui';
 
 import ChatsGroup from './chats-group';
 import AccountButton from './account-button';
@@ -13,6 +13,10 @@ import RefferalProgram from './referral-program';
 import Portfolio from './portfolio';
 
 const SidebarMenu: React.FC = () => {
+    const { open } = useSidebar();
+
+    console.log('open: ', open);
+
     return (
         <SidebarMenuUI>
             <ChatsGroup />

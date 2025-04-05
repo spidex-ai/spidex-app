@@ -30,6 +30,7 @@ import { useChat } from '../../../chat/_contexts/chat';
 
 import { cn } from '@/lib/utils';
 
+import Image from 'next/image';
 const ChatsGroup: React.FC = () => {
 
     const pathname = usePathname();
@@ -94,7 +95,13 @@ const ChatsGroup: React.FC = () => {
                         >
                             <div className="flex items-center justify-between w-full">
                                 <div className="flex items-center gap-2">
-                                    <MessageSquare className="h-4 w-4" />
+                                    {
+                                        isActive ? (
+                                            <Image src="/icons/chat-blink.svg" alt="Chats" width={20} height={20} className='h-4 w-4'/>
+                                        ) : (
+                                            <Image src="/icons/chat.svg" alt="Chats" width={20} height={20} className='h-4 w-4'/>
+                                        )
+                                    }
                                     <h1 className="text-sm font-semibold">Chats</h1>
                                 </div>
                                 <div className="flex items-center gap-2">

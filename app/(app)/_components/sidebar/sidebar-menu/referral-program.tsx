@@ -15,20 +15,22 @@ import Image from 'next/image';
 const RefferalProgram: React.FC = () => {
     const pathname = usePathname();
 
+    const isActive = pathname?.includes('/referral');
+
     return (
         <Link href='/referral'>
             <SidebarMenuItem>
                 <SidebarMenuButton 
-                    isActive={pathname?.includes('/referral') ?? false}
+                    isActive={isActive}
                 >
                     <h1 className="flex items-center gap-2 font-semibold">
-                        <Image 
-                            src={'/icons/ref-white.svg'} 
-                            width={5}
-                            height={5}
-                            alt="ref-program"
-                            className='w-4 h-4'
-                        />
+                        {
+                            isActive ? (
+                                <Image src="/icons/ref-blink.svg" alt="ref-program" width={5} height={5} className='w-4 h-4'/>
+                            ) : (
+                                <Image src="/icons/ref-white.svg" alt="ref-program" width={5} height={5} className='w-4 h-4'/>
+                            )
+                        }
                         Referral Program
                     </h1>
                 </SidebarMenuButton>

@@ -25,6 +25,7 @@ import {
 
 import { useSavedTokens } from '@/hooks';
 import SaveToken from '../../save-token';
+import Image from 'next/image';
 
 const SavedTokensGroup: React.FC = () => {
 
@@ -35,6 +36,7 @@ const SavedTokensGroup: React.FC = () => {
     const { savedTokens, isLoading } = useSavedTokens();
 
     const [isOpen, setIsOpen] = useState(false);
+    const isActive = pathname.includes('/token');
 
     return (
         <Collapsible className="group/collapsible" open={isOpen} onOpenChange={setIsOpen}>
@@ -49,7 +51,13 @@ const SavedTokensGroup: React.FC = () => {
                         >
                             <div className="flex items-center justify-between w-full">
                                 <div className="flex items-center gap-2">
-                                    <Coins className="h-4 w-4" />
+                                    {
+                                        isActive ? (
+                                            <Image src="/icons/token-blink.svg" alt="Tokens" width={20} height={20} className='h-4 w-4'/>
+                                        ) : (
+                                            <Image src="/icons/token-white.svg" alt="Tokens" width={20} height={20} className='h-4 w-4'/>
+                                        )
+                                    }
                                     <h1 className="text-sm font-semibold">Tokens</h1>
                                     <Badge variant="brandOutline" className="text-[10px] h-5 w-fit px-1 rounded-md">
                                         New

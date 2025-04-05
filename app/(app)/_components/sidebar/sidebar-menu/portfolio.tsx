@@ -14,21 +14,21 @@ import Image from 'next/image';
 
 const Portfolio: React.FC = () => {
     const pathname = usePathname();
-
+    const isActive = pathname?.includes('/portfolio');
     return (
         <Link href='/portfolio'>
             <SidebarMenuItem>
                 <SidebarMenuButton 
-                    isActive={pathname?.includes('/portfolio') ?? false}
+                    isActive={isActive}
                 >
                     <h1 className="flex items-center gap-2 font-semibold">
-                        <Image 
-                            src={'/icons/portfolio-white.svg'} 
-                            width={5}
-                            height={5}
-                            alt="ref-program"
-                            className='w-4 h-4'
-                        />
+                        {
+                            isActive ? (
+                                <Image src="/icons/portfolio-blink.svg" alt="portfolio" width={5} height={5} className='w-4 h-4'/>
+                            ) : (
+                                <Image src="/icons/portfolio-white.svg" alt="portfolio" width={5} height={5} className='w-4 h-4'/>
+                            )
+                        }
                         Portfolio
                     </h1>
                 </SidebarMenuButton>
