@@ -96,5 +96,7 @@ export const POST = async (req: NextRequest) => {
         });
     }
 
+    console.log('streamTextResult:::', streamTextResult);
+
     return streamTextResult.toDataStreamResponse();
 }

@@ -45,7 +45,6 @@ const ConnectedAccounts: React.FC<Props> = ({ user }) => {
                 width={28}
                 height={28}
                 className="h-full"
-             
               />
             }
             name="Google"

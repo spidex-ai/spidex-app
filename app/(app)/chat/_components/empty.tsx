@@ -7,6 +7,7 @@ import StarterButtons from './starter-buttons';
 
 import { cn } from '@/lib/utils';
 import { LogoChat } from '@/components/ui/logo';
+import AgentButtons from './agent-buttons';
 
 const EmptyChat: React.FC = () => {
 
@@ -29,6 +30,7 @@ const EmptyChat: React.FC = () => {
                 </div>
                 <ChatInput />
                 <StarterButtons />
+                <AgentButtons />
             </div>
         </div>
     )

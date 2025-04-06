@@ -100,7 +100,7 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
         onResponse: () => {
             setIsResponseLoading(false);
         },
-        api: '/api/chat/solana',
+        api: '/api/chat/cardano',
         body: {
             model,
             modelName: model,
