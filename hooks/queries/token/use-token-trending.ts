@@ -1,22 +1,24 @@
 'use client'
 
-import { TokenDetail } from "@/services/dexhunter/types";
+import { useTaptools } from "@/hooks/useTaptools";
+import { TrendingToken } from "@/services/birdeye/types";
+import { TopToken } from "@/services/taptools/types";
 import { useEffect, useState } from "react";
 
-export const useTokenDetail = (address: string) => {
+export const useTokenTrending = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [data, setData] = useState<TokenDetail | null>(null);
+    const [data, setData] = useState<TopToken[]>([]);
+    const { getTopTokensByVolume } = useTaptools();
 
     useEffect(() => {
-        getTokenDetail(address);
-    }, [address]);
+        fetchTopTokenTreding();
+    }, []);
   
-    const getTokenDetail = async (address: string) => {
+    const fetchTopTokenTreding = async () => {
       setIsLoading(true);
       try {
-        const response = await fetch(`/api/tokens/detail?tokenId=${encodeURIComponent(address)}&verified=true`);
-        const data = await response.json();
+        const data = await getTopTokensByVolume();
         setData(data);
       } catch (error) {
         setError(error as string);
@@ -28,7 +30,6 @@ export const useTokenDetail = (address: string) => {
     return {
       isLoading,
       error,
-      getTokenDetail,
       data
     };
   };

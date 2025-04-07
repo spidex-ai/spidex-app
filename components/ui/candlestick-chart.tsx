@@ -1,6 +1,6 @@
 "use client";
 
-import { useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 import { useColorMode } from "@/app/_contexts/color-mode";
 import { ColorType, createChart, IChartApi, Time } from "lightweight-charts";
@@ -34,8 +34,8 @@ export function CandlestickChart({ data }: CandlestickChartProps) {
   const chartRef = useRef<IChartApi | null>(null);
   const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
 
-  // Update container size
-  useLayoutEffect(() => {
+
+  useEffect(() => {
     const container = chartContainerRef.current;
     if (!container) return;
 
@@ -44,7 +44,7 @@ export function CandlestickChart({ data }: CandlestickChartProps) {
       setContainerSize({ width: clientWidth, height: clientHeight });
     };
 
-    // Initial size
+
     updateSize();
 
     const resizeObserver = new ResizeObserver(updateSize);
@@ -53,7 +53,7 @@ export function CandlestickChart({ data }: CandlestickChartProps) {
     return () => resizeObserver.disconnect();
   }, []);
 
-  // Create and update chart
+
   useLayoutEffect(() => {
     const container = chartContainerRef.current;
     if (!container || containerSize.width === 0 || containerSize.height === 0)
@@ -97,13 +97,6 @@ export function CandlestickChart({ data }: CandlestickChartProps) {
     });
 
     candlestickSeries.setData(data);
-    // candlestickSeries.applyOptions({
-    //     priceFormat: {
-    //         type: 'price',
-    //         precision: 4,
-    //         minMove: 0.00001,
-    //     },
-    // });
 
     chart.timeScale().fitContent();
 
@@ -112,6 +105,7 @@ export function CandlestickChart({ data }: CandlestickChartProps) {
       chartRef.current = null;
     };
   }, [containerSize, colors, data]);
+
 
   return (
     <div

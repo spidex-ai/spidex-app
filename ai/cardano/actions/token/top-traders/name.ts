@@ -1,1 +1,1 @@
-export const SOLANA_TOKEN_TOP_TRADERS_NAME = "token-top-traders"; 
+export const CARDANO_TOKEN_TOP_TRADERS_NAME = "token-top-traders"; 

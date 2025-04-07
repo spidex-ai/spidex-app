@@ -1,12 +1,13 @@
-import { SOLANA_BUBBLE_MAPS_NAME } from "./name";
-import { SOLANA_BUBBLE_MAPS_PROMPT } from "./prompt";
+import { CARDANO_BUBBLE_MAPS_NAME } from "./name";
+import { CARDANO_BUBBLE_MAPS_PROMPT } from "./prompt";
 import { BubbleMapsArgumentsSchema } from "./input-schema";
 
-import type { SolanaAction } from "../../cardano-action";
+import type { CardanoAction } from "../../cardano-action";
 import type { BubbleMapsResultBodyType } from "./types";
 
-export class SolanaGetBubbleMapsAction implements SolanaAction<typeof BubbleMapsArgumentsSchema, BubbleMapsResultBodyType> {
-  public name = SOLANA_BUBBLE_MAPS_NAME;
-  public description = SOLANA_BUBBLE_MAPS_PROMPT;
+
+export class CardanoGetBubbleMapsAction implements CardanoAction<typeof BubbleMapsArgumentsSchema, BubbleMapsResultBodyType> {
+  public name = CARDANO_BUBBLE_MAPS_NAME;
+  public description = CARDANO_BUBBLE_MAPS_PROMPT;
   public argsSchema = BubbleMapsArgumentsSchema;
 } 

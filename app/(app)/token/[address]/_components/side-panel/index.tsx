@@ -15,6 +15,7 @@ import { getToken } from '@/db/services';
 
 import type { TokenChatData } from '@/types';
 import type { Token } from '@/db/types';
+import { useTokenDetail } from "@/hooks";
 
 interface Props {
     address: string;
@@ -22,32 +23,33 @@ interface Props {
 
 const SidePanel: React.FC<Props> = async ({ address }) => {
 
-    const tokenMetadata = await getTokenOverview(address);
-    const token = await getToken(address);
+    const {data, error} = await useTokenDetail(address);
+
+
 
     // If getToken fails, use tokenMetadata to create a token object
-    const tokenData = token || (tokenMetadata ? {
-        id: tokenMetadata.address,
-        name: tokenMetadata.name,
-        symbol: tokenMetadata.symbol,
-        decimals: tokenMetadata.decimals,
-        logoURI: tokenMetadata.logoURI,
-        extensions: tokenMetadata.extensions,
+    const tokenData = {
+        id: data?.token_id,
+        name: data?.token_ascii,
+        symbol: data?.ticker,
+        decimals: data?.decimals,
+        logoURI: data?.logo,
+        extensions: {},
         tags: [],
         freezeAuthority: null,
         mintAuthority: null,
         permanentDelegate: null
-    } as Token : null);
+    } as Token;
 
     const tokenChatData: TokenChatData = {
-        address: tokenMetadata.address,
-        name: tokenMetadata.name,
-        symbol: tokenMetadata.symbol,
-        decimals: tokenMetadata.decimals,
-        extensions: tokenMetadata.extensions,
-        logoURI: tokenMetadata.logoURI,
-        supply: tokenMetadata.supply,
-        circulatingSupply: tokenMetadata.circulatingSupply
+        address: data?.token_id!,
+        name: data?.token_ascii!,
+        symbol: data?.ticker!,
+        decimals: data?.decimals!,
+        extensions: {},
+        logoURI: data?.logo!,
+        supply: 10000,
+        circulatingSupply: 10000
     }
 
     return (

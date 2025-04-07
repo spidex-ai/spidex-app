@@ -15,6 +15,9 @@ export interface TokenOverview {
     name: string;
     extensions: TokenExtensions | null;
     logoURI: string;
+    policyId?: string;
+    unit?: string;
+    tokenId?: string;
 
     // Market overview
     liquidity: number;

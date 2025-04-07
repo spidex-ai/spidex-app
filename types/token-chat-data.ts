@@ -8,5 +8,9 @@ export type TokenChatData = Pick<TokenOverview,
   'extensions' |
   'logoURI' |
   'supply' |
-  'circulatingSupply'
+  'circulatingSupply' |
+  'policyId' |
+  'unit' |
+  'tokenId'
 >;
+

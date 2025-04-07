@@ -1,12 +1,12 @@
-import { SOLANA_WITHDRAW_LIQUIDITY_NAME } from "./name";
-import { SOLANA_WITHDRAW_LIQUIDITY_PROMPT } from "./prompt";
+import { CARDANO_WITHDRAW_LIQUIDITY_NAME } from "./name";
+import { CARDANO_WITHDRAW_LIQUIDITY_PROMPT } from "./prompt";
 import { WithdrawLiquidityInputSchema } from "./input-schema";
 
-import type { SolanaWithdrawLiquiditySchemaType, SolanaWithdrawLiquidityResultBodyType } from "./types";
-import type { SolanaAction } from "../../cardano-action";
+import type { CardanoWithdrawLiquiditySchemaType, CardanoWithdrawLiquidityResultBodyType } from "./types";
+import type { CardanoAction } from "../../cardano-action";
 
-export class SolanaWithdrawLiquidityAction implements SolanaAction<SolanaWithdrawLiquiditySchemaType, SolanaWithdrawLiquidityResultBodyType> {
-  public name = SOLANA_WITHDRAW_LIQUIDITY_NAME;
-  public description = SOLANA_WITHDRAW_LIQUIDITY_PROMPT;
+export class CardanoWithdrawLiquidityAction implements CardanoAction<CardanoWithdrawLiquiditySchemaType, CardanoWithdrawLiquidityResultBodyType> {
+  public name = CARDANO_WITHDRAW_LIQUIDITY_NAME;
+  public description = CARDANO_WITHDRAW_LIQUIDITY_PROMPT;
   public argsSchema = WithdrawLiquidityInputSchema;
 } 

@@ -18,19 +18,8 @@ interface Props {
 }
 
 const Header: React.FC<Props> = ({ address }) => {
-  const [data, setData] = useState<TokenDetail | null>(null);
-  const { isLoading, getTokenDetail } = useTokenDetail();
+  const { isLoading, data } = useTokenDetail(address);
 
-  useEffect(() => {
-    fetchTokenDetail();
-  }, [address]);
-
-  const fetchTokenDetail = async () => {
-    const data = await getTokenDetail(address);
-    if (data) {
-      setData(data);
-    }
-  };
 
   if (isLoading) {
     return <Skeleton className="h-6 w-full" />;

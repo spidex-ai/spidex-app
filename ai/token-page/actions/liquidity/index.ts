@@ -1,5 +1,5 @@
-import { SOLANA_TOKEN_PAGE_LIQUIDITY_NAME } from "./name";
-import { SOLANA_TOKEN_PAGE_LIQUIDITY_PROMPT } from "./prompt";
+import { CARDANO_TOKEN_PAGE_LIQUIDITY_NAME, SOLANA_TOKEN_PAGE_LIQUIDITY_NAME } from "./name";
+import { CARDANO_TOKEN_PAGE_LIQUIDITY_PROMPT, SOLANA_TOKEN_PAGE_LIQUIDITY_PROMPT } from "./prompt";
 import { TokenPageLiquidityInputSchema } from "./input-schema";
 import { TokenPageLiquidityResultBodyType } from "./types";
 import { getTokenPageLiquidity } from "./function";
@@ -12,3 +12,10 @@ export class SolanaTokenPageLiquidityAction implements TokenPageAction<typeof To
   public argsSchema = TokenPageLiquidityInputSchema;
   public func = getTokenPageLiquidity;
 } 
+
+export class CardanoTokenPageLiquidityAction implements TokenPageAction<typeof TokenPageLiquidityInputSchema, TokenPageLiquidityResultBodyType> {
+  public name = CARDANO_TOKEN_PAGE_LIQUIDITY_NAME;
+  public description = CARDANO_TOKEN_PAGE_LIQUIDITY_PROMPT;
+  public argsSchema = TokenPageLiquidityInputSchema;
+  public func = getTokenPageLiquidity;
+}

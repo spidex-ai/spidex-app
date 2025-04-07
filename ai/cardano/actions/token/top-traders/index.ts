@@ -1,15 +1,15 @@
-import { SOLANA_TOKEN_TOP_TRADERS_NAME } from "./name";
-import { SOLANA_TOKEN_TOP_TRADERS_PROMPT } from "./prompt";
+import { CARDANO_TOKEN_TOP_TRADERS_NAME } from "./name";
+import { CARDANO_TOKEN_TOP_TRADERS_PROMPT } from "./prompt";
 import { TopTokenTradersInputSchema } from "./input-schema";
 import { TopTokenTradersResultBodyType } from "./types";
 
 import { getTopTokenTraders } from "./function";
 
-import type { SolanaAction } from "../../cardano-action";
+import type { CardanoAction } from "../../cardano-action";
 
-export class SolanaTopTokenTradersAction implements SolanaAction<typeof TopTokenTradersInputSchema, TopTokenTradersResultBodyType> {
-  public name = SOLANA_TOKEN_TOP_TRADERS_NAME;
-  public description = SOLANA_TOKEN_TOP_TRADERS_PROMPT;
+export class CardanoTopTokenTradersAction implements CardanoAction<typeof TopTokenTradersInputSchema, TopTokenTradersResultBodyType> {
+  public name = CARDANO_TOKEN_TOP_TRADERS_NAME;
+  public description = CARDANO_TOKEN_TOP_TRADERS_PROMPT;
   public argsSchema = TopTokenTradersInputSchema;
   public func = getTopTokenTraders;
 } 

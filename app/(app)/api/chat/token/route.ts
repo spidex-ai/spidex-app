@@ -10,6 +10,8 @@ import { deepseek } from '@ai-sdk/deepseek';
 
 import { Models } from "@/types/models";
 import { 
+    CardanoTokenPageLiquidityAction,
+    CardanoTokenPageTopHoldersAction,
     SolanaTokenPageLiquidityAction, 
     SolanaTokenPagePriceAnalysisAction, 
     SolanaTokenPageTopHoldersAction, 
@@ -20,7 +22,7 @@ import {
 import type { TokenChatData } from "@/types";
 
 const system = (tokenMetadata: TokenChatData) =>
-`You are a blockchain agent that helping the user analyze the following token: ${tokenMetadata.name} (${tokenMetadata.symbol}) with the address ${tokenMetadata.address}.
+`You are a blockchain agent that helping the user analyze the following token: ${tokenMetadata.name} (${tokenMetadata.name}) with the address ${tokenMetadata?.tokenId}.
 
 The token has ${tokenMetadata.extensions?.twitter ? 'a Twitter account linked to it' : 'no Twitter account linked to it'}.`
 
@@ -83,8 +85,8 @@ export const POST = async (req: NextRequest) => {
         messages: truncatedMessages,
         system: system(token),
         tools: tokenPageTools(token, [
-            new SolanaTokenPageTopHoldersAction(),
-            new SolanaTokenPageLiquidityAction(),
+            new CardanoTokenPageTopHoldersAction(),
+            new CardanoTokenPageLiquidityAction(),
             new SolanaTokenPagePriceAnalysisAction(),
             ...(token.extensions?.twitter ? [
                 new TokenPageNumMentionsAction(token.extensions.twitter.split("/").pop()!)
