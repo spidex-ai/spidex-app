@@ -16,13 +16,13 @@ const TokenPage = async ({ params }: { params: Promise<{ address: string }> }) =
             <Header address={address} />
             <ResizableLayout 
                 chartComponent={<TokenChart mint={address} />}
-                // tabsComponent={
-                //     <Suspense fallback={<Skeleton className="h-full w-full m-2" />}>
-                //         <TokenDashboardTabs address={address} tokenOverview={tokenOverview} />
-                //     </Suspense>
-                // }
+                tabsComponent={
+                    <Suspense fallback={<Skeleton className="h-full w-full m-2" />}>
+                        <TokenDashboardTabs address={address} />
+                    </Suspense>
+                }
                 sidePanelComponent={<SidePanel address={address} />}
-                tabsComponent={<div></div>}
+                // tabsComponent={<div></div>}
                 // sidePanelComponent={<div></div>}
             />
         </div>

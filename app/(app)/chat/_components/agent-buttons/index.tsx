@@ -41,7 +41,7 @@ const Agents: Agent[] = [
 const AgentButtons = () => {
     const { sendMessage } = useChat();
   return (
-    <div>
+    <div className='mt-10'>
         <div className='uppercase text-sm font-bold text-neutral-500 text-center'>supported agents</div>
         <div className="flex gap-4 mt-5">
             {

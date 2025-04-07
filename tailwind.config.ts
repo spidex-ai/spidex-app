@@ -17,7 +17,8 @@ export default {
 			},
 			bg: {
 				gray: '#5D717D99',
-				main: '#131E2F'
+				main: '#131E2F',
+				secondary: '#0B1320'
 			},
   			brand: {
   				'50': '#ffffe7',

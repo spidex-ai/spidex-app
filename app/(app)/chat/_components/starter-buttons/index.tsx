@@ -1,31 +1,32 @@
 import React from 'react'
 
 import StarterButton from './starter-button';
-
+import Image from 'next/image';
 const starterButtons = [
     {
         title: "Trending",
-        description: "Search the trending tokens",
-        icon: "Coins" as const,
-        prompt: "Show me the trending tokens"
+        description: "Search Cardano trending tokens",
+        icon: <Image src="/icons/trending.svg" alt="Trending" width={13} height={13} />,
+        prompt: "Show me the top volume tokens on Cardano"
+        //   prompt: "Show me the trending tokens"
     }, 
     {
-        title: "Stake",
-        description: "Stake Sol",
-        icon: "Coins" as const,
-        prompt: "Find me the best staking yields"
+        title: "News",
+        description: "Catch up with latest news",
+        icon: <Image src="/icons/news-white.svg" alt="Trending" width={13} height={13} />,
+        prompt: "Catch up with latest news on Cardano"
     },
     {
         title: "Trade",
-        description: "Swap on Jupiter",
-        icon: "ChartCandlestick" as const,
+        description: "Swap tokens with best market offers",
+        icon: <Image src="/icons/trading-agent.svg" alt="Trending" width={13} height={13} />,
         prompt: "Let's trade some tokens"
     },
     {
         title: "Knowledge",
-        description: "Get developer docs for protocols",
-        icon: "Brain" as const,
-        prompt: "Get me developer docs for Orca"
+        description: "Learn developer docs for protocols",
+        icon: <Image src="/icons/knowledge-white.svg" alt="Trending" width={13} height={13} />,
+        prompt: "Get me developer docs from Ethereum documentation"
     }
 ] as const
 

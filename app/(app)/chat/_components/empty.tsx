@@ -8,6 +8,7 @@ import StarterButtons from './starter-buttons';
 import { cn } from '@/lib/utils';
 import { LogoChat } from '@/components/ui/logo';
 import AgentButtons from './agent-buttons';
+import { TextGradient } from '@/components/ui/text';
 
 const EmptyChat: React.FC = () => {
 
@@ -21,11 +22,11 @@ const EmptyChat: React.FC = () => {
                     <LogoChat className="w-20 h-20" />
                     <div className="flex flex-col gap-1">
                         <h1 className="font-semibold text-center text-2xl">
-                            How can <span className="text-brand-600 font-bold inline">We</span> help you?
+                        Welcome to <TextGradient className='inline-block'>Spidex AI</TextGradient>, your personal DeFi assistant.
                         </h1>
-                        <p className="text-center text-sm text-neutral-600 dark:text-neutral-400">
+                        {/* <p className="text-center text-sm text-neutral-600 dark:text-neutral-400">
                         Welcome to Spidex AI, your personal DeFi assistant. <br /> Type your intent or pick a prompt to get started.
-                        </p>
+                        </p> */}
                     </div>
                 </div>
                 <ChatInput />

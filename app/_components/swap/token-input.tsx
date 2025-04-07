@@ -32,7 +32,7 @@ const TokenInput: React.FC<Props> = ({ label, amount, onChange, token, onChangeT
 
     return (
         <div className={cn(
-            "flex flex-col border border-transparent rounded-md p-2 w-full transition-colors bg-neutral-100 dark:bg-neutral-700 gap-2",
+            "flex flex-col border border-transparent rounded-md p-2 w-full transition-colors bg-neutral-100 dark:bg-bg-main gap-2",
             isFocused && "border-brand-600"
         )}>
             <div className="flex items-center justify-between">

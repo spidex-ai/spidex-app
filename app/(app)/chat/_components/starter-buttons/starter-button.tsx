@@ -11,7 +11,7 @@ import { cn } from '@/lib/utils';
 import { IconName } from '@/types';
 
 interface Props {
-    icon: IconName
+    icon: React.ReactNode
     title: string
     description: string
     prompt: string,
@@ -23,26 +23,23 @@ const StarterButton: React.FC<Props> = ({ icon, title, description, prompt, clas
     const { sendMessage } = useChat();
 
     return (
-        <Button 
+        <div 
             className={cn(
-                'flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400 h-fit justify-start',
+                'gap-2 text-sm text-neutral-600 dark:text-neutral-400 border border-neutral-200 dark:border-border-main dark:bg-bg-secondary rounded-md px-2 py-4 cursor-pointer',
                 className
             )}
-            variant="outline"
             onClick={() => sendMessage(prompt)}
         >
-            <div className="flex flex-col">
-                <div className="flex items-center gap-2">
-                    <Icon name={icon} className="w-4 h-4" />
-                    <p className="text-md font-bold">
-                        {title}
-                    </p>
+            <div className="grid grid-cols-6 gap-2">
+                <div className="col-span-1 flex justify-end items-start pt-1">
+                    {icon}
                 </div>
-                <p className="text-xs text-neutral-600 dark:text-neutral-400 hidden md:block">
-                    {description}
-                </p>
+                <div className="col-span-5 text-left">
+                    <div className="text-sm text-white">{title}</div>
+                    <div className='text-xs text-neutral-400'>{description}</div>
+                </div>
             </div>
-        </Button>
+        </div>
     )
 }
 

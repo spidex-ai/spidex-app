@@ -24,10 +24,10 @@ import { getTokenOverview } from '@/services/birdeye';
 
 interface Props {
     address: string;
-    tokenOverview: Awaited<ReturnType<typeof getTokenOverview>>;
+    // tokenOverview: Awaited<ReturnType<typeof getTokenOverview>>;
 }
 
-const TokenDashboardTabs: React.FC<Props> = ({ address, tokenOverview }) => {
+const TokenDashboardTabs: React.FC<Props> = ({ address }) => {
     const [activeTab, setActiveTab] = React.useState('market-stats')
     const tabsRef = useRef<{ [key: string]: HTMLButtonElement }>({})
 
@@ -110,7 +110,7 @@ const TokenDashboardTabs: React.FC<Props> = ({ address, tokenOverview }) => {
                     <FaUsers className="w-4 h-4" />
                     Active Wallets
                 </TabsTrigger>
-                {
+                {/* {
                     tokenOverview.extensions?.twitter && (
                         <>
                             <TabsTrigger 
@@ -135,7 +135,7 @@ const TokenDashboardTabs: React.FC<Props> = ({ address, tokenOverview }) => {
                             </TabsTrigger>
                         </>
                     )
-                }
+                } */}
             </DraggableTabsList>
             <div className="flex-1 h-0 overflow-y-auto w-full no-scrollbar">
                 <TabsContent value="market-stats" className="h-full m-0 p-2">
@@ -156,7 +156,7 @@ const TokenDashboardTabs: React.FC<Props> = ({ address, tokenOverview }) => {
                 <TabsContent value="users-over-time" className="h-full m-0 p-2">
                     <TokenUsersOverTime mint={address} />
                 </TabsContent>
-                {
+                {/* {
                     tokenOverview.extensions?.twitter && (
                         <>
                             <TabsContent value="tweets" className="h-full m-0 p-2">
@@ -167,7 +167,7 @@ const TokenDashboardTabs: React.FC<Props> = ({ address, tokenOverview }) => {
                             </TabsContent>
                         </>
                     )
-                }
+                } */}
             </div>
         </Tabs>
     )

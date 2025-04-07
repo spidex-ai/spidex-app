@@ -1,3 +1,4 @@
+'use client'
 import React from 'react'
 
 import { ArrowLeftRight, MessageSquare } from 'lucide-react';
@@ -21,9 +22,9 @@ interface Props {
     address: string;
 }
 
-const SidePanel: React.FC<Props> = async ({ address }) => {
+const SidePanel: React.FC<Props> =  ({ address }) => {
 
-    const {data, error} = await useTokenDetail(address);
+    const {data, error} = useTokenDetail(address);
 
 
 
