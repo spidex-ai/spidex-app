@@ -1,6 +1,6 @@
 import { getSmartMoneyInflows as getSmartMoneyInflowsService } from "@/services/hellomoon";
 
-import type { GetSmartMoneyInflowsArgumentsType, GetSmartMoneyInflowsResultBodyType } from "./types";
+import type { CardanoGetSmartMoneyInflowsArgumentsType, CardanoGetSmartMoneyInflowsResultBodyType } from "./types";
 import type { CardanoActionResult } from "../../cardano-action"; 
 import { SmartMoneyTokenInflow } from "@/services/hellomoon/types";
 import { getPrices, getTokenMetadata } from "@/services/birdeye";
@@ -15,8 +15,8 @@ import type { Price, TokenMetadata } from "@/services/birdeye/types";
  * @returns A message containing the trending tokens information
  */
 export async function getSmartMoneyInflows(
-  args: GetSmartMoneyInflowsArgumentsType
-): Promise<CardanoActionResult<GetSmartMoneyInflowsResultBodyType>> {
+  args: CardanoGetSmartMoneyInflowsArgumentsType
+): Promise<CardanoActionResult<CardanoGetSmartMoneyInflowsResultBodyType>> {
   try {
 
     const response = await getSmartMoneyInflowsService(args.granularity, 10);

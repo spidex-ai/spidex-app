@@ -1,12 +1,12 @@
 import { z } from "zod";
 
 import { TokenPriceChartInputSchema } from "./input-schema";
-import type { SolanaActionResult } from "../../cardano-action";
+import type { CardanoActionResult } from "../../cardano-action";
 
-export type TokenPriceChartSchemaType = typeof TokenPriceChartInputSchema;
+export type CardanoTokenPriceChartSchemaType = typeof TokenPriceChartInputSchema;
 
-export type TokenPriceChartArgumentsType = z.infer<TokenPriceChartSchemaType>;
+export type CardanoTokenPriceChartArgumentsType = z.infer<CardanoTokenPriceChartSchemaType>;
 
-export type TokenPriceChartResultBodyType = {}; 
+export type CardanoTokenPriceChartResultBodyType = {}; 
 
-export type TokenPriceChartResultType = SolanaActionResult<TokenPriceChartResultBodyType>;
+export type CardanoTokenPriceChartResultType = CardanoActionResult<CardanoTokenPriceChartResultBodyType>;

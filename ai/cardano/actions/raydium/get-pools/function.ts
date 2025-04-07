@@ -2,8 +2,8 @@ import { getRaydiumPoolById } from "@/services/raydium";
 import { getToken, getTokenBySymbol } from "@/db/services";
 import { getTokenPairsFromAddress } from "@/services/dexscreener";
 
-import type { GetPoolsArgumentsType, GetPoolsResultBodyType } from "./types";
-import type { SolanaActionResult } from "../../cardano-action";
+import type { CardanoGetPoolsArgumentsType, CardanoGetPoolsResultBodyType } from "./types";
+import type { CardanoActionResult } from "../../cardano-action";
 
 /**
  * Gets the token data for a given ticker.
@@ -12,7 +12,7 @@ import type { SolanaActionResult } from "../../cardano-action";
  * @param args - The input arguments for the action
  * @returns A message containing the token data
  */
-export async function getPools(args: GetPoolsArgumentsType): Promise<SolanaActionResult<GetPoolsResultBodyType>> {
+export async function getPools(args: CardanoGetPoolsArgumentsType): Promise<CardanoActionResult<CardanoGetPoolsResultBodyType>> {
   try {
 
     if (args.address) {

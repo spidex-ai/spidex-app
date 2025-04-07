@@ -22,10 +22,11 @@ import { cn } from '@/lib/utils';
 
 import type { QuoteResponse } from '@jup-ag/api';
 import type { Token } from '@/db/types';
+import { SearchTokenInfo } from '@/services/dexhunter/types';
 
 interface Props {
-    initialInputToken: Token | null,    
-    initialOutputToken: Token | null,
+    initialInputToken: SearchTokenInfo | null,    
+    initialOutputToken: SearchTokenInfo | null,
     inputLabel: string,
     outputLabel: string,
     initialInputAmount?: string,
@@ -53,16 +54,16 @@ const Swap: React.FC<Props> = ({
 }) => {
 
     const [inputAmount, setInputAmount] = useState<string>(initialInputAmount || "");
-    const [inputToken, setInputToken] = useState<Token | null>(initialInputToken);
+    const [inputToken, setInputToken] = useState<SearchTokenInfo | null>(initialInputToken);
     const [outputAmount, setOutputAmount] = useState<string>("");
-    const [outputToken, setOutputToken] = useState<Token | null>(initialOutputToken);
+    const [outputToken, setOutputToken] = useState<SearchTokenInfo | null>(initialOutputToken);
 
     const [isQuoteLoading, setIsQuoteLoading] = useState<boolean>(false);
     const [quoteResponse, setQuoteResponse] = useState<QuoteResponse | null>(null);
     const [isSwapping, setIsSwapping] = useState<boolean>(false);
 
     const { sendTransaction, wallet } = useSendTransaction();
-    const { balance: inputBalance, isLoading: inputBalanceLoading } = useTokenBalance(inputToken?.id || "", wallet?.address || "");
+    const { balance: inputBalance, isLoading: inputBalanceLoading } = useTokenBalance(inputToken?.token_id || "", wallet?.address || "");
 
     const onChangeInputOutput = () => {
         const tempInputToken = inputToken;
@@ -91,22 +92,22 @@ const Swap: React.FC<Props> = ({
 
     useEffect(() => {
         if (inputToken && outputToken) {
-            const fetchQuoteAndUpdate = async () => {
-                setIsQuoteLoading(true);
-                setOutputAmount("");
-                const quote = await getQuote(inputToken.id, outputToken.id, parseFloat(inputAmount) * (10 ** inputToken.decimals));
-                setQuoteResponse(quote);
-                setOutputAmount(new Decimal(quote.outAmount).div(new Decimal(10).pow(outputToken.decimals)).toString());
-                setIsQuoteLoading(false);
-            }
+            // const fetchQuoteAndUpdate = async () => {
+            //     setIsQuoteLoading(true);
+            //     setOutputAmount("");
+            //     const quote = await getQuote(inputToken.id, outputToken.id, parseFloat(inputAmount) * (10 ** inputToken.decimals));
+            //     setQuoteResponse(quote);
+            //     setOutputAmount(new Decimal(quote.outAmount).div(new Decimal(10).pow(outputToken.decimals)).toString());
+            //     setIsQuoteLoading(false);
+            // }
 
 
-            if (inputAmount && Number(inputAmount) > 0) {
-                fetchQuoteAndUpdate();
-            } else {
-                setQuoteResponse(null);
-                setOutputAmount("");
-            }
+            // if (inputAmount && Number(inputAmount) > 0) {
+            //     fetchQuoteAndUpdate();
+            // } else {
+            //     setQuoteResponse(null);
+            //     setOutputAmount("");
+            // }
         }
     }, [inputToken, outputToken, inputAmount]);
 

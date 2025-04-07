@@ -1,14 +1,14 @@
 import { z } from "zod";
 
 import type { GetWalletAddressInputSchema } from "./input-schema";
-import type { SolanaActionResult } from "../../cardano-action";
+import type { CardanoActionResult } from "../../cardano-action";
 
-export type GetWalletAddressSchemaType = typeof GetWalletAddressInputSchema;
+export type CardanoGetWalletAddressSchemaType = typeof GetWalletAddressInputSchema;
 
-export type GetWalletAddressArgumentsType = z.infer<GetWalletAddressSchemaType>;
+export type CardanoGetWalletAddressArgumentsType = z.infer<CardanoGetWalletAddressSchemaType>;
 
-export type GetWalletAddressResultBodyType = {
+export type CardanoGetWalletAddressResultBodyType = {
     address: string;
 } 
 
-export type GetWalletAddressResultType = SolanaActionResult<GetWalletAddressResultBodyType>;
+export type CardanoGetWalletAddressResultType = CardanoActionResult<CardanoGetWalletAddressResultBodyType>;

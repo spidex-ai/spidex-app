@@ -79,7 +79,8 @@ const SidePanel: React.FC<Props> = async ({ address }) => {
                 <TabsContent value="trade" className="h-full m-0 p-2">
                     <Swap 
                         initialInputToken={null}
-                        initialOutputToken={tokenData}
+                        initialOutputToken={null}
+                        // initialOutputToken={tokenData}
                         inputLabel="Sell"
                         outputLabel="Buy"
                         className="w-full"

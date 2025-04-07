@@ -1,8 +1,7 @@
-import { getTrendingTokens as getTrendingTokensBirdeye } from "@/services/birdeye";
-
-import type { GetTrendingTokensArgumentsType, GetTrendingTokensResultBodyType } from "./types";
-import { SolanaActionResult } from "@/ai/solana/actions/solana-action";
 import taptoolsService from "@/services/taptools";
+
+import type { CardanoGetTrendingTokensArgumentsType, CardanoGetTrendingTokensResultBodyType } from "./types";
+import { CardanoActionResult } from "@/ai/cardano/actions/cardano-action";
 
 /**
  * Gets the trending tokens from Birdeye API.
@@ -12,8 +11,8 @@ import taptoolsService from "@/services/taptools";
  * @returns A message containing the trending tokens information
  */
 export async function getTrendingTokens(
-  args: GetTrendingTokensArgumentsType
-): Promise<SolanaActionResult<GetTrendingTokensResultBodyType>> {
+  args: CardanoGetTrendingTokensArgumentsType
+): Promise<CardanoActionResult<CardanoGetTrendingTokensResultBodyType>> {
   try {
     const response = await taptoolsService.getTopTokensByMcap(1, args.limit);
     console.log("🚀 ~ response:", response)

@@ -12,8 +12,19 @@ import { cn } from '@/lib/utils'
 
 import type { ToolInvocation } from 'ai'
 import type { BaseActionResult } from '@/ai'
-import { getAgentIcon, getAgentName } from './tool-to-agent'
+import { getAgentName } from './tool-to-agent'
 import { ChevronDown } from 'lucide-react'
+import Image from 'next/image'
+import { 
+    KNOWLEDGE_AGENT_NAME, 
+    MARKET_AGENT_NAME, 
+    STAKING_AGENT_NAME, 
+    WALLET_AGENT_NAME,
+    TOKEN_ANALYSIS_AGENT_NAME, 
+    TRADING_AGENT_NAME, 
+    SOCIAL_AGENT_NAME,
+    LIQUIDITY_AGENT_NAME
+} from "@/ai/agents/names";
 
 interface Props<ActionResultBodyType, ActionArgsType> {
     tool: ToolInvocation,
@@ -31,11 +42,37 @@ interface Props<ActionResultBodyType, ActionArgsType> {
     prevToolAgent?: string,
 }
 
+const getAgentIcon = (agentName: string) => {
+    switch(agentName) {
+        case STAKING_AGENT_NAME:
+            return <Image src="/icons/trading-agent.svg" alt="Chart Candlestick" width={20} height={20} />;
+        case WALLET_AGENT_NAME:
+            return <Image src="/icons/trading-agent.svg" alt="Chart Candlestick" width={20} height={20} />;
+        case MARKET_AGENT_NAME:
+            return <Image src="/icons/trading-agent.svg" alt="Chart Candlestick" width={20} height={20} />;
+        case KNOWLEDGE_AGENT_NAME:
+            return <Image src="/icons/trading-agent.svg" alt="Chart Candlestick" width={20} height={20} />;
+        case TRADING_AGENT_NAME:
+            return <Image src="/icons/trading-agent.svg" alt="Chart Candlestick" width={20} height={20} />;
+        case SOCIAL_AGENT_NAME:
+            return <Image src="/icons/trading-agent.svg" alt="Chart Candlestick" width={20} height={20} />;
+        case TOKEN_ANALYSIS_AGENT_NAME:
+            return <Image src="/icons/trading-agent.svg" alt="Chart Candlestick" width={20} height={20} />;
+        case LIQUIDITY_AGENT_NAME:
+            return <Image src="/icons/trading-agent.svg" alt="Chart Candlestick" width={20} height={20} />;
+            
+    }   
+}
+
 const ToolCard = <ActionResultBodyType, ActionArgsType>({ tool, loadingText, result, call, defaultOpen = true, className, prevToolAgent }: Props<ActionResultBodyType, ActionArgsType>) => {
 
     const agentName = getAgentName(tool);
+    console.log("🚀 ~ ToolCard ~ agentName:", agentName)
 
     const agentIcon = getAgentIcon(agentName);
+    console.log("🚀 ~ ToolCard ~ agentIcon:", agentIcon)
+
+    console.log("🚀 ~ ToolCard ~ tool:", tool)
     
     return (
         <div className={cn(
@@ -49,9 +86,9 @@ const ToolCard = <ActionResultBodyType, ActionArgsType>({ tool, loadingText, res
                 {
                     tool.state === "result"
                         ? (tool.result.body 
-                            ? <Icon name={agentIcon} className="w-4 h-4 text-brand-600 dark:text-brand-600" />
+                            ? <>{agentIcon}</>
                             : <Icon name="X" className="w-4 h-4 text-red-500 dark:text-red-400" />)
-                        : <Icon name={agentIcon} className="w-4 h-4 text-neutral-500 dark:text-neutral-400" />
+                        : <>{agentIcon}</>
                 }
                 <p className="text-sm md:text-lg font-bold">{agentName}</p>
             </div>
@@ -61,7 +98,7 @@ const ToolCard = <ActionResultBodyType, ActionArgsType>({ tool, loadingText, res
                         <AnimatedShinyText
                             className="text-sm"
                         >
-                            {loadingText}
+                         a
                         </AnimatedShinyText>
                     ) : (
                         tool.state === "call" ? (
@@ -76,12 +113,12 @@ const ToolCard = <ActionResultBodyType, ActionArgsType>({ tool, loadingText, res
                                     <AnimatedShinyText
                                         className="text-sm"
                                     >
-                                        {loadingText}
+                                       {loadingText}
                                     </AnimatedShinyText>
                                 )
                         ) : (
                             <Collapsible defaultOpen={defaultOpen}>
-                                <CollapsibleTrigger 
+                                {/* <CollapsibleTrigger 
                                     className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400 hover:underline"
                                 >
                                     <p className="text-sm">{result.heading(tool.result)}</p>
@@ -89,7 +126,7 @@ const ToolCard = <ActionResultBodyType, ActionArgsType>({ tool, loadingText, res
                                 </CollapsibleTrigger>
                                 <CollapsibleContent className="text-sm pt-2">
                                     {result.body(tool.result)}
-                                </CollapsibleContent>
+                                </CollapsibleContent> */}
                             </Collapsible>
                         )
                     )

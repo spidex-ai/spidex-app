@@ -1,12 +1,12 @@
-import type { TopHoldersArgumentsType, TopHoldersResultBodyType } from "./types";
-import type { SolanaActionResult } from "../../cardano-action";
+import type { CardanoTopHoldersArgumentsType, CardanoTopHoldersResultBodyType } from "./types";
+import type { CardanoActionResult } from "../../cardano-action";
 import { getTokenLargestAccounts } from "@/services/helius";
 import { Connection, PublicKey } from "@solana/web3.js";
 import { getAccount } from "@solana/spl-token";
 
 export async function getTopHolders(
-  args: TopHoldersArgumentsType
-): Promise<SolanaActionResult<TopHoldersResultBodyType>> {
+  args: CardanoTopHoldersArgumentsType
+  ): Promise<CardanoActionResult<CardanoTopHoldersResultBodyType>> {
   try {
     let topHolders = await getTokenLargestAccounts(args.tokenAddress);
 

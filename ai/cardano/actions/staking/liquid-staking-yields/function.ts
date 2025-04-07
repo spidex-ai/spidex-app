@@ -2,8 +2,8 @@ import { getBestLiquidStaking } from "@/services/staking-rewards";
 
 import { getTokenBySymbol } from "@/db/services";
 
-import type { LiquidStakingYieldsArgumentsType, LiquidStakingYieldsResultBodyType } from "./types";
-import type { SolanaActionResult } from "../../cardano-action";
+import type { CardanoLiquidStakingYieldsArgumentsType, CardanoLiquidStakingYieldsResultBodyType } from "./types";
+import type { CardanoActionResult } from "../../cardano-action";
 
 /**
  * Gets the best liquid staking yields from Staking Rewards API.
@@ -12,8 +12,8 @@ import type { SolanaActionResult } from "../../cardano-action";
  * @returns A message containing the best liquid staking yields information
  */
 export async function getLiquidStakingYields(
-  args: LiquidStakingYieldsArgumentsType
-): Promise<SolanaActionResult<LiquidStakingYieldsResultBodyType>> {
+  args: CardanoLiquidStakingYieldsArgumentsType
+): Promise<CardanoActionResult<CardanoLiquidStakingYieldsResultBodyType>> {
   try {
     const bestLiquidStaking = await getBestLiquidStaking(6);
 
@@ -23,7 +23,7 @@ export async function getLiquidStakingYields(
         name: option.outputAssets[0].name,
         yield: option.metrics.find((metric) => metric.metricKey === "reward_rate")?.defaultValue ?? 0,
         tokenData: await getTokenBySymbol(option.outputAssets[0].symbol)
-      })))).filter((item) => item.tokenData !== undefined) as LiquidStakingYieldsResultBodyType
+      })))).filter((item) => item.tokenData !== undefined) as CardanoLiquidStakingYieldsResultBodyType
     };
   } catch (error) {
     console.error(error);

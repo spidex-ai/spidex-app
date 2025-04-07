@@ -2,14 +2,14 @@ import { LAMPORTS_PER_SOL, PublicKey, Connection } from "@solana/web3.js";
 
 import { getAssociatedTokenAddressSync } from "@solana/spl-token";
 
-import type { BalanceArgumentsType, BalanceResultBodyType } from "./types";
-import type { SolanaActionResult } from "../../cardano-action";
+import type { CardanoBalanceArgumentsType, CardanoBalanceResultBodyType } from "./types";
+import type { CardanoActionResult } from "../../cardano-action";
 import { getToken } from "@/db/services";
 
 export async function getBalance(
   connection: Connection,
-  args: BalanceArgumentsType
-): Promise<SolanaActionResult<BalanceResultBodyType>> {
+  args: CardanoBalanceArgumentsType
+): Promise<CardanoActionResult<CardanoBalanceResultBodyType>> {
   try {
     let balance: number;
     

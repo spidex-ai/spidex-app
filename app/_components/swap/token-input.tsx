@@ -14,13 +14,14 @@ import { usePrice } from '@/hooks/queries/price'
 import { cn } from '@/lib/utils'
 
 import type { Token } from '@/db/types'
+import { SearchTokenInfo } from '@/services/dexhunter/types'
 
 interface Props {
     label: string,
     amount: string,
     onChange?: (amount: string) => void,
-    token: Token | null,
-    onChangeToken?: (token: Token | null) => void,
+    token: SearchTokenInfo | null,
+    onChangeToken?: (token: SearchTokenInfo | null) => void,
     address?: string,
     priorityTokens?: string[]
 }
@@ -42,8 +43,8 @@ const TokenInput: React.FC<Props> = ({ label, amount, onChange, token, onChangeT
                     token && address && (
                         <TokenBalance
                             address={address}
-                            tokenAddress={token.id}
-                            tokenSymbol={token.symbol}
+                            tokenAddress={token.token_id}
+                            tokenSymbol={token.token_ascii}
                             setAmount={onChange}
                         />
                     )
@@ -90,8 +91,8 @@ const TokenInput: React.FC<Props> = ({ label, amount, onChange, token, onChangeT
     )
 }
 
-export const TokenInputValue = ({ amount, token }: { amount: string, token: Token }) => {
-    const { data: price, isLoading: isPriceLoading } = usePrice(token.id);
+export const TokenInputValue = ({ amount, token }: { amount: string, token: SearchTokenInfo }) => {
+    const { data: price, isLoading: isPriceLoading } = usePrice(token.token_id);
     
     if(isPriceLoading) return <Skeleton className="w-16 h-4" />
 

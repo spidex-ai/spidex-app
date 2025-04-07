@@ -69,8 +69,8 @@ export const SwapModalProvider: React.FC<{ children: ReactNode }> = ({ children 
                         </DialogTitle>
                     </DialogHeader>
                     <Swap 
-                        initialInputToken={inputToken}
-                        initialOutputToken={outputToken}
+                        initialInputToken={null}
+                        initialOutputToken={null}
                         inputLabel="From"
                         outputLabel="To"
                         onSuccess={() => setIsOpen(false)}

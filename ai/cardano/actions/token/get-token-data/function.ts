@@ -1,7 +1,7 @@
 
 
-import type { SolanaActionResult } from "../../cardano-action";
-import type { GetTokenDataArgumentsType, GetTokenDataResultBodyType } from "./types";
+import type { CardanoActionResult } from "../../cardano-action";
+import type { CardanoGetTokenDataArgumentsType, CardanoGetTokenDataResultBodyType } from "./types";
 import { searchTokens, getTokenOverview } from "@/services/birdeye";
 
 /**
@@ -11,7 +11,7 @@ import { searchTokens, getTokenOverview } from "@/services/birdeye";
  * @param args - The input arguments for the action
  * @returns A message containing the token data
  */
-export async function getTokenData(args: GetTokenDataArgumentsType): Promise<SolanaActionResult<GetTokenDataResultBodyType>> {
+  export async function getTokenData(args: CardanoGetTokenDataArgumentsType): Promise<CardanoActionResult<CardanoGetTokenDataResultBodyType>> {
   try {
 
     const { items } = await searchTokens({ keyword: args.search });

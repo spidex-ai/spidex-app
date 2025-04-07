@@ -1,15 +1,15 @@
 import { z } from "zod";
 import { UnstakeInputSchema } from "./input-schema";
-import { SolanaActionResult } from "../../cardano-action";
+import { CardanoActionResult } from "../../cardano-action";
 
-export type UnstakeSchemaType = typeof UnstakeInputSchema;
+export type CardanoUnstakeSchemaType = typeof UnstakeInputSchema;
 
-export type UnstakeArgumentsType = z.infer<UnstakeSchemaType>;
+export type CardanoUnstakeArgumentsType = z.infer<CardanoUnstakeSchemaType>;
 
-export type UnstakeResultBodyType = {
+export type CardanoUnstakeResultBodyType = {
     tx: string;
     inputAmount: number;
     symbol: string;
 } 
 
-export type UnstakeResultType = SolanaActionResult<UnstakeResultBodyType>;
+export type CardanoUnstakeResultType = CardanoActionResult<CardanoUnstakeResultBodyType>;

@@ -1,7 +1,7 @@
 import { getLpTokensByAddress } from "@/services/raydium";
 
-import type { GetLpTokensArgumentsType, GetLpTokensResultBodyType } from "./types";
-import type { SolanaActionResult } from "../../cardano-action";
+import type { CardanoGetLpTokensArgumentsType, CardanoGetLpTokensResultBodyType } from "./types";
+import type { CardanoActionResult } from "../../cardano-action";
 
 /**
  * Gets the token data for a given ticker.
@@ -10,7 +10,7 @@ import type { SolanaActionResult } from "../../cardano-action";
  * @param args - The input arguments for the action
  * @returns A message containing the token data
  */
-export async function getLpTokens(args: GetLpTokensArgumentsType): Promise<SolanaActionResult<GetLpTokensResultBodyType>> {
+export async function getLpTokens(args: CardanoGetLpTokensArgumentsType): Promise<CardanoActionResult<CardanoGetLpTokensResultBodyType>> {
     try {
         const lpTokens = await getLpTokensByAddress(args.address);
 

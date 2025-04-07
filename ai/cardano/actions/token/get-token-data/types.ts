@@ -2,15 +2,15 @@ import { z } from "zod";
 
 import { GetTokenDataInputSchema } from "./input-schema";
 
-import type { SolanaActionResult } from "../../cardano-action";
+import type { CardanoActionResult } from "../../cardano-action";
 import type { TokenOverview } from "@/services/birdeye/types";
 
-export type GetTokenDataSchemaType = typeof GetTokenDataInputSchema;
+export type CardanoGetTokenDataSchemaType = typeof GetTokenDataInputSchema;
 
-export type GetTokenDataArgumentsType = z.infer<GetTokenDataSchemaType>;
+export type CardanoGetTokenDataArgumentsType = z.infer<CardanoGetTokenDataSchemaType>;
 
-export type GetTokenDataResultBodyType = {
+export type CardanoGetTokenDataResultBodyType = {
     token: TokenOverview;
 }; 
 
-export type GetTokenDataResultType = SolanaActionResult<GetTokenDataResultBodyType>;
+export type CardanoGetTokenDataResultType = CardanoActionResult<CardanoGetTokenDataResultBodyType>;

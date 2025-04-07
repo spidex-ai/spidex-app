@@ -20,10 +20,12 @@ import { useTokenSearch } from '@/hooks/search';
 import { cn } from '@/lib/utils';
 
 import { Token } from '@/db/types';
+import { SearchTokenInfo } from '@/services/dexhunter/types';
+import { getLogoUrl } from '../utils/logo';
 
 interface Props {
-    value: Token | null,
-    onChange: (token: Token | null) => void,
+    value: SearchTokenInfo | null,
+    onChange: (token: SearchTokenInfo | null) => void,
     priorityTokens?: string[]
 }
 
@@ -35,36 +37,24 @@ const TokenSelect: React.FC<Props> = ({ value, onChange, priorityTokens = [] }) 
 
     const { results, loading } = useTokenSearch(input);
 
-    const sortedResults = React.useMemo(() => {
-        if (!results) return [];
-        
-        return results.sort((a, b) => {
-            // First check for priority tokens
-            const aIndex = priorityTokens.indexOf(a.id);
-            const bIndex = priorityTokens.indexOf(b.id);
-            
-            if (aIndex !== -1 && bIndex !== -1) return aIndex - bIndex;
-            if (aIndex !== -1) return -1;
-            if (bIndex !== -1) return 1;
-
-            // keep order
-            return 0;
-        });
-    }, [results, priorityTokens, input]);
 
     return (
         <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
                 <div
-                    className="w-fit shrink-0 flex items-center bg-neutral-200 dark:bg-neutral-700 hover:bg-neutral-300 dark:hover:bg-neutral-600 rounded-md px-2 py-1 gap-2 cursor-pointer transition-colors duration-200"
+                    className="w-fit shrink-0 flex items-center bg-neutral-200 dark:bg-transparent hover:bg-neutral-300 dark:hover:bg-transparent rounded-md px-2 py-1 gap-2 cursor-pointer transition-colors duration-200"
                 >
                     {
                         value ? (
-                            <img 
-                                src={value.logoURI || '/placeholder.png'} 
-                                alt={value.name} 
-                                className="w-6 h-6 rounded-full" 
-                            />
+                            <>{
+                                value.logo && (
+                                    <img 
+                                        src={getLogoUrl(value.logo)}
+                                        alt={value.token_ascii} 
+                                        className="w-6 h-6 rounded-full" 
+                                    />
+                                )
+                            }</>
                         ) : (
                             <div className="w-6 h-6 rounded-full bg-neutral-200 dark:bg-neutral-600" />
                         )
@@ -73,7 +63,7 @@ const TokenSelect: React.FC<Props> = ({ value, onChange, priorityTokens = [] }) 
                         "text-xs font-bold",
                         value ? "opacity-100" : "opacity-50"
                     )}>
-                        {value ? value.symbol : "Select"}
+                        {value ? value.token_ascii : "Select"}
                     </p>
                     <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />
                 </div>
@@ -91,14 +81,14 @@ const TokenSelect: React.FC<Props> = ({ value, onChange, priorityTokens = [] }) 
                         <div className="flex flex-col gap-2 max-h-[300px] overflow-y-scroll">
                             {
                                 input ? (
-                                    sortedResults.length === 0 ? (
+                                    results.length === 0 ? (
                                         <p className="text-xs text-neutral-500">
                                             No results for &quot;{input}&quot;
                                         </p>
                                     ) : (
-                                        sortedResults.map((token) => (
+                                        results.map((token: SearchTokenInfo) => (
                                             <Button 
-                                                key={token.id}
+                                                key={token.token_id}
                                                 variant="ghost"
                                                 className="w-full justify-start px-1"
                                                 onClick={() => {
@@ -106,15 +96,19 @@ const TokenSelect: React.FC<Props> = ({ value, onChange, priorityTokens = [] }) 
                                                     onChange(token);
                                                 }}
                                             >
-                                                <img 
-                                                    src={token.logoURI} 
-                                                    alt={token.name} 
-                                                    className="w-6 h-6 rounded-full" 
-                                                />
+                                                {
+                                                    token.logo && (
+                                                        <img 
+                                                            src={getLogoUrl(token.logo)}
+                                                            alt={token.token_ascii}
+                                                            className="w-6 h-6 rounded-full" 
+                                                        />
+                                                    )
+                                                }
                                                 <p className="text-sm font-bold">
-                                                    {token.symbol}
+                                                    {token.token_ascii} ({token.ticker})
                                                 </p>
-                                                <SaveToken address={token.id} />
+                                                <SaveToken address={token.token_id} />
                                             </Button>
                                         ))
                                     )

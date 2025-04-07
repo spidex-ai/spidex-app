@@ -1,16 +1,16 @@
 import { z } from "zod";
 
 import { TopTokenTradersInputSchema } from "./input-schema";
-import { SolanaActionResult } from "../../cardano-action";
+import { CardanoActionResult } from "../../cardano-action";
 
 import type { TopTraderByToken } from "@/services/birdeye/types";
 
-export type TopTokenTradersSchemaType = typeof TopTokenTradersInputSchema;
+export type CardanoTopTokenTradersSchemaType = typeof TopTokenTradersInputSchema;
 
-export type TopTokenTradersArgumentsType = z.infer<TopTokenTradersSchemaType>;
+export type CardanoTopTokenTradersArgumentsType = z.infer<CardanoTopTokenTradersSchemaType>;
 
-export type TopTokenTradersResultBodyType = {
+export type CardanoTopTokenTradersResultBodyType = {
     topTraders: TopTraderByToken[];
 }; 
 
-export type TopTokenTradersResultType = SolanaActionResult<TopTokenTradersResultBodyType>;
+export type CardanoTopTokenTradersResultType = CardanoActionResult<CardanoTopTokenTradersResultBodyType>;

@@ -1,16 +1,16 @@
 import { z } from "zod";
 import { TransferInputSchema } from "./input-schema";
-import { SolanaActionResult } from "../../cardano-action";
+import { CardanoActionResult } from "../../cardano-action";
 
-export type SolanaTransferSchemaType = typeof TransferInputSchema;
+export type CardanoTransferSchemaType = typeof TransferInputSchema;
 
-export type SolanaTransferArgumentsType = z.infer<SolanaTransferSchemaType>;
+export type CardanoTransferArgumentsType = z.infer<CardanoTransferSchemaType>;
 
-export type SolanaTransferResultBodyType = {
+export type CardanoTransferResultBodyType = {
     amount: number;
     recipient: string;
     token: string;
     transaction: string;
 };
 
-export type SolanaTransferResultType = SolanaActionResult<SolanaTransferResultBodyType>;
+export type CardanoTransferResultType = CardanoActionResult<CardanoTransferResultBodyType>;

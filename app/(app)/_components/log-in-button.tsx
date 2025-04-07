@@ -2,7 +2,7 @@
 
 import React from 'react'
 import '@/components/utils/suppress-console'
-import { Button } from '@/components/ui'
+import { Button, GradientButton } from '@/components/ui'
 import { useLogin } from '@/hooks'
 import { Wallet } from '@privy-io/react-auth'
 
@@ -19,13 +19,13 @@ const LogInButton: React.FC<Props> = ({ onComplete }) => {
     const address = user?.wallet?.address;
 
     return (
-        <Button 
+        <GradientButton 
             variant="brand"
             onClick={() => { if(user) { linkWallet() } else { login() } }}
             className="w-full"
         >
             Connect {address ? `${address.slice(0, 4)}...${address.slice(-4)}` : ''}
-        </Button>
+        </GradientButton>
     )
 }
 

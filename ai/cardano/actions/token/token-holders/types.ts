@@ -1,15 +1,14 @@
 import { z } from "zod";
 
 import { TokenHoldersInputSchema } from "./input-schema";
-import { SolanaActionResult } from "../../cardano-action";
-import { TokenLargestAccount } from "@/services/helius";
+import { CardanoActionResult } from "../../cardano-action";
 
-export type TokenHoldersSchemaType = typeof TokenHoldersInputSchema;
+export type CardanoTokenHoldersSchemaType = typeof TokenHoldersInputSchema;
 
-export type TokenHoldersArgumentsType = z.infer<TokenHoldersSchemaType>;
+export type CardanoTokenHoldersArgumentsType = z.infer<CardanoTokenHoldersSchemaType>;
 
-export type TokenHoldersResultBodyType = {
+export type CardanoTokenHoldersResultBodyType = {
     numHolders: number;
 }; 
 
-export type TokenHoldersResultType = SolanaActionResult<TokenHoldersResultBodyType>;
+export type CardanoTokenHoldersResultType = CardanoActionResult<CardanoTokenHoldersResultBodyType>;

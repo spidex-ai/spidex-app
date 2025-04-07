@@ -1,10 +1,10 @@
-import type { TokenHoldersArgumentsType, TokenHoldersResultBodyType } from "./types";
-import type { SolanaActionResult } from "../../cardano-action";
+import type { CardanoTokenHoldersArgumentsType, CardanoTokenHoldersResultBodyType } from "./types";
+import type { CardanoActionResult } from "../../cardano-action";
 import { getTokenAccountsByMint } from "@/services/helius";
 
 export async function getNumHolders(
-  args: TokenHoldersArgumentsType
-): Promise<SolanaActionResult<TokenHoldersResultBodyType>> {
+  args: CardanoTokenHoldersArgumentsType
+): Promise<CardanoActionResult<CardanoTokenHoldersResultBodyType>> {
   try {
     let tokenAccounts = await getTokenAccountsByMint(args.tokenAddress);
 

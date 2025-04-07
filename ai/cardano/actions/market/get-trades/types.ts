@@ -1,25 +1,26 @@
 import { z } from "zod";
 
 import type { GetTraderTradesInputSchema } from "./input-schema";
-import type { SolanaActionResult } from "../../cardano-action";
+import type { CardanoActionResult } from "../../cardano-action";
 import { Token } from "@/db/types";
+import { WalletTradeToken } from "@/services/taptools/types";
 
-export type TokenTraded = {
-    token: Token;
-    volume: {
-        buy: number;
-        sell: number;
-    },
-    balanceChange: number;
-    usdChange: number;
-}
+// export type CardanoTokenTraded extends WalletTradeToken {
+//     token: Token;
+//     volume: {
+//         buy: number;
+//         sell: number;
+//     },
+//     balanceChange: number;
+//     usdChange: number;
+// }
 
-export type GetTraderTradesSchemaType = typeof GetTraderTradesInputSchema;
+export type CardanoGetTraderTradesSchemaType = typeof GetTraderTradesInputSchema;
 
-export type GetTraderTradesArgumentsType = z.infer<GetTraderTradesSchemaType>;
+export type CardanoGetTraderTradesArgumentsType = z.infer<CardanoGetTraderTradesSchemaType>;
 
-export type GetTraderTradesResultBodyType = {
-    tokensTraded: Record<string, TokenTraded>;
+export type CardanoGetTraderTradesResultBodyType = {
+    tokensTraded: WalletTradeToken[];
 }; 
 
-export type GetTraderTradesResultType = SolanaActionResult<GetTraderTradesResultBodyType>;
+export type CardanoGetTraderTradesResultType = CardanoActionResult<CardanoGetTraderTradesResultBodyType>;

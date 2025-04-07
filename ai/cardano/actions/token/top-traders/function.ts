@@ -1,11 +1,11 @@
 import { getTopTradersByToken } from "@/services/birdeye";
 
-import type { TopTokenTradersArgumentsType, TopTokenTradersResultBodyType } from "./types";
-import type { SolanaActionResult } from "../../cardano-action";
+import type { CardanoTopTokenTradersArgumentsType, CardanoTopTokenTradersResultBodyType } from "./types";
+import type { CardanoActionResult } from "../../cardano-action";
 
 export async function getTopTokenTraders(
-  args: TopTokenTradersArgumentsType
-): Promise<SolanaActionResult<TopTokenTradersResultBodyType>> {
+  args: CardanoTopTokenTradersArgumentsType
+): Promise<CardanoActionResult<CardanoTopTokenTradersResultBodyType>> {
   try {
     let topTraders = await getTopTradersByToken({
       address: args.tokenAddress,

@@ -6,7 +6,7 @@ import SwapCard from './swap-result';
 import SwapCallBody from './call';
 
 import type { ToolInvocation } from 'ai';
-import type { SolanaTradeResultType, SolanaTradeArgumentsType } from '@/ai';
+import type { SolanaTradeResultType, SolanaTradeArgumentsType, CardanoTradeResultType, CardanoTradeArgumentsType } from '@/ai';
 
 interface SwapProps {
     tool: ToolInvocation,
@@ -20,16 +20,16 @@ const Swap: React.FC<SwapProps> = ({ tool, prevToolAgent }) => {
             tool={tool}
             loadingText="Completing Trade..."
             result={{
-                heading: (result: SolanaTradeResultType) => result.body 
+                heading: (result: CardanoTradeResultType) => result.body 
                     ? "Trade Complete"
                     : "Failed to complete trade",
-                body: (result: SolanaTradeResultType) => result.body 
+                body: (result: CardanoTradeResultType) => result.body 
                     ? <SwapCard />
                     : result.message
             }}
             call={{
                 heading: "Swap",
-                body: (toolCallId: string, args: SolanaTradeArgumentsType) => (
+                body: (toolCallId: string, args: CardanoTradeArgumentsType) => (
                     <SwapCallBody toolCallId={toolCallId} args={args} />
                 )
             }}

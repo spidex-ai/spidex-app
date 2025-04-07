@@ -1,10 +1,10 @@
 import { seekTradesByTime } from "@/services/birdeye";
 
-import type { GetTraderTradesArgumentsType, GetTraderTradesResultBodyType, TokenTraded } from "./types";
+import type { CardanoGetTraderTradesArgumentsType, CardanoGetTraderTradesResultBodyType } from "./types";
 import { getToken } from "@/db/services";
 import { Token } from "@/db/types";
 import taptoolsService from "@/services/taptools";
-import { CardanoAction, CardanoActionResult } from "../../cardano-action";
+import { CardanoActionResult } from "../../cardano-action";
 
 /**
  * Gets the trending tokens from Birdeye API.
@@ -14,8 +14,8 @@ import { CardanoAction, CardanoActionResult } from "../../cardano-action";
  * @returns A message containing the trending tokens information
  */
 export async function getTraderTrades(
-  args: GetTraderTradesArgumentsType
-): Promise<CardanoActionResult<any>> {
+  args: CardanoGetTraderTradesArgumentsType
+): Promise<CardanoActionResult<CardanoGetTraderTradesResultBodyType>> {
   try {
     // const responses = await Promise.all(
     //   Array.from({ length: 10 }, (_, i) => 
@@ -85,14 +85,14 @@ export async function getTraderTrades(
     return {
       message: `Found ${response.length} trades for the trader. The user is shown the trades, do not list them. Ask the user what they want to do with the trades.`,
       body: {
-        response,
+        tokensTraded: response,
       }
     };
   } catch (error) {
     return {
       message: `Error getting trades for the trader: ${error}`,
       body: {
-        tokensTraded: {},
+        tokensTraded: [],
       }
     };
   }

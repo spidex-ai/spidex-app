@@ -2,17 +2,17 @@ import { z } from "zod";
 
 import { LiquidStakingYieldsInputSchema } from "./input-schema";
 
-import type { SolanaActionResult } from "../../cardano-action";
+import type { CardanoActionResult } from "../../cardano-action";
 import type { Token } from "@/db/types";
 
-export type LiquidStakingYieldsSchemaType = typeof LiquidStakingYieldsInputSchema;
+export type CardanoLiquidStakingYieldsSchemaType = typeof LiquidStakingYieldsInputSchema;
 
-export type LiquidStakingYieldsArgumentsType = z.infer<LiquidStakingYieldsSchemaType>;
+export type CardanoLiquidStakingYieldsArgumentsType = z.infer<CardanoLiquidStakingYieldsSchemaType>;
 
-export type LiquidStakingYieldsResultBodyType = {
+export type CardanoLiquidStakingYieldsResultBodyType = {
     name: string;
     yield: number;
     tokenData: Token;
 }[]
 
-export type LiquidStakingYieldsResultType = SolanaActionResult<LiquidStakingYieldsResultBodyType>;
+export type CardanoLiquidStakingYieldsResultType = CardanoActionResult<CardanoLiquidStakingYieldsResultBodyType>;

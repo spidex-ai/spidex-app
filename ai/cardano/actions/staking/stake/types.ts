@@ -1,14 +1,14 @@
 import { z } from "zod";
 import { StakeInputSchema } from "./input-schema";
-import { SolanaActionResult } from "../../cardano-action";
+import { CardanoActionResult } from "../../cardano-action";
 
-export type StakeSchemaType = typeof StakeInputSchema;
+export type CardanoStakeSchemaType = typeof StakeInputSchema;
 
-export type StakeArgumentsType = z.infer<StakeSchemaType>;
+export type CardanoStakeArgumentsType = z.infer<CardanoStakeSchemaType>;
 
-export type StakeResultBodyType = {
+export type CardanoStakeResultBodyType = {
     tx: string;
     symbol: string;
 } 
 
-export type StakeResultType = SolanaActionResult<StakeResultBodyType>;
+export type CardanoStakeResultType = CardanoActionResult<CardanoStakeResultBodyType>;

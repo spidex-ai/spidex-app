@@ -1,7 +1,7 @@
 import { getTopTraders as getTopTradersBirdeye } from "@/services/birdeye";
 
-import type { GetTopTradersArgumentsType, GetTopTradersResultBodyType } from "./types";
-import { SolanaActionResult } from "@/ai/solana/actions/solana-action";
+import type { CardanoGetTopTradersArgumentsType, CardanoGetTopTradersResultBodyType } from "./types";
+import { CardanoActionResult } from "@/ai/cardano/actions/cardano-action";
 import taptoolsService from "@/services/taptools";
 
 /**
@@ -12,8 +12,8 @@ import taptoolsService from "@/services/taptools";
  * @returns A message containing the trending tokens information
  */
 export async function getTopTraders(
-  args: GetTopTradersArgumentsType
-): Promise<SolanaActionResult<GetTopTradersResultBodyType>> {
+    args: CardanoGetTopTradersArgumentsType
+): Promise<CardanoActionResult<CardanoGetTopTradersResultBodyType>> {
   try {
     const response = await taptoolsService.getTopTokenHolders('8fef2d34078659493ce161a6c7fba4b56afefa8535296a5743f6958741414441', 1, args.limit);
     console.log("🚀 ~ response:", response)

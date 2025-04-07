@@ -3,14 +3,14 @@ import { LAMPORTS_PER_SOL, PublicKey, Connection } from "@solana/web3.js";
 
 import { getTokenAccountsByOwner } from "@/services/helius";
 
-import type { SolanaActionResult } from "../../cardano-action";
-import type { AllBalancesArgumentsType, AllBalancesResultBodyType } from "./types";
+import type { CardanoActionResult } from "../../cardano-action";
+import type { CardanoAllBalancesArgumentsType, CardanoAllBalancesResultBodyType } from "./types";
 import { getToken } from "@/db/services";
 
 export async function getAllBalances(
   connection: Connection,
-  args: AllBalancesArgumentsType
-): Promise<SolanaActionResult<AllBalancesResultBodyType>> {
+  args: CardanoAllBalancesArgumentsType
+): Promise<CardanoActionResult<CardanoAllBalancesResultBodyType>> {
   try {
     let balances: {
       balance: number;

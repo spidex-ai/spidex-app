@@ -1,16 +1,15 @@
 import { z } from "zod";
 
 import type { GetTrendingTokensInputSchema } from "./input-schema";
-import type { TrendingToken } from "@/services/birdeye/types";
-import { TopTokenMcap } from "@/services/taptools/types";
-import { SolanaActionResult } from "@/ai/solana/actions/solana-action";
+import type { TopTokenMcap } from "@/services/taptools/types";
+import { CardanoActionResult } from "@/ai/cardano/actions/cardano-action";
 
-export type GetTrendingTokensSchemaType = typeof GetTrendingTokensInputSchema;
+export type CardanoGetTrendingTokensSchemaType = typeof GetTrendingTokensInputSchema;
 
-export type GetTrendingTokensArgumentsType = z.infer<GetTrendingTokensSchemaType>;
+export type CardanoGetTrendingTokensArgumentsType = z.infer<CardanoGetTrendingTokensSchemaType>;
 
-export type GetTrendingTokensResultBodyType = {
+export type CardanoGetTrendingTokensResultBodyType = {
     tokens: TopTokenMcap[];
 };
 
-export type GetTrendingTokensResultType = SolanaActionResult<GetTrendingTokensResultBodyType>;
+export type CardanoGetTrendingTokensResultType = CardanoActionResult<CardanoGetTrendingTokensResultBodyType>;

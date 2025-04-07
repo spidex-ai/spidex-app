@@ -1,14 +1,14 @@
 import { z } from "zod";
 
 import { GetTokenAddressArgumentsSchema } from "./input-schema";
-import { SolanaActionResult } from "../../cardano-action";
+import { CardanoActionResult } from "../../cardano-action";
 
-export type GetTokenAddressSchemaType = typeof GetTokenAddressArgumentsSchema;
+export type CardanoGetTokenAddressSchemaType = typeof GetTokenAddressArgumentsSchema;
 
-export type GetTokenAddressArgumentsType = z.infer<GetTokenAddressSchemaType>;
+export type CardanoGetTokenAddressArgumentsType = z.infer<CardanoGetTokenAddressSchemaType>;
 
-export type GetTokenAddressResultBodyType = {
+export type CardanoGetTokenAddressResultBodyType = {
     address: string;
 }; 
 
-export type GetTokenAddressResultType = SolanaActionResult<GetTokenAddressResultBodyType>;
+export type CardanoGetTokenAddressResultType = CardanoActionResult<CardanoGetTokenAddressResultBodyType>;

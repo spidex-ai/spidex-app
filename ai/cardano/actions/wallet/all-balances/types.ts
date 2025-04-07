@@ -1,13 +1,13 @@
 import { z } from "zod";
 
 import { AllBalancesInputSchema } from "./input-schema";
-import type { SolanaActionResult } from "../../cardano-action";
+import type { CardanoActionResult } from "../../cardano-action";
 
-export type AllBalancesSchemaType = typeof AllBalancesInputSchema;
+export type CardanoAllBalancesSchemaType = typeof AllBalancesInputSchema;
 
-export type AllBalancesArgumentsType = z.infer<AllBalancesSchemaType>;
+export type CardanoAllBalancesArgumentsType = z.infer<CardanoAllBalancesSchemaType>;
 
-export type AllBalancesResultBodyType = {
+export type CardanoAllBalancesResultBodyType = {
     balances: {
         balance: number;
         token: string;
@@ -16,4 +16,4 @@ export type AllBalancesResultBodyType = {
     }[];
 }; 
 
-export type AllBalancesResultType = SolanaActionResult<AllBalancesResultBodyType>;
+export type CardanoAllBalancesResultType = CardanoActionResult<CardanoAllBalancesResultBodyType>;
