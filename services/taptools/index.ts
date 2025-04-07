@@ -196,7 +196,7 @@ export class TaptoolsService {
      * @returns Promise with top tokens by market cap
      */
     async getTopTokensByMcap(page = 1, perPage = 10): Promise<TopTokenMcap[]> {
-        return this.client.get<TopTokenMcap[]>('token/top/mcap', { page, perPage });
+        return this.client.get<TopTokenMcap[]>('token/top/mcap', { type: 'mcap', page, perPage });
     }
 
     /**
