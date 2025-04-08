@@ -99,7 +99,7 @@ export interface TopToken {
     unit: string;
     ticker: string;
     price: number;
-    volume: number;
+    volume?: number;
 }
 
 export interface TopTokenMcap extends TopToken {

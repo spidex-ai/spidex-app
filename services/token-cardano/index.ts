@@ -1,6 +1,7 @@
 import { TokenCardanoClient } from './client';
 import {
-    BatchTokenCardanoInfo
+    BatchTokenCardanoInfo,
+    TokenCardanoInfo
 } from './types';
 
 export class TokenCardanoService {
@@ -21,6 +22,11 @@ export class TokenCardanoService {
             properties: properties
         });
     }
+
+    async tokenInfo(token: string): Promise<TokenCardanoInfo> {
+        return this.client.get<TokenCardanoInfo>(`metadata/${token}`);
+    }
+
 }
 
 // Export a singleton instance of the service
