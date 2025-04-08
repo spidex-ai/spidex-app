@@ -1,6 +1,6 @@
 'use client'
 
-import { AgentButton, Button, Icon } from '@/components/ui'
+import { AgentButton } from '@/components/ui'
 import React from 'react'
 import Image from 'next/image'
 import { useChat } from '../../_contexts/chat'
@@ -47,6 +47,7 @@ const AgentButtons = () => {
             {
                 Agents.map((agent) => (
                     <AgentButton
+                        key={agent.name}
                         onClick={() => sendMessage(agent.prompt)}
                     >
                         <div className="flex items-center gap-2">

@@ -1,7 +1,7 @@
-import type { TokenPriceChartResultBodyType } from "./types";
-import type { SolanaActionResult } from "../../cardano-action";
+import type { CardanoTokenPriceChartResultBodyType } from "./types";
+import type { CardanoActionResult } from "../../cardano-action";
 
-export async function getPriceChart(): Promise<SolanaActionResult<TokenPriceChartResultBodyType>> {
+export async function getPriceChart(): Promise<CardanoActionResult<CardanoTokenPriceChartResultBodyType>> {
   try {
     return {
       message: `The price chart has been retrieved and displayed to the user. Do not reiterate the raw data.`,

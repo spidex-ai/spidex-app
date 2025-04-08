@@ -5,7 +5,7 @@ import React, { useRef, useEffect } from 'react'
 import { GiSwapBag } from 'react-icons/gi'
 import { IoSwapHorizontal } from 'react-icons/io5'
 import { MdBubbleChart } from 'react-icons/md'
-import { FaXTwitter, FaAt, FaWater, FaUsers } from 'react-icons/fa6'
+import { FaWater, FaUsers } from 'react-icons/fa6'
 import { ChartCandlestick } from 'lucide-react'
 
 import { Tabs, TabsTrigger, TabsContent } from '@/components/ui'
@@ -14,13 +14,10 @@ import DraggableTabsList from './draggable-tabs-list'
 import TopHolders from './top-holders';
 import TopTraders from './top-traders';
 import BubbleMap from './bubble-map';
-import AccountTweets from './account-tweets';
-import AccountMentions from './account-mentions';
+
 import TokenMarkets from './markets'
 import TokenUsersOverTime from './users-over-time'
 import MarketStats from './market-stats'
-
-import { getTokenOverview } from '@/services/birdeye';
 
 interface Props {
     address: string;

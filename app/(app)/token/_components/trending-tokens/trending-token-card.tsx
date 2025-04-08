@@ -2,7 +2,7 @@ import React from 'react'
 
 import { Card } from '@/components/ui'
 
-import type { TrendingToken } from '@/services/birdeye/types'
+// import type { TrendingToken } from '@/services/birdeye/types'
 import Link from 'next/link'
 
 import SaveToken from '@/app/(app)/_components/save-token'

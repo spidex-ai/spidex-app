@@ -2,7 +2,7 @@
 
 import React from 'react'
 import '@/components/utils/suppress-console'
-import { Button, GradientButton } from '@/components/ui'
+import { GradientButton } from '@/components/ui'
 import { useLogin } from '@/hooks'
 import { Wallet } from '@privy-io/react-auth'
 

@@ -2,7 +2,7 @@
 
 import React, { useState} from 'react'
 
-import { ChevronDown, Loader2, MessageSquare, Trash2 } from 'lucide-react';
+import { ChevronDown, Loader2, Trash2 } from 'lucide-react';
 
 import Link from 'next/link';
 

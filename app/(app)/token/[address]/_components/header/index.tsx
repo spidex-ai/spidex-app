@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 import { Skeleton } from "@/components/ui";
 
@@ -11,7 +11,6 @@ import Address from "@/app/_components/address";
 import { useTokenDetail } from "@/hooks";
 import SaveToken from "@/app/(app)/_components/save-token";
 import { getLogoUrl } from "@/app/utils/logo";
-import { TokenDetail } from "@/services/dexhunter/types";
 
 interface Props {
   address: string;

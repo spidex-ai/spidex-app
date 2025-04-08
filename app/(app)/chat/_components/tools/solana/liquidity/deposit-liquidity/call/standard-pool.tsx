@@ -45,6 +45,8 @@ const StandardPool: React.FC<Props> = ({ pool, toolCallId }) => {
 
     const { data: mintA } = useTokenDataByAddress(pool.mintA.address);
     const { data: mintB } = useTokenDataByAddress(pool.mintB.address);
+    console.log("🚀 ~ StandardPool ~ mintA:", mintA)
+    console.log("🚀 ~ StandardPool ~ mintB:", mintB)
 
     const { balance: balanceA, isLoading: isBalanceALoading } = useTokenBalance(pool.mintA.address, wallet?.address ?? "");
     const { balance: balanceB, isLoading: isBalanceBLoading } = useTokenBalance(pool.mintB.address, wallet?.address ?? "");
@@ -148,14 +150,14 @@ const StandardPool: React.FC<Props> = ({ pool, toolCallId }) => {
             <div className="flex flex-col gap-2">
                 <div className="flex flex-col gap-2">
                     <TokenInput
-                        token={mintA}
+                        token={null}
                         label={"Token A"}
                         amount={amountA}
                         onChange={handleAmountAChange}
                         address={wallet?.address ?? ""}
                     />
                     <TokenInput
-                        token={mintB}
+                        token={null}
                         label={"Token B"}
                         amount={amountB}
                         onChange={handleAmountBChange}

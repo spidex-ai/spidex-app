@@ -2,13 +2,9 @@
 
 import React from 'react'
 
-import { Button, Icon } from '@/components/ui';
-
 import { useChat } from '../../_contexts/chat';
 
 import { cn } from '@/lib/utils';
-
-import { IconName } from '@/types';
 
 interface Props {
     icon: React.ReactNode

@@ -19,7 +19,7 @@ import { useTokenSearch } from '@/hooks/search';
 
 import { cn } from '@/lib/utils';
 
-import { Token } from '@/db/types';
+// import { Token } from '@/db/types';
 import { SearchTokenInfo } from '@/services/dexhunter/types';
 import { getLogoUrl } from '../utils/logo';
 
@@ -36,6 +36,8 @@ const TokenSelect: React.FC<Props> = ({ value, onChange, priorityTokens = [] }) 
     const [input, setInput] = useState("");
 
     const { results, loading } = useTokenSearch(input);
+
+    console.log("🚀 ~ TokenSelect ~ priorityTokens:", priorityTokens)
 
 
     return (

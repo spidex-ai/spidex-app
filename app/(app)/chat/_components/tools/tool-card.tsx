@@ -3,8 +3,6 @@ import React from 'react'
 import { 
     AnimatedShinyText, 
     Collapsible, 
-    CollapsibleTrigger, 
-    CollapsibleContent, 
     Icon 
 } from '@/components/ui'
 
@@ -13,7 +11,6 @@ import { cn } from '@/lib/utils'
 import type { ToolInvocation } from 'ai'
 import type { BaseActionResult } from '@/ai'
 import { getAgentName } from './tool-to-agent'
-import { ChevronDown } from 'lucide-react'
 import Image from 'next/image'
 import { 
     KNOWLEDGE_AGENT_NAME, 
@@ -73,6 +70,7 @@ const ToolCard = <ActionResultBodyType, ActionArgsType>({ tool, loadingText, res
     console.log("🚀 ~ ToolCard ~ agentIcon:", agentIcon)
 
     console.log("🚀 ~ ToolCard ~ tool:", tool)
+    console.log("🚀 ~ ToolCard ~ result:", result)
     
     return (
         <div className={cn(

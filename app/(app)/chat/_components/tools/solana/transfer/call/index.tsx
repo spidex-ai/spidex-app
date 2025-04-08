@@ -77,15 +77,13 @@ const TransferCall: React.FC<Props> = ({ args, toolCallId }) => {
         <Card className="flex flex-col gap-2 p-2">
             <div className="flex flex-col items-center gap-2">
                 <TokenInput
-                    token={token}
+                    token={null}
                     label="Transfer"
                     amount={amount}
                     onChange={(amount) => {
                         setAmount(amount);
                     }}
-                    onChangeToken={(token) => {
-                        setToken(token);
-                    }}
+                    onChangeToken={() => {}}
                     address={wallet?.address}
                 />
                 <ChevronDown className="w-4 h-4" />

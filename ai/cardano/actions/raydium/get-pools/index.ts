@@ -3,10 +3,10 @@ import { CARDANO_GET_POOLS_PROMPT } from "./prompt";
 import { GetPoolsInputSchema } from "./input-schema";
 import { getPools } from "./function";
 
+import type { CardanoGetPoolsResultBodyType } from "./types";
 import type { CardanoAction } from "../../cardano-action";
-import type { GetPoolsResultBodyType } from "./types";
 
-export class CardanoGetPoolsAction implements CardanoAction<typeof GetPoolsInputSchema, GetPoolsResultBodyType> {
+export class CardanoGetPoolsAction implements CardanoAction<typeof GetPoolsInputSchema, CardanoGetPoolsResultBodyType> {
   public name = CARDANO_GET_POOLS_NAME;
   public description = CARDANO_GET_POOLS_PROMPT;
   public argsSchema = GetPoolsInputSchema;

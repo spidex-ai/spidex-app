@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
-
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
@@ -89,9 +88,10 @@ export const GradientButton = (props: any) => {
   return (
     <button
       {...rest}
+      disabled={isLoading}
       className="bg-gradient-to-r from-[#009EFF] to-[#BBF985] text-black px-6 md:px-8 py-2 md:py-3 rounded-lg font-semibold hover:opacity-90 transition-all duration-200 cursor-pointer"
     >
-      {props.children}
+      {children}
     </button>
   );
 };
@@ -101,9 +101,10 @@ export const GradientButtonIcon = (props: any) => {
   return (
     <button
       {...rest}
+      disabled={isLoading}
       className="bg-gradient-to-r from-[#009EFF] to-[#BBF985] text-black px-2 md:px-2 py-2 md:py-2 rounded-lg font-semibold hover:opacity-90 transition-all duration-200 cursor-pointer"
     >
-      {props.children}
+      {children}
     </button>
   );
 };
@@ -112,6 +113,7 @@ export const AgentButton = (props: any) => {
   const { isLoading, children, className, ...rest } = props;
   return (
     <Button
+      disabled={isLoading}
       className={cn(
         "flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400 h-fit justify-start",
         className
@@ -119,7 +121,7 @@ export const AgentButton = (props: any) => {
       variant="outline"
       {...rest}
     >
-      {props.children}
+      {children}
     </Button>
   );
 };

@@ -6,7 +6,7 @@ import SwapCard from './swap-result';
 import SwapCallBody from './call';
 
 import type { ToolInvocation } from 'ai';
-import type { SolanaTradeResultType, SolanaTradeArgumentsType, CardanoTradeResultType, CardanoTradeArgumentsType } from '@/ai';
+import type { CardanoTradeResultType, CardanoTradeArgumentsType } from '@/ai';
 
 interface SwapProps {
     tool: ToolInvocation,

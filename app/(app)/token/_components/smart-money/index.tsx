@@ -1,19 +1,19 @@
 'use client'
-import React, { use } from 'react'
+import React from 'react'
 
-import SmartMoneyTokenCard from './smart-money-token-card';
+// import SmartMoneyTokenCard from './smart-money-token-card';
 
-import { getPrices, getTokenMetadata } from '@/services/birdeye'
-import { getSmartMoneyInflows } from '@/services/hellomoon';
+// import { getPrices, getTokenMetadata } from '@/services/birdeye'
+// import { getSmartMoneyInflows } from '@/services/hellomoon';
 
-import { Granularity, SmartMoneyTokenInflow } from '@/services/hellomoon/types';
-import { Price, TokenMetadata } from '@/services/birdeye/types';
+// import { Granularity, SmartMoneyTokenInflow } from '@/services/hellomoon/types';
+// import { Price, TokenMetadata } from '@/services/birdeye/types';
 import { useTokenTrending } from '@/hooks/queries/token/use-token-trending';
 import TrendingTokenCard from '../trending-tokens/trending-token-card';
 
 const SmartMoneyTokens: React.FC = () => {
 
-    const { data, isLoading, error } = useTokenTrending();
+    const { data } = useTokenTrending();
 
     // const tokens = await getSmartMoneyInflows(Granularity.ONE_DAY, 9).catch((error) => {
     //     console.error(error);

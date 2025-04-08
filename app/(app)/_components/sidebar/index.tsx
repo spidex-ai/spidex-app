@@ -2,8 +2,6 @@ import React from 'react'
 
 import Link from 'next/link';
 
-import { FaDiscord, FaXTwitter } from 'react-icons/fa6';
-
 import {
     Sidebar as SidebarUI, 
     SidebarHeader, 
@@ -14,7 +12,6 @@ import {
     SidebarMenuButton,
     SidebarSeparator,
     SidebarMenu as SidebarMenuUI,
-    useSidebar,
 } from '@/components/ui'
 
 import AuthButton from './auth-button';

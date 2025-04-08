@@ -30,22 +30,6 @@ const starterButtons = [
     }
 ] as const
 
-type SuggestionButton = {
-    title: string
-    description?: string
-    icon: React.ReactNode | null
-    prompt: string
-}
-
-const suggestionButtonUp: SuggestionButton[] = [
-    {
-        title: "Trending",
-        description: "Search the trending tokens",
-        icon: null,
-        prompt: "Show me the trending tokens"
-    }
-]
-
 const StarterButtons = () => {
     return (
         <div className="grid grid-cols-2 gap-2">

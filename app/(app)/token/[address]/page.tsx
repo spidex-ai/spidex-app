@@ -6,7 +6,6 @@ import Header from "./_components/header";
 import TokenDashboardTabs from "./_components/tabs";
 import SidePanel from "./_components/side-panel";
 import ResizableLayout from "./_components/resizable-layout";
-import { getTokenOverview } from '@/services/birdeye';
 
 const TokenPage = async ({ params }: { params: Promise<{ address: string }> }) => {
     const { address } = await params;

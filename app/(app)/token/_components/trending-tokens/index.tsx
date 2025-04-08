@@ -7,7 +7,7 @@ import { useTokenTrending } from '@/hooks/queries/token/use-token-trending';
 
 const TrendingTokens: React.FC =  () => {
 
-    const { data, isLoading, error } = useTokenTrending();
+    const { data } = useTokenTrending();
     console.log(data);
 
     return (

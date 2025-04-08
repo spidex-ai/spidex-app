@@ -115,8 +115,8 @@ const Swap: React.FC<Props> = ({
                     label={inputLabel}
                     amount={inputAmount}
                     onChange={setInputAmount}
-                    token={inputToken}
-                    onChangeToken={setInputToken}
+                    token={null}
+                    onChangeToken={() => {}}
                     address={wallet?.address}
                 />
                 <Button 
@@ -130,8 +130,8 @@ const Swap: React.FC<Props> = ({
                 <TokenInput
                     label={outputLabel}
                     amount={outputAmount}
-                    token={outputToken}
-                    onChangeToken={setOutputToken}
+                    token={null}
+                    onChangeToken={() => {}}
                     address={wallet?.address}
                 />
             </div>

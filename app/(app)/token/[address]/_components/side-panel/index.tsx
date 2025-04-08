@@ -11,11 +11,8 @@ import Chat from './chat';
 
 import { ChatProvider } from '../../_contexts';
 
-import { getTokenOverview } from '@/services/birdeye';
-import { getToken } from '@/db/services';
-
 import type { TokenChatData } from '@/types';
-import type { Token } from '@/db/types';
+
 import { useTokenDetail } from "@/hooks";
 
 interface Props {
@@ -24,31 +21,31 @@ interface Props {
 
 const SidePanel: React.FC<Props> =  ({ address }) => {
 
-    const {data, error} = useTokenDetail(address);
+    const {data} = useTokenDetail(address);
 
 
 
     // If getToken fails, use tokenMetadata to create a token object
-    const tokenData = {
-        id: data?.token_id,
-        name: data?.token_ascii,
-        symbol: data?.ticker,
-        decimals: data?.decimals,
-        logoURI: data?.logo,
-        extensions: {},
-        tags: [],
-        freezeAuthority: null,
-        mintAuthority: null,
-        permanentDelegate: null
-    } as Token;
+    // const tokenData = {
+    //     id: data?.token_id,
+    //     name: data?.token_ascii,
+    //     symbol: data?.ticker,
+    //     decimals: data?.decimals,
+    //     logoURI: data?.logo,
+    //     extensions: {},
+    //     tags: [],
+    //     freezeAuthority: null,
+    //     mintAuthority: null,
+    //     permanentDelegate: null
+    // } as Token;
 
     const tokenChatData: TokenChatData = {
-        address: data?.token_id!,
-        name: data?.token_ascii!,
-        symbol: data?.ticker!,
-        decimals: data?.decimals!,
+        address: data?.token_id ?? '',
+        name: data?.token_ascii ?? '',
+        symbol: data?.ticker ?? '',
+        decimals: data?.decimals ?? 0,
         extensions: {},
-        logoURI: data?.logo!,
+        logoURI: data?.logo ?? '',
         supply: 10000,
         circulatingSupply: 10000
     }

@@ -30,6 +30,7 @@ export const getTokenCandlesticks = async (mint: string, granularity: Candlestic
         low: candle.low / (10 ** decimals),
         close: candle.close / (10 ** decimals),
         volume: candle.volume / (10 ** decimals),
+        time: candle.startTime as unknown as number,
     })).reverse();
 
     return adjustedData;

@@ -2,14 +2,13 @@
 
 import React from 'react'
 
-import { ChevronsUpDown, Coins, LogIn, LogOut, Wallet } from 'lucide-react';
+import { Coins, LogOut, Wallet } from 'lucide-react';
 
 import { useLogin } from '@/hooks';
 
 import {
     SidebarMenu,
     SidebarMenuItem,
-    SidebarMenuButton,
     DropdownMenu,
     DropdownMenuTrigger,
     DropdownMenuContent,

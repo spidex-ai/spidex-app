@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 
-import { ChevronDown, Coins } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 
 import Link from 'next/link';
 

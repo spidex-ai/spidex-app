@@ -13,7 +13,7 @@ import { usePrice } from '@/hooks/queries/price'
 
 import { cn } from '@/lib/utils'
 
-import type { Token } from '@/db/types'
+// import type { Token } from '@/db/types'
 import { SearchTokenInfo } from '@/services/dexhunter/types'
 
 interface Props {

@@ -1,20 +1,15 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import { Button, CandlestickChart, Skeleton } from "@/components/ui";
 
-import { usePriceChart, usePriceChartTaptools } from "@/hooks";
+import { usePriceChartTaptools } from "@/hooks";
 
 import { cn } from "@/lib/utils";
 
 import type { UTCTimestamp } from "lightweight-charts";
-import {
-  CandlestickGranularity,
-  CandleStickInterval,
-  TokenPriceCandlestick,
-} from "@/services/hellomoon/types";
-import { useTaptools } from "@/hooks/useTaptools";
+import { CandlestickGranularity, CandleStickInterval } from "@/services/hellomoon/types";
 
 const WINDOWS = [
   {
@@ -58,12 +53,13 @@ const TokenChart: React.FC<Props> = ({ mint }) => {
     CandlestickGranularity.FIVE_MIN
   );
   const [numDays, setNumDays] = useState<number>(1);
-  const { data, isLoading, error } = usePriceChartTaptools(
+  const { data, isLoading } = usePriceChartTaptools(
     "8fef2d34078659493ce161a6c7fba4b56afefa8535296a5743f6958741414441",
     CandleStickInterval.FOUR_HOURS,
     180
   );
   console.log("data:::", data);
+  console.log("mint:::", mint);
 
   const price = data?.length > 0 ? data[data.length - 1].close : 0;
   const open = data?.length > 0 ? data[0].open : 0;

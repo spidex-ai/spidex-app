@@ -6,8 +6,6 @@ import { ChevronDown } from 'lucide-react';
 
 import { VersionedTransaction } from '@solana/web3.js';
 
-import Decimal from 'decimal.js';
-
 import { Button, Separator } from '@/components/ui';
 
 import LogInButton from '@/app/(app)/_components/log-in-button';
@@ -16,12 +14,12 @@ import TokenInput from './token-input';
 
 import { useSendTransaction, useTokenBalance } from '@/hooks';
 
-import { getSwapObj, getQuote } from '@/services/jupiter';
+import { getSwapObj } from '@/services/jupiter';
 
 import { cn } from '@/lib/utils';
 
 import type { QuoteResponse } from '@jup-ag/api';
-import type { Token } from '@/db/types';
+
 import { SearchTokenInfo } from '@/services/dexhunter/types';
 
 interface Props {
@@ -58,8 +56,8 @@ const Swap: React.FC<Props> = ({
     const [outputAmount, setOutputAmount] = useState<string>("");
     const [outputToken, setOutputToken] = useState<SearchTokenInfo | null>(initialOutputToken);
 
-    const [isQuoteLoading, setIsQuoteLoading] = useState<boolean>(false);
-    const [quoteResponse, setQuoteResponse] = useState<QuoteResponse | null>(null);
+    const [isQuoteLoading] = useState<boolean>(false);
+    const [quoteResponse] = useState<QuoteResponse | null>(null);
     const [isSwapping, setIsSwapping] = useState<boolean>(false);
 
     const { sendTransaction, wallet } = useSendTransaction();
