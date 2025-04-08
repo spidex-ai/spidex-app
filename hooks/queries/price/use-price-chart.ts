@@ -39,7 +39,9 @@ export const usePriceChartTaptools = (unit: string, interval: CandleStickInterva
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        fetchDataChart();
+        if (unit) {
+            fetchDataChart();
+        }
     }, [unit, interval, numIntervals]);
 
     const fetchDataChart = async () => {

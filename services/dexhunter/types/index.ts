@@ -20,4 +20,5 @@ export interface TokenDetail {
     logo: string
     total_supply: number 
     decimals: number
+    unit:string
 }

@@ -18,9 +18,11 @@ import BubbleMap from './bubble-map';
 import TokenMarkets from './markets'
 import TokenUsersOverTime from './users-over-time'
 import MarketStats from './market-stats'
+import { TokenDetail } from '@/services/dexhunter/types'
 
 interface Props {
     address: string;
+    data: TokenDetail | null;
     // tokenOverview: Awaited<ReturnType<typeof getTokenOverview>>;
 }
 

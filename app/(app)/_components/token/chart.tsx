@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 
 import type { UTCTimestamp } from "lightweight-charts";
 import { CandlestickGranularity, CandleStickInterval } from "@/services/hellomoon/types";
+import { TokenDetail } from "@/services/dexhunter/types";
 
 const WINDOWS = [
   {
@@ -46,15 +47,16 @@ const WINDOWS = [
 
 interface Props {
   mint: string;
+  data: TokenDetail | null;
 }
 
-const TokenChart: React.FC<Props> = ({ mint }) => {
+const TokenChart: React.FC<Props> = ({ mint, data: tokenDeetail }) => {
   const [timeframe, setTimeframe] = useState<CandlestickGranularity>(
     CandlestickGranularity.FIVE_MIN
   );
   const [numDays, setNumDays] = useState<number>(1);
   const { data, isLoading } = usePriceChartTaptools(
-    "8fef2d34078659493ce161a6c7fba4b56afefa8535296a5743f6958741414441",
+    tokenDeetail?.unit ?? "",
     CandleStickInterval.FOUR_HOURS,
     180
   );

@@ -14,14 +14,19 @@ import { ChatProvider } from '../../_contexts';
 import type { TokenChatData } from '@/types';
 
 import { useTokenDetail } from "@/hooks";
+import { TokenDetail } from '@/services/dexhunter/types';
 
 interface Props {
     address: string;
+    data: TokenDetail | null;
 }
 
-const SidePanel: React.FC<Props> =  ({ address }) => {
+const SidePanel: React.FC<Props> =  ({ address, data: tokenDetail }) => {
 
     const {data} = useTokenDetail(address);
+
+    console.log('================>>>>>>>>>>>>>tokenDetail', tokenDetail);
+    
 
 
 

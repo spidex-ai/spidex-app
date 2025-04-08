@@ -8,7 +8,7 @@ import { useTokenTrending } from '@/hooks/queries/token/use-token-trending';
 const TrendingTokens: React.FC =  () => {
 
     const { data } = useTokenTrending();
-    console.log(data);
+    console.log('data:::', data);
 
     return (
         <div className="flex flex-col gap-2">

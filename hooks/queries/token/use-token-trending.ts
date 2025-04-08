@@ -34,3 +34,38 @@ export const useTokenTrending = () => {
     };
   };
   
+
+export const useTokenTopMcap = (page: number, perPage: number) => {
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+    const [data, setData] = useState<TopToken[]>([]);
+
+    useEffect(() => {
+        fetchTopTokenMcap();
+    }, []);
+
+    const fetchTopTokenMcap = async () => {
+        setIsLoading(true);
+        try {
+          const response = await fetch(`/api/taptools/token/top/mcap?page=${page}&perPage=${perPage}`);
+
+          if (!response.ok) {
+            throw new Error(`API error: ${response.status}`);
+          }
+    
+          const data = await response.json();
+          setData(data);
+        } catch (error) {
+          setError(error as string);
+        } finally {
+          setIsLoading(false);
+        }
+    }
+
+    return {
+      isLoading,
+      error,
+      data
+    }
+}
+
