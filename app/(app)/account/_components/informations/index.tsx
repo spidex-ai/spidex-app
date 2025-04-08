@@ -3,6 +3,8 @@ import Image from "next/image";
 import { GradientBorderButton } from "@/components/ui/button";
 import { TextGradient } from "@/components/ui/text";
 import { type User } from "@privy-io/react-auth";
+
+import { useLogin } from '@/hooks';
 interface Props {
   user: User;
 }
@@ -11,6 +13,7 @@ const Information: React.FC<Props> = ({ user }) => {
   const wallets = user.linkedAccounts.filter(
     (account) => account.type === "wallet"
   );
+  const { logout } = useLogin();
   return (
     <>
       <div className="flex justify-between gap-4">
@@ -25,7 +28,7 @@ const Information: React.FC<Props> = ({ user }) => {
           </div>
           <TextGradient className="text-2xl">Account</TextGradient>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 cursor-pointer" onClick={() => logout()}>
           <div>
             <Image
               src="/icons/logout-white.svg"

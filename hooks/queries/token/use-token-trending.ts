@@ -54,6 +54,7 @@ export const useTokenTopMcap = (page: number, perPage: number) => {
           }
     
           const data = await response.json();
+          console.log('data::: top mcap', data);
           setData(data);
         } catch (error) {
           setError(error as string);
