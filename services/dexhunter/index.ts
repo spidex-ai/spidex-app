@@ -1,6 +1,10 @@
 import { DexHunterClient } from './client';
 import {
+    BuildSwapResponse,
     SearchTokenInfo,
+    SubmitSwapPayload,
+    SubmitSwapResponse,
+    SwapPayload,
     TokenDetail
 } from './types';
 
@@ -25,10 +29,21 @@ export class DexHunterService {
         const response = await this.client.get<TokenDetail>(`swap/token/${token_id}`);
         return response;
     }
+
+    async buildSwap(payload: SwapPayload): Promise<BuildSwapResponse> {
+        const response = await this.client.post<BuildSwapResponse>('swap/build', payload);
+        return response;
+    }
+
+    async submitSwap(payload: SubmitSwapPayload): Promise<SubmitSwapResponse> {
+        const response = await this.client.post<SubmitSwapResponse>('swap/sign', payload);
+        return response;
+    }
 }
+
 
 // Export a singleton instance of the service
 export const dexHunterService = new DexHunterService();
 
 // Export types and classes
-export default dexHunterService; 
+export default dexHunterService;

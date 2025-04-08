@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { taptoolsService } from '@/services/taptools';
+import { keyBy } from 'lodash';
+import tokenCardanoService from '@/services/token-cardano';
 
 export async function GET(request: NextRequest) {
   try {
@@ -8,7 +10,30 @@ export async function GET(request: NextRequest) {
     const perPage = parseInt(searchParams.get('perPage') || '10');
 
     const data = await taptoolsService.getTopTokensByLiquidity(page, perPage);
-    return NextResponse.json(data);
+    const tokenIds = data.map((token) => token.unit);
+    const [tokenDetails, tokenPrices] = await Promise.all([
+      tokenCardanoService.batchTokenInfo(tokenIds, ['logo']),
+      Promise.all(tokenIds.map(async (token) => {
+        const tokenPrice = await taptoolsService.getTokenQuote(token, 'USD');
+        return {
+          unit: token,
+          price: tokenPrice.price
+        };
+      }))
+    ]);
+
+    const mapTokenWithPrices = keyBy(tokenPrices, 'unit');
+
+    const mapTokenWithDetails = keyBy(tokenDetails.subjects, 'subject');
+    const tokens = data.map((token) => {
+      const tokenDetail = mapTokenWithDetails[token.unit];
+      return {
+        ...token,
+        logo: tokenDetail?.logo.value,
+        usdPrice: mapTokenWithPrices[token.unit]?.price
+      };
+    });
+    return NextResponse.json(tokens);
   } catch (error: any) {
     console.error('Error fetching top tokens by liquidity:', error);
     return NextResponse.json(
