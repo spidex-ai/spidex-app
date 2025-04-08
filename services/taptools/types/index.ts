@@ -95,12 +95,16 @@ export interface TokenLinks {
     youtube?: string;
 }
 
-export interface TopToken {
+export interface TokenDetail {
     unit: string;
     ticker: string;
     price: number;
     volume?: number;
+    logo?: string;
+    usdPrice?: number;
 }
+
+export type TopToken = TokenDetail
 
 export interface TopTokenMcap extends TopToken {
     mcap: number;
