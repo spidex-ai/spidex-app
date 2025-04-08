@@ -18,6 +18,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
         const tokenDetail = tokenDetails.subjects[0];
         const tokensWithDetails = {
             ...data,
+            unit: tokenDetail.subject,
             logo: tokenDetail?.logo.value,
         };
         return NextResponse.json(tokensWithDetails);
