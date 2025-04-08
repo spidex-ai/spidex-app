@@ -4,32 +4,31 @@ import { TokenDetail } from "@/services/dexhunter/types";
 import { useEffect, useState } from "react";
 
 export const useTokenDetail = (address: string) => {
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
-    const [data, setData] = useState<TokenDetail | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [data, setData] = useState<TokenDetail | null>(null);
 
-    useEffect(() => {
-        getTokenDetail(address);
-    }, [address]);
-  
-    const getTokenDetail = async (address: string) => {
-      setIsLoading(true);
-      try {
-        const response = await fetch(`/api/tokens/detail?tokenId=${encodeURIComponent(address)}&verified=true`);
-        const data = await response.json();
-        setData(data);
-      } catch (error) {
-        setError(error as string);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-  
-    return {
-      isLoading,
-      error,
-      getTokenDetail,
-      data
-    };
+  useEffect(() => {
+    getTokenDetail(address);
+  }, [address]);
+
+  const getTokenDetail = async (address: string) => {
+    setIsLoading(true);
+    try {
+      const response = await fetch(`/api/token/${address}/detail`);
+      const data = await response.json();
+      setData(data);
+    } catch (error) {
+      setError(error as string);
+    } finally {
+      setIsLoading(false);
+    }
   };
-  
+
+  return {
+    isLoading,
+    error,
+    getTokenDetail,
+    data
+  };
+};
