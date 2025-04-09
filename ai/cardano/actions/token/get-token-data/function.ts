@@ -1,8 +1,10 @@
 
 
+import dexHunterService from "@/services/dexhunter";
 import type { CardanoActionResult } from "../../cardano-action";
 import type { CardanoGetTokenDataArgumentsType, CardanoGetTokenDataResultBodyType } from "./types";
 import { searchTokens, getTokenOverview } from "@/services/birdeye";
+import { TokenOverview } from "@/services/birdeye/types";
 
 /**
  * Gets the token data for a given ticker.
@@ -11,12 +13,11 @@ import { searchTokens, getTokenOverview } from "@/services/birdeye";
  * @param args - The input arguments for the action
  * @returns A message containing the token data
  */
-  export async function getTokenData(args: CardanoGetTokenDataArgumentsType): Promise<CardanoActionResult<CardanoGetTokenDataResultBodyType>> {
+export async function getTokenData(args: CardanoGetTokenDataArgumentsType): Promise<CardanoActionResult<CardanoGetTokenDataResultBodyType>> {
   try {
+    console.log("🚀 ~ getTokenData ~ args:", args)
 
-    const { items } = await searchTokens({ keyword: args.search });
-
-    const token = items?.[0]?.result?.[0];
+    const token = {}
 
     if (!token) {
       return {
@@ -25,10 +26,10 @@ import { searchTokens, getTokenOverview } from "@/services/birdeye";
     }
 
     return {
-        message: `Token data for ${args.search}`,
-        body: {
-            token: await getTokenOverview(token.address),
-        },
+      message: `Token data for ${args.search}`,
+      body: {
+        token: {} as TokenOverview,
+      },
     };
 
   } catch (error) {

@@ -18,7 +18,6 @@ interface Props {
 }
 
 const GetTrendingTokens: React.FC<Props> = ({ tool, prevToolAgent }) => {
-
     return (
         <ToolCard 
             tool={tool}

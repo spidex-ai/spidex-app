@@ -3,33 +3,31 @@ import type { CardanoActionResult } from "../../cardano-action";
 import { getTokenLargestAccounts } from "@/services/helius";
 import { Connection, PublicKey } from "@solana/web3.js";
 import { getAccount } from "@solana/spl-token";
+import taptoolsService from "@/services/taptools";
 
 export async function getTopHolders(
   args: CardanoTopHoldersArgumentsType
-  ): Promise<CardanoActionResult<CardanoTopHoldersResultBodyType>> {
+): Promise<CardanoActionResult<CardanoTopHoldersResultBodyType>> {
   try {
-    let topHolders = await getTokenLargestAccounts(args.tokenAddress);
+    let topHolders = await taptoolsService.getTopTokenHolders(args.tokenAddress, 1, args.limit);
+    console.log("🚀 ~ topHolders:", topHolders)
 
-    const connection = new Connection(process.env.NEXT_PUBLIC_SOLANA_RPC_URL!);
-    await Promise.all(topHolders.map(async (holder) => {
-      const tokenAccount = await getAccount(connection, new PublicKey(holder.address));
-    }));
-
-    const mintInfo = await connection.getTokenSupply(new PublicKey(args.tokenAddress));
-    const totalSupply = Number(BigInt(mintInfo.value.amount) / BigInt(Math.pow(10, mintInfo.value.decimals)));
+    if (!topHolders || topHolders.length === 0) {
+      throw new Error('Failed to fetch top holders');
+    }
+    const mintInfo = await taptoolsService.getTokenMcap(args.tokenAddress);
+    const totalSupply = Number(BigInt(mintInfo.totalSupply));
 
     return {
       message: `The top holders have been retrieved and displayed to the user. Now ask them what they want to do next.`,
       body: {
         topHolders: await Promise.all(topHolders.map(async (holder) => {
-          const tokenAccount = await getAccount(connection, new PublicKey(holder.address));
           return {
             ...holder,
-            owner: tokenAccount.owner.toString(),
-            percentageOwned: (holder.uiAmount / totalSupply) * 100
+            percentageOwned: (holder.amount / totalSupply) * 100
           }
         })),
-        percentageOwned: topHolders.reduce((acc, holder) => acc + Number(holder.uiAmount), 0) / totalSupply
+        percentageOwned: topHolders.reduce((acc, holder) => acc + Number(holder.amount), 0) / totalSupply
       }
     };
   } catch (error) {

@@ -1,7 +1,5 @@
 export const KNOWLEDGE_AGENT_CAPABILITIES =
-`The Knowledge Agent has a vector database of information about Solana protocols and concepts.
-
-It can use this information to answer questions about the user's wallet, the user's social accounts, and the user's trading history.
+    `The Knowledge Agent has a vector database of information about Cardano and Minswap protocols and concepts.
 
 There are documents that cover:
 

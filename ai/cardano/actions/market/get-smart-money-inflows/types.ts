@@ -10,11 +10,7 @@ export type CardanoGetSmartMoneyInflowsSchemaType = typeof GetSmartMoneyInflowsI
 export type CardanoGetSmartMoneyInflowsArgumentsType = z.infer<CardanoGetSmartMoneyInflowsSchemaType>;
 
 export type CardanoGetSmartMoneyInflowsResultBodyType = {
-    tokens: {
-        inflow: SmartMoneyTokenInflow;
-        token: TokenMetadata;
-        price: Price;
-    }[];
-}; 
+    tokens: any[];
+};
 
 export type CardanoGetSmartMoneyInflowsResultType = CardanoActionResult<CardanoGetSmartMoneyInflowsResultBodyType>;

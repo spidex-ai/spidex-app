@@ -71,7 +71,7 @@ const ToolInvocation: React.FC<Props> = ({ tool, prevToolAgent }) => {
 
     const toolParts = tool.toolName.split("-");
     const toolName = toolParts.slice(1).join("-");
-    
+    console.log("🚀 ~ ToolInvocation ~ toolName:", toolName)
     switch(toolName) {
         case CARDANO_BALANCE_NAME:
             return <Balance tool={tool} prevToolAgent={prevToolAgent} />

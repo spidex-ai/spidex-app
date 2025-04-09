@@ -8,10 +8,8 @@ import { liquidityAgent } from "./liquidity";
 
 export const agents = [
     walletAgent,
-    stakingAgent,
     marketAgent,
     tradingAgent,
     knowledgeAgent,
     tokenAnalysisAgent,
-    liquidityAgent
 ]

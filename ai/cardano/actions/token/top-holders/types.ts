@@ -9,8 +9,8 @@ export type CardanoTopHoldersSchemaType = typeof TopHoldersInputSchema;
 export type CardanoTopHoldersArgumentsType = z.infer<CardanoTopHoldersSchemaType>;
 
 export type CardanoTopHoldersResultBodyType = {
-    topHolders: (TokenLargestAccount & { owner: string, percentageOwned: number })[];
+    topHolders: any[];
     percentageOwned: number;
-}; 
+};
 
 export type CardanoTopHoldersResultType = CardanoActionResult<CardanoTopHoldersResultBodyType>;

@@ -26,14 +26,14 @@ export async function getTokenAddress(args: CardanoGetTokenAddressArgumentsType)
     const tokenAddress = data[0]?.token_id;
 
     if (!tokenAddress) {
-        throw new Error('Failed to fetch token address');
+      throw new Error('Failed to fetch token address');
     }
 
     return {
-        message: `Found token address for ${args.keyword}. The user is shown the following token address in the UI, DO NOT REITERATE THE TOKEN ADDRESS. Ask the user what they want to do next.`,
-        body: {
-          address: tokenAddress,
-        }
+      message: `Found token address for ${args.keyword}. The user is shown the following token address in the UI, DO NOT REITERATE THE TOKEN ADDRESS. Ask the user what they want to do next.`,
+      body: {
+        address: tokenAddress,
+      }
     }
   } catch (error) {
     return {
