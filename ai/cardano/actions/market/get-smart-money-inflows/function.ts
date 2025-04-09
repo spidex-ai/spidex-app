@@ -19,6 +19,7 @@ export async function getSmartMoneyInflows(
 
     console.log("🚀 ~ getSmartMoneyInflows ~ args:", args)
     const response = await fetchTopVolumeToken(args.granularity, args.limit)
+    console.log("🚀 ~ response:", response)
     return {
       body: {
         tokens: response,
