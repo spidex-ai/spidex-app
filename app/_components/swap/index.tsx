@@ -119,11 +119,6 @@ const Swap: React.FC<Props> = ({
                     token={inputToken}
                     onChangeToken={setInputToken}
                     address={wallet?.address}
-                    priorityTokens={[
-                        'So11111111111111111111111111111111111111112', // SOL
-                        'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v', // USDC
-                        'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB', // USDT
-                    ]}
                 />
                 <Button 
                     variant="ghost" 
@@ -139,11 +134,6 @@ const Swap: React.FC<Props> = ({
                     token={outputToken}
                     onChangeToken={setOutputToken}
                     address={wallet?.address}
-                    priorityTokens={[
-                        'So11111111111111111111111111111111111111112', // SOL
-                        'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v', // USDC
-                        'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB', // USDT
-                    ]}
                 />
             </div>
             <Separator />

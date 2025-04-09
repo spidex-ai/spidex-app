@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 
 import type { UTCTimestamp } from "lightweight-charts";
 import { CandlestickGranularity, CandleStickInterval } from "@/services/hellomoon/types";
-import { TokenDetail } from "@/services/dexhunter/types";
+import { CardanoTokenDetail } from "@/services/dexhunter/types";
 
 const WINDOWS = [
   {
@@ -47,7 +47,7 @@ const WINDOWS = [
 
 interface Props {
   mint: string;
-  data: TokenDetail | null;
+  data: CardanoTokenDetail | null;
 }
 
 const TokenChart: React.FC<Props> = ({ mint, data: tokenDeetail }) => {

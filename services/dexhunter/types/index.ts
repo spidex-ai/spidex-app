@@ -24,6 +24,11 @@ export interface TokenDetail {
     unit: string
 }
 
+export interface CardanoTokenDetail extends SearchTokenInfo {
+    total_supply?: number
+    decimals?: number
+}
+
 /**
  * Interface for swap transaction payload
  */

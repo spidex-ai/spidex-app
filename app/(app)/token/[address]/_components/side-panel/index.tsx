@@ -14,11 +14,11 @@ import { ChatProvider } from '../../_contexts';
 import type { TokenChatData } from '@/types';
 
 import { useTokenDetail } from "@/hooks";
-import { TokenDetail } from '@/services/dexhunter/types';
+import { CardanoTokenDetail } from '@/services/dexhunter/types';
 
 interface Props {
     address: string;
-    data: TokenDetail | null;
+    data: CardanoTokenDetail | null;
 }
 
 const SidePanel: React.FC<Props> =  ({ address, data: tokenDetail }) => {

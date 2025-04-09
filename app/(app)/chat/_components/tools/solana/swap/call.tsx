@@ -6,7 +6,7 @@ import { Card, Skeleton } from '@/components/ui';
 
 import Swap from '../../utils/swap';
 
-import { useTokenDataByAddress } from '@/hooks';
+import { useTokenDetail } from '@/hooks';
 
 import { useChat } from '@/app/(app)/chat/_contexts/chat';
 
@@ -21,8 +21,8 @@ const SwapCallBody: React.FC<Props> = ({ toolCallId, args }) => {
 
     const { addToolResult } = useChat();
 
-    const { data: inputTokenData, isLoading: inputTokenLoading } = useTokenDataByAddress(args.inputMint || "");
-    const { data: outputTokenData, isLoading: outputTokenLoading } = useTokenDataByAddress(args.outputMint || "");
+    const { data: inputTokenData, isLoading: inputTokenLoading } = useTokenDetail(args.inputMint || "");
+    const { data: outputTokenData, isLoading: outputTokenLoading } = useTokenDetail(args.outputMint || "");
     
     return (
         <Card className="p-2">
@@ -44,8 +44,8 @@ const SwapCallBody: React.FC<Props> = ({ toolCallId, args }) => {
                                 body: {
                                     transaction: tx,
                                     inputAmount: args.inputAmount || 0,
-                                    inputToken: inputTokenData?.symbol || "",
-                                    outputToken: outputTokenData?.symbol || "",
+                                    inputToken: inputTokenData?.unit || "",
+                                    outputToken: outputTokenData?.unit || "",
                                 }
                             });
                         }}

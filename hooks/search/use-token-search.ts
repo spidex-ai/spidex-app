@@ -1,12 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import type { Token } from "@/db/types";
-import type { SearchResultItem } from "@/services/birdeye/types";
-import { SearchTokenInfo } from "@/services/dexhunter/types";
+
+import { CardanoTokenDetail } from "@/services/dexhunter/types";
 
 export const useTokenSearch = (input: string) => {
-    const [results, setResults] = useState<SearchTokenInfo[]>([]);
+    const [results, setResults] = useState<CardanoTokenDetail[]>([]);
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
@@ -23,7 +22,7 @@ export const useTokenSearch = (input: string) => {
                       input
                     )}&verified=true`
                 );
-                const data: SearchTokenInfo[] = await response.json();
+                const data: CardanoTokenDetail[] = await response.json();
                 
                 setResults(data);
             } catch (error) {

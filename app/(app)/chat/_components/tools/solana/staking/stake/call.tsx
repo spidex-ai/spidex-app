@@ -2,15 +2,15 @@
 
 import React from 'react'
 
-import { Card, Skeleton } from '@/components/ui';
+import { Card } from '@/components/ui';
 
-import Swap from '../../../utils/swap';
+// import Swap from '../../../utils/swap';
 
-import { useTokenDataByAddress } from '@/hooks';
 
-import { useChat } from '@/app/(app)/chat/_contexts/chat';
 
-import type { StakeArgumentsType, StakeResultBodyType } from '@/ai';
+// import { useChat } from '@/app/(app)/chat/_contexts/chat';
+
+import type { StakeArgumentsType } from '@/ai';
 
 interface Props {
     toolCallId: string,
@@ -19,20 +19,21 @@ interface Props {
 
 const SwapCallBody: React.FC<Props> = ({ toolCallId, args }) => {
 
-    const { addToolResult } = useChat();
+    console.log(args, toolCallId);
 
-    const { data: inputTokenData, isLoading: inputTokenLoading } = useTokenDataByAddress("So11111111111111111111111111111111111111112");
-    const { data: outputTokenData, isLoading: outputTokenLoading } = useTokenDataByAddress(args.contractAddress);
+    // const { addToolResult } = useChat();
+
+
     
     return (
         <Card className="p-4 max-w-full">
-            {
+            {/* {
                 inputTokenLoading || outputTokenLoading ? (
                     <Skeleton className="h-48 w-96 max-w-full" />
                 ) : (
                     <Swap
-                        initialInputToken={inputTokenData}
-                        initialOutputToken={outputTokenData}
+                        initialInputToken={null}
+                        initialOutputToken={null}
                         inputLabel="Stake"
                         outputLabel="Receive"
                         initialInputAmount={args.amount?.toString()}
@@ -59,7 +60,7 @@ const SwapCallBody: React.FC<Props> = ({ toolCallId, args }) => {
                         }}
                     />
                 )
-            }
+            } */}
         </Card>
     )
 }

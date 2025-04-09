@@ -1,12 +1,12 @@
 'use client'
 
-import { TokenDetail } from "@/services/dexhunter/types";
+import { CardanoTokenDetail } from "@/services/dexhunter/types";
 import { useEffect, useState } from "react";
 
 export const useTokenDetail = (address: string) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [data, setData] = useState<TokenDetail | null>(null);
+  const [data, setData] = useState<CardanoTokenDetail | null>(null);
 
   useEffect(() => {
     getTokenDetail(address);

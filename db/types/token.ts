@@ -1,3 +1,5 @@
+import type { TokenDetail } from "@/services/taptools/types";
+
 export interface Token {
     id: string;
     name: string;
@@ -11,4 +13,9 @@ export interface Token {
     extensions: {
         coingeckoId?: string;
     };
+}
+
+export interface CardanoToken extends TokenDetail {
+
+    
 }

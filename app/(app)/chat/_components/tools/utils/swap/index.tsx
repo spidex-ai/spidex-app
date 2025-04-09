@@ -6,7 +6,7 @@ import { ChevronDown } from 'lucide-react';
 
 import { VersionedTransaction } from '@solana/web3.js';
 
-import Decimal from 'decimal.js';
+// import Decimal from 'decimal.js';
 
 import { Button, Separator } from '@/components/ui';
 
@@ -16,14 +16,16 @@ import TokenInput from './token-input';
 
 import { useSendTransaction, useTokenBalance } from '@/hooks';
 
-import { getSwapObj, getQuote } from '@/services/jupiter';
+import { getSwapObj } from '@/services/jupiter';
 
-import type { QuoteResponse } from '@jup-ag/api';
-import type { Token } from '@/db/types';
+import { SwapMode, type QuoteResponse } from '@jup-ag/api';
+// import type { CardanoToken, Token } from '@/db/types';
+// import { useCardanoTokenBalance } from '@/hooks/queries/cardano/use-token-balance';
+import { CardanoTokenDetail } from '@/services/dexhunter/types';
 
 interface Props {
-    initialInputToken: Token | null,    
-    initialOutputToken: Token | null,
+    initialInputToken: CardanoTokenDetail | null,    
+    initialOutputToken: CardanoTokenDetail   | null,
     inputLabel: string,
     outputLabel: string,
     initialInputAmount?: string,
@@ -48,10 +50,10 @@ const Swap: React.FC<Props> = ({
 }) => {
 
     const [inputAmount, setInputAmount] = useState<string>(initialInputAmount || "");
-    const [inputToken, setInputToken] = useState<Token | null>(initialInputToken);
+    const [inputToken, setInputToken] = useState<CardanoTokenDetail | null>(initialInputToken);
 
     const [outputAmount, setOutputAmount] = useState<string>("");
-    const [outputToken, setOutputToken] = useState<Token | null>(initialOutputToken);
+    const [outputToken, setOutputToken] = useState<CardanoTokenDetail | null>(initialOutputToken);
 
     const [isQuoteLoading, setIsQuoteLoading] = useState<boolean>(false);
     const [quoteResponse, setQuoteResponse] = useState<QuoteResponse | null>(null);
@@ -60,7 +62,7 @@ const Swap: React.FC<Props> = ({
 
     const { sendTransaction, wallet } = useSendTransaction();
 
-    const { balance: inputBalance, isLoading: inputBalanceLoading } = useTokenBalance(inputToken?.id || "", wallet?.address || "");
+    const { balance: inputBalance, isLoading: inputBalanceLoading } = useTokenBalance(inputToken?.unit || "", wallet?.address || "");
 
     const onChangeInputOutput = () => {
         const tempInputToken = inputToken;
@@ -87,14 +89,32 @@ const Swap: React.FC<Props> = ({
         }
     }
 
+    const getQuoteCardano = async (inputUnit: string, outputUnit: string, amount: number) => {
+        console.log(inputUnit, outputUnit, amount);
+        const quote: QuoteResponse = {
+            inputMint: "0",
+            outputMint: "0",
+            inAmount: "0",
+            outAmount: "0",
+            otherAmountThreshold: "0",
+            swapMode: SwapMode.ExactIn,
+            slippageBps: 0,
+            priceImpactPct: "0",
+            routePlan: [],
+        }
+        return quote;
+    }
+
     useEffect(() => {
         if (inputToken && outputToken) {
             const fetchQuoteAndUpdate = async () => {
                 setIsQuoteLoading(true);
                 setOutputAmount("");
-                const quote = await getQuote(inputToken.id, outputToken.id, parseFloat(inputAmount) * (10 ** inputToken.decimals));
+                
+                // TODO: Fetch quote from API
+                const quote = await getQuoteCardano(inputToken?.unit || inputToken?.token_id || "", outputToken?.unit || outputToken?.token_id || "", 0);
                 setQuoteResponse(quote);
-                setOutputAmount(new Decimal(quote.outAmount).div(new Decimal(10).pow(outputToken.decimals)).toString());
+                setOutputAmount("0");
                 setIsQuoteLoading(false);
             }
 
@@ -115,8 +135,8 @@ const Swap: React.FC<Props> = ({
                     label={inputLabel}
                     amount={inputAmount}
                     onChange={setInputAmount}
-                    token={null}
-                    onChangeToken={() => {}}
+                    token={inputToken}
+                    onChangeToken={(token) => setInputToken(token)}
                     address={wallet?.address}
                 />
                 <Button 
@@ -130,8 +150,8 @@ const Swap: React.FC<Props> = ({
                 <TokenInput
                     label={outputLabel}
                     amount={outputAmount}
-                    token={null}
-                    onChangeToken={() => {}}
+                    token={outputToken}
+                    onChangeToken={(token) => setOutputToken(token)}
                     address={wallet?.address}
                 />
             </div>

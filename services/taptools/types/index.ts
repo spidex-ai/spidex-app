@@ -96,6 +96,7 @@ export interface TokenLinks {
 }
 
 export interface TokenDetail {
+    token_id?: string;
     unit: string;
     ticker: string;
     price: number;
