@@ -24,4 +24,5 @@ export interface TokenLargestAccountsResponse {
 export interface TokenLargestAccount {
     address: string;
     amount: number;
+    uiAmount?: number;
 }

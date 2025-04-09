@@ -116,7 +116,7 @@ const TopHolder = ({ topHolder, index, knownAddresses }: { topHolder: (TokenLarg
                         />
                     )
                 }
-                <p className="text-xs">{topHolder.uiAmount.toLocaleString()} ({topHolder.percentageOwned.toFixed(2)}%)</p>
+                <p className="text-xs">{topHolder.uiAmount ? topHolder.uiAmount.toLocaleString() : "0"} ({topHolder.percentageOwned.toFixed(2)}%)</p>
             </div>
         </Card>
     )

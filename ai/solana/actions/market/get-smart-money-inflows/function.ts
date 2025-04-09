@@ -1,11 +1,8 @@
 import { getSmartMoneyInflows as getSmartMoneyInflowsService } from "@/services/hellomoon";
 
-import type { GetSmartMoneyInflowsArgumentsType, GetSmartMoneyInflowsResultBodyType } from "./types";
+import type { GetSmartMoneyInflowsArgumentsType } from "./types";
 import type { SolanaActionResult } from "../../solana-action";
-import { SmartMoneyTokenInflow } from "@/services/hellomoon/types";
-import { getPrices, getTokenMetadata } from "@/services/birdeye";
-
-import type { Price, TokenMetadata } from "@/services/birdeye/types";
+import { getPrices } from "@/services/birdeye";
 
 /**
  * Gets the trending tokens from Birdeye API.
@@ -23,6 +20,7 @@ export async function getSmartMoneyInflows(
 
     const prices = await getPrices(response.map((token) => token.mint));
 
+    console.log(prices);
 
     return {
       body: {

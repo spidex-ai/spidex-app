@@ -26,7 +26,7 @@ export async function getTopHolders(
           return {
             ...holder,
             owner: tokenAccount.owner.toString(),
-            percentageOwned: (holder.uiAmount / totalSupply) * 100
+            percentageOwned: (holder.uiAmount ? holder.uiAmount : 0 / totalSupply) * 100
           }
         })),
         percentageOwned: topHolders.reduce((acc, holder) => acc + Number(holder.uiAmount), 0) / totalSupply

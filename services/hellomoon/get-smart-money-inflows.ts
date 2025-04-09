@@ -6,7 +6,7 @@ import { Granularity } from "./types";
 
 export const getSmartMoneyInflows = async (granularity: Granularity, limit: number = 10): Promise<TokenSmartMoneyInflow[]> => {
     const response = await client.send(new TokenSmartMoneyInflowRequest({
-        granularity,
+        granularity: granularity as any,
         limit,
     }));
     return response.data;
