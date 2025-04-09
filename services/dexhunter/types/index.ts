@@ -9,6 +9,7 @@ export interface SearchTokenInfo {
     creation_date: string
     price: number
     logo?: string
+    unit?: string
 }
 
 

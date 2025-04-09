@@ -2,6 +2,7 @@ import { searchTokens } from "@/services/birdeye";
 
 import type { CardanoActionResult } from "../../cardano-action";
 import type { CardanoGetTokenAddressArgumentsType, CardanoGetTokenAddressResultBodyType } from "./types";
+import { SearchTokenInfo } from "@/services/dexhunter/types";
 
 /**
  * Gets the token data for a given ticker.
@@ -12,12 +13,17 @@ import type { CardanoGetTokenAddressArgumentsType, CardanoGetTokenAddressResultB
  */
 export async function getTokenAddress(args: CardanoGetTokenAddressArgumentsType): Promise<CardanoActionResult<CardanoGetTokenAddressResultBodyType>> {
   try {
-    const token = await searchTokens({ keyword: args.keyword });
-    if (!token) {
-        throw new Error('Failed to fetch token data');
+    const response = await fetch(
+      `/api/tokens/search?query=${encodeURIComponent(
+        args.keyword
+      )}&verified=true`
+    );
+    if (!response.ok) {
+      throw new Error("Failed to fetch search results");
     }
+    const data: SearchTokenInfo[] = await response.json();
 
-    const tokenAddress = token?.items[0]?.result[0]?.address;
+    const tokenAddress = data[0]?.token_id;
 
     if (!tokenAddress) {
         throw new Error('Failed to fetch token address');

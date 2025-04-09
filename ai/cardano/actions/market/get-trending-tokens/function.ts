@@ -15,7 +15,7 @@ export async function getTrendingTokens(
 ): Promise<CardanoActionResult<CardanoGetTrendingTokensResultBodyType>> {
   try {
     const response = await taptoolsService.getTopTokensByMcap(1, args.limit);
-    console.log("🚀 ~ response:", response)
+    console.log("🚀 ~ getTopTokensByMcap:", response)
 
     return {
       message: `Found ${response.length} trending tokens. The user is shown the tokens, do not list them. Ask the user what they want to do with the coin.`,

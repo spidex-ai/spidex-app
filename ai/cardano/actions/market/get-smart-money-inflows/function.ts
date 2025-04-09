@@ -1,11 +1,6 @@
-import { getSmartMoneyInflows as getSmartMoneyInflowsService } from "@/services/hellomoon";
-
 import type { CardanoGetSmartMoneyInflowsArgumentsType, CardanoGetSmartMoneyInflowsResultBodyType } from "./types";
 import type { CardanoActionResult } from "../../cardano-action"; 
-import { SmartMoneyTokenInflow } from "@/services/hellomoon/types";
-import { getPrices, getTokenMetadata } from "@/services/birdeye";
 
-import type { Price, TokenMetadata } from "@/services/birdeye/types";
 
 /**
  * Gets the trending tokens from Birdeye API.
@@ -19,30 +14,13 @@ export async function getSmartMoneyInflows(
 ): Promise<CardanoActionResult<CardanoGetSmartMoneyInflowsResultBodyType>> {
   try {
 
-    const response = await getSmartMoneyInflowsService(args.granularity, 10);
-
-    const prices = await getPrices(response.map((token) => token.mint));
-
-    const tokens = (await Promise.all(response.map(async (token) => {
-      
-      const tokenMetadata = await getTokenMetadata(token.mint).catch(() => null);
-
-      return {
-        inflow: token,
-        token: tokenMetadata,
-        price: prices[token.mint]
-      };
-    }))).filter((token) => token.token !== null && token.price !== null) as {
-      inflow: SmartMoneyTokenInflow;
-      token: TokenMetadata;
-      price: Price;
-    }[];
-
+    console.log("🚀 ~ getSmartMoneyInflows ~ args:", args)
+ 
     return {
       body: {
-        tokens,
+        tokens: [],
       },
-      message: `Found ${response.length} smart money inflows. The user is shown the inflows, do not list them. Ask the user what they want to do next.`,
+      message: `Found ${0} smart money inflows. The user is shown the inflows, do not list them. Ask the user what they want to do next.`,
     };
   } catch (error) {
     return {

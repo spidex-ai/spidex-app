@@ -2,7 +2,6 @@
 
 import React, { useRef, useEffect } from 'react';
 
-import { CornerDownRight } from 'lucide-react';
 
 import Textarea from 'react-textarea-autosize'
 
@@ -14,15 +13,16 @@ import { useChat } from '../_contexts/chat';
 
 import { cn } from '@/lib/utils';
 
-import ModelSelector from '../../_components/chat/model-selector';
+// import ModelSelector from '../../_components/chat/model-selector';
 import { usePrivy } from '@privy-io/react-auth';
 import FollowUpSuggestions from './follow-up-suggestions';
+import Image from 'next/image';
 
 const ChatInput: React.FC = () => {
     const [isFocused, setIsFocused] = React.useState(false);
     const { user } = usePrivy();
 
-    const { input, setInput, onSubmit, isLoading, model, setModel, inputDisabledMessage } = useChat();
+    const { input, setInput, onSubmit, isLoading, inputDisabledMessage } = useChat();
 
     const { onKeyDown } = useEnterSubmit({ onSubmit: onSubmit })
 
@@ -76,11 +76,12 @@ const ChatInput: React.FC = () => {
                     />
                 </OptionalTooltip>
                 <div className="flex items-center justify-between px-2 pb-2">
-                    <ModelSelector
+                    {/* <ModelSelector
                         model={model}
                         onModelChange={setModel}
                         disabled={isLoading}
-                    />
+                    /> */}
+                    <div></div>
                     <TooltipProvider>
                         <Tooltip delayDuration={0}>
                             <TooltipTrigger asChild>
@@ -91,7 +92,7 @@ const ChatInput: React.FC = () => {
                                     variant="ghost"
                                     className="h-8 w-8"
                                 >
-                                    <CornerDownRight className="w-4 h-4 text-neutral-600 dark:text-neutral-400" />
+                                    <Image src="/icons/send-gray.svg" alt="Send message" width={13} height={13} />
                                     <span className="sr-only">Send message</span>
                                 </Button>
                             </TooltipTrigger>
