@@ -5,10 +5,12 @@ import { Card } from '@/components/ui';
 import ToolCard from '../tool-card';
 
 import type { ToolInvocation } from 'ai';
-import type { GetTrendingTokensResultBodyType, GetTrendingTokensResultType } from '@/ai';
-import type { TrendingToken } from '@/services/birdeye/types';
+import type { CardanoGetTrendingTokensResultBodyType, CardanoGetTrendingTokensResultType } from '@/ai';
+
 import SaveToken from '@/app/(app)/_components/save-token';
 import Link from 'next/link';
+import { TopTokenMcap } from '@/services/taptools/types';
+import { getLogoUrl } from '@/app/utils/logo';
 
 interface Props {
     tool: ToolInvocation,
@@ -16,17 +18,16 @@ interface Props {
 }
 
 const GetTrendingTokens: React.FC<Props> = ({ tool, prevToolAgent }) => {
-    
 
     return (
         <ToolCard 
             tool={tool}
             loadingText={`Getting Trending Tokens...`}
             result={{
-                heading: (result: GetTrendingTokensResultType) => result.body 
+                heading: (result: CardanoGetTrendingTokensResultType) => result.body 
                     ? `Fetched Trending Tokens`
                     : `Failed to fetch trending tokens`,
-                body: (result: GetTrendingTokensResultType) => result.body 
+                body: (result: CardanoGetTrendingTokensResultType) => result.body 
                     ? <TrendingTokens body={result.body} />
                     :  "No trending tokens found"
             }}
@@ -37,13 +38,14 @@ const GetTrendingTokens: React.FC<Props> = ({ tool, prevToolAgent }) => {
     )
 }
 
-const TrendingTokens = ({ body }: { body: GetTrendingTokensResultBodyType }) => {
-
+const TrendingTokens = ({ body }: { body: CardanoGetTrendingTokensResultBodyType }) => {
+    console.log("body:::::: ", body);
+    // return <div>this is trending tokens</div>
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-            {body.tokens.map((token: TrendingToken) => (
+            {body.tokens.map((token: TopTokenMcap) => (
                 <TokenCard
-                    key={token.address} 
+                    key={token.unit} 
                     token={token} 
                 />
             ))}
@@ -51,26 +53,30 @@ const TrendingTokens = ({ body }: { body: GetTrendingTokensResultBodyType }) => 
     )
 }
 
-const TokenCard = ({ token }: { token: TrendingToken }) => {
+const TokenCard = ({ token }: { token: TopTokenMcap }) => {
     return (
-        <Link href={`/token/${token.address}`}>
+        <Link href={`/token/${token.unit}`}>
             <Card className="flex flex-col gap-2 p-2 justify-center hover:border-brand-600 dark:hover:border-brand-600 transition-all duration-300">
                 <div className="flex flex-row items-center gap-2 justify-between">
                     <div className="flex flex-row items-center gap-2">
-                        <img 
-                            src={token.logoURI} 
-                            alt={token.name} 
-                            className="w-10 h-10 rounded-full" 
-                        />
+                        {
+                            token?.logo ? (
+                                <img 
+                                    src={getLogoUrl(token.logo)} 
+                                    alt={token.ticker} 
+                                    className="w-10 h-10 rounded-full" 
+                                />
+                            ) : null
+                        }
                         <div className="flex flex-col">
-                            <p className="text-sm font-bold">{token.name} ({token.symbol})</p>
-                            <p className="text-xs text-muted-foreground">${token.price.toLocaleString(undefined, { maximumFractionDigits: 5})} <span className={token.price24hChangePercent > 0 ? 'text-green-500' : 'text-red-500'}>({token.price24hChangePercent > 0 ? '+' : ''}{token.price24hChangePercent.toLocaleString(undefined, { maximumFractionDigits: 2 })}%)</span></p>
+                            <p className="text-sm font-bold">{token.ticker} ({token.ticker})</p>
+                            <p className="text-xs text-muted-foreground">${token.price.toLocaleString(undefined, { maximumFractionDigits: 5})}</p>
                         </div>
                     </div>
-                    <SaveToken address={token.address} />
+                    <SaveToken address={token.unit} />
                 </div>
                 <div className="flex flex-col">
-                    <p className="text-xs text-muted-foreground">24h Volume: ${token.volume24hUSD.toLocaleString()}</p>
+                    <p className="text-xs text-muted-foreground">Market Cap: ${token.mcap.toLocaleString()}</p>
                 </div>
             </Card>
         </Link>

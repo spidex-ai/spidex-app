@@ -3,6 +3,8 @@ import React from "react";
 import {
   AnimatedShinyText,
   Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
   Icon,
 } from "@/components/ui";
 
@@ -22,6 +24,7 @@ import {
   SOCIAL_AGENT_NAME,
   LIQUIDITY_AGENT_NAME,
 } from "@/ai/agents/names";
+import { ChevronDown } from "lucide-react";
 
 interface Props<ActionResultBodyType, ActionArgsType> {
   tool: ToolInvocation;
@@ -171,15 +174,13 @@ const ToolCard = <ActionResultBodyType, ActionArgsType>({
           )
         ) : (
           <Collapsible defaultOpen={defaultOpen}>
-            {/* <CollapsibleTrigger 
-                                    className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400 hover:underline"
-                                >
-                                    <p className="text-sm">{result.heading(tool.result)}</p>
-                                    <ChevronDown className="w-4 h-4 transition-transform duration-300 group-data-[state=open]:rotate-180" />
-                                </CollapsibleTrigger>
-                                <CollapsibleContent className="text-sm pt-2">
-                                    {result.body(tool.result)}
-                                </CollapsibleContent> */}
+            <CollapsibleTrigger className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400 hover:underline">
+              <p className="text-sm">{result.heading(tool.result)}</p>
+              <ChevronDown className="w-4 h-4 transition-transform duration-300 group-data-[state=open]:rotate-180" />
+            </CollapsibleTrigger>
+            <CollapsibleContent className="text-sm pt-2">
+              {result.body(tool.result)}
+            </CollapsibleContent>
           </Collapsible>
         )}
       </div>
