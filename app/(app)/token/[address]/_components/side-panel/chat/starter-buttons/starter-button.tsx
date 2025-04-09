@@ -2,41 +2,44 @@
 
 import React from 'react'
 
-import { Button, Icon } from '@/components/ui';
+// import { Button, Icon } from '@/components/ui';
 
 import { useChat } from '../../../../_contexts';
 
 import { cn } from '@/lib/utils';
 
-import { IconName } from '@/types';
+// import { IconName } from '@/types';
 
 interface Props {
-    icon: IconName
+    icon: React.ReactNode
     title: string
+    description: string
     prompt: string,
     className?: string
 }
 
-const StarterButton: React.FC<Props> = ({ icon, title, prompt, className }) => {
-
+const StarterButton: React.FC<Props> = ({ icon, title, prompt, className, description }) => {
+    console.log('prompt:::', icon, description);
     const { sendMessage } = useChat();
 
     return (
-        <Button 
-            className={cn(
-                'flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400 h-fit justify-start',
-                className
-            )}
-            variant="outline"
-            onClick={() => sendMessage(prompt)}
-        >
-            <div className="flex items-center gap-2 max-w-full">
-                <Icon name={icon} className="w-4 h-4" />
-                <p className="text-sm font-bold text-wrap text-left">
-                    {title}
-                </p>
+        <div 
+        className={cn(
+            'gap-2 text-sm text-neutral-600 dark:text-neutral-400 border border-neutral-200 dark:border-border-main dark:bg-bg-secondary rounded-md py-2 cursor-pointer',
+            className
+        )}
+        onClick={() => sendMessage(prompt)}
+    >
+        <div className="px-2 gap-2">
+            {/* <div className="col-span-1 flex justify-end items-start pt-1">
+                {icon}
+            </div> */}
+            <div className="col-span-5 text-left">
+                <div className="text-sm text-white">{title}</div>
+                {/* <div className='text-xs text-neutral-400'>{description}</div> */}
             </div>
-        </Button>
+        </div>
+    </div>
     )
 }
 

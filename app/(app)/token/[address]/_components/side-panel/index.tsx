@@ -57,7 +57,7 @@ const SidePanel: React.FC<Props> =  ({ address, data: tokenDetail }) => {
 
     return (
         <Tabs className="h-full flex flex-col items-start w-full max-w-full" defaultValue="chat">
-            <TabsList className="p-0 h-[44px] justify-start bg-neutral-100 dark:bg-neutral-700 w-full max-w-full overflow-x-auto rounded-none no-scrollbar">
+            <TabsList className="p-0 h-[44px] justify-start bg-neutral-100 dark:bg-bg-secondary w-full max-w-full overflow-x-auto rounded-none no-scrollbar">
                 <TabsTrigger 
                     value="chat"
                     className="h-full"

@@ -1,26 +1,31 @@
 import React from 'react'
 
 import StarterButton from './starter-button';
-
+import Image from 'next/image';
 const starterButtons = [
     {
         title: "Holder Analysis",
-        icon: "Coins" as const,
+        description: "Analyze the holders of this token",
+        icon: <Image src="/icons/trending.svg" alt="Trending" width={13} height={13} />,
         prompt: "Analyze the holders of this token"
+        //   prompt: "Show me the trending tokens"
     }, 
     {
         title: "Liquidity Pools",
-        icon: "Coins" as const,
-        prompt: "Analyze the liquidity pools of this token"
+        description: "Analyze the liquidity pools of this token",
+        icon: <Image src="/icons/news-white.svg" alt="Trending" width={13} height={13} />,
+        prompt: "Analyze the liquidity pools of this tokeno"
     },
     {
         title: "Twitter Sentiment",
-        icon: "Twitter" as const,
+        description: "Analyze the sentiment of the Twitter community for this token",
+        icon: <Image src="/icons/trading-agent.svg" alt="Trending" width={13} height={13} />,
         prompt: "Analyze the sentiment of the Twitter community for this token"
     },
     {
         title: "Trading Activity",
-        icon: "ChartCandlestick" as const,
+        description: "Analyze the trading activity of this token",
+        icon: <Image src="/icons/knowledge-white.svg" alt="Trending" width={13} height={13} />,
         prompt: "Analyze the trading activity of this token"
     }
 ] as const

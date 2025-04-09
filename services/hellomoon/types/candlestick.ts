@@ -17,9 +17,16 @@ export type TokenPriceCandlestick = {
 
 
 export enum CandleStickInterval {
+    THREE_MINUTES = '3m',
+    FIVE_MINUTES = '5m',
+    FIFTEEN_MINUTES = '15m',
+    THIRTY_MINUTES = '30m',
+    ONE_HOUR = '1h',
+    TWO_HOURS = '2h',
     FOUR_HOURS = '4h',
     TWELVE_HOURS = '12h',
     ONE_DAY = '1d',
     THREE_DAYS = '3d',
-    SEVEN_DAYS = '7d'
+    ONE_WEEK = '1w',
+    ONE_MONTH = '1M'
 }

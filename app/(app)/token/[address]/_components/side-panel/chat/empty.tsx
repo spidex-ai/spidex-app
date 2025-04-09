@@ -8,6 +8,7 @@ import StarterButtons from './starter-buttons';
 import { cn } from '@/lib/utils';
 
 import type { TokenChatData } from '@/types';
+import { getLogoUrl } from '@/app/utils/logo';
 
 interface Props {
     token: TokenChatData
@@ -22,7 +23,11 @@ const EmptyChat: React.FC<Props> = ({ token }) => {
         )}>
             <div className="flex flex-col items-center justify-center w-full max-w-2xl gap-4">
                 <div className="flex flex-col gap-4 items-center justify-center">
-                    {/* <img src={token.logoURI} alt={token.name} className="w-16 h-16 rounded-full" /> */}
+                    {
+                        token.logoURI ? (
+                            <img src={getLogoUrl(token.logoURI)} alt={token.name} className="w-16 h-16 rounded-full" />
+                        ) : null
+                    }
                     <h1 className="font-semibold text-center text-md">
                         What would you like to know about <span className="text-brand-600 font-bold inline">{token.name}</span>?
                     </h1>
