@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 
 import { ChevronDown } from 'lucide-react';
 
@@ -21,7 +21,11 @@ import { getSwapObj } from '@/services/jupiter';
 import { SwapMode, type QuoteResponse } from '@jup-ag/api';
 // import type { CardanoToken, Token } from '@/db/types';
 // import { useCardanoTokenBalance } from '@/hooks/queries/cardano/use-token-balance';
-import { CardanoTokenDetail } from '@/services/dexhunter/types';
+import { CardanoTokenDetail, SwapPayload } from '@/services/dexhunter/types';
+import { useSwapCardano } from '@/hooks/trade/use-swap-cardano';
+
+    
+    
 
 interface Props {
     initialInputToken: CardanoTokenDetail | null,    
@@ -105,6 +109,59 @@ const Swap: React.FC<Props> = ({
         return quote;
     }
 
+    const { buildSwapRequest, submitSwapRequest, signSwapRequest } = useSwapCardano();
+
+    const testSwap = useCallback(async () => {
+        try {
+            const api = await (window as any).cardano.lace.enable();
+            const addresses = await api.getUsedAddresses();
+            console.log('api:::', api);
+            console.log('api:addresses:::', addresses);
+            console.log("api.inputToken:::", api.inputToken);
+            console.log("api.outputToken:::", api.outputToken);
+            
+        
+            const payload: SwapPayload = {
+                buyer_address: 'addr1q9gykktajrgrmj5am8vwlhp65a72emlwn2s3e5cadkhe3vrfkfxs6yajls3ft0yn42uqlcnrq6qcn3l0lunkxy6aplgspxm6da', 
+                token_in: '',
+                token_out: "279c909f348e533da5808898f87f9a14bb2c3dfbbacccd631d927a3f534e454b",
+                amount_in: 1,
+                slippage: 1,
+                tx_optimization: false,
+                blacklisted_dexes: [],
+            }
+            console.log('payload:::', payload);
+            const buildSwap = await buildSwapRequest(payload);
+            console.log('buildSwap:::', buildSwap);
+            const signatures = await api?.signTx(buildSwap?.cbor, true); 
+            console.log('signedSwap:::', signatures);
+            const submitSwap = await submitSwapRequest({
+                txCbor: buildSwap.cbor,
+                signatures: signatures,
+            });
+
+            console.log('submitSwap:::', submitSwap);
+
+            const submitTx = await api?.submitTx(submitSwap?.cbor);
+            console.log('submitTx:::', submitTx);
+        } catch (error) {
+            console.error('error:::', error);
+        }
+    }, [inputToken, outputToken, inputAmount]);
+
+    async function connectCardano() {
+        await (window as any).cardano.lace.enable();
+
+    }
+    useEffect(() => {
+        // const cardano = window?.cardano;
+        console.log('windowooooooooooooooooooooo:::', (window as any)?.cardano);
+        if (typeof window !== 'undefined' && (window as any)?.cardano) {
+            connectCardano();
+        }
+        
+    }, []);
+
     useEffect(() => {
         if (inputToken && outputToken) {
             const fetchQuoteAndUpdate = async () => {
@@ -136,7 +193,10 @@ const Swap: React.FC<Props> = ({
                     amount={inputAmount}
                     onChange={setInputAmount}
                     token={inputToken}
-                    onChangeToken={(token) => setInputToken(token)}
+                    onChangeToken={(token) => {
+                        console.log('api:token:::', token);
+                        setInputToken(token);
+                    }}
                     address={wallet?.address}
                 />
                 <Button 
@@ -151,11 +211,15 @@ const Swap: React.FC<Props> = ({
                     label={outputLabel}
                     amount={outputAmount}
                     token={outputToken}
-                    onChangeToken={(token) => setOutputToken(token)}
+                    onChangeToken={(token) => {
+                        console.log('api:token:::', token);
+                        setOutputToken(token);
+                    }}
                     address={wallet?.address}
                 />
             </div>
             <Separator />
+            <button className='hidden' onClick={testSwap}>TestSwap</button>
             <div className="flex flex-col gap-2">
                 {
                     wallet ? (
