@@ -3,6 +3,7 @@ import {
     BuildSwapResponse,
     EsitmateSwapPayload,
     EsitmateSwapResponse,
+    PoolStatsResponse,
     SearchTokenInfo,
     SubmitSwapPayload,
     SubmitSwapResponse,
@@ -29,6 +30,11 @@ export class DexHunterService {
 
     async getTokenDetail(token_id: string): Promise<TokenDetail> {
         const response = await this.client.get<TokenDetail>(`swap/token/${token_id}`);
+        return response;
+    }
+
+    async poolStats(tokenIn: string, tokenOut: string): Promise<PoolStatsResponse[]> {
+        const response = await this.client.get<PoolStatsResponse[]>(`stats/pools/${tokenIn}/${tokenOut}`);
         return response;
     }
 

@@ -114,3 +114,9 @@ export interface EsitmateSwapResponse {
     communications: any[]
     partner_code: string
 }
+
+export interface PoolStatsResponse {
+    dex_name: string
+    token_1_amount: number
+    token_2_amount: number
+}
