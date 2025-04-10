@@ -3,7 +3,6 @@ import {
     CARDANO_GET_TOKEN_DATA_NAME,
     CARDANO_TOKEN_HOLDERS_NAME,
     CARDANO_TOKEN_PRICE_CHART_NAME,
-    CARDANO_TOKEN_TOP_TRADERS_NAME,
     CARDANO_TOP_HOLDERS_NAME,
 } from "@/ai/action-names";
 
@@ -24,8 +23,6 @@ ${CARDANO_GET_TOKEN_ADDRESS_NAME} requires a symbol as input and can get the con
 ${CARDANO_TOP_HOLDERS_NAME} requires a token address as input.
 
 ${CARDANO_TOKEN_HOLDERS_NAME} requires a token address as input.
-
-${CARDANO_TOKEN_TOP_TRADERS_NAME} requires a token address as input.
 
 ${CARDANO_TOKEN_PRICE_CHART_NAME} requires a token address as input.
 

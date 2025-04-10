@@ -3,6 +3,7 @@ import { searchTokens } from "@/services/birdeye";
 import type { CardanoActionResult } from "../../cardano-action";
 import type { CardanoGetTokenAddressArgumentsType, CardanoGetTokenAddressResultBodyType } from "./types";
 import { SearchTokenInfo } from "@/services/dexhunter/types";
+import dexHunterService from "@/services/dexhunter";
 
 /**
  * Gets the token data for a given ticker.
@@ -12,27 +13,18 @@ import { SearchTokenInfo } from "@/services/dexhunter/types";
  * @returns A message containing the token data
  */
 export async function getTokenAddress(args: CardanoGetTokenAddressArgumentsType): Promise<CardanoActionResult<CardanoGetTokenAddressResultBodyType>> {
+  console.log("🚀 ~ getTokenAddress ~ args:", args)
   try {
-    const response = await fetch(
-      `/api/tokens/search?query=${encodeURIComponent(
-        args.keyword
-      )}&verified=true`
-    );
-    if (!response.ok) {
+    const response = await dexHunterService.searchToken(args.keyword, true, 0, 1);
+    console.log("🚀 ~ getTokenAddress ~ response:", response)
+    if (!response) {
       throw new Error("Failed to fetch search results");
-    }
-    const data: SearchTokenInfo[] = await response.json();
-
-    const tokenAddress = data[0]?.token_id;
-
-    if (!tokenAddress) {
-      throw new Error('Failed to fetch token address');
     }
 
     return {
       message: `Found token address for ${args.keyword}. The user is shown the following token address in the UI, DO NOT REITERATE THE TOKEN ADDRESS. Ask the user what they want to do next.`,
       body: {
-        address: tokenAddress,
+        address: response[0]?.token_id,
       }
     }
   } catch (error) {

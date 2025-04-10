@@ -1,21 +1,21 @@
 import type { CardanoTokenHoldersArgumentsType, CardanoTokenHoldersResultBodyType } from "./types";
 import type { CardanoActionResult } from "../../cardano-action";
 import { getTokenAccountsByMint } from "@/services/helius";
+import taptoolsService from "@/services/taptools";
 
 export async function getNumHolders(
   args: CardanoTokenHoldersArgumentsType
 ): Promise<CardanoActionResult<CardanoTokenHoldersResultBodyType>> {
   try {
-    let tokenAccounts = await getTokenAccountsByMint(args.tokenAddress);
-
-    if(args.threshold && args.threshold > 0) {
-        tokenAccounts = tokenAccounts.filter(account => account.amount >= args.threshold!);
+    const response = await taptoolsService.getTokenHolders(args.tokenAddress);
+    if (!response) {
+      throw new Error("Failed to fetch token holders");
     }
 
     return {
       message: `The number of holders have been retrieved and displayed to the user. Now ask them what they want to do next.`,
       body: {
-        numHolders: tokenAccounts.length,
+        numHolders: response.holders,
       }
     };
   } catch (error) {
