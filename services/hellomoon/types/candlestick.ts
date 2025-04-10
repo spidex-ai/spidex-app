@@ -1,11 +1,18 @@
 export enum CandlestickGranularity {
     ONE_MIN = "ONE_MIN",
-    FIVE_MIN = "FIVE_MIN", 
+    FIVE_MIN = "FIVE_MIN",
     ONE_HOUR = "ONE_HOUR",
     ONE_DAY = "ONE_DAY",
-    ONE_WEEK = "ONE_WEEK"
+    ONE_WEEK = "ONE_WEEK",
 }
 
+export enum CardanoCandlestickGranularity {
+    FIVE_MIN = "FIVE_MIN",
+    ONE_HOUR = "ONE_HOUR",
+    ONE_DAY = "ONE_DAY",
+    ONE_WEEK = "ONE_WEEK",
+    THREE_MIN = "THREE_MIN",
+}
 export type TokenPriceCandlestick = {
     time: number;
     open: number;
