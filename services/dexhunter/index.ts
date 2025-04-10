@@ -1,6 +1,8 @@
 import { DexHunterClient } from './client';
 import {
     BuildSwapResponse,
+    EsitmateSwapPayload,
+    EsitmateSwapResponse,
     SearchTokenInfo,
     SubmitSwapPayload,
     SubmitSwapResponse,
@@ -27,6 +29,11 @@ export class DexHunterService {
 
     async getTokenDetail(token_id: string): Promise<TokenDetail> {
         const response = await this.client.get<TokenDetail>(`swap/token/${token_id}`);
+        return response;
+    }
+
+    async estimateSwap(payload: EsitmateSwapPayload): Promise<EsitmateSwapResponse> {
+        const response = await this.client.post<BuildSwapResponse>('swap/estimate', payload);
         return response;
     }
 

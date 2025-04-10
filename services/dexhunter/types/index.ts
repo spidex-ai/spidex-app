@@ -32,6 +32,14 @@ export interface CardanoTokenDetail extends SearchTokenInfo {
 /**
  * Interface for swap transaction payload
  */
+
+export interface EsitmateSwapPayload {
+    token_in: string;
+    token_out: string;
+    slippage: number;
+    amount_in: string;
+    blacklisted_dexes: string[];
+}
 export interface SwapPayload {
     buyer_address: string;
     token_in: string;
@@ -89,4 +97,20 @@ export interface SubmitSwapPayload {
 export interface SubmitSwapResponse {
     cbor: string
     strat_id: string
+}
+export interface EsitmateSwapResponse {
+    splits: Split[]
+    average_price: number
+    total_fee: number
+    total_output: number
+    deposits: number
+    total_output_without_slippage: number
+    possible_routes: PossibleRoutes
+    dexhunter_fee: number
+    batcher_fee: number
+    net_price: number
+    net_price_reverse: number
+    partner_fee: number
+    communications: any[]
+    partner_code: string
 }
