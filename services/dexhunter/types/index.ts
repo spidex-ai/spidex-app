@@ -37,7 +37,7 @@ export interface EsitmateSwapPayload {
     token_in: string;
     token_out: string;
     slippage: number;
-    amount_in: string;
+    amount_in: number;
     blacklisted_dexes: string[];
 }
 export interface SwapPayload {
@@ -45,7 +45,7 @@ export interface SwapPayload {
     token_in: string;
     token_out: string;
     slippage: number;
-    amount_in: string;
+    amount_in: number;
     tx_optimization: boolean;
     blacklisted_dexes: string[];
 }

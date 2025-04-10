@@ -71,7 +71,6 @@ export class TaptoolsClient {
                 status: error.response.status,
                 data: error.response.data,
                 url: error.config?.url,
-                request: error.request,
             });
         } else if (error.request) {
             // The request was made but no response was received

@@ -58,18 +58,17 @@ export class DexHunterClient {
         if (error.response) {
             // The request was made and the server responded with a status code
             // that falls out of the range of 2xx
-            console.error('Taptools API error:', {
+            console.error('Dexhunter API error:', {
                 status: error.response.status,
                 data: error.response.data,
                 url: error.config?.url,
-                request: error.request,
             });
         } else if (error.request) {
             // The request was made but no response was received
-            console.error('Taptools API request error:', error.request);
+            console.error('Dexhunter API request error:', error.request);
         } else {
             // Something happened in setting up the request that triggered an Error
-            console.error('Taptools API error:', error.message);
+            console.error('Dexhunter API error:', error.message);
         }
     }
 }
