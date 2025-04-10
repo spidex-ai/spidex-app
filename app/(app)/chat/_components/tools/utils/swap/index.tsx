@@ -109,7 +109,7 @@ const Swap: React.FC<Props> = ({
         return quote;
     }
 
-    const { buildSwapRequest, submitSwapRequest, signSwapRequest } = useSwapCardano();
+    const { buildSwapRequest, submitSwapRequest } = useSwapCardano();
 
     const testSwap = useCallback(async () => {
         try {
