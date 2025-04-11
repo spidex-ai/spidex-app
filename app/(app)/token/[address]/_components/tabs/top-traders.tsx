@@ -25,6 +25,8 @@ const TopTokenTraders: React.FC<Props> = ({ address }) => {
         return <Skeleton className="h-full w-full" />
     }
 
+    return <div>No data available</div>
+
     return (
         <Table>
             <TableHeader>

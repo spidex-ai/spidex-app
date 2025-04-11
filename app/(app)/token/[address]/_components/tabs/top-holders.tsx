@@ -63,6 +63,8 @@ const TopHolders: React.FC<Props> = ({ mint }) => {
         return <Skeleton className="h-full w-full" />
     }
 
+    return <div>No data available</div>
+
     return (
         <Table>
             <TableHeader>

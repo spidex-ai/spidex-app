@@ -470,3 +470,11 @@ export interface WalletValueTrended {
     time: number;
     value: number;
 }
+
+export interface TokenStats {
+    price: number;
+    usdPrice: number;
+    mcap: TokenMcap;
+    holders: TokenHolders;
+    "24h": TokenTradingStats;
+}

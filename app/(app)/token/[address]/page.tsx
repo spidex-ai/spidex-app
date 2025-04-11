@@ -21,7 +21,7 @@ const TokenPage = ({ params }: { params: tParams }) => {
             <ResizableLayout 
                 chartComponent={<TokenChart mint={address} data={data} />}
                 tabsComponent={
-                    <Suspense fallback={<Skeleton className="h-full w-full m-2" />}>
+                    <Suspense fallback={<Skeleton className="h-full w-full m-2 " />}>
                         <TokenDashboardTabs address={address} data={data} />
                     </Suspense>
                 }

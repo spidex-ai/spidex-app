@@ -1,66 +1,137 @@
-"use client"
+"use client";
 
-import React from 'react'
+import React from "react";
 
-import { Skeleton } from '@/components/ui';
+import { Skeleton } from "@/components/ui";
 
-import TimeStats from './time-stats';
+// import TimeStats from "./time-stats";
 
-import { useTokenOverview } from '@/hooks';
+import { useTokenStats } from "@/hooks";
 
 interface Props {
-    address: string;
+  tokenId: string | undefined;
+  tokenName: string | undefined;
 }
 
-const MarketStats: React.FC<Props> = ({ address }) => {
+const MarketStats: React.FC<Props> = ({ tokenId, tokenName }) => {
+  const { data: tokenStats, isLoading } = useTokenStats(tokenId);
 
-    const { data: tokenOverview, isLoading } = useTokenOverview(address);
+  if (isLoading) {
+    return <Skeleton className="h-full w-full" />;
+  }
 
-    if(isLoading) {
-        return <Skeleton className="h-full w-full" />
-    }
+  return (
+    <div className="grid grid-cols-7 gap-2">
+      <div className="col-span-1">
+        <div className="flex flex-col gap-2">
+          <div className="bg-bg-tab p-2 flex flex-1 justify-center">
+            <div className="min-h-[80px] flex flex-col justify-center items-center gap-3">
+              <div className="text-xs font-semibold text-text-gray">Price USD</div>
+              <div className="text-sm text-white">{tokenStats?.usdPrice ? tokenStats?.usdPrice : "N/A"}</div>
+            </div>
+          </div>
 
-    return (
-        <div className='flex flex-col gap-2 h-full max-h-full overflow-y-auto no-scrollbar'>
-            {
-                tokenOverview ? (
-                    <>
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-                            <StatItem label="Market Cap" value={tokenOverview.mc} prefix="$" />
-                            <StatItem label="Liquidity" value={tokenOverview.liquidity} prefix="$" />
-                            <StatItem label="# of Holders" value={tokenOverview.holder} />
-                            <StatItem label="# of Markets" value={tokenOverview.numberMarkets} />
-                        </div>
-                        <TimeStats token={tokenOverview} />
-                    </>
-                ) : (
-                    <p className="text-sm text-neutral-500">
-                        No data available
-                    </p>
-                )
+          <div className="bg-bg-tab p-2 flex flex-1 justify-center">
+            <div className="min-h-[80px] flex flex-col justify-center items-center gap-3">
+              <div className="text-xs font-semibold text-text-gray">Liquidity</div>
+              <div className="text-sm text-white">
+                {tokenStats?.mcap.circSupply
+                  ? tokenStats?.mcap.circSupply
+                  : "N/A"}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="col-span-6 bg-bg-tab rounded-md p-2">
+        <div className="grid grid-cols-5 gap-2">
+          <StatItem
+            label="Liquidity"
+            value={
+               "--"
             }
-        </div>
-    )
-}
+          />
+          <StatItem
+            label="Market Cap"
+            value={
+              tokenStats?.mcap.mcap ? `$${tokenStats?.mcap.mcap.toLocaleString()}` : "--"
+            }
+          />
 
-interface StatItemProps {
-    label: string;
-    value: number;
-    formatOptions?: Intl.NumberFormatOptions;
-    prefix?: string;
-}
-
-const StatItem: React.FC<StatItemProps> = ({ label, value, formatOptions = {}, prefix = '' }) => {
-    return (
-        <div className="flex flex-col border rounded-md p-2 border-neutral-200 dark:border-neutral-700">
-            <h3 className="text-xs font-semibold">
-                {label}
-            </h3>
-            <p className="text-sm">
-                {prefix}{value.toLocaleString(undefined, { notation: 'compact', ...formatOptions })}
-            </p>
+          <StatItem
+            label="FDV"
+            value={
+              tokenStats?.mcap?.fdv ? `$${tokenStats?.mcap.fdv.toLocaleString()}` : "--"
+            }
+          />
+          <StatItem
+            label="Pooled USD"
+            value={
+               "--"
+            }
+          />
+          <StatItem
+            label="Holders"
+            value={
+              tokenStats?.holders.holders
+                ? tokenStats?.holders.holders.toLocaleString()
+                : "--"
+            }
+          />
+          <StatItem
+            label="Token Listed"
+            value={
+               "--"
+            }
+          />
+          <StatItem
+            label="Circ Supply"
+            value={
+              tokenStats?.mcap.circSupply
+                ? tokenStats?.mcap.circSupply.toLocaleString()
+                : "--"
+            }
+          />
+          <StatItem
+            label="Total Supply"
+            value={
+              tokenStats?.mcap.totalSupply
+                ? tokenStats?.mcap.totalSupply.toLocaleString()
+                : "--"
+            }
+          />
+          <StatItem
+            label={`% Pooled ${tokenName}`}
+            value={
+               "--"
+            }
+          />
         </div>
-    );
+      </div>
+    </div>
+  );
 };
 
-export default MarketStats
+interface StatItemProps {
+  label: string;
+  value: string;
+  formatOptions?: Intl.NumberFormatOptions;
+  prefix?: string;
+}
+
+const StatItem: React.FC<StatItemProps> = ({
+  label,
+  value,
+}) => {
+  return (
+    <div className="col-span-1">
+      <div className="min-h-[88px] flex flex-col gap-3 justify-center items-center rounded-md p-2 bg-bg-secondary">
+        <div className="text-xs font-semibold text-text-gray">{label}</div>
+        <div className="text-sm tex-white">{value}</div>
+      </div>
+    </div>
+  );
+};
+
+export default MarketStats;

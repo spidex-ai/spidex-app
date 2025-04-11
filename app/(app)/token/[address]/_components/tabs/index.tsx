@@ -2,23 +2,19 @@
 
 import React, { useRef, useEffect } from 'react'
 
-import { GiSwapBag } from 'react-icons/gi'
-import { IoSwapHorizontal } from 'react-icons/io5'
-import { MdBubbleChart } from 'react-icons/md'
-import { FaWater, FaUsers } from 'react-icons/fa6'
-import { ChartCandlestick } from 'lucide-react'
-
 import { Tabs, TabsTrigger, TabsContent } from '@/components/ui'
 import DraggableTabsList from './draggable-tabs-list'
 
 import TopHolders from './top-holders';
 import TopTraders from './top-traders';
-import BubbleMap from './bubble-map';
+// import BubbleMap from './bubble-map';
 
-import TokenMarkets from './markets'
-import TokenUsersOverTime from './users-over-time'
+// import TokenMarkets from './markets'
+// import TokenUsersOverTime from './users-over-time'
 import MarketStats from './market-stats'
 import { CardanoTokenDetail } from '@/services/dexhunter/types'
+import Image from 'next/image'
+import TradeHistory from './trade-history'
 
 interface Props {
     address: string;
@@ -26,7 +22,7 @@ interface Props {
     // tokenOverview: Awaited<ReturnType<typeof getTokenOverview>>;
 }
 
-const TokenDashboardTabs: React.FC<Props> = ({ address }) => {
+const TokenDashboardTabs: React.FC<Props> = ({ address, data }) => {
     const [activeTab, setActiveTab] = React.useState('market-stats')
     const tabsRef = useRef<{ [key: string]: HTMLButtonElement }>({})
 
@@ -37,18 +33,28 @@ const TokenDashboardTabs: React.FC<Props> = ({ address }) => {
         }
     }
 
+    
+
     useEffect(() => {
         scrollToTab(activeTab)
     }, [activeTab])
 
     return (
-        <Tabs 
+        <div className='p-2'>
+        
+          
+           <Tabs 
             className="h-full flex flex-col items-start w-full max-w-full" 
             defaultValue="market-stats"
             value={activeTab}
             onValueChange={setActiveTab}
         >
-            <DraggableTabsList selectedTab={activeTab}>
+            <div className='flex gap-4'>
+            <div className='flex items-center gap-1 px-4 py-1 bg-bg-tab rounded-md'>
+                <Image src="/icons/red-dot.svg" alt="Live" width={6} height={6} />
+                <span className='text-xs'>Live</span>
+            </div>
+            <DraggableTabsList selectedTab={activeTab}  className="p bg-neutral-100 dark:bg-bg-tab">
                 <TabsTrigger 
                     value="market-stats"
                     ref={(el) => {
@@ -56,8 +62,8 @@ const TokenDashboardTabs: React.FC<Props> = ({ address }) => {
                     }}
                     className="min-w-fit whitespace-nowrap data-[state=active]:bg-white dark:data-[state=active]:bg-neutral-800"
                 >
-                    <ChartCandlestick className="w-4 h-4" />
-                    Market Stats
+                   
+                    Stats
                 </TabsTrigger>
                 <TabsTrigger 
                     value="holders"
@@ -66,8 +72,8 @@ const TokenDashboardTabs: React.FC<Props> = ({ address }) => {
                     }}
                     className="min-w-fit whitespace-nowrap data-[state=active]:bg-white dark:data-[state=active]:bg-neutral-800"
                 >
-                    <GiSwapBag className="w-4 h-4" />
-                    Holders
+                   
+                    Trade History
                 </TabsTrigger>
                 <TabsTrigger 
                     value="traders"
@@ -76,8 +82,8 @@ const TokenDashboardTabs: React.FC<Props> = ({ address }) => {
                     }}
                     className="min-w-fit whitespace-nowrap data-[state=active]:bg-white dark:data-[state=active]:bg-neutral-800"
                 >
-                    <IoSwapHorizontal className="w-4 h-4" />
-                    Traders
+                  
+                    Top Traders
                 </TabsTrigger>
                 <TabsTrigger 
                     value="bubble"
@@ -86,17 +92,17 @@ const TokenDashboardTabs: React.FC<Props> = ({ address }) => {
                     }}
                     className="min-w-fit whitespace-nowrap data-[state=active]:bg-white dark:data-[state=active]:bg-neutral-800"
                 >
-                    <MdBubbleChart className="w-4 h-4" />
-                    Bubble Map
+                 
+                    Holders
                 </TabsTrigger>
-                <TabsTrigger 
+                {/* <TabsTrigger 
                     value="markets"
                     ref={(el) => {
                         if (el) tabsRef.current['markets'] = el
                     }}
                     className="min-w-fit whitespace-nowrap data-[state=active]:bg-white dark:data-[state=active]:bg-neutral-800"
                 >
-                    <FaWater className="w-4 h-4" />
+                  
                     Markets
                 </TabsTrigger>
                 <TabsTrigger 
@@ -106,9 +112,9 @@ const TokenDashboardTabs: React.FC<Props> = ({ address }) => {
                     }}
                     className="min-w-fit whitespace-nowrap data-[state=active]:bg-white dark:data-[state=active]:bg-neutral-800"
                 >
-                    <FaUsers className="w-4 h-4" />
+              
                     Active Wallets
-                </TabsTrigger>
+                </TabsTrigger> */}
                 {/* {
                     tokenOverview.extensions?.twitter && (
                         <>
@@ -136,25 +142,26 @@ const TokenDashboardTabs: React.FC<Props> = ({ address }) => {
                     )
                 } */}
             </DraggableTabsList>
-            <div className="flex-1 h-0 overflow-y-auto w-full no-scrollbar">
+            </div>
+            <div className="flex-1 h-0 overflow-y-auto w-full no-scrollbar mt-2">
                 <TabsContent value="market-stats" className="h-full m-0 p-2">
-                    <MarketStats address={address} />
+                    <MarketStats tokenId={data?.token_id} tokenName={data?.ticker} />
                 </TabsContent>
                 <TabsContent value="holders" className="h-full m-0">
-                    <TopHolders mint={address} />
+                    <TradeHistory address={address} />
                 </TabsContent>
                 <TabsContent value="traders" className="h-full m-0">
                     <TopTraders address={address} />
-                </TabsContent>
+                </TabsContent> 
                 <TabsContent value="bubble" className="h-full m-0 p-2">
-                    <BubbleMap address={address} />
+                    <TopHolders mint={address} />
                 </TabsContent>
-                <TabsContent value="markets" className="h-full m-0">
+                {/* <TabsContent value="markets" className="h-full m-0">
                     <TokenMarkets address={address} />
                 </TabsContent>
                 <TabsContent value="users-over-time" className="h-full m-0 p-2">
                     <TokenUsersOverTime mint={address} />
-                </TabsContent>
+                </TabsContent> */}
                 {/* {
                     tokenOverview.extensions?.twitter && (
                         <>
@@ -169,6 +176,8 @@ const TokenDashboardTabs: React.FC<Props> = ({ address }) => {
                 } */}
             </div>
         </Tabs>
+      
+        </div>
     )
 }
 

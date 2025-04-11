@@ -1,7 +1,7 @@
 'use client';
 
 import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
-import { Card } from '@/components/ui';
+import { CardTab } from '@/components/ui';
 
 interface ResizableLayoutProps {
     chartComponent: React.ReactNode;
@@ -20,23 +20,23 @@ const ResizableLayout = ({
                 <Panel defaultSize={66} minSize={30} className="flex flex-col gap-2">
                     <PanelGroup direction="vertical" className="h-full">
                         <Panel defaultSize={60} minSize={20}>
-                            <Card className="h-full overflow-hidden max-h-full">
+                            <CardTab className="h-full overflow-hidden max-h-full">
                                 {chartComponent}
-                            </Card>
+                            </CardTab>
                         </Panel>
                         <PanelResizeHandle className="h-2 hover:bg-accent rounded-sm transition-colors" />
                         <Panel defaultSize={40} minSize={30}>
-                            <Card className="h-full overflow-hidden">
-                                {tabsComponent}
-                            </Card>
+                            <CardTab className="h-full overflow-hidden ">
+                                {tabsComponent} 
+                            </CardTab>
                         </Panel>
                     </PanelGroup>
                 </Panel>
                 <PanelResizeHandle className="w-2 md:hover:bg-accent rounded-sm transition-colors" />
                 <Panel defaultSize={33} minSize={20}>
-                    <Card className="h-full flex flex-col gap-2 overflow-hidden">
+                    <CardTab className="h-full flex flex-col gap-2 overflow-hidden">
                         {sidePanelComponent}
-                    </Card>
+                    </CardTab>
                 </Panel>
             </PanelGroup>
         </div>

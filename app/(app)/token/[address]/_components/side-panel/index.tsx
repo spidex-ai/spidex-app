@@ -3,7 +3,7 @@ import React from 'react'
 
 import { ArrowLeftRight, MessageSquare } from 'lucide-react';
 
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui';
+import { Tabs, TabsList, TabsContent, TabsTriggerGradient } from '@/components/ui';
 
 import Swap from '@/app/_components/swap';
 
@@ -58,20 +58,20 @@ const SidePanel: React.FC<Props> =  ({ address, data: tokenDetail }) => {
     return (
         <Tabs className="h-full flex flex-col items-start w-full max-w-full" defaultValue="chat">
             <TabsList className="p-0 h-[44px] justify-start bg-neutral-100 dark:bg-bg-secondary w-full max-w-full overflow-x-auto rounded-none no-scrollbar">
-                <TabsTrigger 
+                <TabsTriggerGradient 
                     value="chat"
                     className="h-full"
                 >
                     <MessageSquare className="w-4 h-4" />
                     Chat
-                </TabsTrigger>
-                <TabsTrigger 
+                </TabsTriggerGradient>
+                <TabsTriggerGradient 
                     value="trade"
                     className="h-full"
                 >
                     <ArrowLeftRight className="w-4 h-4" />
                     Trade
-                </TabsTrigger>
+                </TabsTriggerGradient>
             </TabsList>
             <div className="flex-1 h-0 overflow-y-auto w-full no-scrollbar">
                 <TabsContent value="chat" className="h-full m-0 p-2">
