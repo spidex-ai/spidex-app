@@ -36,21 +36,6 @@ const LiquidityAnalysis: React.FC<Props> = ({ tool }) => {
                                     tooltip={`Largest liquidity pool on ${result.body.mainPool.source}`}
                                 />
                             </StatsSection>
-                            <StatsSection title="Volume Metrics">
-                                <StatItem 
-                                    label="24h Volume"
-                                    value={result.body.volumeMetrics.volume24h}
-                                    formatter={formatCurrency}
-                                />
-                                <StatItem 
-                                    label="24h Change"
-                                    value={result.body.volumeMetrics.volumeChange24h}
-                                    formatter={(value) => value.toFixed(2)}
-                                    suffix="%"
-                                    className={result.body.volumeMetrics.volumeChange24h >= 0 ? "text-green-500" : "text-red-500"}
-                                    tooltip="Percentage change in trading volume over the last 24 hours"
-                                />
-                            </StatsSection>
                             <StatsSection title="Liquidity Concentration">
                                 <StatItem 
                                     label="Top Pool Share"

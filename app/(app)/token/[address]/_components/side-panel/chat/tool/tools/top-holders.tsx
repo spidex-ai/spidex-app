@@ -49,14 +49,14 @@ const TopHolders: React.FC<Props> = ({ tool }) => {
                             </StatsSection>
                             <StatsSection title="Exchange & Vesting">
                                 <StatItem 
-                                    label="Exchange Holdings"
-                                    value={result.body.exchangeHoldersPercent}
+                                    label="Debt Holdings"
+                                    value={result.body.totalDebtPercent}
                                     formatter={(value) => (value * 100).toFixed(2)}
                                     suffix="%"
                                 />
                                 <StatItem 
-                                    label="Vested Tokens"
-                                    value={result.body.vestedHoldersPercent}
+                                    label="Collatarel "
+                                    value={result.body.totalCollateralPercent}
                                     formatter={(value) => (value * 100).toFixed(2)}
                                     suffix="%"
                                 />

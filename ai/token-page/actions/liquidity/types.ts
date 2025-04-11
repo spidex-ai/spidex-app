@@ -6,27 +6,29 @@ import { MarketSource } from "@/services/birdeye/types/markets";
 
 export type TokenPageLiquiditySchemaType = typeof TokenPageLiquidityInputSchema;
 
-export type TokenPageLiquidityArgumentsType = z.infer<TokenPageLiquiditySchemaType>;
+export type TokenPageLiquidityArgumentsType =
+  z.infer<TokenPageLiquiditySchemaType>;
 
 export type TokenPageLiquidityResultBodyType = {
-    totalLiquidityUSD: number;
-    mainPool: {
-        address: string;
-        liquidity: number;
-        source: MarketSource;
-    };
-    volumeMetrics: {
-        volume24h: number;
-        volumeChange24h: number;
-    };
-    liquidityConcentration: {
-        topPoolShare: number;
-        top3PoolsShare: number;
-    };
-    liquidityHealth: {
-        score: number;
-        description: string;
-    };
-}; 
+  totalLiquidityUSD: number;
+  mainPool: {
+    address: string;
+    liquidity: number;
+    source: MarketSource;
+  };
+  volumeMetrics: {
+    volume24h: number;
+    volumeChange24h: number;
+  };
+  liquidityConcentration: {
+    topPoolShare: number;
+    top3PoolsShare: number;
+  };
+  liquidityHealth: {
+    score: number;
+    description: string;
+  };
+};
 
-export type TokenPageLiquidityResultType = SolanaActionResult<TokenPageLiquidityResultBodyType>;
+export type TokenPageLiquidityResultType =
+  SolanaActionResult<TokenPageLiquidityResultBodyType>;
