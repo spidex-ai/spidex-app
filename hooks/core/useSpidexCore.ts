@@ -226,6 +226,68 @@ export const useSpidexCore = () => {
         setAuth(null);
     }, [fetchWithAuth]);
 
+    const getUserRefMeInfo = useCallback(async () => {
+        setLoading(true);
+        setError(null);
+
+        try {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_SPIDEX_CORE_API_URL}/user-referral/me/info`, {
+                headers: {
+                    'Authorization': `Bearer ${process.env.NEXT_PUBLIC_SPIDEX_CORE_API_KEY}`
+                }
+            });
+            const data = await response.json();
+
+            return data.data;
+        } catch (err: any) {
+            setError(err.message || 'An error occurred');
+            return null;
+        } finally {
+            setLoading(false);
+        }
+    }, []);
+
+    const getUserRefMeReferredUsers = useCallback(async (page = 1, perPage = 10) => {
+        setLoading(true);
+        setError(null);
+
+        try {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_SPIDEX_CORE_API_URL}/user-referral/me/referred-users?page=${page}&limit=${perPage}`, {
+                headers: {
+                    'Authorization': `Bearer ${process.env.NEXT_PUBLIC_SPIDEX_CORE_API_KEY}`
+                }
+            });
+            const data = await response.json(); 
+            return data.data;
+        } catch (err: any) {
+            setError(err.message || 'An error occurred');
+            return null;
+        } finally {
+            setLoading(false);
+        } 
+    }, []);
+
+    const getUserRefHistory = useCallback(async (page = 1, perPage = 10) => {
+        setLoading(true);
+        setError(null);
+
+        try {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_SPIDEX_CORE_API_URL}/user-referral/me/referral-history?page=${page}&limit=${perPage}`, {
+                headers: {
+                    'Authorization': `Bearer ${process.env.NEXT_PUBLIC_SPIDEX_CORE_API_KEY}`
+                }
+            });
+            const data = await response.json();
+            return data.data;
+        } catch (err: any) {
+            setError(err.message || 'An error occurred');
+            return null;
+        } finally {
+            setLoading(false);
+        } 
+    }, []);
+
+
     return {
         auth,
         loading,
@@ -239,6 +301,9 @@ export const useSpidexCore = () => {
         connectGoogle,
         fetchWithAuth,
         isAuthenticated,
-        logout
+        logout,
+        getUserRefMeInfo,
+        getUserRefMeReferredUsers,
+        getUserRefHistory
     };
 };
