@@ -1,7 +1,22 @@
-import React from "react";
+'use client'
+
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
+import { useRefInfo } from "@/hooks/referral/user-ref";
 
 const AgentClub: React.FC = () => {
+  const { referralInfo, loading, error } = useRefInfo();
+
+  console.log('referralInfo:::', referralInfo);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
   return (
     <div className="p-8 border border-border-main rounded-lg">
       <div className="flex gap-8">
@@ -27,7 +42,7 @@ const AgentClub: React.FC = () => {
               </div>
               <div>
                 <div>Total referrals</div>
-                <div>2222</div>
+                <div>{referralInfo?.referralUserCount}</div>
               </div>
             </div>
             <div className="flex gap-4 p-4 bg-bg-main">
@@ -41,14 +56,14 @@ const AgentClub: React.FC = () => {
               </div>
               <div>
                 <div>SILK Points Earned</div>
-                <div>50000</div>
+                <div>{referralInfo?.referralPointEarned}</div>
               </div>
             </div>
           </div>
           <div>
             <div>Your Referrals Link</div>
             <div className="flex justify-between bg-bg-main p-4 my-4 rounded-sm">
-              <div>robotician.gg/ref=34565459965363626365435345</div>
+              <div>{`${process.env.NEXT_PUBLIC_SPIDEX_APP_URL}/ref=${referralInfo?.referralCode}`}</div>
               <div><Image src="/icons/copy-gray.svg" alt="copy" width={24} height={24} /></div>
             </div>
           </div>
