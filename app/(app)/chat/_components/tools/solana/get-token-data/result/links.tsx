@@ -13,6 +13,7 @@ import { OptionalLink } from '@/components/ui';
 import { cn } from '@/lib/utils';
 
 import type { TokenOverview } from '@/services/birdeye/types';
+import { TokenStats } from '@/services/taptools/types';
 
 const SOCIAL_LINKS = [
     {
@@ -22,18 +23,6 @@ const SOCIAL_LINKS = [
     {
         id: 'twitter',
         icon: <FaXTwitter className="h-4 w-4" />
-    },
-    {
-        id: 'coingeckoId',
-        icon: (
-            <Image 
-                src="/logos/coingecko.png" 
-                alt="Coingecko" 
-                width={16} 
-                height={16} 
-                className="h-4 w-4"
-            />
-        )
     },
     {
         id: 'discord',
@@ -47,7 +36,7 @@ const SOCIAL_LINKS = [
 
 
 interface Props {
-    token: TokenOverview
+    token: TokenStats
 }
 
 const Links: React.FC<Props> = ({ token }) => {
@@ -56,15 +45,13 @@ const Links: React.FC<Props> = ({ token }) => {
             {SOCIAL_LINKS.map((link) => (
                 <OptionalLink 
                     key={link.id}
-                    href={(link.id === "coingeckoId" && token?.extensions?.[link.id]) 
-                        ? `https://www.coingecko.com/en/coins/${token.extensions?.[link.id]}` 
-                        : token?.extensions?.[link.id]} 
+                    href={ token?.tokenLinks?.[link.id]} 
                     target="_blank"
                 >
                     <div 
                         className={cn(
                             "p-1",
-                            token?.extensions?.[link.id] ? "hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-full" : "opacity-25"
+                            token?.tokenLinks?.[link.id] ? "hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-full" : "opacity-25"
                         )}
                     >
                         {link.icon}

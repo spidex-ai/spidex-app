@@ -5,9 +5,10 @@ import React from 'react'
 import { Card } from '@/components/ui'
 
 import type { TokenOverview } from '@/services/birdeye/types'
+import { TokenStats } from '@/services/taptools/types'
 
 interface Props {
-    token: TokenOverview
+    token: TokenStats;
 }
 
 const Stats: React.FC<Props> = ({ token }) => {
@@ -21,25 +22,25 @@ const Stats: React.FC<Props> = ({ token }) => {
                     <h3 className="text-sm font-semibold">
                         Market Cap
                     </h3>
-                    <p>${token.mc.toLocaleString(undefined, { maximumFractionDigits: 2 })}</p>
+                    <p>${token.mcap.mcap.toLocaleString()}</p>
                 </div>
                 <div className="flex flex-col">
                     <h3 className="text-sm font-semibold">
-                        Liquidity
+                        Circulate Supply
                     </h3>
-                    <p>${token.liquidity.toLocaleString(undefined, { maximumFractionDigits: 2 })}</p>
+                    <p>${token.mcap.circSupply.toLocaleString(undefined, { maximumFractionDigits: 2 })}</p>
+                </div>
+                <div className="flex flex-col">
+                    <h3 className="text-sm font-semibold">
+                        Total Supply
+                    </h3>
+                    <p>{token.mcap.totalSupply.toLocaleString(undefined, { maximumFractionDigits: 0 })}</p>
                 </div>
                 <div className="flex flex-col">
                     <h3 className="text-sm font-semibold">
                         # of Holders
                     </h3>
-                    <p>{token.holder.toLocaleString(undefined, { maximumFractionDigits: 0 })}</p>
-                </div>
-                <div className="flex flex-col">
-                    <h3 className="text-sm font-semibold">
-                        # of Markets
-                    </h3>
-                    <p>{token.numberMarkets.toLocaleString(undefined, { maximumFractionDigits: 0 })}</p>
+                    <p>{token.holders.holders.toLocaleString()}</p>
                 </div>
             </div>
         </Card>

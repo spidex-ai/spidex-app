@@ -15,10 +15,11 @@ import Links from './links'
 import { cn } from '@/lib/utils'
 
 import type { TokenOverview } from '@/services/birdeye/types'
+import { TokenStats } from '@/services/taptools/types'
 
 
 interface Props {
-    token: TokenOverview,
+    token: TokenStats,
 }
 
 const GetTokenDataResultHeading: React.FC<Props> = ({ token }) => {
@@ -26,32 +27,32 @@ const GetTokenDataResultHeading: React.FC<Props> = ({ token }) => {
         <Card className="p-2 flex flex-col md:flex-row justify-between gap-4">
             <div className="flex items-center gap-2">
                 <img 
-                    src={token.logoURI} 
-                    alt={token.name} 
+                    src={token.tokenLogo} 
+                    alt={token.mcap.ticker} 
                     className="w-10 h-10 rounded-full" 
                 />
                 <div className="flex flex-col">
                     <div className="flex flex-col md:flex-row md:items-center md:gap-2">
-                        <h1 className="text-xl font-bold">{token.name} ({token.symbol})</h1>
-                        <Address address={token.address} />
-                        <Link href={`/token/${token.address}`}>
+                        <h1 className="text-xl font-bold">{token.mcap.ticker} ({token.mcap.ticker})</h1>
+                        <Address address={token.tokenAddress!} />
+                        <Link href={`/token/${token.tokenAddress}`}>
                             <Button variant="brandOutline" className="p-1 h-6 text-xs w-fit">
                                 See More
                             </Button>
                         </Link>
-                        <SaveToken address={token.address} />
+                        <SaveToken address={token.tokenAddress!} />
                     </div>
                     <p className="text-sm font-semibold flex items-center gap-1">
                         ${token.price.toLocaleString(undefined, { maximumFractionDigits: 5 })} 
                         {
-                            token.priceChange24hPercent && (
+                            token.tokenPriceChange?.['24h'] && (
                                 <span 
                                     className={cn(
                                         "text-xs",
-                                        token.priceChange24hPercent > 0 ? "text-green-500" : "text-red-500"
+                                        token.tokenPriceChange['24h'] > 0 ? "text-green-500" : "text-red-500"
                                     )}
                                 >
-                                    {token.priceChange24hPercent ? `(${token.priceChange24hPercent > 0 ? "+" : ""}${token.priceChange24hPercent.toFixed(2)}%)` : ""}
+                                    {token.tokenPriceChange['24h'] ? `(${token.tokenPriceChange['24h'] > 0 ? "+" : ""}${token.tokenPriceChange['24h'].toFixed(2)}%)` : ""}
                                 </span>
                             )
                         }
