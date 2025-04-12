@@ -51,13 +51,13 @@ import {
     CARDANO_TOKEN_PRICE_CHART_NAME,
     CARDANO_GET_TRADER_TRADES_NAME,
     CARDANO_GET_SMART_MONEY_INFLOWS_NAME,
-    CARDANO_BALANCE_NAME,
     CARDANO_GET_WALLET_ADDRESS_NAME,
     CARDANO_GET_TRENDING_TOKENS_NAME,
     CARDANO_GET_TOKEN_DATA_NAME,
     CARDANO_TRADE_NAME,
     CARDANO_STAKE_NAME,
     CARDANO_UNSTAKE_NAME,
+    CARDANO_TRANSACTION_NAME,
 } from '@/ai/action-names'
 
 import type { ToolInvocation as ToolInvocationType } from 'ai'
@@ -73,7 +73,7 @@ const ToolInvocation: React.FC<Props> = ({ tool, prevToolAgent }) => {
     const toolName = toolParts.slice(1).join("-");
     console.log("🚀 ~ ToolInvocation ~ toolName:", toolName)
     switch(toolName) {
-        case CARDANO_BALANCE_NAME:
+        case CARDANO_TRANSACTION_NAME:
             return <Balance tool={tool} prevToolAgent={prevToolAgent} />
         case CARDANO_GET_WALLET_ADDRESS_NAME:
             return <GetWalletAddress tool={tool} prevToolAgent={prevToolAgent} />

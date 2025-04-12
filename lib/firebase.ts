@@ -3,13 +3,13 @@ import { getAnalytics } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCnaNohZ93r236p7cSeHbu0dx4eJDgddOQ",
-  authDomain: "cai-dev-c3823.firebaseapp.com",
-  projectId: "cai-dev-c3823",
-  storageBucket: "cai-dev-c3823.firebasestorage.app",
-  messagingSenderId: "678864531734",
-  appId: "1:678864531734:web:3ae4e866ca73a7d0016037",
-  measurementId: "G-H5H351406G",
+  apiKey: "AIzaSyDwiC444_f2cxPMPe64e8kP1YcJaU3lQAk",
+  authDomain: "spidex-30c14.firebaseapp.com",
+  projectId: "spidex-30c14",
+  storageBucket: "spidex-30c14.firebasestorage.app",
+  messagingSenderId: "282546013060",
+  appId: "1:282546013060:web:add445901b2df7f6d8d3d1",
+  measurementId: "G-Y8ZV0KCHL8",
 };
 
 // Initialize Firebase

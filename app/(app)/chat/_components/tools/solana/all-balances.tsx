@@ -3,7 +3,7 @@ import React from 'react'
 import ToolCard from '../tool-card';
 
 import type { ToolInvocation } from 'ai';
-import type { AllBalancesResultType } from '@/ai';
+import type { AllBalancesResultType, CardanoAllBalancesResultType } from '@/ai';
 import { TokenBalance } from '../utils';
 
 interface Props {
@@ -19,18 +19,18 @@ const AllBalances: React.FC<Props> = ({ tool, prevToolAgent }) => {
             tool={tool}
             loadingText={`Getting All Balances...`}
             result={{
-                heading: (result: AllBalancesResultType) => result.body 
+                heading: (result: CardanoAllBalancesResultType) => result.body 
                     ? `Fetched All Balances`
                     : `Failed to fetch balances`,
-                body: (result: AllBalancesResultType) => result.body 
+                body: (result: CardanoAllBalancesResultType) => result.body 
                     ? (
                         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
-                            {result.body.balances.map((balance) => (
+                            {result.body.amount.map((balance) => (
                                 <TokenBalance
-                                    key={balance.token}
-                                    token={balance.token}
-                                    balance={balance.balance}
-                                    logoURI={balance.logoURI}
+                                    key={balance.unit}
+                                    token={balance.ticker}
+                                    balance={Number(balance.quantity)}
+                                    logoURI={balance.logo!}
                                     name={balance.name}
                                 />
                             ))}

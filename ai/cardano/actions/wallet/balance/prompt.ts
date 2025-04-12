@@ -1,6 +1,3 @@
-export const CARDANO_BALANCE_PROMPT = `Get the balance of a Cardano wallet for a given token.
+export const CARDANO_BALANCE_PROMPT = `Get the last 50 transaction of a Cardano wallet.
 
-If no tokenAddress is provided, the balance will be in ADA.
-
-If the user provides a symbol, first use the tokenData tool to get the tokenAddress.`; 
-
+You can use this tool to get the transaction of a Cardano wallet`;

@@ -4,7 +4,8 @@ import ToolCard from '../tool-card';
 import { TokenBalance } from '../utils';
 
 import type { ToolInvocation } from 'ai';
-import type { BalanceResultType } from '@/ai';
+import type { BalanceResultType, TransactionResultType } from '@/ai';
+import Transaction from '../utils/transaction';
 
 interface Props {
     tool: ToolInvocation,
@@ -19,17 +20,19 @@ const GetBalance: React.FC<Props> = ({ tool, prevToolAgent }) => {
             tool={tool}
             loadingText={`Getting ${tool.args.tokenAddress || "SOL"} Balance...`}
             result={{
-                heading: (result: BalanceResultType) => result.body?.token 
-                    ? `Fetched ${result.body.token} Balance` 
-                    : `Failed to fetch balance`,
-                body: (result: BalanceResultType) => result.body 
+                heading: (result: TransactionResultType) => result.body?.walletTx
+                    ? `Found ${result.body.walletTx.length} transactions`
+                    : `No transactions found`, 
+                body: (result: TransactionResultType) => result.body 
                     ? (
-                        <TokenBalance 
-                            token={result.body.token}
-                            balance={result.body.balance}
-                            logoURI={result.body.logoURI}
-                            name={result.body.name}
-                        />
+"hello"
+                        //TODO : Show transaction
+                        // <Transaction 
+                        //     txHash={result.body.}
+                        //     txIndex={result.body.balance}
+                        //     blockHeight={result.body.}
+                        //     blockTime={result.body.name}
+                        // />
                     ) : "No balance found"
             }}
             prevToolAgent={prevToolAgent}
