@@ -17,7 +17,7 @@ import { useChat } from '../../../_contexts';
 import { cn } from '@/lib/utils';
 
 import Image from 'next/image';
-import { useSpidexCore } from '@/hooks/core/useSpidexCore';
+// import { useSpidexCore } from '@/hooks/core/useSpidexCore';
 import { useSpidexCoreContext } from '@/app/_contexts';
 const ChatInput: React.FC = () => {
 

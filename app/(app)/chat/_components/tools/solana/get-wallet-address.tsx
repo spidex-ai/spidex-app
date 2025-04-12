@@ -7,8 +7,8 @@ import ToolCard from '../tool-card';
 import { useChat } from '@/app/(app)/chat/_contexts/chat';
 
 import type { ToolInvocation } from 'ai';
-import type { CardanoGetWalletAddressResultType, GetWalletAddressResultType } from '@/ai';
-import { useSpidexCore } from '@/hooks/core/useSpidexCore';
+import type { GetWalletAddressResultType } from '@/ai';
+// import { useSpidexCore } from '@/hooks/core/useSpidexCore';
 import { useSpidexCoreContext } from '@/app/_contexts';
 
 interface Props {

@@ -1,20 +1,18 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 
-import Image from 'next/image';
+// import Image from 'next/image';44444
 
 import { Button, Card } from '@/components/ui';
 
-import WalletAddress from '@/app/_components/wallet-address';
+// import WalletAddress from '@/app/_components/wallet-address';
 
 import ToolCard from '../tool-card';
 
-import { getStreamsByMint } from '@/services/streamflow';
+// import { getStreamsByMint } from '@/services/streamflow';
 
 import type { ToolInvocation } from 'ai';
-import type { TopHolderBodyType, TopHolderNewResultType, TopHoldersResultBodyType, TopHoldersResultType } from '@/ai';
+import type { TopHolderBodyType, TopHolderNewResultType } from '@/ai';
 import type { TokenLargestAccount } from '@/services/helius';
-import type { Stream } from '@streamflow/stream';
-import type { ProgramAccount } from '@project-serum/anchor';
 
 interface Props {
     tool: ToolInvocation,
@@ -42,7 +40,7 @@ const GetTopHolders: React.FC<Props> = ({ tool, prevToolAgent }) => {
     )
 }
 
-const TopHolders = ({ body,mint }: { body: TopHolderBodyType, mint : string }) => {
+const TopHolders = ({ body }: { body: TopHolderBodyType, mint : string }) => {
 
     const [showAll, setShowAll] = useState(false);
 

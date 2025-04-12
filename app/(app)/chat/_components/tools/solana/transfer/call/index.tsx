@@ -38,7 +38,7 @@ const TransferCall: React.FC<Props> = ({ args, toolCallId }) => {
 
     const { data: inputTokenData, isLoading: inputTokenLoading } = useTokenDataByAddress(args.mint || "So11111111111111111111111111111111111111112");
 
-    const { balance, isLoading: balanceLoading } = useTokenBalance(args.mint || "So11111111111111111111111111111111111111112", wallet?.address || "");
+    const { balance, isLoading: balanceLoading } = useTokenBalance(args.mint || "So11111111111111111111111111111111111111112", wallet || "");
     
     useEffect(() => {
         if(inputTokenData && !token) {
@@ -49,7 +49,7 @@ const TransferCall: React.FC<Props> = ({ args, toolCallId }) => {
     const onTransfer = async () => {
         if(!wallet || !amount || !toAddress || !token) return;
         setIsTransferring(true);
-        const transaction = await buildTransferTx(wallet.address, toAddress, Number(amount), token.id);
+        const transaction = await buildTransferTx(wallet, toAddress, Number(amount), token.id);
         try {
             
             const tx = await sendTransaction(transaction);
@@ -84,7 +84,7 @@ const TransferCall: React.FC<Props> = ({ args, toolCallId }) => {
                         setAmount(amount);
                     }}
                     onChangeToken={() => {}}
-                    address={wallet?.address}
+                    address={wallet}
                 />
                 <ChevronDown className="w-4 h-4" />
                 <Input

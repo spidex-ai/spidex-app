@@ -118,7 +118,7 @@ const LoginButton: React.FC = () => {
   const [walletConnecting, setWalletConnecting] = useState<string | null>(null)
   const [isConnecting, setIsConnecting] = useState(false)
   const processedCodeRef = useRef<string | null>(null)
-  const [openConnected, setOpenConnected] = useState(false)
+  // const [openConnected, setOpenConnected] = useState(false)
   const [open, setOpen] = useState(false)
   const router = useRouter()
   const params = useSearchParams()
@@ -157,10 +157,10 @@ const LoginButton: React.FC = () => {
     []
   )
   
-  const hideWidget = async () => {
-    const widgetApi = await nufiCoreSdk.getWidgetApi()
-    widgetApi.hideWidget()
-  }
+  // const hideWidget = async () => {
+  //   const widgetApi = await nufiCoreSdk.getWidgetApi()
+  //   widgetApi.hideWidget()
+  // }
 
   const onWalletConnectSuccess = useCallback(() => {
     handleSignMessage(stakeAddress?.toString())

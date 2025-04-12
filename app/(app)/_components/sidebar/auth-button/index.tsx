@@ -1,9 +1,7 @@
 'use client'
 
 import React from 'react'
-
-import { Coins, LogOut, Wallet } from 'lucide-react';
-
+import {  LogOut, Wallet } from 'lucide-react'; 
 import {
     SidebarMenu,
     SidebarMenuItem,
@@ -12,7 +10,6 @@ import {
     DropdownMenuContent,
     DropdownMenuLabel,
     DropdownMenuSeparator,
-    DropdownMenuGroup,
     DropdownMenuItem,
     useSidebar,
     Skeleton,

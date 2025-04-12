@@ -6,7 +6,7 @@ import { Card } from '@/components/ui'
 
 import BuySell from '../../../utils/buy-sell'
 
-import type { TokenOverview } from '@/services/birdeye/types'
+// import type { TokenOverview } from '@/services/birdeye/types'
 import { TokenStats } from '@/services/taptools/types'
 
 interface Props {

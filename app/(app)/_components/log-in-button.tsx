@@ -9,9 +9,9 @@ interface Props {
     onComplete?: (wallet: string) => void,
 }
 
-const LogInButton: React.FC<Props> = ({ onComplete }) => {
+const LogInButton: React.FC<Props> = () => {
 
-    const { auth, connectGoogle } = useSpidexCoreContext();
+    const { auth } = useSpidexCoreContext();
 
     const address = auth?.user?.walletAddress;
 

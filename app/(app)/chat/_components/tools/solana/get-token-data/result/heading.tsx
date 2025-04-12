@@ -14,7 +14,7 @@ import Links from './links'
 
 import { cn } from '@/lib/utils'
 
-import type { TokenOverview } from '@/services/birdeye/types'
+// import type { TokenOverview } from '@/services/birdeye/types'
 import { TokenStats } from '@/services/taptools/types'
 
 

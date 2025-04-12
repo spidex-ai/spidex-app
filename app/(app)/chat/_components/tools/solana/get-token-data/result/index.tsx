@@ -9,7 +9,7 @@ import TwentyFourHrStats from './24hr-stats';
 import type { GetTokenDataResultBodyType } from '@/ai';
 
 interface Props {
-    body: GetTokenDataResultBodyType
+    body: GetTokenDataResultBodyType | any
 }
 
 const GetTokenDataResult: React.FC<Props> = ({ body }) => {
