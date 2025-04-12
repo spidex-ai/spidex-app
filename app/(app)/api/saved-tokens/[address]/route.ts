@@ -1,15 +1,10 @@
 import { NextResponse } from "next/server";
 
-import { PrivyClient } from "@privy-io/server-auth";
-
 import { addSavedToken, deleteSavedToken, getSavedToken } from "@/db/services";
-import { getTokenMetadata } from "@/services/birdeye";
+
 import tokenCardanoService from "@/services/token-cardano";
 
-const privy = new PrivyClient(
-  process.env.NEXT_PUBLIC_PRIVY_APP_ID!,
-  process.env.PRIVY_APP_SECRET!
-);
+
 
 export const GET = async (
   request: Request,

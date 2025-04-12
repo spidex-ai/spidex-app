@@ -3,7 +3,7 @@ import React from 'react'
 import ToolCard from '../tool-card';
 
 import type { ToolInvocation } from 'ai';
-import type { AllBalancesResultType, CardanoAllBalancesResultType } from '@/ai';
+import type { CardanoAllBalancesResultType } from '@/ai';
 import { TokenBalance } from '../utils';
 
 interface Props {

@@ -7,7 +7,7 @@ import {
   deleteChat,
 } from "@/db/services";
 
-import { privy } from "@/services/privy";
+// import { privy } from "@/services/privy";
 import { generateText } from "ai";
 import { Message } from "ai";
 import { openai } from "@ai-sdk/openai";

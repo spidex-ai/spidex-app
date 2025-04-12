@@ -11,7 +11,7 @@ interface Props {
     blockTime: number,
 }
 
-const Transaction: React.FC<Props> = ({ txHash, txIndex, blockHeight, blockTime }) => {
+const Transaction: React.FC<Props> = ({ txHash, blockHeight }) => {
     return (
         <Card className="flex flex-row items-center gap-2 p-2">
             

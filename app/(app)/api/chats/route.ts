@@ -1,13 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { PrivyClient } from "@privy-io/server-auth";
-
 import { findChatsByUser } from "@/db/services/chats";
-
-const privy = new PrivyClient(
-  process.env.NEXT_PUBLIC_PRIVY_APP_ID!,
-  process.env.PRIVY_APP_SECRET!
-);
 
 export const GET = async (req: NextRequest) => {
   try {

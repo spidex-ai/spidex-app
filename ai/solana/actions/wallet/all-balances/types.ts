@@ -20,4 +20,4 @@ export type AllBalancesResultBodyType = {
 export type AllBalancesResultType =
   SolanaActionResult<AllBalancesResultBodyType>;
 
-export type CardanoAllBalancesResultType = SolanaActionResult<WalletBalances>;
+export type SolanaAllBalancesResultType = SolanaActionResult<WalletBalances>;

@@ -7,7 +7,7 @@ import ToolCard from '../tool-card';
 import { useChat } from '@/app/(app)/chat/_contexts/chat';
 
 import type { ToolInvocation } from 'ai';
-import type { GetWalletAddressResultType } from '@/ai';
+import type { CardanoGetWalletAddressResultType } from '@/ai';
 // import { useSpidexCore } from '@/hooks/core/useSpidexCore';
 import { useSpidexCoreContext } from '@/app/_contexts';
 
@@ -23,9 +23,7 @@ const GetWalletAddress: React.FC<Props> = ({ tool, prevToolAgent }) => {
             tool={tool}
             loadingText={`Getting Wallet Address...`}   
             result={{
-                heading: (result: CardanoGetWalletAddressResultType
-
-                ) => result.body 
+                heading: (result: CardanoGetWalletAddressResultType) => result.body 
                     ? `Fetched Wallet Address`
                     : "No wallet address found",
                 body: (result: CardanoGetWalletAddressResultType) => result.body 
