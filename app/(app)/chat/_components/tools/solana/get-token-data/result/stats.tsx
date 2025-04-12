@@ -4,7 +4,7 @@ import React from 'react'
 
 import { Card } from '@/components/ui'
 
-import type { TokenOverview } from '@/services/birdeye/types'
+// import type { TokenOverview } from '@/services/birdeye/types'
 import { TokenStats } from '@/services/taptools/types'
 
 interface Props {

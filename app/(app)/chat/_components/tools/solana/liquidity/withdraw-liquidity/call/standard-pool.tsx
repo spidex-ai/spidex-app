@@ -43,7 +43,7 @@ const StandardPool: React.FC<Props> = ({ pool, toolCallId }) => {
 
     const { sendTransaction, wallet } = useSendTransaction();
 
-    const { balance, isLoading: isBalanceLoading } = useTokenBalance(pool.lpMint.address, wallet?.address ?? "");
+    const { balance, isLoading: isBalanceLoading } = useTokenBalance(pool.lpMint.address, wallet ?? "");
 
     const handleAmountChange = async (amount: string) => {
         setAmount(amount);
@@ -64,11 +64,11 @@ const StandardPool: React.FC<Props> = ({ pool, toolCallId }) => {
     }
 
     const onSubmit = async () => {
-        if(!wallet || !wallet.address) return;
+        if(!wallet) return;
         setIsWithdrawing(true);
         try {
             const lpSlippage = 0.1;
-            const raydium = await raydiumTransactionClient(wallet.address);
+            const raydium = await raydiumTransactionClient(wallet);
             const { transaction } = await raydium.liquidity.removeLiquidity({
                 poolInfo: pool,
                 lpAmount: new BN(Number(amount) * 10 ** pool.lpMint.decimals),
@@ -76,7 +76,7 @@ const StandardPool: React.FC<Props> = ({ pool, toolCallId }) => {
                 quoteAmountMin: new BN(new Decimal(withdrawAmountB).mul(1 - lpSlippage).toFixed(0)),
                 txVersion: TxVersion.V0
             });
-            const txHash = await sendTransaction(transaction);
+            const txHash: any = await sendTransaction(transaction);
             addToolResult<SolanaWithdrawLiquidityResultBodyType>(toolCallId, {
                 message: "Withdraw liquidity successful. The user is shown the transaction hash, so you do not have to repeat it. Ask what they want to do next.",
                 body: {
@@ -117,7 +117,7 @@ const StandardPool: React.FC<Props> = ({ pool, toolCallId }) => {
                 onChange={handleAmountChange}
                 pool={pool}
                 lpMint={pool.lpMint.address}
-                address={wallet?.address ?? ""}
+                address={wallet ?? ""}
             />
             <div className="flex flex-col items-center gap-2">
                 <ChevronDown className="w-4 h-4" />

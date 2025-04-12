@@ -66,7 +66,7 @@ const Swap: React.FC<Props> = ({
 
     const { sendTransaction, wallet } = useSendTransaction();
 
-    const { balance: inputBalance, isLoading: inputBalanceLoading } = useTokenBalance(inputToken?.unit || "", wallet?.address || "");
+    const { balance: inputBalance, isLoading: inputBalanceLoading } = useTokenBalance(inputToken?.unit || "", wallet || "");
 
     const onChangeInputOutput = () => {
         const tempInputToken = inputToken;
@@ -81,10 +81,10 @@ const Swap: React.FC<Props> = ({
         if(!wallet || !quoteResponse) return;
         setIsSwapping(true);
         try {
-            const { swapTransaction} = await getSwapObj(wallet.address, quoteResponse);
+            const { swapTransaction} = await getSwapObj(wallet, quoteResponse);
             const swapTransactionBuf = Buffer.from(swapTransaction, "base64");
             const transaction = VersionedTransaction.deserialize(swapTransactionBuf);
-            const txHash = await sendTransaction(transaction);
+            const txHash: any = await sendTransaction(transaction);
             onSuccess?.(txHash);
         } catch (error) {
             onError?.(error instanceof Error ? error.message : "Unknown error");
@@ -197,7 +197,7 @@ const Swap: React.FC<Props> = ({
                         console.log('api:token:::', token);
                         setInputToken(token);
                     }}
-                    address={wallet?.address}
+                    address={wallet}
                 />
                 <Button 
                     variant="ghost" 
@@ -215,7 +215,7 @@ const Swap: React.FC<Props> = ({
                         console.log('api:token:::', token);
                         setOutputToken(token);
                     }}
-                    address={wallet?.address}
+                    address={wallet}
                 />
             </div>
             <Separator />

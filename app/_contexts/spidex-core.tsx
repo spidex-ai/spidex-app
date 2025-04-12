@@ -1,14 +1,18 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import { useSpidexCore, Auth } from '@/hooks/core/useSpidexCore';
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { Auth, useSpidexCore } from "@/hooks/core/useSpidexCore";
 
 interface SpidexCoreContextType {
   auth: Auth | null;
   loading: boolean;
   error: string | null;
   isAuthenticated: boolean;
-  getTopTokensByVolume: (timeframe?: string, page?: number, perPage?: number) => Promise<any>;
+  getTopTokensByVolume: (
+    timeframe?: string,
+    page?: number,
+    perPage?: number
+  ) => Promise<any>;
   getTopTokensByMcap: (page?: number, perPage?: number) => Promise<any>;
   getNounce: () => Promise<any>;
   signMessage: (message: any) => Promise<any>;
@@ -18,36 +22,54 @@ interface SpidexCoreContextType {
   fetchWithAuth: (url: string, options?: RequestInit) => Promise<any>;
   logout: () => Promise<void>;
   setLocalAuth: (auth: Auth) => void;
+  getUserRefMeInfo: () => Promise<any>;
+  getUserRefMeReferredUsers: (page?: number, perPage?: number) => Promise<any>;
+  getUserRefHistory: (page?: number, perPage?: number) => Promise<any>;
 }
 
-const STORAGE_KEY = 'spidex_auth';
+const STORAGE_KEY = "spidex_auth";
 
-const SpidexCoreContext = createContext<SpidexCoreContextType | undefined>(undefined);
+const SpidexCoreContext = createContext<SpidexCoreContextType | undefined>(
+  undefined
+);
 
-export const SpidexCoreProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const spidexCore = useSpidexCore();
-  const [localAuth, setLocalAuth] = useState<Auth | null>(null);
-  
-  // Custom setter for auth that also updates localStorage
+export const SpidexCoreProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
+  const [localAuth, setLocalAuth] = useState<Auth | null>(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const savedAuth = localStorage.getItem(STORAGE_KEY);
+        if (savedAuth) {
+          return JSON.parse(savedAuth);
+        }
+      } catch (error) {
+        console.error("Failed to parse saved auth data", error);
+        localStorage.removeItem(STORAGE_KEY);
+      }
+    }
+    return null;
+  });
+  const spidexCore = useSpidexCore(localAuth);
+
+
   const handleSetLocalAuth = (auth: Auth) => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(auth));
       setLocalAuth(auth);
     }
   };
-  
-  // Custom logout that clears localStorage
+
   const handleLogout = async () => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       localStorage.removeItem(STORAGE_KEY);
       setLocalAuth(null);
     }
     await spidexCore.logout();
   };
-  
-  // Initialize auth from localStorage on mount
+
   useEffect(() => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       try {
         const savedAuth = localStorage.getItem(STORAGE_KEY);
         if (savedAuth) {
@@ -55,25 +77,29 @@ export const SpidexCoreProvider: React.FC<{ children: React.ReactNode }> = ({ ch
           setLocalAuth(parsedAuth);
         }
       } catch (error) {
-        console.error('Failed to parse saved auth data', error);
+        console.error("Failed to parse saved auth data", error);
         localStorage.removeItem(STORAGE_KEY);
       }
     }
   }, []);
-  
+
   // When spidexCore.auth changes, update localStorage
   useEffect(() => {
-    if (typeof window !== 'undefined' && spidexCore.auth) {
+    if (typeof window !== "undefined" && spidexCore.auth) {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(spidexCore.auth));
       setLocalAuth(spidexCore.auth);
     }
   }, [spidexCore.auth]);
+
   
-  // Use either the local state or the spidexCore state
   const currentAuth = localAuth || spidexCore.auth;
-  const isAuthenticated = Boolean(currentAuth?.accessToken && currentAuth?.userId);
+
+  const isAuthenticated = Boolean(
+    currentAuth?.accessToken && currentAuth?.userId
+  );
+
+
   
-  // The value object matches the interface exactly
   const contextValue: SpidexCoreContextType = {
     auth: currentAuth,
     loading: spidexCore.loading,
@@ -96,13 +122,28 @@ export const SpidexCoreProvider: React.FC<{ children: React.ReactNode }> = ({ ch
       }
       return result;
     },
-    connectX: spidexCore.connectX,
-    connectGoogle: spidexCore.connectGoogle,
+    connectX: async (code, redirectUrl) => {
+      const result = await spidexCore.connectX(code, redirectUrl);
+      if (result) {
+        handleSetLocalAuth(result);
+      }
+      return result;
+    },
+    connectGoogle: async (idToken) => {
+      const result = await spidexCore.connectGoogle(idToken);
+      if (result) {
+        handleSetLocalAuth(result);
+      }
+      return result;
+    },
     fetchWithAuth: spidexCore.fetchWithAuth,
     logout: handleLogout,
-    setLocalAuth: handleSetLocalAuth
+    setLocalAuth: handleSetLocalAuth,
+    getUserRefMeInfo: spidexCore.getUserRefMeInfo,
+    getUserRefMeReferredUsers: spidexCore.getUserRefMeReferredUsers,
+    getUserRefHistory: spidexCore.getUserRefHistory,
   };
-  
+
   return (
     <SpidexCoreContext.Provider value={contextValue}>
       {children}
@@ -113,7 +154,9 @@ export const SpidexCoreProvider: React.FC<{ children: React.ReactNode }> = ({ ch
 export const useSpidexCoreContext = () => {
   const context = useContext(SpidexCoreContext);
   if (context === undefined) {
-    throw new Error('useSpidexCoreContext must be used within a SpidexCoreProvider');
+    throw new Error(
+      "useSpidexCoreContext must be used within a SpidexCoreProvider"
+    );
   }
   return context;
-}; 
+};

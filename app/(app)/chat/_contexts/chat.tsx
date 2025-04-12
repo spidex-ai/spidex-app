@@ -16,7 +16,7 @@ import {
     SOLANA_DEPOSIT_LIQUIDITY_NAME,
     SOLANA_WITHDRAW_LIQUIDITY_NAME
 } from '@/ai/action-names';
-import { useSpidexCore } from '@/hooks/core/useSpidexCore';
+// import { useSpidexCore } from '@/hooks/core/useSpidexCore';
 import { useSpidexCoreContext } from '@/app/_contexts';
 export enum ColorMode {
     LIGHT = 'light',

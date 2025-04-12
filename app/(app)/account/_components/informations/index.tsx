@@ -5,6 +5,7 @@ import { TextGradient } from "@/components/ui/text";
 
 import { UserSpidex } from "@/hooks/core/useSpidexCore";
 import { useSpidexCoreContext } from "@/app/_contexts";
+import Address from "@/app/_components/address";
 interface Props {
   user: UserSpidex;
 }
@@ -12,6 +13,7 @@ interface Props {
 const Information: React.FC<Props> = ({ user }) => {
   const wallets = [user.walletAddress]
   const { logout } = useSpidexCoreContext();
+  console.log('user:::', user);
   return (
     <>
       <div className="flex justify-between gap-4">
@@ -50,8 +52,11 @@ const Information: React.FC<Props> = ({ user }) => {
               />
             </div>
             <div>
-              <div>{user?.walletAddress ? user?.walletAddress : "No wallet connected"}</div>
-              <div className="text-xs text-text-gray">Joined on {user.createdAt.toLocaleDateString()}</div>
+              <div>{user?.walletAddress ?  <Address 
+                                        address={user?.walletAddress}
+                                        className="text-md font-bold"
+                                    /> : "No wallet connected"}</div>
+              <div className="text-xs text-text-gray">Joined on {user?.createdAt ? new Date(user?.createdAt).toLocaleDateString() : "N/A"}</div>
             </div>
           </div>
 

@@ -48,8 +48,8 @@ const StandardPool: React.FC<Props> = ({ pool, toolCallId }) => {
     console.log("🚀 ~ StandardPool ~ mintA:", mintA)
     console.log("🚀 ~ StandardPool ~ mintB:", mintB)
 
-    const { balance: balanceA, isLoading: isBalanceALoading } = useTokenBalance(pool.mintA.address, wallet?.address ?? "");
-    const { balance: balanceB, isLoading: isBalanceBLoading } = useTokenBalance(pool.mintB.address, wallet?.address ?? "");
+    const { balance: balanceA, isLoading: isBalanceALoading } = useTokenBalance(pool.mintA.address, wallet ?? "");
+    const { balance: balanceB, isLoading: isBalanceBLoading } = useTokenBalance(pool.mintB.address, wallet ?? "");
 
     const handleAmountAChange = async (amount: string) => {
         setAmountA(amount);
@@ -84,10 +84,10 @@ const StandardPool: React.FC<Props> = ({ pool, toolCallId }) => {
     }
 
     const onSubmit = async () => {
-        if(!wallet || !wallet.address) return;
+        if(!wallet) return;
         setIsDepositing(true);
         try {
-            const raydium = await raydiumTransactionClient(wallet.address);
+            const raydium = await raydiumTransactionClient(wallet);
             const { transaction } = await raydium.liquidity.addLiquidity({
                 poolInfo: pool,
                 amountInA: new TokenAmount(
@@ -109,7 +109,7 @@ const StandardPool: React.FC<Props> = ({ pool, toolCallId }) => {
             const transactionBuffer = transaction.serialize();
             const versionedTransaction = VersionedTransaction.deserialize(transactionBuffer);
             
-            const txHash = await sendTransaction(versionedTransaction);
+            const txHash: any = await sendTransaction(versionedTransaction);
             addToolResult<SolanaDepositLiquidityResultBodyType>(toolCallId, {
                 message: "Deposit liquidity successful. The user is shown the transaction hash, so you do not have to repeat it. Ask what they want to do next.",
                 body: {
@@ -154,14 +154,14 @@ const StandardPool: React.FC<Props> = ({ pool, toolCallId }) => {
                         label={"Token A"}
                         amount={amountA}
                         onChange={handleAmountAChange}
-                        address={wallet?.address ?? ""}
+                        address={wallet ?? ""}
                     />
                     <TokenInput
                         token={null}
                         label={"Token B"}
                         amount={amountB}
                         onChange={handleAmountBChange}
-                        address={wallet?.address ?? ""}
+                        address={wallet ?? ""}
                     />
                 </div>
             </div>

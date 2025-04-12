@@ -61,7 +61,7 @@ const Swap: React.FC<Props> = ({
     const [isSwapping, setIsSwapping] = useState<boolean>(false);
 
     const { sendTransaction, wallet } = useSendTransaction();
-    const { balance: inputBalance, isLoading: inputBalanceLoading } = useTokenBalance(inputToken?.token_id || "", wallet?.address || "");
+    const { balance: inputBalance, isLoading: inputBalanceLoading } = useTokenBalance(inputToken?.token_id || "", wallet || "");
 
     const onChangeInputOutput = () => {
         const tempInputToken = inputToken;
@@ -76,10 +76,10 @@ const Swap: React.FC<Props> = ({
         if(!wallet || !quoteResponse) return;
         setIsSwapping(true);
         try {
-            const { swapTransaction} = await getSwapObj(wallet.address, quoteResponse);
+            const { swapTransaction} = await getSwapObj(wallet, quoteResponse);
             const swapTransactionBuf = Buffer.from(swapTransaction, "base64");
             const transaction = VersionedTransaction.deserialize(swapTransactionBuf);
-            const txHash = await sendTransaction(transaction);
+            const txHash: any = await sendTransaction(transaction);
             onSuccess?.(txHash);
         } catch (error) {
             onError?.(error instanceof Error ? error.message : "Unknown error");
@@ -118,7 +118,7 @@ const Swap: React.FC<Props> = ({
                     onChange={setInputAmount}
                     token={inputToken}
                     onChangeToken={setInputToken}
-                    address={wallet?.address}
+                    address={wallet}
                 />
                 <Button 
                     variant="ghost" 
@@ -133,7 +133,7 @@ const Swap: React.FC<Props> = ({
                     amount={outputAmount}
                     token={outputToken}
                     onChangeToken={setOutputToken}
-                    address={wallet?.address}
+                    address={wallet}
                 />
             </div>
             <Separator />

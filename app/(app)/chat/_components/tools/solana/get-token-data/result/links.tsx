@@ -2,7 +2,7 @@
 
 import React from 'react'
 
-import Image from 'next/image';
+// import Image from 'next/image';
 
 import { FaDiscord, FaTelegram, FaXTwitter } from 'react-icons/fa6';
 
@@ -12,7 +12,7 @@ import { OptionalLink } from '@/components/ui';
 
 import { cn } from '@/lib/utils';
 
-import type { TokenOverview } from '@/services/birdeye/types';
+// import type { TokenOverview } from '@/services/birdeye/types';
 import { TokenStats } from '@/services/taptools/types';
 
 const SOCIAL_LINKS = [

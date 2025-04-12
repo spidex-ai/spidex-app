@@ -1,13 +1,11 @@
 'use client'
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Image from "next/image";
 import { useRefInfo } from "@/hooks/referral/user-ref";
 
 const AgentClub: React.FC = () => {
   const { referralInfo, loading, error } = useRefInfo();
-
-  console.log('referralInfo:::', referralInfo);
 
   if (loading) {
     return <div>Loading...</div>;

@@ -3,10 +3,11 @@
 import { useSpidexCore } from "../core/useSpidexCore";
 
 import { useEffect, useState } from "react";
-import { ReferralInfo } from "./type";
+import { MyRefItem, ReferralInfo } from "./type";
+import { useSpidexCoreContext } from "@/app/_contexts/spidex-core";
 
 export const useRefInfo = () => {
-    const { getUserRefMeInfo } = useSpidexCore();
+    const { getUserRefMeInfo } = useSpidexCoreContext();
 
     const [referralInfo, setReferralInfo] = useState<ReferralInfo | null>(null);
     const [loading, setLoading] = useState(false);
@@ -31,8 +32,8 @@ export const useRefInfo = () => {
     return { referralInfo, loading, error };
 }
 
-export const useRefHistory = () => {
-    const { getUserRefHistory } = useSpidexCore();
+export const useRefHistory = ({ page = 1, perPage = 10 }: { page?: number, perPage?: number }) => {
+    const { getUserRefHistory } = useSpidexCoreContext();
 
     const [referralHistory, setReferralHistory] = useState<any>(null);
     const [loading, setLoading] = useState(false);
@@ -40,12 +41,12 @@ export const useRefHistory = () => {
 
     useEffect(() => {
         fetchRefHistory();
-    }, []); 
+    }, [page, perPage]); 
 
     const fetchRefHistory = async () => {
         try {
             setLoading(true);
-            const data = await getUserRefHistory();
+            const data = await getUserRefHistory(page, perPage);
             setReferralHistory(data);
         } catch (error) {
             setError(error as string);
@@ -59,9 +60,9 @@ export const useRefHistory = () => {
 
 
 export const useRefReferredUsers = ({ page = 1, perPage = 10 }: { page?: number, perPage?: number }) => {
-    const { getUserRefMeReferredUsers } = useSpidexCore();
+    const { getUserRefMeReferredUsers } = useSpidexCoreContext();
 
-    const [referralReferredUsers, setReferralReferredUsers] = useState<any>(null);
+    const [myRefUsers, setMyRefUsers] = useState<MyRefItem[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
      
@@ -73,7 +74,7 @@ export const useRefReferredUsers = ({ page = 1, perPage = 10 }: { page?: number,
         try { 
             setLoading(true);
             const data = await getUserRefMeReferredUsers(page, perPage);
-            setReferralReferredUsers(data);
+            setMyRefUsers(data);
         } catch (error) {
             setError(error as string);
         } finally {
@@ -81,5 +82,5 @@ export const useRefReferredUsers = ({ page = 1, perPage = 10 }: { page?: number,
         } 
     }
 
-    return { referralReferredUsers, loading, error };
+    return { myRefUsers, loading, error };
 }
