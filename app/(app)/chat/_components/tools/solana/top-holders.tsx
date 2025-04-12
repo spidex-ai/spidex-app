@@ -11,7 +11,7 @@ import ToolCard from '../tool-card';
 import { getStreamsByMint } from '@/services/streamflow';
 
 import type { ToolInvocation } from 'ai';
-import type { TopHoldersResultBodyType, TopHoldersResultType } from '@/ai';
+import type { TopHolderBodyType, TopHolderNewResultType, TopHoldersResultBodyType, TopHoldersResultType } from '@/ai';
 import type { TokenLargestAccount } from '@/services/helius';
 import type { Stream } from '@streamflow/stream';
 import type { ProgramAccount } from '@project-serum/anchor';
@@ -29,10 +29,10 @@ const GetTopHolders: React.FC<Props> = ({ tool, prevToolAgent }) => {
             tool={tool}
             loadingText={`Getting Top Holders...`}
             result={{
-                heading: (result: TopHoldersResultType) => result.body 
+                heading: (result: TopHolderNewResultType) => result.body 
                     ? `Fetched Top 20 Holders`
                     : `Failed to fetch top holders`,
-                body: (result: TopHoldersResultType) => result.body 
+                body: (result: TopHolderNewResultType) => result.body 
                     ? <TopHolders body={result.body} mint={tool.args.tokenAddress} />
                     :  "No top holders found"
             }}
@@ -42,27 +42,9 @@ const GetTopHolders: React.FC<Props> = ({ tool, prevToolAgent }) => {
     )
 }
 
-const TopHolders = ({ body, mint }: { body: TopHoldersResultBodyType, mint: string }) => {
+const TopHolders = ({ body,mint }: { body: TopHolderBodyType, mint : string }) => {
 
     const [showAll, setShowAll] = useState(false);
-
-    const [streamflowAccounts, setStreamflowAccounts] = useState<ProgramAccount<Stream>[]>([]);
-
-    useEffect(() => {
-        const fetchStreamflowAccounts = async () => {
-            const accounts = await getStreamsByMint(mint);
-            setStreamflowAccounts(accounts);
-        }
-        fetchStreamflowAccounts();
-    }, [mint]);
-
-    const knownAddressesWithStreamflow = streamflowAccounts.reduce((acc, account) => {
-        acc[account.account.escrowTokens] = {
-            name: "Streamflow Vault",
-            logo: "/vesting/streamflow.png"
-        }
-        return acc;
-    }, {} as Record<string, { name: string, logo: string }>)
 
     return (
         <div className="flex flex-col gap-2">
@@ -72,10 +54,9 @@ const TopHolders = ({ body, mint }: { body: TopHoldersResultBodyType, mint: stri
             <div className="flex flex-col gap-2">
                 {body.topHolders.slice(0, showAll ? body.topHolders.length : 5).map((topHolder, index) => (
                     <TopHolder
-                        key={topHolder.owner} 
+                        key={topHolder.address} 
                         topHolder={topHolder}
                         index={index}
-                        knownAddresses={knownAddressesWithStreamflow}
                     />
                 ))}
             </div>
@@ -89,35 +70,14 @@ const TopHolders = ({ body, mint }: { body: TopHoldersResultBodyType, mint: stri
     )
 }
 
-const TopHolder = ({ topHolder, index, knownAddresses }: { topHolder: (TokenLargestAccount & { percentageOwned: number, owner: string }), index: number, knownAddresses: Record<string, { name: string, logo: string }> }) => {
+const TopHolder = ({ topHolder, index }: { topHolder: (TokenLargestAccount & { percentageOwned: number, owner: string }), index: number }) => {
     return (
         <Card className="flex flex-row items-center gap-2 p-2">
             <p className="text-sm text-muted-foreground">
-                {index + 1})
+                {index + 1}
             </p>
-            <div className="flex flex-col">
-                {
-                    knownAddresses[topHolder.owner] ? (
-                        <div className="flex flex-row items-center gap-2">
-                            <Image
-                                src={knownAddresses[topHolder.owner].logo}
-                                alt={knownAddresses[topHolder.owner].name}
-                                width={16}
-                                height={16}
-                            />
-                            <p className="text-sm font-bold">
-                                {knownAddresses[topHolder.owner].name}
-                            </p>
-                        </div>
-                    ) : (
-                        <WalletAddress 
-                            address={topHolder.owner} 
-                            className="text-sm font-bold"
-                        />
-                    )
-                }
-                <p className="text-xs">{topHolder.uiAmount ? topHolder.uiAmount.toLocaleString() : "0"} ({topHolder.percentageOwned.toFixed(2)}%)</p>
-            </div>
+            <p className="text-xs">{topHolder.address}</p>
+                <p className="text-xs">{topHolder.amount ? topHolder.amount.toLocaleString() : "0"} ({topHolder.percentageOwned.toFixed(2)}%)</p>
         </Card>
     )
 }

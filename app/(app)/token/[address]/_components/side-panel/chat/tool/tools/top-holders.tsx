@@ -55,7 +55,7 @@ const TopHolders: React.FC<Props> = ({ tool }) => {
                                     suffix="%"
                                 />
                                 <StatItem 
-                                    label="Collatarel "
+                                    label="Collataral"
                                     value={result.body.totalCollateralPercent}
                                     formatter={(value) => (value * 100).toFixed(2)}
                                     suffix="%"
