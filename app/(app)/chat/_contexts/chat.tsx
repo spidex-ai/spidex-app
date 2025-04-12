@@ -4,7 +4,6 @@ import React, { createContext, useContext, ReactNode, useState, useEffect, useMe
 
 import { Message, useChat as useAiChat } from 'ai/react';
 import { Models } from '@/types/models';
-import { usePrivy } from '@privy-io/react-auth';
 import { generateId } from 'ai';
 import { useUserChats } from '@/hooks';
 
@@ -17,7 +16,8 @@ import {
     SOLANA_DEPOSIT_LIQUIDITY_NAME,
     SOLANA_WITHDRAW_LIQUIDITY_NAME
 } from '@/ai/action-names';
-
+import { useSpidexCore } from '@/hooks/core/useSpidexCore';
+import { useSpidexCoreContext } from '@/app/_contexts';
 export enum ColorMode {
     LIGHT = 'light',
     DARK = 'dark',
@@ -69,7 +69,7 @@ interface ChatProviderProps {
 
 export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
 
-    const { user, getAccessToken } = usePrivy();
+    const { auth } = useSpidexCoreContext();
 
     const [chatId, setChatId] = useState<string>(generateId());
     const [isResponseLoading, setIsResponseLoading] = useState(false);
@@ -81,7 +81,7 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
         setChatId(chatId);
         const chat = await fetch(`/api/chats/${chatId}`, {
             headers: {
-                Authorization: `Bearer ${await getAccessToken()}`,
+                Authorization: `Bearer ${auth?.accessToken}`,
             },
         });
         const chatData = await chat.json();
@@ -104,7 +104,7 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
         body: {
             model,
             modelName: model,
-            userId: user?.id,
+            userId: auth?.user?.id,
             chatId,
         },
     });
@@ -122,7 +122,7 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
                 const response = await fetch(`/api/chats/${chatId}`, {
                     method: 'POST',
                     headers: {
-                        Authorization: `Bearer ${await getAccessToken()}`,
+                        Authorization: `Bearer ${auth?.accessToken}`,
                     },
                     body: JSON.stringify({
                         messages,

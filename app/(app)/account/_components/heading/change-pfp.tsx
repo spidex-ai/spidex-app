@@ -5,11 +5,10 @@ import React, { useCallback } from "react";
 import { Button } from "@/components/ui";
 
 import { uploadImage } from "@/services/storage";
-
-import type { User } from "@privy-io/react-auth";
+import { UserSpidex } from "@/hooks/core/useSpidexCore";
 
 interface Props {
-    user: User;
+    user: UserSpidex;
     isUploading: boolean;
     setIsUploading: (isUploading: boolean) => void;
 }

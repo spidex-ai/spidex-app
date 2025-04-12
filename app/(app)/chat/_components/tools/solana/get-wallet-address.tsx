@@ -4,12 +4,12 @@ import LoginButton from '@/app/(app)/_components/log-in-button';
 
 import ToolCard from '../tool-card';
 
-import { usePrivy, Wallet } from '@privy-io/react-auth';
-
 import { useChat } from '@/app/(app)/chat/_contexts/chat';
 
 import type { ToolInvocation } from 'ai';
 import type { GetWalletAddressResultType } from '@/ai';
+import { useSpidexCore } from '@/hooks/core/useSpidexCore';
+import { useSpidexCoreContext } from '@/app/_contexts';
 
 interface Props {
     tool: ToolInvocation,
@@ -41,26 +41,26 @@ const GetWalletAddress: React.FC<Props> = ({ tool, prevToolAgent }) => {
 
 const GetWalletAddressAction = ({ toolCallId }: { toolCallId: string }) => {
 
-    const { user } = usePrivy();
+    const { auth } = useSpidexCoreContext();
 
     const { addToolResult, isLoading } = useChat();
 
     useEffect(() => {
-        if(user?.wallet?.address && !isLoading) {
+        if(auth?.user?.walletAddress && !isLoading) {
             addToolResult(toolCallId, {
                 message: "Wallet connected",
                 body: {
-                    address: user.wallet.address
+                    address: auth?.user?.walletAddress
                 }
             });
         }
-    }, [user, isLoading]);
+    }, [auth?.user?.walletAddress, isLoading]);
 
-    const onComplete = (wallet: Wallet) => {
+    const onComplete = (wallet: string) => {
         addToolResult(toolCallId, {
             message: "Wallet connected",
             body: {
-                address: wallet.address
+                address: wallet
             }
         });
     }

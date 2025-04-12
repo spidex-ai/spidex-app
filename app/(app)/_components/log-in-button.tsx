@@ -1,27 +1,24 @@
 'use client'
 
-import React from 'react'
-import '@/components/utils/suppress-console'
+import { useSpidexCoreContext } from '@/app/_contexts'
 import { GradientButton } from '@/components/ui'
-import { useLogin } from '@/hooks'
-import { Wallet } from '@privy-io/react-auth'
+import '@/components/utils/suppress-console'
+import React from 'react'
 
 interface Props {
-    onComplete?: (wallet: Wallet) => void,
+    onComplete?: (wallet: string) => void,
 }
 
 const LogInButton: React.FC<Props> = ({ onComplete }) => {
 
-    const { login, user, linkWallet } = useLogin({
-        onComplete
-    })
+    const { auth, connectGoogle } = useSpidexCoreContext();
 
-    const address = user?.wallet?.address;
+    const address = auth?.user?.walletAddress;
 
     return (
         <GradientButton 
             variant="brand"
-            onClick={() => { if(user) { linkWallet() } else { login() } }}
+            onClick={() => { }}
             className="w-full"
         >
             Connect {address ? `${address.slice(0, 4)}...${address.slice(-4)}` : ''}

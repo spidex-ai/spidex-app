@@ -1,56 +1,244 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+export interface SignMessageData {
+    signature: string;
+    address: string;
+    publicKey: string;
+    role: string;
+}
+
+export interface Auth {
+    accessToken: string;
+    refreshToken: string;
+    userId: number;
+    user: UserSpidex;
+}
+
+export interface UserSpidex {
+    id: number;
+    walletAddress: string;
+    username: string;
+    fullName: string | null;
+    xId: string | null;
+    xUsername: string | null;
+    email: string | null;
+    bio: string | null;
+    avatar: string | null;
+    status: string;
+    referralCode: string;
+    telegramLink: string | null;
+    discordLink: string | null;
+    xLink: string | null;
+    createdAt: Date;
+}
+
 export const useSpidexCore = () => {
     const [loading, setLoading] = useState<boolean>(false);
+    const [auth, setAuth] = useState<Auth | null>(null);
     const [error, setError] = useState<string | null>(null);
-    const getTopTokensByVolume = useCallback(async (timeframe = '24h', page = 1, perPage = 10) => {
+
+    useEffect(() => {
+        if (auth?.accessToken) {
+            getMe();
+        }
+    }, [auth?.accessToken]);
+
+    const isAuthenticated = useMemo(() => {
+        return auth?.accessToken && auth?.userId;
+    }, [auth]);
+
+    // Fetch manager to handle API requests
+    const fetchWithAuth = useCallback(async (
+        url: string, 
+        options: RequestInit = {}
+    ) => {
         setLoading(true);
         setError(null);
+        
+        // Default headers with content type and authorization if token exists
+        const headers = {
+            'Content-Type': 'application/json',
+            ...(auth?.accessToken && { Authorization: `Bearer ${auth.accessToken}` }),
+            ...options.headers
+        };
 
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_SPIDEX_CORE_API_URL}/tokens/top/volume?timeframe=${timeframe}&page=${page}&perPage=${perPage}`);
+            const response = await fetch(`${process.env.NEXT_PUBLIC_SPIDEX_CORE_API_URL}${url}`, {
+                ...options,
+                headers
+            });
 
+            // Handle 401 Unauthorized (expired token)
+            if (response.status === 401 && auth?.refreshToken) {
+                // Try to refresh the token
+                const refreshResponse = await fetch(`${process.env.NEXT_PUBLIC_SPIDEX_CORE_API_URL}/auth/refresh-token`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ refreshToken: auth.refreshToken })
+                });
+
+                if (refreshResponse.ok) {
+                    const refreshData = await refreshResponse.json();
+                    const newAuth = { ...auth, ...refreshData.data };
+                    setAuth(newAuth);
+
+                    // Retry the original request with new access token
+                    const retryResponse = await fetch(`${process.env.NEXT_PUBLIC_SPIDEX_CORE_API_URL}${url}`, {
+                        ...options,
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization: `Bearer ${newAuth.accessToken}`,
+                            ...options.headers
+                        }
+                    });
+
+                    setLoading(false);
+                    if (!retryResponse.ok) {
+                        throw new Error(`API error: ${retryResponse.status}`);
+                    }
+                    return await retryResponse.json();
+                } else {
+                    // If refresh token is invalid, clear auth and throw error
+                    setAuth(null);
+                    throw new Error('Session expired. Please login again.');
+                }
+            }
+
+            setLoading(false);
             if (!response.ok) {
                 throw new Error(`API error: ${response.status}`);
             }
 
-            const data = await response.json();
-            setLoading(false);
-            return data.data;
+            return await response.json();
         } catch (err: any) {
             setError(err.message || 'An error occurred');
             setLoading(false);
-            console.error('Taptools API error:', err);
+            console.error('Spidex API error:', err);
+            throw err;
+        }
+    }, [auth]);
+
+    const getMe = useCallback(async () => {
+        try {
+            const data = await fetchWithAuth('/auth/me');
+            if (auth) {
+                setAuth({ ...auth, user: data.data });
+            }
+            return data.data;
+        } catch (err) {
+            // Error is already handled in fetchWithAuth
             return null;
         }
-    }, []);
+    }, [fetchWithAuth, auth]);
 
+    const getTopTokensByVolume = useCallback(async (timeframe = '24h', page = 1, perPage = 10) => {
+        try {
+            const data = await fetchWithAuth(`/tokens/top/volume?timeframe=${timeframe}&page=${page}&perPage=${perPage}`);
+            return data.data;
+        } catch (err) {
+            return null;
+        }
+    }, [fetchWithAuth]);
 
     const getTopTokensByMcap = useCallback(async (page = 1, perPage = 10) => {
-        setLoading(true);
-        setError(null);
-
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_SPIDEX_CORE_API_URL}/tokens/top/mcap?page=${page}&perPage=${perPage}`);
-
-            if (!response.ok) {
-                throw new Error(`API error: ${response.status}`);
-            }
-
-            const data = await response.json();
-            setLoading(false);
+            const data = await fetchWithAuth(`/tokens/top/mcap?page=${page}&perPage=${perPage}`);
             return data.data;
-        } catch (err: any) {
-            setError(err.message || 'An error occurred');
-            setLoading(false);
-            console.error('Taptools API error:', err);
+        } catch (err) {
             return null;
         }
-    }, []);
+    }, [fetchWithAuth]);
+
+    const getNounce = useCallback(async () => {
+        try {
+            const data = await fetchWithAuth('/auth/connect-wallet/sign-message');
+            return data.data;
+        } catch (err) {
+            return null;
+        }
+    }, [fetchWithAuth]);
+
+    const signMessage = useCallback(async (message: SignMessageData) => {
+        try {
+            const data = await fetchWithAuth('/auth/connect-wallet', {
+                method: 'POST',
+                body: JSON.stringify(message)
+            });
+            setAuth(data.data);
+            return data.data;
+        } catch (err) {
+            return null;
+        }
+    }, [fetchWithAuth]);
+
+    const refreshToken = useCallback(async () => {
+        if (!auth) {
+            setError('No auth token found');
+            return null;
+        }
+        
+        try {
+            const data = await fetchWithAuth('/auth/refresh-token', {
+                method: 'POST',
+                body: JSON.stringify({
+                    refreshToken: auth.refreshToken
+                })
+            });
+            const newAuth = { ...auth, ...data.data };
+            setAuth(newAuth);
+            return newAuth;
+        } catch (err) {
+            return null;
+        }
+    }, [fetchWithAuth, auth]);
+
+    const connectX = useCallback(async (code: string, redirectUrl: string) => {
+        try {
+            const data = await fetchWithAuth('/auth/connect/x', {
+                method: 'POST',
+                body: JSON.stringify({
+                    code,
+                    redirectUrl
+                })
+            });
+            setAuth(data.data);
+            return data.data;
+        } catch (err) {
+            return null;
+        }
+    }, [fetchWithAuth]);
+
+    const connectGoogle = useCallback(async (idToken: string) => {
+        try {
+            const data = await fetchWithAuth('/auth/connect/google', {
+                method: 'POST',
+                body: JSON.stringify({
+                    idToken
+                })
+            });
+            setAuth(data.data);
+            return data.data;
+        } catch (err) {
+            return null;
+        }
+    }, [fetchWithAuth]);
+
+    const logout = useCallback(async () => {
+        setAuth(null);
+    }, [fetchWithAuth]);
 
     return {
+        auth,
         loading,
         error,
         getTopTokensByVolume,
-        getTopTokensByMcap
+        getTopTokensByMcap,
+        getNounce,
+        signMessage,
+        refreshToken,
+        connectX,
+        connectGoogle,
+        fetchWithAuth,
+        isAuthenticated,
+        logout
     };
 };

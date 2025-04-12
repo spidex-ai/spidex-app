@@ -2,13 +2,12 @@
 
 import { useState } from "react";
 
-import { usePrivy } from "@privy-io/react-auth";
-
+import { useSpidexCoreContext } from "@/app/_contexts";
 import { useIsTokenSaved } from "./use-is-token-saved";
 import { useSavedTokens } from "./use-saved-tokens";
 
 export const useSaveToken = (address: string) => {
-    const { getAccessToken } = usePrivy();
+    const { auth } = useSpidexCoreContext();
 
     const { mutate: mutateSavedTokens } = useSavedTokens();
 
@@ -26,7 +25,7 @@ export const useSaveToken = (address: string) => {
         setIsUpdating(true);
 
         try {
-            const accessToken = await getAccessToken();
+            const accessToken = auth?.accessToken;
             if (!accessToken) {
                 throw new Error("Not authenticated");
             }

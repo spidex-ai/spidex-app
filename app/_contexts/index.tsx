@@ -2,9 +2,9 @@
 
 import { Analytics } from "@vercel/analytics/react"
 
-import { PrivyProvider } from "./privy";
 import { ColorModeProvider } from "./color-mode";
 import { PostHogProvider } from "./posthog";
+import { SpidexCoreProvider } from "./spidex-core";
 
 interface Props {
     children: React.ReactNode;
@@ -13,12 +13,12 @@ interface Props {
 const Providers: React.FC<Props> = ({ children }) => {
     return (
         <PostHogProvider>
-            <PrivyProvider>
-                <ColorModeProvider>
+            <ColorModeProvider>
+                <SpidexCoreProvider>
                     <Analytics />
                     {children}
-                </ColorModeProvider>
-            </PrivyProvider>
+                </SpidexCoreProvider>
+            </ColorModeProvider>
         </PostHogProvider>
     )
 }
@@ -26,3 +26,4 @@ const Providers: React.FC<Props> = ({ children }) => {
 export default Providers;
 
 export * from "./color-mode"
+export * from "./spidex-core"

@@ -16,12 +16,12 @@ import { useChat } from '../../../_contexts';
 
 import { cn } from '@/lib/utils';
 
-import { usePrivy } from '@privy-io/react-auth';
 import Image from 'next/image';
-
+import { useSpidexCore } from '@/hooks/core/useSpidexCore';
+import { useSpidexCoreContext } from '@/app/_contexts';
 const ChatInput: React.FC = () => {
 
-    const { user } = usePrivy();
+    const { auth } = useSpidexCoreContext();
 
     const { input, setInput, onSubmit, isLoading, inputDisabledMessage } = useChat();
 
@@ -66,7 +66,7 @@ const ChatInput: React.FC = () => {
                     onChange={e => {
                         setInput(e.target.value);
                     }}
-                    disabled={isLoading || !user || inputDisabledMessage !== ''}
+                    disabled={isLoading || !auth?.user || inputDisabledMessage !== ''}
                     autoFocus
                 />
             </OptionalTooltip>
@@ -83,7 +83,7 @@ const ChatInput: React.FC = () => {
                             <Button 
                                 type="submit" 
                                 size="icon" 
-                                disabled={input.trim() === '' || isLoading || !user}
+                                disabled={input.trim() === '' || isLoading || !auth?.user}
                                 variant="ghost"
                                 className="h-8 w-8"
                             >

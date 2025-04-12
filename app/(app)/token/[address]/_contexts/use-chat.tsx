@@ -1,25 +1,24 @@
 "use client";
 
-import React, { createContext, useContext, ReactNode, useState, useMemo } from 'react';
+import React, { createContext, ReactNode, useContext, useMemo, useState } from 'react';
 
-import { usePrivy } from '@privy-io/react-auth';
 
 import { Message, useChat as useAiChat } from 'ai/react';
 
 import { Models } from '@/types/models';
 
 import {
-    SOLANA_GET_WALLET_ADDRESS_NAME,
-    SOLANA_TRADE_NAME,
-    SOLANA_STAKE_NAME,
-    SOLANA_UNSTAKE_NAME,
-    SOLANA_TRANSFER_NAME,
     SOLANA_DEPOSIT_LIQUIDITY_NAME,
+    SOLANA_GET_WALLET_ADDRESS_NAME,
+    SOLANA_STAKE_NAME,
+    SOLANA_TRADE_NAME,
+    SOLANA_TRANSFER_NAME,
+    SOLANA_UNSTAKE_NAME,
     SOLANA_WITHDRAW_LIQUIDITY_NAME
 } from '@/ai/action-names';
 
+import { useSpidexCoreContext } from '@/app/_contexts';
 import type { TokenChatData } from '@/types';
-
 export enum ColorMode {
     LIGHT = 'light',
     DARK = 'dark',
@@ -68,7 +67,7 @@ interface ChatProviderProps {
 
 export const ChatProvider: React.FC<ChatProviderProps> = ({ token, children }) => {
 
-    const { user } = usePrivy();
+    const { auth } = useSpidexCoreContext();
 
     const [isResponseLoading, setIsResponseLoading] = useState(false);
     const [model, setModel] = useState<Models>(Models.OpenAI);
@@ -86,7 +85,7 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ token, children }) =
         body: {
             model,
             modelName: model,
-            userId: user?.id,
+            userId: auth?.user?.id,
             token,
         },
     });

@@ -1,37 +1,35 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 
 import { ChevronDown } from 'lucide-react';
 
 import Link from 'next/link';
 
-import { usePrivy } from '@privy-io/react-auth';
-
 import { usePathname } from 'next/navigation';
 
-import { 
+import {
     Badge,
-    SidebarMenuItem, 
-    SidebarMenuButton,
-    Skeleton,
     Collapsible,
     CollapsibleContent,
     CollapsibleTrigger,
+    SidebarMenuButton,
+    SidebarMenuItem,
     SidebarMenuSub,
-    SidebarMenuSubItem,
     SidebarMenuSubButton,
+    SidebarMenuSubItem,
+    Skeleton,
 } from '@/components/ui';
 
+import { useSpidexCoreContext } from '@/app/_contexts';
 import { useSavedTokens } from '@/hooks';
-import SaveToken from '../../save-token';
 import Image from 'next/image';
-
+import SaveToken from '../../save-token';
 const SavedTokensGroup: React.FC = () => {
 
     const pathname = usePathname();
 
-    const { ready, user } = usePrivy();
+    const { auth } = useSpidexCoreContext();
 
     const { savedTokens, isLoading } = useSavedTokens();
 
@@ -73,7 +71,7 @@ const SavedTokensGroup: React.FC = () => {
                 <CollapsibleContent>
                     <SidebarMenuSub className="flex-1 overflow-hidden relative flex flex-col">
                         {
-                            isLoading || !ready ? (
+                            isLoading ? (
                                 <Skeleton className="h-10 w-full" />
                             ) : (
                                 savedTokens.length > 0 ? (
@@ -99,7 +97,7 @@ const SavedTokensGroup: React.FC = () => {
                                         </SidebarMenuSubItem>
                                     ))
                                 ) : (
-                                    user ? (
+                                    auth?.user ? (
                                         <p className='text-sm text-neutral-500 dark:text-neutral-400 pl-2 py-1'>
                                             No saved tokens
                                         </p>
