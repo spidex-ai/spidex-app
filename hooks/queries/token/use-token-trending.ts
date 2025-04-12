@@ -1,72 +1,68 @@
 'use client'
 
-import { useTaptools } from "@/hooks/useTaptools";
-import { TrendingToken } from "@/services/birdeye/types";
+import { useSpidexCore } from "@/hooks/core/useSpidexCore";
 import { TopToken } from "@/services/taptools/types";
 import { useEffect, useState } from "react";
 
-export const useTokenTrending = () => {
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
-    const [data, setData] = useState<TopToken[]>([]);
-    const { getTopTokensByVolume } = useTaptools();
 
-    useEffect(() => {
-        fetchTopTokenTreding();
-    }, []);
-  
-    const fetchTopTokenTreding = async () => {
-      setIsLoading(true);
-      try {
-        const data = await getTopTokensByVolume();
-        setData(data);
-      } catch (error) {
-        setError(error as string);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-  
-    return {
-      isLoading,
-      error,
-      data
-    };
+export const useTokenTrending = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [data, setData] = useState<TopToken[]>([]);
+  const { getTopTokensByVolume } = useSpidexCore();
+
+  useEffect(() => {
+    fetchTopTokenTreding();
+  }, []);
+
+  const fetchTopTokenTreding = async () => {
+    setIsLoading(true);
+    try {
+      const data = await getTopTokensByVolume();
+      setData(data);
+    } catch (error) {
+      setError(error as string);
+    } finally {
+      setIsLoading(false);
+    }
   };
-  
+
+  return {
+    isLoading,
+    error,
+    data
+  };
+};
+
 
 export const useTokenTopMcap = (page: number, perPage: number) => {
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
-    const [data, setData] = useState<TopToken[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [data, setData] = useState<TopToken[]>([]);
+  const { getTopTokensByMcap } = useSpidexCore();
 
-    useEffect(() => {
-        fetchTopTokenMcap();
-    }, []);
 
-    const fetchTopTokenMcap = async () => {
-        setIsLoading(true);
-        try {
-          const response = await fetch(`/api/taptools/token/top/mcap?page=${page}&perPage=${perPage}`);
+  useEffect(() => {
+    fetchTopTokenMcap();
+  }, []);
 
-          if (!response.ok) {
-            throw new Error(`API error: ${response.status}`);
-          }
-    
-          const data = await response.json();
-          console.log('data::: top mcap', data);
-          setData(data);
-        } catch (error) {
-          setError(error as string);
-        } finally {
-          setIsLoading(false);
-        }
+  const fetchTopTokenMcap = async () => {
+    setIsLoading(true);
+    try {
+      const data = await getTopTokensByMcap(page, perPage)
+      console.log('data::: top mcap', data);
+      setData(data);
+    } catch (error) {
+      setError(error as string);
+    } finally {
+      setIsLoading(false);
     }
+  }
 
-    return {
-      isLoading,
-      error,
-      data
-    }
+  return {
+    isLoading,
+    error,
+    data
+  }
 }
 
