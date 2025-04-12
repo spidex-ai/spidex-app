@@ -2,7 +2,6 @@
 
 import React from 'react'
 
-import { useLogin } from '@privy-io/react-auth'
 
 import { 
     AlertDialog, 
@@ -13,13 +12,13 @@ import {
     Button,
     Logo
 } from '@/components/ui'
+import { useSpidexCoreContext } from '@/app/_contexts'
 
 const NotLoggedIn: React.FC = () => {
 
-    const { login } = useLogin();
-
+    const { auth } = useSpidexCoreContext();
     return (
-        <AlertDialog open={true}>
+        <AlertDialog open={!auth?.user}>
             <AlertDialogHeader className="hidden">
                 <AlertDialogTitle>You are not logged in</AlertDialogTitle>
                 <AlertDialogDescription>Please login to continue</AlertDialogDescription>
@@ -30,7 +29,7 @@ const NotLoggedIn: React.FC = () => {
                 <p className='text-sm text-gray-500'>Please login to continue</p>
                 <Button
                     variant="brand"
-                    onClick={() => login()}
+                    onClick={() => {}}
                 >
                     Login
                 </Button>

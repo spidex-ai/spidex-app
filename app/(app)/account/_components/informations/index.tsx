@@ -2,18 +2,16 @@ import React from "react";
 import Image from "next/image";
 import { GradientBorderButton } from "@/components/ui/button";
 import { TextGradient } from "@/components/ui/text";
-import { type User } from "@privy-io/react-auth";
 
-import { useLogin } from '@/hooks';
+import { UserSpidex } from "@/hooks/core/useSpidexCore";
+import { useSpidexCoreContext } from "@/app/_contexts";
 interface Props {
-  user: User;
+  user: UserSpidex;
 }
 
 const Information: React.FC<Props> = ({ user }) => {
-  const wallets = user.linkedAccounts.filter(
-    (account) => account.type === "wallet"
-  );
-  const { logout } = useLogin();
+  const wallets = [user.walletAddress]
+  const { logout } = useSpidexCoreContext();
   return (
     <>
       <div className="flex justify-between gap-4">
@@ -52,7 +50,7 @@ const Information: React.FC<Props> = ({ user }) => {
               />
             </div>
             <div>
-              <div>{user?.wallet?.address ? user?.wallet?.address : "No wallet connected"}</div>
+              <div>{user?.walletAddress ? user?.walletAddress : "No wallet connected"}</div>
               <div className="text-xs text-text-gray">Joined on {user.createdAt.toLocaleDateString()}</div>
             </div>
           </div>
@@ -65,7 +63,7 @@ const Information: React.FC<Props> = ({ user }) => {
         <div className="h-[1px] w-full my-5 bg-bg-gray" />
         <div>
           <div className="text-xs text-text-gray">User ID</div>
-          <div className="text-xs mt-2">{user.id.slice(10)}</div>
+          <div className="text-xs mt-2">{user.id.toString().slice(10)}</div>
         </div>
 
         <div className="h-[1px] w-full my-5" />
@@ -75,8 +73,8 @@ const Information: React.FC<Props> = ({ user }) => {
           {wallets?.length > 0 ? (
             <>
               {wallets.map((wallet) => (
-                <div className="text-xs mt-2" key={wallet.address}>
-                  {wallet.address}
+                <div className="text-xs mt-2" key={wallet}>
+                  {wallet}
                 </div>
               ))}
             </>

@@ -1,15 +1,13 @@
-import useSWR from "swr";
-import { usePrivy } from "@privy-io/react-auth";
-
+import { useSpidexCoreContext } from "@/app/_contexts";
 import type { Chat } from "@/db/types";
-
+import useSWR from "swr";
 export const useUserChats = () => {
-    const { getAccessToken } = usePrivy();
+    const { auth } = useSpidexCoreContext();
 
     const { data, isLoading, error, mutate } = useSWR<Chat[]>(
         "/api/chats",
         async (route: string) => {
-            const accessToken = await getAccessToken();
+            const accessToken = auth?.accessToken;
             if (!accessToken) {
                 throw new Error("Not authenticated");
             }

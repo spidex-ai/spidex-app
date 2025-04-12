@@ -9,18 +9,19 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 import { SidebarMenuItem, SidebarMenuButton } from '@/components/ui';
-import { usePrivy } from '@privy-io/react-auth';
+
+import { useSpidexCoreContext } from '@/app/_contexts';
 
 const PortfolioButton: React.FC = () => {
 
     const pathname = usePathname();
 
-    const { user } = usePrivy();
+    const { auth } = useSpidexCoreContext();
 
-    if(!user?.wallet?.address) return null;
+    if(!auth?.user?.walletAddress) return null;
 
     return (
-        <Link href={`/portfolio/${user.wallet.address}`}>
+        <Link href={`/portfolio/${auth.user.walletAddress}`}>
             <SidebarMenuItem>
                 <SidebarMenuButton 
                     isActive={pathname?.includes('/portfolio') ?? false}

@@ -8,8 +8,6 @@ import Link from 'next/link';
 
 import { usePathname } from 'next/navigation';
 
-import { usePrivy } from '@privy-io/react-auth';
-
 import { 
     SidebarMenuItem, 
     SidebarMenuButton,
@@ -31,13 +29,15 @@ import { useChat } from '../../../chat/_contexts/chat';
 import { cn } from '@/lib/utils';
 
 import Image from 'next/image';
+import { useSpidexCoreContext } from '@/app/_contexts';
+
 const ChatsGroup: React.FC = () => {
 
     const pathname = usePathname();
 
     const { isMobile, setOpenMobile } = useSidebar();
 
-    const { ready, user, getAccessToken } = usePrivy();
+    const { auth } = useSpidexCoreContext();
 
     const { chats, isLoading, mutate } = useUserChats();
 
@@ -51,7 +51,7 @@ const ChatsGroup: React.FC = () => {
         e.preventDefault();
         e.stopPropagation();
         
-        if (!user || deletingChatId) return;
+        if (!auth?.user || deletingChatId) return;
 
         setDeletingChatId(deletedChatId);
         
@@ -59,7 +59,7 @@ const ChatsGroup: React.FC = () => {
             const response = await fetch(`/api/chats/${deletedChatId}`, {
                 method: 'DELETE',
                 headers: {
-                    Authorization: `Bearer ${await getAccessToken()}`,
+                    Authorization: `Bearer ${auth.accessToken}`,
                 },
             });
             
@@ -127,7 +127,7 @@ const ChatsGroup: React.FC = () => {
                 <CollapsibleContent>
                     <SidebarMenuSub className="flex-1 overflow-hidden relative flex flex-col">
                         {
-                            isLoading || !ready ? (
+                            isLoading ? (
                                 <Skeleton className="h-10 w-full" />
                             ) : (
                                 chats.length > 0 ? (
@@ -164,7 +164,7 @@ const ChatsGroup: React.FC = () => {
                                         </SidebarMenuSubItem>
                                     ))
                                 ) : (
-                                    user ? (
+                                    auth?.user ? (
                                         <p className='text-sm text-neutral-500 dark:text-neutral-400 pl-2'>
                                             No chats found
                                         </p>

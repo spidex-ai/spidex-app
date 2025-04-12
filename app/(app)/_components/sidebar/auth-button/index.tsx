@@ -4,8 +4,6 @@ import React from 'react'
 
 import { Coins, LogOut, Wallet } from 'lucide-react';
 
-import { useLogin } from '@/hooks';
-
 import {
     SidebarMenu,
     SidebarMenuItem,
@@ -26,31 +24,27 @@ import Balances from './balances';
 
 import { truncateAddress } from '@/lib/wallet';
 import Image from 'next/image';
+import { useSpidexCoreContext } from '@/app/_contexts';
 
 const AuthButton: React.FC = () => {
 
-    const { user, ready, login, logout, fundWallet, linkWallet } = useLogin({
-        onComplete: async () => {
-        }
-    });
+    const { auth, logout } = useSpidexCoreContext();
 
     const { isMobile, open } = useSidebar();
 
-    if (!ready) return <Skeleton className="w-full h-8" />;
+    if (!auth) return <Skeleton className="w-full h-8" />;
 
     const handleConnectWallet = () => {
         console.log('xxxxxxx');
         
-        if(user) {
-            linkWallet()
+        if(auth.user) {
+            console.log('xxxxxxx');
         } else {
             console.log('xxxxxxx');
-            
-            login()
         }
     }
 
-    if (!user || !user.wallet) return (
+    if (!auth.user || !auth.user.walletAddress) return (
         <SidebarMenu>
             <SidebarMenuItem>
                 {
@@ -81,7 +75,7 @@ const AuthButton: React.FC = () => {
                                 <GradientButton>
                                     <div>
                                         <Image src="/icons/wallet.svg" alt="wallet-wallet" width={15} height={15} /> 
-                                        <div>{truncateAddress(user.wallet.address)}</div>
+                                        <div>{truncateAddress(auth.user.walletAddress)}</div>
                                     </div>
                                 </GradientButton>
                             ) : (
@@ -101,19 +95,12 @@ const AuthButton: React.FC = () => {
                             <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                                 <Wallet className="size-4" />
                                 <div className="grid flex-1 text-left text-sm leading-tight">
-                                    <span className="truncate font-semibold">{truncateAddress(user.wallet.address)}</span>
+                                    <span className="truncate font-semibold">{truncateAddress(auth.user.walletAddress)}</span>
                                 </div>
                             </div>
                         </DropdownMenuLabel>
                         <DropdownMenuSeparator />
-                        <Balances address={user.wallet.address} />
-                        <DropdownMenuSeparator />
-                        <DropdownMenuGroup>
-                            <DropdownMenuItem onClick={() => fundWallet(user.wallet!.address, { amount: "0.01" })}>
-                                <Coins className="size-4" />
-                                Fund Wallet
-                            </DropdownMenuItem>
-                        </DropdownMenuGroup>
+                        <Balances address={auth.user.walletAddress} />
                         <DropdownMenuSeparator />
                         <DropdownMenuItem onClick={() => logout()}>
                             <LogOut />

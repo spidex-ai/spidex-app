@@ -1,18 +1,17 @@
 'use client';
 
-import React from 'react'
+import React from 'react';
 
-import { usePrivy } from '@privy-io/react-auth';
-
-import { Markdown, Icon, Avatar, AvatarFallback, AvatarImage, LogoChat } from '@/components/ui';
+import { Avatar, AvatarFallback, AvatarImage, Icon, LogoChat, Markdown } from '@/components/ui';
 
 import Link from './link';
 
 import { cn } from '@/lib/utils';
 
-import { getAgentName } from '../../chat/_components/tools/tool-to-agent';
 import { pfpURL } from '@/lib/pfp';
+import { getAgentName } from '../../chat/_components/tools/tool-to-agent';
 
+import { useSpidexCoreContext } from '@/app/_contexts';
 import type { Message as MessageType, ToolInvocation as ToolInvocationType } from 'ai';
 
 interface Props {
@@ -26,7 +25,7 @@ interface Props {
 
 const Message: React.FC<Props> = ({ message, ToolComponent, className, previousMessage, nextMessage, compressed }) => {
 
-    const { user } = usePrivy();
+    const { auth } = useSpidexCoreContext();
 
     const isUser = message.role === 'user';
 
@@ -68,8 +67,8 @@ const Message: React.FC<Props> = ({ message, ToolComponent, className, previousM
                                     <Icon name="User" className={cn("w-4 h-4 md:w-6 md:h-6", compressed && "md:w-4 md:h-4")} />
                                 </AvatarFallback>
                                 {
-                                    user && (
-                                        <AvatarImage src={pfpURL(user, false)} />
+                                    auth?.user && (
+                                        <AvatarImage src={pfpURL(auth.user, false)} />
                                     )
                                 }
                             </Avatar>

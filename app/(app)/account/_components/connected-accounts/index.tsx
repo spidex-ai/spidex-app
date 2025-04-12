@@ -2,18 +2,17 @@
 
 import React from "react";
 
-import { usePrivy, type User } from "@privy-io/react-auth";
 
 import ConnectedAccount from "./connected-account";
 import { TextGradient } from "@/components/ui/text";
 import Image from "next/image";
+import { UserSpidex } from "@/hooks/core/useSpidexCore";
 
 interface Props {
-  user: User;
+  user: UserSpidex;
 }
 
 const ConnectedAccounts: React.FC<Props> = ({ user }) => {
-  const { linkTwitter, linkGoogle } = usePrivy();
 
   return (
     <div className="flex flex-col gap-4 mt-8">
@@ -32,9 +31,9 @@ const ConnectedAccounts: React.FC<Props> = ({ user }) => {
               />
             }
             name="Twitter"
-            value={user.twitter?.username ?? undefined}
-            isConnected={!!user.twitter}
-            onConnect={linkTwitter}
+            value={user.xUsername ?? undefined}
+            isConnected={!!user.xUsername}
+            onConnect={() => {}}
             isSeparator={true}
           />
           <ConnectedAccount
@@ -48,9 +47,9 @@ const ConnectedAccounts: React.FC<Props> = ({ user }) => {
               />
             }
             name="Google"
-            value={user.google?.email ?? undefined}
-            isConnected={!!user.google}
-            onConnect={linkGoogle}
+            value={user.email ?? undefined}
+            isConnected={!!user.email}
+            onConnect={() => {}}
           />
         </div>
       </div>

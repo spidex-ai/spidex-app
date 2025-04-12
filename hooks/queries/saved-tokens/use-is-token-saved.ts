@@ -1,15 +1,14 @@
+import { useSpidexCoreContext } from "@/app/_contexts";
 import useSWR from "swr";
-
-import { usePrivy } from "@privy-io/react-auth";
 
 export const useIsTokenSaved = (address: string) => {
 
-    const { getAccessToken } = usePrivy();
+    const { auth } = useSpidexCoreContext();
 
     const { data, isLoading, error, mutate } = useSWR<boolean>(
         `/api/saved-tokens/${address}`,
         async (route: string) => {
-            const accessToken = await getAccessToken();
+            const accessToken = auth?.accessToken;
             if (!accessToken) {
                 throw new Error("Not authenticated");
             }

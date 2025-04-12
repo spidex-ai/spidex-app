@@ -3,7 +3,6 @@
 import React from 'react'
 import '@/components/utils/suppress-console'
 
-import { usePrivy } from '@privy-io/react-auth';
 
 import { 
     AlertDialog, 
@@ -16,15 +15,15 @@ import {
 
 import LoginButton from '@/app/_components/login-button';
 import { useExperimentalConfirmed } from '../../_hooks';
-
+import { useSpidexCoreContext } from '@/app/_contexts';
 const NotLoggedInAlert: React.FC = () => {
 
-    const { ready, user } = usePrivy();
+    const { auth } = useSpidexCoreContext();
 
     const { confirmed } = useExperimentalConfirmed();
 
     return (
-        <AlertDialog open={ready && !user && confirmed}>
+        <AlertDialog open={!auth?.user && confirmed}>
             <AlertDialogHeader className="hidden">
                 <AlertDialogTitle>You are not logged in</AlertDialogTitle>
                 <AlertDialogDescription>Please login to continue</AlertDialogDescription>
