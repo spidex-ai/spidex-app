@@ -3,7 +3,6 @@
 import React from "react";
 
 import { Card } from "@/components/ui";
-import Address from "@/app/_components/address";
 
 interface Props {
   txHash: string;
@@ -26,15 +25,15 @@ export const ListTransaction: React.FC<ListTransactionProps> = (
         <div className="col-span-1 flex items-center justify-center">Block Number</div>
         <div className="col-span-1 flex items-center justify-center">Block Time</div>
       </div>
-      {props.data.map((prop) => (
-        <Transaction {...prop} />
+      {props.data.map((prop, index) => (
+        <Transaction {...prop} key={index} />
       ))}
     </div>
   );
 };
 const Transaction: React.FC<Props> = ({
   txHash,
-  txIndex,
+  // txIndex,
   blockHeight,
   blockTime,
 }) => {

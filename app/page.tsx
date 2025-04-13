@@ -3,7 +3,7 @@ import React from 'react'
 import { BorderBeam } from '@/components/ui';
 
 import GraphComponent from './_components'
-import LoginButton from './_components/login-button';
+import LoginButtonWrapper from './_components/login-button-wrapper';
 
 
 const Graph = () => {
@@ -18,7 +18,7 @@ const Graph = () => {
                         <p className="">
                             A modular network of interoperable DeFi agents
                         </p>
-                        <LoginButton />
+                        <LoginButtonWrapper />
                     </div>
                     <div className="w-full flex-1 max-w-2xl rounded-md border border-neutral-200 dark:border-neutral-700 relative">
                         <GraphComponent />

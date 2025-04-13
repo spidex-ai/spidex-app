@@ -13,9 +13,10 @@ import {
     Logo,
 } from '@/components/ui';
 
-import LoginButton from '@/app/_components/login-button';
 import { useExperimentalConfirmed } from '../../_hooks';
 import { useSpidexCoreContext } from '@/app/_contexts';
+import LoginButtonWrapper from '@/app/_components/login-button-wrapper';
+
 const NotLoggedInAlert: React.FC = () => {
 
     const { auth } = useSpidexCoreContext();
@@ -32,7 +33,7 @@ const NotLoggedInAlert: React.FC = () => {
                 <Logo className='w-16 h-16'/>
                 <h1 className='text-2xl font-bold'>You are not logged in</h1>
                 <p className='text-sm text-gray-500'>Please login to continue</p>
-                <LoginButton />
+                <LoginButtonWrapper />
             </AlertDialogContent>
         </AlertDialog>
     )

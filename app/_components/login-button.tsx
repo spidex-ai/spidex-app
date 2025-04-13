@@ -118,15 +118,20 @@ const LoginButton: React.FC = () => {
   const [walletConnecting, setWalletConnecting] = useState<string | null>(null)
   const [isConnecting, setIsConnecting] = useState(false)
   const processedCodeRef = useRef<string | null>(null)
-  // const [openConnected, setOpenConnected] = useState(false)
   const [open, setOpen] = useState(false)
   const router = useRouter()
   const params = useSearchParams()
+  const [isClient, setIsClient] = useState(false)
 
   // Custom hooks
   const { signMessage: signMessageSpidex, auth, getNounce } = useSpidexCoreContext()
   const { signInWithGoogle } = useGoogleLogin()
   const { signInWithX } = useXLogin()
+
+  // Initialize client-side state
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
 
   useEffect(() => {
     if (auth?.userId) {
@@ -134,9 +139,14 @@ const LoginButton: React.FC = () => {
     }
   }, [auth?.userId])
   
-  nufiCoreSdk.init('https://wallet.nu.fi', {
-    zIndex: 1402
-  })
+  // Only initialize NuFi SDK on client side
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      nufiCoreSdk.init('https://wallet.nu.fi', {
+        zIndex: 1402
+      })
+    }
+  }, [])
   
   const {
     stakeAddress,
@@ -151,17 +161,14 @@ const LoginButton: React.FC = () => {
   // Determine if any connection is in progress
   const anyConnectionInProgress = walletConnecting !== null || isConnecting
   
-  // Derive base URL for social login redirects
-  const baseUrl = useMemo(
-    () => window.location.href.split("/").slice(0, 3).join("/") + "/app",
-    []
-  )
+  // Derive base URL for social login redirects - only on client
+  const baseUrl = useMemo(() => {
+    if (typeof window !== 'undefined') {
+      return window.location.href.split("/").slice(0, 3).join("/") + "/app"
+    }
+    return ''
+  }, [isClient])
   
-  // const hideWidget = async () => {
-  //   const widgetApi = await nufiCoreSdk.getWidgetApi()
-  //   widgetApi.hideWidget()
-  // }
-
   const onWalletConnectSuccess = useCallback(() => {
     handleSignMessage(stakeAddress?.toString())
   }, [stakeAddress, enabledWallet])
@@ -259,7 +266,7 @@ const LoginButton: React.FC = () => {
       setIsConnecting(true)
       const result = await signInWithX(code, redirectUri)
       
-      if (result) {
+      if (result && typeof window !== 'undefined') {
         console.log("X login successful")
         // remove code from URL
         window.history.replaceState(
@@ -285,15 +292,19 @@ const LoginButton: React.FC = () => {
   }, [params, baseUrl])
 
   const handleConnectMetamask = () => {
+    if (typeof window === 'undefined') return
+    
     nufiCoreSdk.isMetamaskInstalled().then(async (isMetamaskInstalled) => {
       if (isMetamaskInstalled) {
         initNufiDappCardanoSdk(nufiCoreSdk, 'snap')
-        Object.defineProperty((window as any).cardano, 'nufisnap', {
-          get: function() {
-            return (window as any).cardano.nufiSnap
-          },
-          configurable: true
-        })
+        if ((window as any).cardano) {
+          Object.defineProperty((window as any).cardano, 'nufisnap', {
+            get: function() {
+              return (window as any).cardano.nufiSnap
+            },
+            configurable: true
+          })
+        }
         handleConnectWallet('nufisnap')
       } else {
         console.log("Metamask is not installed")
@@ -409,6 +420,11 @@ const LoginButton: React.FC = () => {
         </div>
       </div>
     )
+  }
+
+  // Only render the full component on the client
+  if (!isClient) {
+    return <Button variant="default" className="w-24 h-10">Login</Button>
   }
 
   return (

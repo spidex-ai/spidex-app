@@ -3,9 +3,9 @@ import React from "react";
 import ToolCard from "../tool-card";
 // import { TokenBalance } from "../utils";
 
+import type { CardanoBalanceResultType } from "@/ai";
 import type { ToolInvocation } from "ai";
-import type { CardanoBalanceResultType, TransactionResultType } from "@/ai";
-import Transaction, { ListTransaction } from "../utils/transaction";
+import { ListTransaction } from "../utils/transaction";
 // import Transaction from '../utils/transaction';
 
 interface Props {
