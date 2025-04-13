@@ -16,7 +16,7 @@ const AgentClub: React.FC = () => {
   }
 
   return (
-    <div className="p-8 border border-border-main rounded-lg">
+    <div className="p-8 border border-border-main rounded-lg bg-bg-secondary">
       <div className="flex gap-8">
         <div>
           <Image
