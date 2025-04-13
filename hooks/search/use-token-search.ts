@@ -14,16 +14,16 @@ export const useTokenSearch = (input: string) => {
                 setResults([]);
                 return;
             }
-            
+
             setLoading(true);
             try {
                 const response = await fetch(
-                    `/api/tokens/search?query=${encodeURIComponent(
-                      input
+                    `${process.env.NEXT_PUBLIC_SPIDEX_CORE_API_URL}/tokens/search?query=${encodeURIComponent(
+                        input
                     )}&verified=true`
                 );
                 const data: CardanoTokenDetail[] = await response.json();
-                
+
                 setResults(data);
             } catch (error) {
                 console.error('Token search error:', error);

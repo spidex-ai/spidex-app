@@ -1,152 +1,147 @@
-'use client'
+"use client";
 
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef } from "react";
 
-import Link from 'next/link';
+import Link from "next/link";
 
-import { Search } from 'lucide-react';
+import { Search } from "lucide-react";
 
-import {
-    Button,
-    Input, 
-    Skeleton, 
-} from '@/components/ui';
+import { Button, Input, Skeleton } from "@/components/ui";
 
-import SaveToken from '../../_components/save-token';
+import SaveToken from "../../_components/save-token";
 
-import { useDebounce } from '@/hooks';
+import { useDebounce } from "@/hooks";
 
 // import type { TokenSearchResult } from '@/services/birdeye/types';
-import { SearchTokenInfo } from '@/services/dexhunter/types';
-import { getLogoUrl } from '@/app/utils/logo';
-import { formatPrice } from '@/app/utils/format';
+import { SearchTokenInfo } from "@/services/dexhunter/types";
+import { getLogoUrl } from "@/app/utils/logo";
+import { formatPrice } from "@/app/utils/format";
 
 const SearchBar: React.FC = () => {
-    
-    const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
-    const [isFocused, setIsFocused] = useState(false);
-    const [inputValue, setInputValue] = useState('');
-    const [results, setResults] = useState<SearchTokenInfo[]>([]);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+  const [isFocused, setIsFocused] = useState(false);
+  const [inputValue, setInputValue] = useState("");
+  const [results, setResults] = useState<SearchTokenInfo[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-    const debouncedValue = useDebounce(inputValue, 500);
+  const debouncedValue = useDebounce(inputValue, 500);
 
-    const handleSearch = async (searchQuery: string) => {
-        if (!searchQuery.trim()) {
-            setResults([]);
-            return;
-          }
-      
-          setLoading(true);
-          setError(null);
-      
-          try {
-            const response = await fetch(
-              `/api/tokens/search?query=${encodeURIComponent(
-                searchQuery
-              )}&verified=true`
-            );
-            if (!response.ok) {
-              throw new Error("Failed to fetch search results");
-            }
-            const data = await response.json();
-            console.log('data:',data);
-            
-            setResults(data);
-          } catch (err) {
-            setError(err instanceof Error ? err.message : "An error occurred");
-            setResults([]);
-          } finally {
-            setLoading(false);
-          }
+  const handleSearch = async (searchQuery: string) => {
+    if (!searchQuery.trim()) {
+      setResults([]);
+      return;
     }
 
-    useEffect(() => {
-        handleSearch(debouncedValue);
-    }, [debouncedValue]);
+    setLoading(true);
+    setError(null);
 
-    return (
-        <div className="flex flex-col gap-2">
-            <h2 className="text-lg font-bold">Search</h2>
-            <div className="relative w-full">
-                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground z-10 pointer-events-none" />
-                <Input
-                    placeholder="Search tokens..."
-                    value={inputValue}
-                    onChange={(e) => setInputValue(e.target.value)}
-                    className="pl-9 w-full cursor-text bg-neutral-200 dark:bg-neutral-800"
-                    ref={inputRef}
-                    onFocus={() => setIsFocused(true)}
-                    onBlur={(e) => {
-                        if (!e.relatedTarget?.closest('.search-results')) {
-                            setIsFocused(false);
-                        }
-                    }}
-                    autoFocus
-                />
-                {isFocused && (
-                    <div 
-                        className="search-results absolute top-full left-0 right-0 mt-2 bg-popover border border-neutral-200 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-900 rounded-md shadow-md z-50"
+    try {
+      const response = await fetch(
+        `${
+          process.env.NEXT_PUBLIC_SPIDEX_CORE_API_URL
+        }/tokens/search?query=${encodeURIComponent(searchQuery)}&verified=true`
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch search results");
+      }
+      const data = await response.json();
+      console.log("data:", data);
+
+      setResults(data.data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "An error occurred");
+      setResults([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    handleSearch(debouncedValue);
+  }, [debouncedValue]);
+
+  return (
+    <div className="flex flex-col gap-2">
+      <h2 className="text-lg font-bold">Search</h2>
+      <div className="relative w-full">
+        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground z-10 pointer-events-none" />
+        <Input
+          placeholder="Search tokens..."
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          className="pl-9 w-full cursor-text bg-neutral-200 dark:bg-neutral-800"
+          ref={inputRef}
+          onFocus={() => setIsFocused(true)}
+          onBlur={(e) => {
+            if (!e.relatedTarget?.closest(".search-results")) {
+              setIsFocused(false);
+            }
+          }}
+          autoFocus
+        />
+        {isFocused && (
+          <div
+            className="search-results absolute top-full left-0 right-0 mt-2 bg-popover border border-neutral-200 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-900 rounded-md shadow-md z-50"
+            onMouseDown={(e) => e.preventDefault()}
+          >
+            {loading ? (
+              <Skeleton className="h-48 w-full" />
+            ) : (
+              <div className="flex flex-col gap-2 max-h-[300px] overflow-y-auto">
+                {inputValue ? (
+                  results.length === 0 || error ? (
+                    <p className="text-xs text-muted-foreground p-2">
+                      No results for &quot;{inputValue}&quot;
+                    </p>
+                  ) : (
+                    results.map((token: SearchTokenInfo) => (
+                      <Link
+                        href={`/token/${token.token_id}`}
+                        key={token.token_id}
                         onMouseDown={(e) => e.preventDefault()}
-                    >
-                        {loading ? (
-                            <Skeleton className="h-48 w-full" />
-                        ) : (
-                            <div className="flex flex-col gap-2 max-h-[300px] overflow-y-auto">
-                                {inputValue ? (
-                                    results.length === 0 || error ? (
-                                        <p className="text-xs text-muted-foreground p-2">
-                                            No results for &quot;{inputValue}&quot;
-                                        </p>
-                                    ) : (
-                                        results.map((token: SearchTokenInfo) => (
-                                            <Link
-                                                href={`/token/${token.token_id}`}
-                                                key={token.token_id}
-                                                onMouseDown={(e) => e.preventDefault()}
-                                                className="h-fit"
-                                            >
-                                                <Button
-                                                    variant="ghost"
-                                                    className="w-full justify-start gap-4 px-2 py-1 h-fit"
-                                                >
-                                                    {
-                                                        token?.logo && (
-                                                            <img
-                                                            src={getLogoUrl(token.logo)}
-                                                            alt={token.token_ascii}
-                                                            className="rounded-full size-8"
-                                                        />
-                                                        )
-                                                    }
-                                                    <div className="flex flex-col items-start">
-                                                        <span className="font-bold text-sm">{token.token_ascii} ({token.ticker})</span>
-                                                        {/* <p className="text-xs text-muted-foreground">
+                        className="h-fit"
+                      >
+                        <Button
+                          variant="ghost"
+                          className="w-full justify-start gap-4 px-2 py-1 h-fit"
+                        >
+                          {token?.logo && (
+                            <img
+                              src={getLogoUrl(token.logo)}
+                              alt={token.token_ascii}
+                              className="rounded-full size-8"
+                            />
+                          )}
+                          <div className="flex flex-col items-start">
+                            <span className="font-bold text-sm">
+                              {token.token_ascii} ({token.ticker})
+                            </span>
+                            {/* <p className="text-xs text-muted-foreground">
                                                             ${token.price.toLocaleString(undefined, { maximumFractionDigits: 5 })} <span className={token.price_change_24h_percent > 0 ? 'text-green-500' : 'text-red-500'}>({token.price_change_24h_percent > 0 ? '+' : ''}{token.price_change_24h_percent.toLocaleString(undefined, { maximumFractionDigits: 2 })}%)</span>
                                                         </p> */}
-                                                        <p className="text-xs text-muted-foreground">
-                                                        {formatPrice(token.price)}
-                                                        </p>
-                                                    </div>
-                                                    <SaveToken address={token.token_id} />
-                                                </Button>
-                                            </Link>
-                                        ))
-                                    )
-                                ) : (
-                                    <p className="text-xs text-muted-foreground p-2">
-                                        Start typing to search for tokens
-                                    </p>
-                                )}
-                            </div>
-                        )}
-                    </div>
+                            <p className="text-xs text-muted-foreground">
+                              {formatPrice(token.price)}
+                            </p>
+                          </div>
+                          <SaveToken address={token.token_id} />
+                        </Button>
+                      </Link>
+                    ))
+                  )
+                ) : (
+                  <p className="text-xs text-muted-foreground p-2">
+                    Start typing to search for tokens
+                  </p>
                 )}
-            </div>
-        </div>
-    )
-}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
 
-export default SearchBar
+export default SearchBar;

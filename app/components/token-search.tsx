@@ -26,9 +26,9 @@ export function TokenSearch() {
 
     try {
       const response = await fetch(
-        `/api/tokens/search?query=${encodeURIComponent(
-          searchQuery
-        )}&verified=true`
+        `${
+          process.env.NEXT_PUBLIC_SPIDEX_CORE_API_URL
+        }/tokens/search?query=${encodeURIComponent(searchQuery)}&verified=true`
       );
       if (!response.ok) {
         throw new Error("Failed to fetch search results");

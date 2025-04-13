@@ -12,15 +12,15 @@ export const useSearchTokens = () => {
 
     const { data, isLoading, error } = useSWR<SearchResultItem[]>(`/api/token/search?search=${search}`, async () => {
         if (!search) return [];
-        
+
         const response = await fetch(
-            `/api/tokens/search?query=${encodeURIComponent(
+            `${process.env.NEXT_PUBLIC_SPIDEX_CORE_API_URL}/tokens/search?query=${encodeURIComponent(
                 search
             )}&verified=true`
-          );
-          const res = await response.json();
-          console.log('res', res);
-          
+        );
+        const res = await response.json();
+        console.log('res', res);
+
 
         return response.json();
     });
