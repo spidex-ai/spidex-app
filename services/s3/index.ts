@@ -70,6 +70,7 @@ export class S3Service {
 
     getLogoUrl(logo: string) {
         if (!logo) return "";
+        if (logo.startsWith("https://")) return logo;
         if (logo.startsWith("data:image")) return logo;
         return `data:image/png;base64,${logo}`;
     };
@@ -84,7 +85,7 @@ export class S3Service {
             iVBORw0KGgo: "image/png",
             "/9j/": "image/jpg"
         };
-        for (var s in signatures) {
+        for (const s in signatures) {
             if (b64.indexOf(s) === 0) {
                 return signatures[s];
             }
