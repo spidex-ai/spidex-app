@@ -3,11 +3,11 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
-import ConnectedAccount from "./connected-account";
 import { TextGradient } from "@/components/ui/text";
 import Image from "next/image";
 import { UserSpidex } from "@/hooks/core/useSpidexCore";
 import { useGoogleLogin, useXLogin } from "@/hooks/social/useSocialLogin";
+import ConnectedAccountWrapper from "./connected-account-wrapper";
 
 interface Props {
   user: UserSpidex;
@@ -85,7 +85,7 @@ const ConnectedAccounts: React.FC<Props> = ({ user }) => {
       </TextGradient>
       <div className="border boder-1 border-gray-800 p-8 mt-4 rounded-2xl">
         <div className="flex flex-col gap-4">
-          <ConnectedAccount
+          <ConnectedAccountWrapper
             icon={
               <Image
                 src="/icons/x-white.svg"
@@ -100,7 +100,7 @@ const ConnectedAccounts: React.FC<Props> = ({ user }) => {
             onConnect={handleConnectX}
             isSeparator={true}
           />
-          <ConnectedAccount
+          <ConnectedAccountWrapper
             icon={
               <Image
                 src="/icons/google-white.svg"

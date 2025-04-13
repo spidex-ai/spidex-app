@@ -4,7 +4,7 @@ import React from "react";
 
 import { GradientBorderButton, Separator } from "@/components/ui";
 
-interface Props {
+export interface ConnectedAccountProps {
   icon: React.ReactNode;
   name: string;
   value: string | undefined;
@@ -13,7 +13,7 @@ interface Props {
   isSeparator?: boolean;
 }
 
-const ConnectedAccount: React.FC<Props> = ({
+const ConnectedAccount: React.FC<ConnectedAccountProps> = ({
   icon: Icon,
   name,
   value,

@@ -209,7 +209,7 @@ p, a, input, textarea, button, body {
     --sidebar-active: 44, 100%, 41%;
 
     --main-background: #f8f8f8;
-    --font-sans: 'AtypDisplay', sans-serif;
+    --font-sans: 'AtypText', sans-serif;
     --font-mono: 'AtypText', monospace;
   }
 
