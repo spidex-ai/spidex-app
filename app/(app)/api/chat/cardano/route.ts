@@ -3,13 +3,13 @@ import { NextRequest } from "next/server";
 import { CoreTool, LanguageModelV1, streamText, StreamTextResult } from "ai";
 
 import { openai } from "@ai-sdk/openai";
-import { anthropic } from "@ai-sdk/anthropic";
-import { xai } from "@ai-sdk/xai";
-import { google } from "@ai-sdk/google";
-import { deepseek } from "@ai-sdk/deepseek";
+// import { anthropic } from "@ai-sdk/anthropic";
+// import { xai } from "@ai-sdk/xai";
+// import { google } from "@ai-sdk/google";
+// import { deepseek } from "@ai-sdk/deepseek";
 
 import { Models } from "@/types/models";
-import { chooseAgent } from "./utils";
+import { chooseAgent, modelTokenLimits, pickRandomOpenAiModel } from "./utils";
 import { agents } from "@/ai/agents";
 
 const system = `You a network of blockchain agents called The Spidex (or Spidex for short). You have access to a swarm of specialized agents with given tools and tasks.
@@ -82,17 +82,3 @@ export const POST = async (req: NextRequest) => {
   return streamTextResult.toDataStreamResponse();
 };
 
-const openAiModels = ["gpt-4-turbo", "gpt-4o", "gpt-4o-mini"] as const;
-
-type OpenAiModelName = (typeof openAiModels)[number];
-
-export const modelTokenLimits: Record<OpenAiModelName, number> = {
-  "gpt-4-turbo": 128000,
-  "gpt-4o": 128000,
-  "gpt-4o-mini": 128000,
-};
-
-export function pickRandomOpenAiModel(): OpenAiModelName {
-  const index = Math.floor(Math.random() * openAiModels.length);
-  return openAiModels[index];
-}

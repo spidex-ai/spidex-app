@@ -11,7 +11,7 @@ import { deepseek } from "@ai-sdk/deepseek";
 import { Models } from "@/types/models";
 import { chooseAgent } from "./utils";
 import { agents } from "@/ai/agents";
-import { modelTokenLimits, pickRandomOpenAiModel } from "../cardano/route";
+import { modelTokenLimits, pickRandomOpenAiModel } from "../cardano/utils";
 
 const system = `You a network of blockchain agents called The Spidex (or Hive for short). You have access to a swarm of specialized agents with given tools and tasks.
 

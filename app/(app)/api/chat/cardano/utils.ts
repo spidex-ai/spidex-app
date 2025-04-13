@@ -24,3 +24,18 @@ export const chooseAgent = async (model: LanguageModelV1, messages: Message[]): 
 
     return agents.find(agent => agent.name === object.agent) ?? null;
 }
+
+const openAiModels = ["gpt-4-turbo", "gpt-4o", "gpt-4o-mini"] as const;
+
+type OpenAiModelName = (typeof openAiModels)[number];
+
+export const modelTokenLimits: Record<OpenAiModelName, number> = {
+  "gpt-4-turbo": 128000,
+  "gpt-4o": 128000,
+  "gpt-4o-mini": 128000,
+};
+
+export function pickRandomOpenAiModel(): OpenAiModelName {
+  const index = Math.floor(Math.random() * openAiModels.length);
+  return openAiModels[index];
+}

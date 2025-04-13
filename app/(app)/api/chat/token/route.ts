@@ -17,7 +17,7 @@ import {
 } from "@/ai";
 
 import type { TokenChatData } from "@/types";
-import { modelTokenLimits, pickRandomOpenAiModel } from "../cardano/route";
+import { modelTokenLimits, pickRandomOpenAiModel } from "../cardano/utils";
 
 const system = (tokenMetadata: TokenChatData) =>
   `You are a blockchain agent that helping the user analyze the following token: ${tokenMetadata.name} (${tokenMetadata.name}) with the address ${tokenMetadata?.address}.`;
