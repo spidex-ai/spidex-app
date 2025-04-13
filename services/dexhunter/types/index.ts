@@ -34,11 +34,11 @@ export interface CardanoTokenDetail extends SearchTokenInfo {
  */
 
 export interface EsitmateSwapPayload {
-    token_in: string;
-    token_out: string;
+    tokenIn: string;
+    tokenOut: string;
     slippage: number;
-    amount_in: number;
-    blacklisted_dexes: string[];
+    amountIn: number;
+    blacklistedDexes: string[];
 }
 export interface SwapPayload {
     buyer_address: string;

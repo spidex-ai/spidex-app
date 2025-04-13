@@ -36,6 +36,7 @@ const TokenSelect: React.FC<Props> = ({ value, onChange, priorityTokens = [] }) 
     const [input, setInput] = useState("");
 
     const { results, loading } = useTokenSearch(input);
+    console.log("🚀 ~ results:", results)
 
     console.log("🚀 ~ TokenSelect ~ priorityTokens:", priorityTokens)
 
@@ -88,7 +89,7 @@ const TokenSelect: React.FC<Props> = ({ value, onChange, priorityTokens = [] }) 
                                             No results for &quot;{input}&quot;
                                         </p>
                                     ) : (
-                                        results.map((token: SearchTokenInfo) => (
+                                        results?.map((token: SearchTokenInfo) => (
                                             <Button 
                                                 key={token.token_id}
                                                 variant="ghost"
