@@ -8,12 +8,12 @@ import { cn } from "@/lib/utils"
 
 export const Progress = React.forwardRef<
   React.ElementRef<typeof ProgressPrimitive.Root>,
-  React.ComponentPropsWithoutRef<typeof ProgressPrimitive.Root> & { indicatorClassName?: string, colorFill?: string }
->(({ className, value, indicatorClassName, colorFill, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof ProgressPrimitive.Root> & { indicatorClassName?: string, colorFill?: string, h?: string }
+>(({ className, value, indicatorClassName, colorFill, h, ...props }, ref) => (
   <ProgressPrimitive.Root
     ref={ref}
     className={cn(
-      "relative h-2 w-full overflow-hidden rounded-full bg-neutral-100 dark:bg-neutral-700",
+      `relative h-2 w-full overflow-hidden rounded-full bg-neutral-100 dark:bg-neutral-700 ${h ? h : 'h-2'}`,
       className
     )}
     {...props}
