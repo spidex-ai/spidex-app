@@ -101,7 +101,7 @@ const getAgentIcon = (agentName: string) => {
     case TOKEN_ANALYSIS_AGENT_NAME:
       return (
         <Image
-          src="/icons/trading-agent.svg"
+          src="/icons/token-analysis.svg"
           alt="Chart Candlestick"
           width={20}
           height={20}

@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import { GradientButton } from "@/components/ui";
 export interface RefListItemProps {
     index: number;
   key: number;
@@ -35,7 +36,9 @@ const RefListItem: React.FC<RefListItemProps> = ({
         </div>
         <div>{username}</div>
       </div>
-      <div className="flex items-center justify-center gap-2">{`${point} SILK`}</div>
+      <div className="flex items-center justify-center gap-2">
+        <GradientButton>{`+${point} CAPI`}</GradientButton>
+      </div>
       <div className="flex items-center justify-center gap-2">{date}</div>
     </div>
     </div>
