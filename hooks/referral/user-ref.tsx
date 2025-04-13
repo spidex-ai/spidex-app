@@ -3,7 +3,7 @@
 import { useSpidexCore } from "../core/useSpidexCore";
 
 import { useEffect, useState } from "react";
-import { MyRefItem, ReferralInfo } from "./type";
+import { MyRefItem, ReferralInfo, RefHistoryItem } from "./type";
 import { useSpidexCoreContext } from "@/app/_contexts/spidex-core";
 
 export const useRefInfo = () => {
@@ -35,7 +35,7 @@ export const useRefInfo = () => {
 export const useRefHistory = ({ page = 1, perPage = 10 }: { page?: number, perPage?: number }) => {
     const { getUserRefHistory } = useSpidexCoreContext();
 
-    const [referralHistory, setReferralHistory] = useState<any>(null);
+    const [referralHistory, setReferralHistory] = useState<RefHistoryItem[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 

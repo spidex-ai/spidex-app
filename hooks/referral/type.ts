@@ -11,3 +11,11 @@ export interface MyRefItem {
     totalReferralPointEarned: string;
     username: string;
 }
+
+export interface RefHistoryItem {
+    id: number; 
+    avatar: string | null;
+    createdAt: string; 
+    point: string;
+    username: string;
+}

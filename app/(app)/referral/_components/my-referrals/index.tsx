@@ -25,7 +25,7 @@ const MyReferrals: React.FC = () => {
     })
 
     return (
-        <div className='border border-border-main rounded-lg'>
+        <div className='border border-border-main rounded-lg bg-bg-secondary'>
             <div className='p-8'>
                 <div className='text-2xl font-bold text-white'>My Referrals</div>
             </div>
