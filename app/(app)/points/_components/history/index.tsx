@@ -1,9 +1,9 @@
 "use client";
 import { Skeleton } from "@/components/ui/skeleton";
-import { usePointHistory, useQuests } from "@/hooks/point/use-point";
+import { usePointHistory } from "@/hooks/point/use-point";
 import React from "react";
 import Image from "next/image";
-import { GradientButton } from "@/components/ui";
+
 import { PointHistory } from "@/hooks/point/type";
 
 interface HistoryItem {
