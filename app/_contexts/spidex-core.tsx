@@ -30,6 +30,9 @@ interface SpidexCoreContextType {
   getUserPointHistory: () => Promise<any>;
   getPortfolioToken: (address?: string) => Promise<any>;
   getPortfolioTransaction: (address?: string) => Promise<any>;
+  getTokenTradeHistory: (tokenId: string) => Promise<any>;
+  getTokenTopHolders: (tokenId: string) => Promise<any>;
+  getTokenTopTraders: (tokenId: string) => Promise<any>;
 }
 
 const STORAGE_KEY = "spidex_auth";
@@ -151,7 +154,10 @@ export const SpidexCoreProvider: React.FC<{ children: React.ReactNode }> = ({
     getUserQuests: spidexCore.getUserQuests,
     getUserPointHistory: spidexCore.getUserPointHistory,
     getPortfolioToken: spidexCore.getPortfolioToken,
-    getPortfolioTransaction: spidexCore.getPortfolioTransaction
+    getPortfolioTransaction: spidexCore.getPortfolioTransaction,
+    getTokenTradeHistory: spidexCore.getTokenTradeHistory,
+    getTokenTopHolders: spidexCore.getTokenTopHolders,
+    getTokenTopTraders: spidexCore.getTokenTopTraders
   };
 
   return (

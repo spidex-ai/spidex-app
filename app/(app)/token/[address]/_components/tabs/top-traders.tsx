@@ -19,9 +19,9 @@ interface Props {
 
 const TopTokenTraders: React.FC<Props> = ({ address }) => {
     
-    const { data: topTraders, isLoading } = useTopTraders(address);
+    const { data: topTraders, loading } = useTopTraders(address);
 
-    if(isLoading) {
+    if(loading) {
         return <Skeleton className="h-full w-full" />
     }
 

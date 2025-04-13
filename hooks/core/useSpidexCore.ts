@@ -388,6 +388,47 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     }
   }, [fetchWithAuth, auth]); 
 
+  const getTokenTradeHistory = useCallback(async (tokenId: string) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await fetchWithAuth(`/tokens/${tokenId}/trades?timeFrame=1h`);
+      return data.data;
+    } catch (error) {
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  }, [fetchWithAuth, auth]);
+
+  const getTokenTopHolders = useCallback(async (tokenId: string) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await fetchWithAuth(`/tokens/${tokenId}/top-holders?limit=10&page=1`);
+      return data.data;
+    } catch (error) {
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  }, [fetchWithAuth, auth]);
+
+  const getTokenTopTraders = useCallback(async (tokenId: string) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await fetchWithAuth(`/tokens/${tokenId}/top-traders?timeFrame=1h&limit=10&page=1`);
+      return data.data;
+    } catch (error) {
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  }, [fetchWithAuth, auth]);
+
+
+
   return {
     auth,
     loading,
@@ -409,7 +450,10 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     getUserQuests,
     getUserPointHistory,
     getPortfolioToken,
-    getPortfolioTransaction
+    getPortfolioTransaction,
+    getTokenTradeHistory,
+    getTokenTopHolders,
+    getTokenTopTraders
   };
 };
 

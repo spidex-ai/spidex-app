@@ -1,18 +1,36 @@
 "use client"
 
-import useSWR from "swr";
+import type { TokenTopHolders } from "@/hooks/queries/token/type";
+import { useSpidexCoreContext } from "@/app/_contexts/spidex-core";
+import { useEffect } from "react";
+import { useState } from "react";
 
-import type { TokenHolder } from "@/services/birdeye/types";
+export const useTopHolders = (tokenId: string) => {
+    const { getTokenTopHolders } = useSpidexCoreContext();
 
-export const useTopHolders = (address: string) => {
-    const { data, isLoading, error } = useSWR<TokenHolder[]>(
-        `/api/token/${address}/top-holders`, 
-        (url: string) => fetch(url).then(res => res.json()),
-    );
+    const [data, setData] = useState<TokenTopHolders[]>([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<Error | null>(null);
 
-    return { 
-        data: data || [], 
-        isLoading,
-        error 
-    };
+    useEffect(() => {
+        if (tokenId) {
+            fetchTopHolders()
+        }
+    }, [tokenId])
+
+    const fetchTopHolders = async () => {
+        setLoading(true);
+        setError(null);
+        try {
+            const response = await getTokenTopHolders(tokenId);
+            setData(response);
+        } catch (error) {
+            setError(error as Error);
+        } finally {
+            setLoading(false);  
+        }
+    }
+
+    return { data, loading, error };
 }
+    

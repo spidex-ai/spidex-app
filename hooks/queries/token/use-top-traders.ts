@@ -3,16 +3,33 @@
 import useSWR from "swr";
 
 import type { TopTraderByToken } from "@/services/birdeye/types";
+import { useSpidexCoreContext } from "@/app/_contexts/spidex-core";
+import { useEffect } from "react";
+import { useState } from "react";
 
 export const useTopTraders = (address: string) => {
-    const { data, isLoading, error } = useSWR<TopTraderByToken[]>(
-        `/api/token/${address}/top-traders`, 
-        (url: string) => fetch(url).then(res => res.json()),
-    );
+    const { getTokenTopTraders } = useSpidexCoreContext();
 
-    return { 
-        data: data || [], 
-        isLoading,
-        error 
-    };
+    const [data, setData] = useState<TopTraderByToken[]>([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<Error | null>(null);
+
+    useEffect(() => {
+        fetchTopTraders()
+    }, [address])
+
+    const fetchTopTraders = async () => {
+        setLoading(true);
+        setError(null);
+        try {
+            const response = await getTokenTopTraders(address);
+            setData(response);
+        } catch (error) {
+            setError(error as Error);
+        } finally {
+            setLoading(false);  
+        }
+    }
+
+    return { data, loading, error };
 }

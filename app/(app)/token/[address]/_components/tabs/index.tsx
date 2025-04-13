@@ -154,7 +154,7 @@ const TokenDashboardTabs: React.FC<Props> = ({ address, data }) => {
                     <TopTraders address={address} />
                 </TabsContent> 
                 <TabsContent value="bubble" className="h-full m-0 p-2">
-                    <TopHolders mint={address} />
+                    <TopHolders tokenId={data?.token_id || ''} />
                 </TabsContent>
                 {/* <TabsContent value="markets" className="h-full m-0">
                     <TokenMarkets address={address} />
