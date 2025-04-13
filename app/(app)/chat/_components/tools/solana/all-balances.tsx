@@ -3,7 +3,7 @@ import React from 'react'
 import ToolCard from '../tool-card';
 
 import type { ToolInvocation } from 'ai';
-import type { CardanoAllBalancesResultType } from '@/ai';
+import type { CardanoAllBalancesResultType, NewCardanoAllBalancesResultType } from '@/ai';
 import { TokenBalance } from '../utils';
 
 interface Props {
@@ -12,20 +12,22 @@ interface Props {
 }
 
 const AllBalances: React.FC<Props> = ({ tool, prevToolAgent }) => {
-    
 
+
+                
     return (
-        <ToolCard 
+        <ToolCard
             tool={tool}
             loadingText={`Getting All Balances...`}
             result={{
-                heading: (result: CardanoAllBalancesResultType) => result.body 
+                heading: (result: NewCardanoAllBalancesResultType) => result.body
                     ? `Fetched All Balances`
                     : `Failed to fetch balances`,
-                body: (result: CardanoAllBalancesResultType) => result.body 
+                body: (result: NewCardanoAllBalancesResultType) => result.body
                     ? (
                         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
-                            {result.body.amount.map((balance) => (
+                            {result.body.balances.amount.map((balance) => (
+                                
                                 <TokenBalance
                                     key={balance.unit}
                                     token={balance.ticker}
@@ -36,7 +38,7 @@ const AllBalances: React.FC<Props> = ({ tool, prevToolAgent }) => {
                             ))}
                         </div>
                     )
-                    :  "No balance found"
+                    : "No balance found"
             }}
             prevToolAgent={prevToolAgent}
         />

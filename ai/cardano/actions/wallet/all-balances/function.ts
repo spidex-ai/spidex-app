@@ -11,10 +11,6 @@ export async function getAllBalances(
   try {
     const balance = await coreService.getBalances(args.walletAddress);
     console.log("🚀 ~ balance:", balance);
-
-    for (const token of balance.amount) {
-      delete token.logo;
-    }
     // let balances: {
     //   balance: number;
     //   token: string;
