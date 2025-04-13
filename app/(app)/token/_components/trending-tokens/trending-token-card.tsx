@@ -34,7 +34,7 @@ const TrendingTokenCard: React.FC<Props> = ({ token }) => {
             )}
             <div className="flex flex-col">
               <p className="text-sm font-bold">
-                {token.ticker} ({token.ticker})
+                {token.name} ({token.ticker})
               </p>
               <p className="text-xs text-muted-foreground">
                 $
@@ -48,7 +48,10 @@ const TrendingTokenCard: React.FC<Props> = ({ token }) => {
         </div>
         <div className="flex flex-col">
           <p className="text-xs text-muted-foreground">
-            24h Volume: ${token?.volume ? token?.volume?.toLocaleString() : token?.mcap?.toLocaleString()}
+            24h Volume: $
+            {token?.volume
+              ? token?.volume?.toLocaleString()
+              : token?.mcap?.toLocaleString()}
           </p>
         </div>
       </Card>

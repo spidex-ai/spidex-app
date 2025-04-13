@@ -104,6 +104,7 @@ export interface TokenDetail {
   logo?: string;
   usdPrice?: number;
   mcap?: number;
+  name?: string;
 }
 
 export type TopToken = TokenDetail;
