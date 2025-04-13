@@ -75,7 +75,7 @@ const AccountHeading: React.FC<Props> = ({ user }) => {
                 <Separator />
                 <div className="flex flex-col">
                     <p className="text-xs font-bold text-neutral-600 dark:text-neutral-400">User ID</p>
-                    <p className="text-sm">{user.id.toString().slice(10)}</p>
+                    <p className="text-sm">{user.id.toString()}</p>
                 </div>
                 <Separator />
                 <div className="flex flex-col">

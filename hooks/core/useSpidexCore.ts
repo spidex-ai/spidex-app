@@ -119,8 +119,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
             }
             return await retryResponse.json();
           } else {
-            // If refresh token is invalid, clear auth and throw error
-            setAuth(null);
+            logout();
             throw new Error("Session expired. Please login again.");
           }
         }
@@ -229,13 +228,13 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
   }, [fetchWithAuth, auth]);
 
   const connectX = useCallback(
-    async (code: string, redirectUrl: string) => {
+    async (code: string, redirectUri: string) => {
       try {
         const data = await fetchWithAuth("/auth/connect/x", {
           method: "POST",
           body: JSON.stringify({
             code,
-            redirectUrl,
+            redirectUri,
           }),
         });
         setAuth(data.data);
@@ -327,14 +326,14 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
 
   const getUserPointMeInfo = useCallback(async () => {
     setLoading(true);
-      setError(null);
-      try {
-        const  data = await fetchWithAuth(`/user-point/me/info`);
-        return data.data;
-      } catch (error) {
-        
-      }
-  },[fetchWithAuth, auth])
+    setError(null);
+    try {
+      const data = await fetchWithAuth(`/user-point/me/info`);
+      return data.data;
+    } catch (error) {
+
+    }
+  }, [fetchWithAuth, auth])
 
   const getUserQuests = useCallback(async () => {
     setLoading(true);
@@ -362,6 +361,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     }
   }, [fetchWithAuth, auth]);
 
+<<<<<<< Updated upstream
   const getPortfolioToken = useCallback(async (address?: string) => {
     setLoading(true);
     setError(null);
@@ -388,6 +388,8 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
       setLoading(false);
     }
   }, [fetchWithAuth, auth]); 
+=======
+>>>>>>> Stashed changes
 
   return {
     auth,

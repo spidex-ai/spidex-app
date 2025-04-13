@@ -82,7 +82,7 @@ const Information: React.FC<Props> = ({ user }) => {
         <div className="h-[1px] w-full my-5 bg-bg-gray" />
         <div>
           <div className="text-xs text-text-gray">User ID</div>
-          <div className="text-xs mt-2">{user.id.toString().slice(10)}</div>
+          <div className="text-xs mt-2">{user.id.toString()}</div>
         </div>
 
         <div className="h-[1px] w-full my-5" />

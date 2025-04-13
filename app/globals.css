@@ -2,12 +2,197 @@
 @tailwind components;
 @tailwind utilities;
 
+/* AtypDisplay Font Family */
+@font-face {
+  font-family: 'AtypDisplay';
+  src: url('/fonts/AtypDisplay-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'AtypDisplay';
+  src: url('/fonts/AtypDisplay-Light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'AtypDisplay';
+  src: url('/fonts/AtypDisplay-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'AtypDisplay';
+  src: url('/fonts/AtypDisplay-Semibold.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'AtypDisplay';
+  src: url('/fonts/AtypDisplay-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'AtypDisplay';
+  src: url('/fonts/AtypDisplay-Italic.otf') format('opentype');
+  font-weight: 400;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'AtypDisplay';
+  src: url('/fonts/AtypDisplay-LightItalic.otf') format('opentype');
+  font-weight: 300;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'AtypDisplay';
+  src: url('/fonts/AtypDisplay-MediumItalic.otf') format('opentype');
+  font-weight: 500;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'AtypDisplay';
+  src: url('/fonts/AtypDisplay-SemiboldItalic.otf') format('opentype');
+  font-weight: 600;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'AtypDisplay';
+  src: url('/fonts/AtypDisplay-BoldItalic.otf') format('opentype');
+  font-weight: 700;
+  font-style: italic;
+}
+
+/* AtypText Font Family */
+@font-face {
+  font-family: 'AtypText';
+  src: url('/fonts/AtypText-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'AtypText';
+  src: url('/fonts/AtypText-Light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'AtypText';
+  src: url('/fonts/AtypText-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'AtypText';
+  src: url('/fonts/AtypText-Semibold.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'AtypText';
+  src: url('/fonts/AtypText-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'AtypText';
+  src: url('/fonts/AtypText-Italic.otf') format('opentype');
+  font-weight: 400;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'AtypText';
+  src: url('/fonts/AtypText-LightItalic.otf') format('opentype');
+  font-weight: 300;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'AtypText';
+  src: url('/fonts/AtypText-MediumItalic.otf') format('opentype');
+  font-weight: 500;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'AtypText';
+  src: url('/fonts/AtypText-SemiboldItalic.otf') format('opentype');
+  font-weight: 600;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'AtypText';
+  src: url('/fonts/AtypText-BoldItalic.otf') format('opentype');
+  font-weight: 700;
+  font-style: italic;
+}
+
+/* AtypKido Font Family */
+@font-face {
+  font-family: 'AtypKido';
+  src: url('/fonts/AtypKido-Thin.otf') format('opentype');
+  font-weight: 100;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'AtypKido';
+  src: url('/fonts/AtypKido-Light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'AtypKido';
+  src: url('/fonts/AtypKido-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'AtypKido';
+  src: url('/fonts/AtypKido-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'AtypKido';
+  src: url('/fonts/AtypKido-Semibold.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'AtypKido';
+  src: url('/fonts/AtypKido-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+}
+
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-dm-sans), sans-serif;
+  font-family: var(--font-sans), sans-serif;
 }
 
 p, a, input, textarea, button, body {
-  font-family: var(--font-dm-mono), monospace;
+  font-family: var(--font-mono), monospace;
 }
 
 @layer base {
@@ -24,6 +209,8 @@ p, a, input, textarea, button, body {
     --sidebar-active: 44, 100%, 41%;
 
     --main-background: #f8f8f8;
+    --font-sans: 'AtypDisplay', sans-serif;
+    --font-mono: 'AtypText', monospace;
   }
 
   body {

@@ -149,7 +149,7 @@ const LoginButton: React.FC = () => {
   }, [])
   
   const {
-    stakeAddress,
+    unusedAddresses,
     connect,
     signMessage,
     disconnect,
@@ -157,21 +157,20 @@ const LoginButton: React.FC = () => {
   } = useCardano({
     limitNetwork: NetworkType.MAINNET,
   })
-  
   // Determine if any connection is in progress
   const anyConnectionInProgress = walletConnecting !== null || isConnecting
   
   // Derive base URL for social login redirects - only on client
   const baseUrl = useMemo(() => {
     if (typeof window !== 'undefined') {
-      return window.location.href.split("/").slice(0, 3).join("/") + "/app"
+      return window.location.href.split("/").slice(0, 3).join("/")
     }
     return ''
   }, [isClient])
   
   const onWalletConnectSuccess = useCallback(() => {
-    handleSignMessage(stakeAddress?.toString())
-  }, [stakeAddress, enabledWallet])
+    handleSignMessage(unusedAddresses?.[0]?.toString())
+  }, [unusedAddresses, enabledWallet])
 
   const onWalletConnectError = (error: Error) => {
     console.log("Wallet connection error", error)
