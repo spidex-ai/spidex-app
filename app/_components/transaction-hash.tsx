@@ -51,9 +51,9 @@ const TransactionHash: React.FC<Props> = ({ hash, className, hideTransactionText
                             <Button variant="outline" size="sm" onClick={handleCopy}>
                                 {copied ? "Copied" : "Copy Hash"}
                             </Button>
-                            <Link href={`https://solscan.io/tx/${hash}`} target="_blank">
+                            <Link href={`${process.env.NEXT_PUBLIC_CARDANO_SCAN_URL}/transaction/${hash}`} target="_blank">
                                 <Button variant="outline" size="sm">
-                                    Solscan <ArrowUpRight className="size-4" />
+                                    Cardanoscan <ArrowUpRight className="size-4" />
                                 </Button>
                             </Link>
                         </div>

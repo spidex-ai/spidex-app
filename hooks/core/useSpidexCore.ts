@@ -361,7 +361,33 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
       setLoading(false);
     }
   }, [fetchWithAuth, auth]);
-  
+
+  const getPortfolioToken = useCallback(async (address?: string) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await fetchWithAuth(`/portfolio/${address || 'addr1q9gykktajrgrmj5am8vwlhp65a72emlwn2s3e5cadkhe3vrfkfxs6yajls3ft0yn42uqlcnrq6qcn3l0lunkxy6aplgspxm6da'}`);
+      return data.data;
+    } catch (error) { 
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  }, [fetchWithAuth, auth]);
+
+
+  const getPortfolioTransaction = useCallback(async (address?: string) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await fetchWithAuth(`/portfolio/${address || 'addr1q9gykktajrgrmj5am8vwlhp65a72emlwn2s3e5cadkhe3vrfkfxs6yajls3ft0yn42uqlcnrq6qcn3l0lunkxy6aplgspxm6da'}/transactions?page=1&count=20&order=desc`);
+      return data.data;
+    } catch (error) {
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  }, [fetchWithAuth, auth]); 
 
   return {
     auth,
@@ -382,7 +408,9 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     getUserRefHistory,
     getUserPointMeInfo,
     getUserQuests,
-    getUserPointHistory
+    getUserPointHistory,
+    getPortfolioToken,
+    getPortfolioTransaction
   };
 };
 
