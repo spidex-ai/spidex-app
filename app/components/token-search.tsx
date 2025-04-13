@@ -1,5 +1,6 @@
 "use client";
 
+import { getLogoUrl } from "@/app/utils/logo";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useDebounce } from "@/hooks";
@@ -46,13 +47,6 @@ export function TokenSearch() {
   useEffect(() => {
     handleSearch(debouncedQuery);
   }, [debouncedQuery]);
-
-  const getLogoUrl = (logo: string) => {
-    if (!logo) return "";
-    if (logo.startsWith("https://")) return logo;
-    if (logo.startsWith("data:image")) return logo;
-    return `data:image/png;base64,${logo}`;
-  };
 
   const formatPrice = (price: number) => {
     if (price === 0) return "$0.00";

@@ -68,15 +68,6 @@ export class S3Service {
         }
     }
 
-    getLogoUrl(logo: string) {
-        if (!logo) return "";
-        if (logo.startsWith("https://")) return logo;
-        if (logo.startsWith("data:image")) return logo;
-        return `data:image/png;base64,${logo}`;
-    };
-
-
-
     detectMimeType(b64: any) {
         const signatures: any = {
             JVBERi0: "application/pdf",
