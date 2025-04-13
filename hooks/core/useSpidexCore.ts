@@ -361,7 +361,6 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     }
   }, [fetchWithAuth, auth]);
 
-<<<<<<< Updated upstream
   const getPortfolioToken = useCallback(async (address?: string) => {
     setLoading(true);
     setError(null);
@@ -388,8 +387,6 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
       setLoading(false);
     }
   }, [fetchWithAuth, auth]); 
-=======
->>>>>>> Stashed changes
 
   return {
     auth,
