@@ -11,9 +11,9 @@ interface Props {
 }
 
 const Information: React.FC<Props> = ({ user }) => {
-  const wallets = [user.walletAddress]
+  const wallets = [user.walletAddress];
   const { logout } = useSpidexCoreContext();
-  console.log('user:::', user);
+  console.log("user:::", user);
   return (
     <>
       <div className="flex justify-between gap-4">
@@ -28,7 +28,10 @@ const Information: React.FC<Props> = ({ user }) => {
           </div>
           <TextGradient className="text-2xl">Account</TextGradient>
         </div>
-        <div className="flex items-center gap-2 cursor-pointer" onClick={() => logout()}>
+        <div
+          className="flex items-center gap-2 cursor-pointer"
+          onClick={() => logout()}
+        >
           <div>
             <Image
               src="/icons/logout-white.svg"
@@ -52,11 +55,22 @@ const Information: React.FC<Props> = ({ user }) => {
               />
             </div>
             <div>
-              <div>{user?.walletAddress ?  <Address 
-                                        address={user?.walletAddress}
-                                        className="text-md font-bold"
-                                    /> : "No wallet connected"}</div>
-              <div className="text-xs text-text-gray">Joined on {user?.createdAt ? new Date(user?.createdAt).toLocaleDateString() : "N/A"}</div>
+              <div>
+                {user?.walletAddress ? (
+                  <Address
+                    address={user?.walletAddress}
+                    className="text-md font-bold"
+                  />
+                ) : (
+                  "No wallet connected"
+                )}
+              </div>
+              <div className="text-xs text-text-gray">
+                Joined on{" "}
+                {user?.createdAt
+                  ? new Date(user?.createdAt).toLocaleDateString()
+                  : "N/A"}
+              </div>
             </div>
           </div>
 

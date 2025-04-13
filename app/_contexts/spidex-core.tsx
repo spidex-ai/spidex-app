@@ -25,6 +25,9 @@ interface SpidexCoreContextType {
   getUserRefMeInfo: () => Promise<any>;
   getUserRefMeReferredUsers: (page?: number, perPage?: number) => Promise<any>;
   getUserRefHistory: (page?: number, perPage?: number) => Promise<any>;
+  getUserPointMeInfo: () => Promise<any>;
+  getUserQuests: () => Promise<any>;
+  getUserPointHistory: () => Promise<any>;
 }
 
 const STORAGE_KEY = "spidex_auth";
@@ -142,6 +145,9 @@ export const SpidexCoreProvider: React.FC<{ children: React.ReactNode }> = ({
     getUserRefMeInfo: spidexCore.getUserRefMeInfo,
     getUserRefMeReferredUsers: spidexCore.getUserRefMeReferredUsers,
     getUserRefHistory: spidexCore.getUserRefHistory,
+    getUserPointMeInfo: spidexCore.getUserPointMeInfo,
+    getUserQuests: spidexCore.getUserQuests,
+    getUserPointHistory: spidexCore.getUserPointHistory
   };
 
   return (
