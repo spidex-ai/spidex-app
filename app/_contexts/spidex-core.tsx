@@ -2,6 +2,8 @@
 
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { Auth, useSpidexCore } from "@/hooks/core/useSpidexCore";
+import { SubmitSwapPayload, SwapPayload } from "@/services/dexhunter/types";
+import { EsitmateSwapPayload } from "@/services/dexhunter/types";
 
 interface SpidexCoreContextType {
   auth: Auth | null;
@@ -33,6 +35,10 @@ interface SpidexCoreContextType {
   getTokenTradeHistory: (tokenId: string) => Promise<any>;
   getTokenTopHolders: (tokenId: string) => Promise<any>;
   getTokenTopTraders: (tokenId: string) => Promise<any>;
+  getSwapPoolStats: (inputToken: string, outputToken: string) => Promise<any>;
+  buildSwapRequest: (payload: SwapPayload) => Promise<any>;
+  estimateSwap: (payload: EsitmateSwapPayload) => Promise<any>;
+  submitSwapRequest: (payload: SubmitSwapPayload) => Promise<any>;
 }
 
 const STORAGE_KEY = "spidex_auth";
@@ -157,7 +163,11 @@ export const SpidexCoreProvider: React.FC<{ children: React.ReactNode }> = ({
     getPortfolioTransaction: spidexCore.getPortfolioTransaction,
     getTokenTradeHistory: spidexCore.getTokenTradeHistory,
     getTokenTopHolders: spidexCore.getTokenTopHolders,
-    getTokenTopTraders: spidexCore.getTokenTopTraders
+    getTokenTopTraders: spidexCore.getTokenTopTraders,
+    getSwapPoolStats: spidexCore.getSwapPoolStats,
+    buildSwapRequest: spidexCore.buildSwapRequest,
+    estimateSwap: spidexCore.estimateSwap,
+    submitSwapRequest: spidexCore.submitSwapRequest
   };
 
   return (

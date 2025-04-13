@@ -29,11 +29,11 @@ export async function POST(request: NextRequest) {
         }
 
         const payload: EsitmateSwapPayload = {
-            token_in,
-            token_out,
+            tokenIn: token_in,
+            tokenOut: token_out,
             slippage: slippage ?? 1.0,
-            amount_in,
-            blacklisted_dexes: blacklisted_dexes ?? []
+            amountIn: amount_in,
+            blacklistedDexes: blacklisted_dexes ?? []
         };
 
         const data = await dexHunterService.estimateSwap(payload);

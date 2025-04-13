@@ -22,9 +22,10 @@ export const useTokenSearch = (input: string) => {
                         input
                     )}&verified=true`
                 );
-                const data: CardanoTokenDetail[] = await response.json();
+                const data: { data: CardanoTokenDetail[] } = await response.json();
+                console.log("🚀 ~ fetchTokens ~ data:", data)
 
-                setResults(data);
+                setResults(data.data);
             } catch (error) {
                 console.error('Token search error:', error);
                 setResults([]);

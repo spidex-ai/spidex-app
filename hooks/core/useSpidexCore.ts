@@ -1,4 +1,5 @@
 import { useSpidexCoreContext } from "@/app/_contexts/spidex-core";
+import { EsitmateSwapPayload, SubmitSwapPayload, SwapPayload } from "@/services/dexhunter/types";
 import { STORAGE_KEY } from "@raydium-io/raydium-sdk-v2";
 import { useCallback, useEffect, useMemo, useState } from "react";
 export interface SignMessageData {
@@ -427,7 +428,66 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     }
   }, [fetchWithAuth, auth]);
 
+  const getSwapPoolStats = useCallback(async (inputToken: string, outputToken: string) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await fetchWithAuth(`/swap/pool-stats/${inputToken}/${outputToken}`);
+      return data.data;
+    } catch (error) {
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  }, [fetchWithAuth, auth]);
 
+  const buildSwapRequest = useCallback(async (payload: SwapPayload) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await fetchWithAuth(`/swap/build`, {
+        method: "POST",
+        body: JSON.stringify(payload)
+      });
+      return data.data;
+    } catch (error) { 
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  }, [fetchWithAuth, auth]);
+
+  const estimateSwap = useCallback(async (payload: EsitmateSwapPayload) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await fetchWithAuth(`/swap/estimate`, {
+        method: "POST", 
+        body: JSON.stringify(payload)
+      });
+      return data.data;
+    } catch (error) {
+      return null;
+    } finally {
+      setLoading(false); 
+    }
+  }, [fetchWithAuth, auth]);
+
+  const submitSwapRequest = useCallback(async (payload: SubmitSwapPayload) => {
+    setLoading(true);
+    setError(null);
+    try { 
+      const data = await fetchWithAuth(`/swap/submit`, {
+        method: "POST",
+        body: JSON.stringify(payload)
+      });
+      return data.data;
+    } catch (error) {
+      return error;
+    } finally {
+      setLoading(false);
+    }
+  }, [fetchWithAuth, auth]);
 
   return {
     auth,
@@ -453,7 +513,11 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     getPortfolioTransaction,
     getTokenTradeHistory,
     getTokenTopHolders,
-    getTokenTopTraders
+    getTokenTopTraders,
+    getSwapPoolStats,
+    buildSwapRequest,
+    estimateSwap,
+    submitSwapRequest
   };
 };
 
