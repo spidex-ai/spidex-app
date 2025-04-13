@@ -325,6 +325,44 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     [fetchWithAuth, auth]
   );
 
+  const getUserPointMeInfo = useCallback(async () => {
+    setLoading(true);
+      setError(null);
+      try {
+        const  data = await fetchWithAuth(`/user-point/me/info`);
+        return data.data;
+      } catch (error) {
+        
+      }
+  },[fetchWithAuth, auth])
+
+  const getUserQuests = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await fetchWithAuth("/user-quest?limit=10&page=1");
+      return data.data;
+    } catch (error) {
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  }, [fetchWithAuth, auth]);
+
+  const getUserPointHistory = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await fetchWithAuth("/user-point/me/history?limit=10&page=1");
+      return data.data;
+    } catch (error) {
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  }, [fetchWithAuth, auth]);
+  
+
   return {
     auth,
     loading,
@@ -342,6 +380,9 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     getUserRefMeInfo,
     getUserRefMeReferredUsers,
     getUserRefHistory,
+    getUserPointMeInfo,
+    getUserQuests,
+    getUserPointHistory
   };
 };
 
