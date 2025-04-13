@@ -28,6 +28,8 @@ interface SpidexCoreContextType {
   getUserPointMeInfo: () => Promise<any>;
   getUserQuests: () => Promise<any>;
   getUserPointHistory: () => Promise<any>;
+  getPortfolioToken: (address?: string) => Promise<any>;
+  getPortfolioTransaction: (address?: string) => Promise<any>;
 }
 
 const STORAGE_KEY = "spidex_auth";
@@ -147,7 +149,9 @@ export const SpidexCoreProvider: React.FC<{ children: React.ReactNode }> = ({
     getUserRefHistory: spidexCore.getUserRefHistory,
     getUserPointMeInfo: spidexCore.getUserPointMeInfo,
     getUserQuests: spidexCore.getUserQuests,
-    getUserPointHistory: spidexCore.getUserPointHistory
+    getUserPointHistory: spidexCore.getUserPointHistory,
+    getPortfolioToken: spidexCore.getPortfolioToken,
+    getPortfolioTransaction: spidexCore.getPortfolioTransaction
   };
 
   return (

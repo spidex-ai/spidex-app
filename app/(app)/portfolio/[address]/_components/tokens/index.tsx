@@ -3,7 +3,7 @@
 import React from 'react'
 
 
-import Decimal from 'decimal.js';
+// import Decimal from 'decimal.js';
 import Image from 'next/image';
 import {
     Table,
@@ -13,20 +13,23 @@ import {
     TableHead,
     TableCell,
     Card,
-    Button,
-    Skeleton
+    Skeleton,
+    GradientButton,
+    GradientBorderButton
 } from '@/components/ui'
 
 import { useSwapModal } from '../../_contexts/use-swap-modal';
-import { usePortfolio } from '@/hooks';
+// import { usePortfolio } from '@/hooks';
+import { usePortfolioToken } from '@/hooks/portfolio';
 
 interface Props {
     address: string
 }
 
 const Tokens: React.FC<Props> = ({ address }) => {
+console.log("🚀 ~ address:", address)
 
-    const { data: portfolio, isLoading } = usePortfolio(address);
+    const { data: portfolio, loading } = usePortfolioToken();
 
     const { openSell, openBuy } = useSwapModal();
 
@@ -42,18 +45,18 @@ const Tokens: React.FC<Props> = ({ address }) => {
                 {
                     portfolio && (
                         <p>
-                            ${portfolio.totalUsd.toLocaleString(undefined, { maximumFractionDigits: 2, minimumFractionDigits: 2 })}
+                            ${portfolio.totalUsdPrice.toLocaleString(undefined, { maximumFractionDigits: 2, minimumFractionDigits: 2 })}
                         </p>
                     )
                 }
             </div>
             <Card className="p-2">
                 {
-                    isLoading ? (
+                    loading ? (
                         <Skeleton className="h-96 w-full" />
                     ) : (
                         portfolio ? (
-                            portfolio.items.length > 0 ? (
+                            portfolio.amount.length > 0 ? (
                                 <Table>
                                     <TableHeader>
                                         <TableRow>
@@ -66,36 +69,36 @@ const Tokens: React.FC<Props> = ({ address }) => {
                                     </TableHeader>
                                     <TableBody className="max-h-96 overflow-y-auto">
                                         {
-                                            portfolio.items.filter((token) => Number(token.balance) > 0 && token.logoURI && token.symbol && token.priceUsd && token.valueUsd).map((token) => (
-                                                <TableRow key={token.address}>
+                                            portfolio.amount.filter((token) => Number(token.quantity) > 0 && token.logo && token.name && token.price && token.usdPrice).map((token) => (
+                                                <TableRow key={token.unit}>
                                                     <TableCell>
                                                         <div className="font-medium flex gap-2 items-center">
                                                             <img
-                                                                src={token.logoURI}
+                                                                src={token.logo}
                                                                 alt={token.name}
                                                                 className="w-4 h-4 rounded-full"
                                                             />
                                                             <p>
-                                                                {token.symbol}
+                                                                {token.name}
                                                             </p>
                                                         </div>
                                                     </TableCell>
-                                                    <TableCell>
-                                                        {new Decimal(token.balance).div(10 ** token.decimals).toNumber().toLocaleString(undefined, { maximumFractionDigits: 2, minimumFractionDigits: 2 })}
+                                                    <TableCell className="text-center">
+                                                        {Number(token.quantity).toLocaleString(undefined, { maximumFractionDigits: 2, minimumFractionDigits: 2 })}
                                                     </TableCell>
-                                                    <TableCell>
-                                                        ${token.priceUsd.toLocaleString(undefined, { maximumFractionDigits: 2, minimumFractionDigits: 2 })}
+                                                    <TableCell className="text-center">
+                                                        ${token.usdPrice.toLocaleString(undefined, { maximumFractionDigits: 5, minimumFractionDigits: 2 })}
                                                     </TableCell>
-                                                    <TableCell>
-                                                        ${token.valueUsd.toLocaleString(undefined, { maximumFractionDigits: 2, minimumFractionDigits: 2 })}
+                                                    <TableCell className="text-center">
+                                                        ${token.usdTotalPrice.toLocaleString(undefined, { maximumFractionDigits: 2, minimumFractionDigits: 2 })}
                                                     </TableCell>
                                                     <TableCell className="flex items-center gap-2 justify-end">
-                                                        <Button variant="outline" onClick={() => openSell(token.address === 'So11111111111111111111111111111111111111111' ? 'So11111111111111111111111111111111111111112' : token.address)}>
+                                                        <GradientBorderButton  onClick={() => openSell(token.unit)}>
                                                             Sell
-                                                        </Button>
-                                                        <Button variant="brand" onClick={() => openBuy(token.address === 'So11111111111111111111111111111111111111111' ? 'So11111111111111111111111111111111111111112' : token.address)}>
+                                                        </GradientBorderButton>
+                                                        <GradientButton onClick={() => openBuy(token.unit)}>
                                                             Buy
-                                                        </Button>
+                                                        </GradientButton>
                                                     </TableCell>
                                                 </TableRow>
                                             ))

@@ -2,7 +2,7 @@ import React from 'react'
 
 import Header from './_components/header';
 import Tokens from './_components/tokens';
-import LiquidityPools from './_components/liquidity-pools';
+// import LiquidityPools from './_components/liquidity-pools';
 import Transactions from './_components/transactions';
 
 import { SwapModalProvider } from './_contexts/use-swap-modal';
@@ -20,9 +20,9 @@ const Portfolio = async ({ params }: { params: Promise<{ address: string }> }) =
                 <Tokens
                     address={address}
                 />
-                <LiquidityPools
+                {/* <LiquidityPools
                     address={address}
-                />
+                /> */}
                 <Transactions
                     address={address}
                 />
