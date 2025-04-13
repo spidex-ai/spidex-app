@@ -28,30 +28,11 @@ export const POST = async (req: NextRequest) => {
   let model: LanguageModelV1 | undefined = undefined;
 
   if (modelName === Models.OpenAI) {
-    model = openai("gpt-4o-mini");
-    MAX_TOKENS = 128000;
+    const selected = pickRandomOpenAiModel();
+    console.log("🔁 Selected GPT-4 model:", selected);
+    model = openai(selected);
+    MAX_TOKENS = modelTokenLimits[selected];
   }
-
-  if (modelName === Models.Anthropic) {
-    model = anthropic("claude-3-5-sonnet-latest");
-    MAX_TOKENS = 190000;
-  }
-
-  if (modelName === Models.XAI) {
-    model = xai("grok-beta");
-    MAX_TOKENS = 131072;
-  }
-
-  if (modelName === Models.Gemini) {
-    model = google("gemini-2.0-flash-exp");
-    MAX_TOKENS = 1048576;
-  }
-
-  if (modelName === Models.Deepseek) {
-    model = deepseek("deepseek-chat") as LanguageModelV1;
-    MAX_TOKENS = 64000;
-  }
-
   if (!model || !MAX_TOKENS) {
     throw new Error("Invalid model");
   }
@@ -100,3 +81,18 @@ export const POST = async (req: NextRequest) => {
 
   return streamTextResult.toDataStreamResponse();
 };
+
+const openAiModels = ["gpt-4-turbo", "gpt-4o", "gpt-4o-mini"] as const;
+
+type OpenAiModelName = (typeof openAiModels)[number];
+
+export const modelTokenLimits: Record<OpenAiModelName, number> = {
+  "gpt-4-turbo": 128000,
+  "gpt-4o": 128000,
+  "gpt-4o-mini": 128000,
+};
+
+export function pickRandomOpenAiModel(): OpenAiModelName {
+  const index = Math.floor(Math.random() * openAiModels.length);
+  return openAiModels[index];
+}
