@@ -148,7 +148,7 @@ const TokenDashboardTabs: React.FC<Props> = ({ address, data }) => {
                     <MarketStats tokenId={data?.token_id} tokenName={data?.ticker} />
                 </TabsContent>
                 <TabsContent value="holders" className="h-full m-0">
-                    <TradeHistory address={address} />
+                    <TradeHistory tokenId={data?.token_id || ''} ticker={data?.ticker || ''} />
                 </TabsContent>
                 <TabsContent value="traders" className="h-full m-0">
                     <TopTraders address={address} />

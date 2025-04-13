@@ -1,6 +1,6 @@
 "use client"
 
-import useSWR from "swr";
+
 
 import type { TopTraderByToken } from "@/services/birdeye/types";
 import { useSpidexCoreContext } from "@/app/_contexts/spidex-core";
