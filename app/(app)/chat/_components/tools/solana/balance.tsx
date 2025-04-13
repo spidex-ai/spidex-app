@@ -4,7 +4,8 @@ import ToolCard from "../tool-card";
 // import { TokenBalance } from "../utils";
 
 import type { ToolInvocation } from "ai";
-import type { TransactionResultType } from "@/ai";
+import type { CardanoBalanceResultType, TransactionResultType } from "@/ai";
+import Transaction, { ListTransaction } from "../utils/transaction";
 // import Transaction from '../utils/transaction';
 
 interface Props {
@@ -13,25 +14,21 @@ interface Props {
 }
 
 const GetBalance: React.FC<Props> = ({ tool, prevToolAgent }) => {
+
   return (
     <ToolCard
       tool={tool}
-      loadingText={`Getting ${tool.args.tokenAddress || "SOL"} Balance...`}
+      loadingText={`Getting ${tool.args.tokenAddress || "ADA"} Balance...`}
       result={{
-        heading: (result: TransactionResultType) =>
+        heading: (result: CardanoBalanceResultType) =>
           result.body?.walletTx
             ? `Found ${result.body.walletTx.length} transactions`
             : `No transactions found`,
-        body: (result: TransactionResultType) =>
+        body: (result: CardanoBalanceResultType) =>
           result.body
-            ? "hello"
-            : //TODO : Show transaction
-              // <Transaction
-              //     txHash={result.body.}
-              //     txIndex={result.body.balance}
-              //     blockHeight={result.body.}
-              //     blockTime={result.body.name}
-              // />
+            ? 
+            <ListTransaction data={result.body.walletTx || []} />
+            : 
               "No balance found",
       }}
       prevToolAgent={prevToolAgent}
