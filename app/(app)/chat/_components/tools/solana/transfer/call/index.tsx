@@ -102,12 +102,12 @@ const TransferCall: React.FC<Props> = ({ args, toolCallId }) => {
                         <Button
                             variant="brand"
                             onClick={onTransfer}
-                            disabled={isTransferring || balanceLoading || !balance || !token || !amount || Number(amount) <= 0 || !toAddress || Number(amount) > balance}
+                            disabled={isTransferring || balanceLoading || !balance || !token || !amount || Number(amount) <= 0 || !toAddress || Number(amount as any) > Number(balance)}
                         >
                             {
                                 balanceLoading 
                                     ? "Loading..." 
-                                    : Number(amount) > balance
+                                    : Number(amount as any) > Number(balance)
                                         ? "Insufficient funds"
                                         : isTransferring 
                                             ? "Transferring..." 

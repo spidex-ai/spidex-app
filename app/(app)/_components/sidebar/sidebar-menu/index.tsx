@@ -10,7 +10,7 @@ import AccountButton from './account-button';
 import SavedTokensGroup from './saved-tokens-group';
 import Points from './points';
 import RefferalProgram from './referral-program';
-import Portfolio from './portfolio';
+import PortfolioWapper from './portfolio-wapper';
 
 const SidebarMenu: React.FC = () => {
     const { open } = useSidebar();
@@ -25,7 +25,7 @@ const SidebarMenu: React.FC = () => {
             {/* <PortfolioButton /> */}
             <Points />
             <RefferalProgram />
-            <Portfolio />
+            <PortfolioWapper />
         </SidebarMenuUI>
     )
 }

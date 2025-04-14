@@ -1,3 +1,4 @@
+'use client'
 import Chat from "./_components/chat";
 
 import NotLoggedInAlert from "./_components/not-logged-in-alert";

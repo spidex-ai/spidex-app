@@ -29,7 +29,7 @@ interface Props {
 const Tokens: React.FC<Props> = ({ address }) => {
 console.log("🚀 ~ address:", address)
 
-    const { data: portfolio, loading } = usePortfolioToken();
+    const { data: portfolio, loading } = usePortfolioToken(address);
 
     const { openSell, openBuy } = useSwapModal();
 

@@ -127,6 +127,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
 
         setLoading(false);
         if (!response.ok) {
+          return null;
           throw new Error(`API error: ${response.status}`);
         }
 

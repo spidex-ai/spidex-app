@@ -34,7 +34,7 @@ const TokenBalance: React.FC<Props> = ({ address, tokenAddress, tokenSymbol, set
                         <Button
                             variant="outline"
                             className="text-[10px] px-1 py-0.5 h-fit w-fit"
-                            onClick={() => setAmount((balance / 2).toString())}
+                            onClick={() => setAmount((Number(balance) / 2).toString())}
                         >
                             Half
                         </Button>

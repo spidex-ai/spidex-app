@@ -22,7 +22,7 @@ import { cn } from '@/lib/utils';
 // import { Token } from '@/db/types';
 import { SearchTokenInfo } from '@/services/dexhunter/types';
 import { getLogoUrl } from '../utils/logo';
-
+import Image from 'next/image';
 interface Props {
     value: SearchTokenInfo | null,
     onChange: (token: SearchTokenInfo | null) => void,
@@ -50,12 +50,14 @@ const TokenSelect: React.FC<Props> = ({ value, onChange, priorityTokens = [] }) 
                     {
                         value ? (
                             <>{
-                                value.logo && (
+                                value.logo ? (
                                     <img 
                                         src={getLogoUrl(value.logo)}
                                         alt={value.token_ascii} 
                                         className="w-6 h-6 rounded-full" 
                                     />
+                                ) : (
+                                    <Image src="/icons/volume-color.svg" alt="token-placeholder" width={24} height={24} className="w-6 h-6 rounded-full" />
                                 )
                             }</>
                         ) : (

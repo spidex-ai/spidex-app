@@ -26,7 +26,7 @@ interface Props {
 const Transactions: React.FC<Props> = ({ address }) => {
     console.log('address: ', address);
 
-    const { data: transactions, loading } = usePortfolioTransaction();
+    const { data: transactions, loading } = usePortfolioTransaction(address);
     return (
         <div className="flex flex-col gap-4">
             <div className="flex items-center gap-2">
@@ -40,7 +40,7 @@ const Transactions: React.FC<Props> = ({ address }) => {
                             className="h-96 w-full"
                         />
                     ) : (
-                        transactions.length > 0 ? (
+                        transactions?.length > 0 ? (
                             <Table>
                                 <TableHeader> 
                                     <TableRow>

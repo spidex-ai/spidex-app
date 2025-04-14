@@ -36,7 +36,7 @@ export interface SwapWrapperProps {
 }
 
 const adaTokenDetail: CardanoTokenDetail = {
-    token_id: "",
+    token_id: " ",
     token_ascii: "ADA",
     ticker: "ADA",
     is_verified: true,
@@ -60,12 +60,12 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
     onError, 
     onCancel 
 }) => {
-
+    console.log('initialInputTokeninitialInputTokeninitialInputTokeninitialInputTokeninitialInputToken:::', initialInputToken);
     const { getSwapPoolStats, estimateSwap, buildSwapRequest, submitSwapRequest } = useSpidexCoreContext();
     const {enabledWallet, unusedAddresses} = useCardano();
 
     const [inputAmount, setInputAmount] = useState<string>(initialInputAmount || "");
-    const [inputToken, setInputToken] = useState<CardanoTokenDetail | null>(initialInputToken);
+    const [inputToken, setInputToken] = useState<CardanoTokenDetail | null>(initialInputToken || adaTokenDetail);
 
     const [outputAmount, setOutputAmount] = useState<string>("");
     const [outputToken, setOutputToken] = useState<CardanoTokenDetail | null>(initialOutputToken);
@@ -77,7 +77,8 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
 
     const [isNotPool, setIsNotPool] = useState<boolean>(false);
 
-    const { balance: inputBalance, isLoading: inputBalanceLoading } = useTokenBalance(inputToken?.unit || "", unusedAddresses?.[0].toString() || "");
+    const { balance: inputBalance, isLoading: inputBalanceLoading } = useTokenBalance(unusedAddresses?.[0]?.toString() || "", inputToken?.unit || "");
+    console.log("🚀 ~ unusedAddresses:", unusedAddresses)
 
     const onChangeInputOutput = () => {
         const tempInputToken = inputToken;
@@ -96,8 +97,8 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
             const api = await (window as any).cardano[enabledWallet as any].enable();
             const payload: SwapPayload = {
                 buyer_address: unusedAddresses?.[0].toString() || "",
-                token_in: inputToken?.token_id || "",
-                token_out: outputToken?.token_id || "",
+                token_in: inputToken?.token_id || " ",
+                token_out: outputToken?.token_id || " ",
                 slippage: 1,
                 amount_in: Number(inputAmount),
                 tx_optimization: false,
@@ -222,7 +223,7 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
                         setIsNotPool(false);
                         setInputToken(token);
                     }}
-                    address={unusedAddresses?.[0].toString() || ""}
+                    address={unusedAddresses?.[0]?.toString() || ""}
                 />
                 <Button 
                     variant="ghost" 
@@ -241,7 +242,7 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
                         setIsNotPool(false);
                         setOutputToken(token);
                     }}
-                    address={unusedAddresses?.[0].toString() || ""}
+                    address={unusedAddresses?.[0]?.toString() || ""}
                 />
             </div>
             <div className='text-sm text-red-500'>{isNotPool ? "No pool found" : null}</div>
@@ -249,7 +250,7 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
             <button className='hidden' onClick={testSwap}>TestSwap</button>
             <div className="flex flex-col gap-2">
                 {
-                    unusedAddresses?.[0].toString() ? (
+                    unusedAddresses?.[0]?.toString() ? (
                         <GradientButton 
                             variant="brand" 
                             className="w-full"
