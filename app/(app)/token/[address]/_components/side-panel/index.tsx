@@ -3,7 +3,7 @@ import React from 'react'
 
 import { ArrowLeftRight, MessageSquare } from 'lucide-react';
 
-import { Tabs, TabsList, TabsContent, TabsTriggerGradient } from '@/components/ui';
+import { Tabs, TabsList, TabsContent, TabsTriggerGradient, Skeleton } from '@/components/ui';
 
 import Swap from '@/app/_components/swap';
 
@@ -13,44 +13,29 @@ import { ChatProvider } from '../../_contexts';
 
 import type { TokenChatData } from '@/types';
 
-import { useTokenDetail } from "@/hooks";
 import { CardanoTokenDetail } from '@/services/dexhunter/types';
+import { adaTokenDetail } from '@/app/(app)/chat/_components/tools/utils/swap/swap';
 
 interface Props {
-    address: string;
     data: CardanoTokenDetail | null;
+    isLoadingTokenDetail: boolean;
 }
 
-const SidePanel: React.FC<Props> =  ({ address, data: tokenDetail }) => {
-
-    const {data} = useTokenDetail(address);
+const SidePanel: React.FC<Props> =  ({ data: tokenDetail, isLoadingTokenDetail }) => {
 
     console.log('================>>>>>>>>>>>>>tokenDetail', tokenDetail);
+
+    if(isLoadingTokenDetail) {
+        return <Skeleton className="h-[100px] w-full" />
+    }
     
-
-
-
-    // If getToken fails, use tokenMetadata to create a token object
-    // const tokenData = {
-    //     id: data?.token_id,
-    //     name: data?.token_ascii,
-    //     symbol: data?.ticker,
-    //     decimals: data?.decimals,
-    //     logoURI: data?.logo,
-    //     extensions: {},
-    //     tags: [],
-    //     freezeAuthority: null,
-    //     mintAuthority: null,
-    //     permanentDelegate: null
-    // } as Token;
-
     const tokenChatData: TokenChatData = {
-        address: data?.token_id ?? '',
-        name: data?.token_ascii ?? '',
-        symbol: data?.ticker ?? '',
-        decimals: data?.decimals ?? 0,
+        address: tokenDetail?.token_id ?? '',
+        name: tokenDetail?.token_ascii ?? '',
+        symbol: tokenDetail?.ticker ?? '',
+        decimals: tokenDetail?.decimals ?? 0,
         extensions: {},
-        logoURI: data?.logo ?? '',
+        logoURI: tokenDetail?.logo ?? '',
         supply: 10000,
         circulatingSupply: 10000
     }
@@ -81,9 +66,8 @@ const SidePanel: React.FC<Props> =  ({ address, data: tokenDetail }) => {
                 </TabsContent>
                 <TabsContent value="trade" className="h-full m-0 p-2">
                     <Swap 
-                        initialInputToken={null}
-                        initialOutputToken={null}
-                        // initialOutputToken={tokenData}
+                        initialInputToken={adaTokenDetail}
+                        initialOutputToken={tokenDetail}
                         inputLabel="Sell"
                         outputLabel="Buy"
                         className="w-full"

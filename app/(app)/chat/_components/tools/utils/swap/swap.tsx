@@ -35,7 +35,7 @@ export interface SwapWrapperProps {
     onCancel?: () => void,
 }
 
-const adaTokenDetail: CardanoTokenDetail = {
+export const adaTokenDetail: CardanoTokenDetail = {
     token_id: " ",
     token_ascii: "ADA",
     ticker: "ADA",
