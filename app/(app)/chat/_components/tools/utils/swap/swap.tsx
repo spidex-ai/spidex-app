@@ -35,8 +35,21 @@ export interface SwapWrapperProps {
     onCancel?: () => void,
 }
 
+const adaTokenDetail: CardanoTokenDetail = {
+    token_id: "",
+    token_ascii: "ADA",
+    ticker: "ADA",
+    is_verified: true,
+    token_policy: "ADA",
+    token_decimals: 6,
+    supply: 0,
+    creation_date: "",
+    price: 0,
+    logo: "",
+}
+
 const SwapWrapper: React.FC<SwapWrapperProps> = ({ 
-    initialInputToken, 
+    initialInputToken = adaTokenDetail, 
     initialOutputToken, 
     inputLabel, 
     outputLabel, 
