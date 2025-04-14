@@ -6,18 +6,17 @@ import { Skeleton } from "@/components/ui";
 
 import Address from "@/app/_components/address";
 
-// import Links from "./token-links";
 
-import { useTokenDetail } from "@/hooks";
 import SaveToken from "@/app/(app)/_components/save-token";
 import { getLogoUrl } from "@/app/utils/logo";
+import { CardanoTokenDetail } from "@/services/dexhunter/types";
 
 interface Props {
-  address: string;
+    data: CardanoTokenDetail | null;
+    isLoading: boolean;
 }
 
-const Header: React.FC<Props> = ({ address }) => {
-  const { isLoading, data } = useTokenDetail(address);
+const Header: React.FC<Props> = ({ data, isLoading }) => {
 
 
   if (isLoading) {
@@ -44,11 +43,6 @@ const Header: React.FC<Props> = ({ address }) => {
         </div>
         <SaveToken address={data?.token_id ?? ""} />
       </div>
-      {/* {
-                tokenOverview.extensions && (
-                    <Links extensions={tokenOverview.extensions} />
-                )
-            } */}
     </div>
   );
 };

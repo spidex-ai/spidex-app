@@ -13,7 +13,6 @@ import { usePrice } from '@/hooks/queries/price'
 
 import { cn } from '@/lib/utils'
 
-// import type { Token } from '@/db/types'
 import { SearchTokenInfo } from '@/services/dexhunter/types'
 
 interface Props {
@@ -91,7 +90,8 @@ const TokenInput: React.FC<Props> = ({ label, amount, onChange, token, onChangeT
     )
 }
 
-export const TokenInputValue = ({ amount, token }: { amount: string, token: SearchTokenInfo }) => {
+export const TokenInputValue = ({ amount, token }: { amount: string, token: SearchTokenInfo }) => { 
+    return null;
     const { data: price, isLoading: isPriceLoading } = usePrice(token.token_id);
     
     if(isPriceLoading) return <Skeleton className="w-16 h-4" />
@@ -100,7 +100,7 @@ export const TokenInputValue = ({ amount, token }: { amount: string, token: Sear
 
     return (
         <p className="text-[10px] text-neutral-600 dark:text-neutral-400">
-            ${(price.value * Number(amount)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            ${((price as any).value * Number(amount)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
         </p>
     )
 }

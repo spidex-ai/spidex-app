@@ -76,22 +76,20 @@ const WINDOWS = [
 ];
 
 interface Props {
-  mint: string;
   data: CardanoTokenDetail | null;
+  isLoadingTokenDetail: boolean;
 }
 
-const TokenChart: React.FC<Props> = ({ mint, data: tokenDeetail }) => {
+const TokenChart: React.FC<Props> = ({ data: tokenDetail, isLoadingTokenDetail }) => {
   const [timeframe, setTimeframe] = useState<CandleStickInterval>(
     CandleStickInterval.FOUR_HOURS
   );
   const [numDays, setNumDays] = useState<number>(180);
   const { data, isLoading } = usePriceChartTaptools(
-    tokenDeetail?.unit ?? "",
+    tokenDetail?.unit ?? "",
     timeframe,
     numDays
   );
-  console.log("data:::", data);
-  console.log("mint:::", mint);
 
   const price = data?.length > 0 ? data[data.length - 1].close : 0;
   const open = data?.length > 0 ? data[0].open : 0;
@@ -100,7 +98,7 @@ const TokenChart: React.FC<Props> = ({ mint, data: tokenDeetail }) => {
   return (
     <div className="flex flex-col h-full w-full">
       <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-1 bg-neutral-100 dark:bg-bg-secondary p-2">
-        {isLoading ? (
+        {isLoadingTokenDetail || isLoading ? (
           <Skeleton className="h-4 w-24" />
         ) : (
           <>

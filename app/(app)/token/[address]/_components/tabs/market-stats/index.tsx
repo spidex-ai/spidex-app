@@ -11,13 +11,14 @@ import { useTokenStats } from "@/hooks";
 interface Props {
   tokenId: string | undefined;
   tokenName: string | undefined;
+  isLoadingTokenDetail: boolean;
 }
 
-const MarketStats: React.FC<Props> = ({ tokenId, tokenName }) => {
+const MarketStats: React.FC<Props> = ({ tokenId, tokenName, isLoadingTokenDetail }) => {
   const { data: tokenStats, isLoading } = useTokenStats(tokenId);
 
-  if (isLoading) {
-    return <Skeleton className="h-full w-full" />;
+  if (isLoading || isLoadingTokenDetail) {
+    return <Skeleton className="h-[100px] w-full" />;
   }
 
   return (

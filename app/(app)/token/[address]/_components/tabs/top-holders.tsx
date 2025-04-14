@@ -25,7 +25,7 @@ const TopHolders: React.FC<Props> = ({ tokenId }) => {
     const { data: topHolders, loading } = useTopHolders(tokenId);
 
     if(loading) {
-        return <Skeleton className="h-full w-full" />
+        return <Skeleton className="h-[100px] w-full" />
     }
     // return <div>Nodata available</div>
 

@@ -19,10 +19,10 @@ import TradeHistory from './trade-history'
 interface Props {
     address: string;
     data: CardanoTokenDetail | null;
-    // tokenOverview: Awaited<ReturnType<typeof getTokenOverview>>;
+    isLoadingTokenDetail: boolean;
 }
 
-const TokenDashboardTabs: React.FC<Props> = ({ address, data }) => {
+const TokenDashboardTabs: React.FC<Props> = ({ address, data, isLoadingTokenDetail }) => {
     const [activeTab, setActiveTab] = React.useState('market-stats')
     const tabsRef = useRef<{ [key: string]: HTMLButtonElement }>({})
 
@@ -33,16 +33,12 @@ const TokenDashboardTabs: React.FC<Props> = ({ address, data }) => {
         }
     }
 
-    
-
     useEffect(() => {
         scrollToTab(activeTab)
     }, [activeTab])
 
     return (
         <div className='p-2'>
-        
-          
            <Tabs 
             className="h-full flex flex-col items-start w-full max-w-full" 
             defaultValue="market-stats"
@@ -95,57 +91,11 @@ const TokenDashboardTabs: React.FC<Props> = ({ address, data }) => {
                  
                     Holders
                 </TabsTrigger>
-                {/* <TabsTrigger 
-                    value="markets"
-                    ref={(el) => {
-                        if (el) tabsRef.current['markets'] = el
-                    }}
-                    className="min-w-fit whitespace-nowrap data-[state=active]:bg-white dark:data-[state=active]:bg-neutral-800"
-                >
-                  
-                    Markets
-                </TabsTrigger>
-                <TabsTrigger 
-                    value="users-over-time"
-                    ref={(el) => {
-                        if (el) tabsRef.current['users-over-time'] = el
-                    }}
-                    className="min-w-fit whitespace-nowrap data-[state=active]:bg-white dark:data-[state=active]:bg-neutral-800"
-                >
-              
-                    Active Wallets
-                </TabsTrigger> */}
-                {/* {
-                    tokenOverview.extensions?.twitter && (
-                        <>
-                            <TabsTrigger 
-                                value="tweets"
-                                ref={(el) => {
-                                    if (el) tabsRef.current['tweets'] = el
-                                }}
-                                className="min-w-fit whitespace-nowrap data-[state=active]:bg-white dark:data-[state=active]:bg-neutral-800"
-                            >
-                                <FaXTwitter className="w-4 h-4" />
-                                Tweets
-                            </TabsTrigger>
-                            <TabsTrigger 
-                                value="mentions"
-                                ref={(el) => {
-                                    if (el) tabsRef.current['mentions'] = el
-                                }}
-                                className="min-w-fit whitespace-nowrap data-[state=active]:bg-white dark:data-[state=active]:bg-neutral-800"
-                            >
-                                <FaAt className="w-4 h-4" />
-                                Mentions
-                            </TabsTrigger>
-                        </>
-                    )
-                } */}
             </DraggableTabsList>
             </div>
             <div className="flex-1 h-0 overflow-y-auto w-full no-scrollbar mt-2">
                 <TabsContent value="market-stats" className="h-full m-0 p-2">
-                    <MarketStats tokenId={data?.token_id} tokenName={data?.ticker} />
+                    <MarketStats tokenId={data?.token_id} tokenName={data?.ticker} isLoadingTokenDetail={isLoadingTokenDetail} />
                 </TabsContent>
                 <TabsContent value="holders" className="h-full m-0">
                     <TradeHistory tokenId={data?.token_id || ''} ticker={data?.ticker || ''} />
@@ -156,24 +106,6 @@ const TokenDashboardTabs: React.FC<Props> = ({ address, data }) => {
                 <TabsContent value="bubble" className="h-full m-0 p-2">
                     <TopHolders tokenId={data?.token_id || ''} />
                 </TabsContent>
-                {/* <TabsContent value="markets" className="h-full m-0">
-                    <TokenMarkets address={address} />
-                </TabsContent>
-                <TabsContent value="users-over-time" className="h-full m-0 p-2">
-                    <TokenUsersOverTime mint={address} />
-                </TabsContent> */}
-                {/* {
-                    tokenOverview.extensions?.twitter && (
-                        <>
-                            <TabsContent value="tweets" className="h-full m-0 p-2">
-                                <AccountTweets username={tokenOverview.extensions.twitter.split('/').pop()!} />
-                            </TabsContent>
-                            <TabsContent value="mentions" className="h-full m-0 p-2">
-                                <AccountMentions username={tokenOverview.extensions.twitter.split('/').pop()!} />
-                            </TabsContent>
-                        </>
-                    )
-                } */}
             </div>
         </Tabs>
       

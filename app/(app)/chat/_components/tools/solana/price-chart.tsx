@@ -60,7 +60,7 @@ const PriceChartBody = ({ tokenAddress }: { tokenAddress: string }) => {
                 )
             }
             <Card className="overflow-hidden">
-                <TokenChart mint={tokenAddress} data={null} />
+                <TokenChart data={null} isLoadingTokenDetail={false} />
             </Card>
         </div>
     )

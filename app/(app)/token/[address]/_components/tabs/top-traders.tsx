@@ -22,7 +22,7 @@ const TopTokenTraders: React.FC<Props> = ({ address }) => {
     const { data: topTraders, loading } = useTopTraders(address);
 
     if(loading) {
-        return <Skeleton className="h-full w-full" />
+        return <Skeleton className="h-[100px] w-full" />
     }
 
     return <div>No data available</div>

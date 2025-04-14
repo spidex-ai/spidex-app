@@ -22,7 +22,7 @@ const TradeHistory: React.FC<Props> = ({ tokenId, ticker }) => {
     const { data, loading } = useTradeHistory(tokenId);
 
     if(loading) {
-        return <Skeleton className="h-full w-full" />
+        return <Skeleton className="h-[100px] w-full" />
     }
 
     return (

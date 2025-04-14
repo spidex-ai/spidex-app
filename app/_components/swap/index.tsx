@@ -1,30 +1,28 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 
 import { ChevronDown } from 'lucide-react';
 
-import { VersionedTransaction } from '@solana/web3.js';
-
-import { Button, Separator } from '@/components/ui';
+import { Button, GradientButton, Separator } from '@/components/ui';
 
 import LogInButton from '@/app/(app)/_components/log-in-button';
 
 import TokenInput from './token-input';
 
-import { useSendTransaction, useTokenBalance } from '@/hooks';
-
-import { getSwapObj } from '@/services/jupiter';
+import { useTokenBalance } from '@/hooks';
 
 import { cn } from '@/lib/utils';
 
 import type { QuoteResponse } from '@jup-ag/api';
 
-import { SearchTokenInfo } from '@/services/dexhunter/types';
+import { CardanoTokenDetail, EsitmateSwapPayload, SwapPayload } from '@/services/dexhunter/types';
+import { useCardano } from '@cardano-foundation/cardano-connect-with-wallet';
+import { useSpidexCoreContext } from '@/app/_contexts';
 
 interface Props {
-    initialInputToken: SearchTokenInfo | null,    
-    initialOutputToken: SearchTokenInfo | null,
+    initialInputToken: CardanoTokenDetail | null,    
+    initialOutputToken: CardanoTokenDetail | null,
     inputLabel: string,
     outputLabel: string,
     initialInputAmount?: string,
@@ -51,17 +49,22 @@ const Swap: React.FC<Props> = ({
     outputLabel,
 }) => {
 
-    const [inputAmount, setInputAmount] = useState<string>(initialInputAmount || "");
-    const [inputToken, setInputToken] = useState<SearchTokenInfo | null>(initialInputToken);
-    const [outputAmount, setOutputAmount] = useState<string>("");
-    const [outputToken, setOutputToken] = useState<SearchTokenInfo | null>(initialOutputToken);
+    const { getSwapPoolStats, estimateSwap, buildSwapRequest, submitSwapRequest } = useSpidexCoreContext();
+    const {enabledWallet, unusedAddresses} = useCardano();
 
-    const [isQuoteLoading] = useState<boolean>(false);
-    const [quoteResponse] = useState<QuoteResponse | null>(null);
+    const [inputAmount, setInputAmount] = useState<string>(initialInputAmount || "");
+    const [inputToken, setInputToken] = useState<CardanoTokenDetail | null>(initialInputToken);
+    const [outputAmount, setOutputAmount] = useState<string>("");
+    const [outputToken, setOutputToken] = useState<CardanoTokenDetail | null>(initialOutputToken);
+
+    const [isQuoteLoading, setIsQuoteLoading] = useState<boolean>(false);
+    const [quoteResponse, setQuoteResponse] = useState<QuoteResponse | null>(null);
     const [isSwapping, setIsSwapping] = useState<boolean>(false);
 
-    const { sendTransaction, wallet } = useSendTransaction();
-    const { balance: inputBalance, isLoading: inputBalanceLoading } = useTokenBalance(inputToken?.token_id || "", wallet || "");
+    const [isNotPool, setIsNotPool] = useState<boolean>(false);
+
+
+    const { balance: inputBalance, isLoading: inputBalanceLoading } = useTokenBalance(inputToken?.token_id || "", unusedAddresses?.[0]?.toString() || "");
 
     const onChangeInputOutput = () => {
         const tempInputToken = inputToken;
@@ -73,14 +76,30 @@ const Swap: React.FC<Props> = ({
     }
 
     const onSwap = async () => {
-        if(!wallet || !quoteResponse) return;
+        if(!unusedAddresses?.[0].toString() || !quoteResponse) return;
+        if (typeof window === 'undefined') return;
         setIsSwapping(true);
         try {
-            const { swapTransaction} = await getSwapObj(wallet, quoteResponse);
-            const swapTransactionBuf = Buffer.from(swapTransaction, "base64");
-            const transaction = VersionedTransaction.deserialize(swapTransactionBuf);
-            const txHash: any = await sendTransaction(transaction);
-            onSuccess?.(txHash);
+            const api = await (window as any).cardano[enabledWallet as any].enable();
+            const payload: SwapPayload = {
+                buyer_address: unusedAddresses?.[0].toString() || "",
+                token_in: inputToken?.token_id || " ",
+                token_out: outputToken?.token_id || " ",
+                slippage: 1,
+                amount_in: Number(inputAmount),
+                tx_optimization: false,
+                blacklisted_dexes: [],
+            }
+
+            const buildSwap = await buildSwapRequest(payload);
+            const signatures = await api?.signTx(buildSwap?.cbor, true); 
+            const submitSwap = await submitSwapRequest({
+                txCbor: buildSwap.cbor,
+                signatures: signatures,
+            });
+
+            const submitTx = await api?.submitTx(submitSwap?.cbor);
+            onSuccess?.(submitTx);
         } catch (error) {
             onError?.(error instanceof Error ? error.message : "Unknown error");
         } finally {
@@ -88,24 +107,59 @@ const Swap: React.FC<Props> = ({
         }
     }
 
+    const getQuoteCardano = async (inputUnit: string, outputUnit: string, amount: number) => {
+        const swapEstPayload: EsitmateSwapPayload = {
+            tokenIn: inputUnit,
+            tokenOut: outputUnit,
+            amountIn: amount,
+            slippage: 1,
+            blacklistedDexes: [],
+        }
+        const swapEstResponse = await estimateSwap(swapEstPayload);
+        return swapEstResponse?.total_output;
+    }
+
+
+    const checkPool = useCallback(async () => {
+        try {
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            const poolStats = await getSwapPoolStats(inputToken?.token_id || "", outputToken?.token_id || "");
+            if (poolStats) {
+                setIsNotPool(false);
+            } else {
+                setIsNotPool(true);
+            }
+        } catch (error) {
+            console.error('error:::', error);
+            setIsNotPool(true);
+        }
+    }, [inputToken, outputToken]);
+
+    const fetchQuoteAndUpdate = async () => {
+        setIsQuoteLoading(true);
+        setOutputAmount("");
+    
+        const quote = await getQuoteCardano(inputToken?.unit || inputToken?.token_id || "", outputToken?.unit || outputToken?.token_id || "", Number(inputAmount));
+        setQuoteResponse(quote);
+        setOutputAmount(quote);
+        setIsQuoteLoading(false);
+    }
+
     useEffect(() => {
-        if (inputToken && outputToken) {
-            // const fetchQuoteAndUpdate = async () => {
-            //     setIsQuoteLoading(true);
-            //     setOutputAmount("");
-            //     const quote = await getQuote(inputToken.id, outputToken.id, parseFloat(inputAmount) * (10 ** inputToken.decimals));
-            //     setQuoteResponse(quote);
-            //     setOutputAmount(new Decimal(quote.outAmount).div(new Decimal(10).pow(outputToken.decimals)).toString());
-            //     setIsQuoteLoading(false);
-            // }
+        if (inputToken || outputToken) {
+            checkPool();
+        }
+    }, [inputToken, outputToken]);
 
+    useEffect(() => {
+        if (inputToken || outputToken) {
 
-            // if (inputAmount && Number(inputAmount) > 0) {
-            //     fetchQuoteAndUpdate();
-            // } else {
-            //     setQuoteResponse(null);
-            //     setOutputAmount("");
-            // }
+            if (inputAmount && Number(inputAmount) > 0) {
+                fetchQuoteAndUpdate();
+            } else {
+                setQuoteResponse(null);
+                setOutputAmount("");
+            }
         }
     }, [inputToken, outputToken, inputAmount]);
 
@@ -117,8 +171,12 @@ const Swap: React.FC<Props> = ({
                     amount={inputAmount}
                     onChange={setInputAmount}
                     token={inputToken}
-                    onChangeToken={setInputToken}
-                    address={wallet}
+                    onChangeToken={(token) => {
+                        console.log('api:token:::', token);
+                        setIsNotPool(false);
+                        setInputToken(token);
+                    }}
+                    address={unusedAddresses?.[0]?.toString()}
                 />
                 <Button 
                     variant="ghost" 
@@ -132,19 +190,24 @@ const Swap: React.FC<Props> = ({
                     label={outputLabel}
                     amount={outputAmount}
                     token={outputToken}
-                    onChangeToken={setOutputToken}
-                    address={wallet}
+                    onChangeToken={(token) => {
+                        console.log('api:token:::', token);
+                        setIsNotPool(false);
+                        setOutputToken(token);
+                    }}
+                    address={unusedAddresses?.[0]?.toString()}
                 />
             </div>
+            <div className='text-sm text-red-500'>{isNotPool ? "No pool found" : null}</div>
             <Separator />
             <div className="flex flex-col gap-2">
                 {
-                    wallet ? (
-                        <Button 
+                    unusedAddresses?.[0]?.toString() ? (
+                        <GradientButton 
                             variant="brand" 
                             className="w-full"
                             onClick={onSwap}
-                            disabled={isSwapping || isQuoteLoading || !quoteResponse || !inputToken || !outputToken || !inputAmount || !outputAmount || !inputBalance || inputBalanceLoading || Number(inputAmount) > Number(inputBalance)}
+                            disabled={isNotPool || isSwapping || isQuoteLoading || !quoteResponse || !inputToken || !outputToken || !inputAmount || !outputAmount || !inputBalance || inputBalanceLoading || Number(inputAmount) > Number(inputBalance)}
                         >
                             {
                                 isQuoteLoading 
@@ -155,7 +218,7 @@ const Swap: React.FC<Props> = ({
                                             ? swappingText || "Swapping..."
                                             : swapText || "Swap"
                             }
-                        </Button>
+                        </GradientButton>
                     ) : (
                         <LogInButton />
                     )

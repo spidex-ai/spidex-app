@@ -1,6 +1,5 @@
 'use client'
-import React, { Suspense, use } from "react";
-import { Skeleton } from "@/components/ui";
+import React, { use } from "react";
 
 import TokenChart from "../../_components/token/chart";
 import Header from "./_components/header";
@@ -13,22 +12,19 @@ type tParams = Promise<{ address: string }>;
 
 const TokenPage = ({ params }: { params: tParams }) => {
     const { address } = use(params);
-    const {data} = useTokenDetail(address);
+    const {data, isLoading} = useTokenDetail(address);
     console.log('data tokeen:::', data);
     return (
         <div className="flex flex-col gap-2 h-full max-h-full overflow-hidden">
-            <Header address={address} />
+            <Header data={data} isLoading={isLoading} />
             <ResizableLayout 
-                chartComponent={<TokenChart mint={address} data={data} />}
+                chartComponent={<TokenChart data={data} isLoadingTokenDetail={isLoading} />}
                 tabsComponent={
-                    <Suspense fallback={<Skeleton className="h-full w-full m-2 " />}>
-                        <TokenDashboardTabs address={address} data={data} />
-                    </Suspense>
+                        <TokenDashboardTabs address={address} data={data} isLoadingTokenDetail={isLoading} />
                 }
-                sidePanelComponent={<SidePanel address={address} data={data} />}
-                // tabsComponent={<div></div>}
-                // sidePanelComponent={<div></div>}
+                sidePanelComponent={<SidePanel data={data} isLoadingTokenDetail={isLoading} />}
             />
+            
         </div>
     );
 };
