@@ -22,23 +22,18 @@ import Balances from './balances';
 import { truncateAddress } from '@/lib/wallet';
 import Image from 'next/image';
 import { useSpidexCoreContext } from '@/app/_contexts';
+import { useLoginModal } from '@/app/_contexts/login-modal-context';
 
 const AuthButton: React.FC = () => {
 
     const { auth, logout } = useSpidexCoreContext();
-
+    const { openModal } = useLoginModal();
     const { isMobile, open } = useSidebar();
 
     if (!auth) return <Skeleton className="w-full h-8" />;
 
     const handleConnectWallet = () => {
-        console.log('xxxxxxx');
-        
-        if(auth.user) {
-            console.log('xxxxxxx');
-        } else {
-            console.log('xxxxxxx');
-        }
+        openModal(true);
     }
 
     if (!auth.user || !auth.user.walletAddress) return (

@@ -15,7 +15,6 @@ interface Props {
 const Information: React.FC<Props> = ({ user }) => {
   const wallets = [user.walletAddress];
   const { logout } = useSpidexCoreContext();
-  console.log("user:::", user);
   return (
     <>
       <div className="flex justify-between gap-4">
