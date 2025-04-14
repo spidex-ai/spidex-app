@@ -116,6 +116,10 @@ export interface TopTokenMcap extends TopToken {
   totalSupply: number;
 }
 
+export interface TopTokenVolume extends TopToken {
+  volume?: number;
+}
+
 export interface TopTokenLiquidity extends TopToken {
   liquidity: number;
 }

@@ -17,10 +17,10 @@ const starterButtons = [
         prompt: "Analyze the liquidity pools of this tokeno"
     },
     {
-        title: "Twitter Sentiment",
-        description: "Analyze the sentiment of the Twitter community for this token",
+        title: "Top Holders",
+        description: "Analyze the top holders of this token",
         icon: <Image src="/icons/trading-agent.svg" alt="Trending" width={13} height={13} />,
-        prompt: "Analyze the sentiment of the Twitter community for this token"
+        prompt: "Analyze the top holders of this token"
     },
     {
         title: "Trading Activity",
