@@ -74,7 +74,7 @@ const getAgentIcon = (agentName: string) => {
     case KNOWLEDGE_AGENT_NAME:
       return (
         <Image
-          src="/icons/knowledge-agent.svg"
+          src="/icons/token-analysis.svg"
           alt="Chart Candlestick"
           width={20}
           height={20}

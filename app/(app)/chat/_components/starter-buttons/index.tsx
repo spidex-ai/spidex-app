@@ -26,7 +26,7 @@ const starterButtons = [
         title: "Knowledge",
         description: "Learn developer docs for protocols",
         icon: <Image src="/icons/knowledge-white.svg" alt="Trending" width={13} height={13} />,
-        prompt: "Get me developer docs from Ethereum documentation"
+        prompt: "Get me developer docs from Cardano documentation"
     }
 ] as const
 
