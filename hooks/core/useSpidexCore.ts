@@ -490,6 +490,21 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     }
   }, [fetchWithAuth, auth]);
 
+  const triggerSocialQuest = useCallback(async (id: number) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await fetchWithAuth(`/user-quest/trigger-social-quest/${id}`, {
+        method: "PUT",
+      });
+      return data.data;
+    } catch (error) {
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  }, [fetchWithAuth, auth]);
+
   return {
     auth,
     loading,
@@ -518,7 +533,8 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     getSwapPoolStats,
     buildSwapRequest,
     estimateSwap,
-    submitSwapRequest
+    submitSwapRequest,
+    triggerSocialQuest
   };
 };
 

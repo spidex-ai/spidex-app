@@ -39,6 +39,7 @@ interface SpidexCoreContextType {
   buildSwapRequest: (payload: SwapPayload) => Promise<any>;
   estimateSwap: (payload: EsitmateSwapPayload) => Promise<any>;
   submitSwapRequest: (payload: SubmitSwapPayload) => Promise<any>;
+  triggerSocialQuest: (id: number) => Promise<any>;
 }
 
 const STORAGE_KEY = "spidex_auth";
@@ -167,7 +168,8 @@ export const SpidexCoreProvider: React.FC<{ children: React.ReactNode }> = ({
     getSwapPoolStats: spidexCore.getSwapPoolStats,
     buildSwapRequest: spidexCore.buildSwapRequest,
     estimateSwap: spidexCore.estimateSwap,
-    submitSwapRequest: spidexCore.submitSwapRequest
+    submitSwapRequest: spidexCore.submitSwapRequest,
+    triggerSocialQuest: spidexCore.triggerSocialQuest
   };
 
   return (

@@ -38,7 +38,7 @@ const Hisotry = () => {
   return (
     <div className="border border-border-main rounded-lg bg-bg-secondary p-10">
       <div className="">
-        <div className="text-2xl font-bold text-white">Missions</div>
+        <div className="text-2xl font-bold text-white">SILK History</div>
       </div>
       <div className="flex flex-col mt-6">
         <div className="grid grid-cols-3 border-b border-border-main py-6 text-text-gray">
@@ -61,7 +61,7 @@ const Hisotry = () => {
               }`}
             >
               <div className="col-span-1 flex items-center gap-2">
-                <div>+{result.point}</div>
+                <div>+{Number(result.point).toFixed(2)}</div>
                 <div>
                   <Image
                     src="/icons/logo-gray.svg"

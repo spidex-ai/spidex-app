@@ -7,6 +7,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 const PointInformation = () => {
 
   const { pointInfo, loading, error } = usePointInfo();
+  console.log("🚀 ~ PointInformation ~ pointInfo:", pointInfo)
 
   if (loading) {
     return <Skeleton className="w-full h-[100px]" />;
@@ -66,7 +67,7 @@ const PointInformation = () => {
           <div className="flex items-center gap-4 bg-bg-main rounded-lg py-1 px-2 mt-1">
             <div className="text-sm">
               <span className="text-text-gray ">Invite link</span>{" "}
-              <span className="text-white text-sm">Copy link</span>
+              <span className="text-white text-sm">{`${pointInfo?.referralInfo?.referralCode}`}</span>
             </div>
             <div>
               <Image
