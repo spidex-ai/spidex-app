@@ -7,6 +7,7 @@ import { Wallet } from 'lucide-react'
 import { Button, Skeleton } from '@/components/ui'
 
 import { useTokenBalance } from '@/hooks'
+import { useCardano } from '@cardano-foundation/cardano-connect-with-wallet'
 
 interface Props {
     address: string
@@ -17,8 +18,10 @@ interface Props {
 }
 
 const TokenBalanceWrapper: React.FC<Props> = ({ address, tokenAddress, tokenSymbol, setAmount, digits = 2 }) => {
-
+    const { accountBalance } = useCardano();
     const { balance, isLoading } = useTokenBalance(tokenAddress, address);
+
+    const tokenBalance = tokenSymbol === 'ADA' ? accountBalance : balance;
 
     if (isLoading) return <Skeleton className="w-16 h-4" />;
 
@@ -26,7 +29,7 @@ const TokenBalanceWrapper: React.FC<Props> = ({ address, tokenAddress, tokenSymb
         <div className="flex items-center gap-2 text-neutral-500 dark:text-neutral-400">
             <Wallet className="w-3 h-3" />
             <p className="text-xs">
-                {balance.toLocaleString(undefined, { maximumFractionDigits: digits })} {tokenSymbol}
+                {tokenBalance.toLocaleString(undefined, { maximumFractionDigits: digits })} {tokenSymbol}
             </p>
             {
                 setAmount && (
@@ -34,14 +37,14 @@ const TokenBalanceWrapper: React.FC<Props> = ({ address, tokenAddress, tokenSymb
                         <Button
                             variant="outline"
                             className="text-[10px] px-1 py-0.5 h-fit w-fit"
-                            onClick={() => setAmount((Number(balance) / 2).toString())}
+                            onClick={() => setAmount((Number(tokenBalance) / 2).toString())}
                         >
                             Half
                         </Button>
                         <Button
                             variant="outline"
                             className="text-[10px] px-1 py-0.5 h-fit w-fit"
-                            onClick={() => setAmount(balance.toString())}
+                            onClick={() => setAmount(tokenBalance.toString())}
                         >
                             Max
                         </Button>

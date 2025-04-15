@@ -280,7 +280,10 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
         <TokenInput
           label={inputLabel}
           amount={inputAmount}
-          onChange={setInputAmount}
+          onChange={(value) => {
+            setIsNotPool(false);
+            setInputAmount(value);
+          }}
           token={inputToken}
           onChangeToken={(token) => {
             console.log("api:token:::", token);
