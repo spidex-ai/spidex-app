@@ -19,7 +19,8 @@ export default {
 				gray: '#5D717D99',
 				main: '#131E2F',
 				secondary: '#0B1320',
-				tab: '#010A19'
+				tab: '#010A19',
+				swap: '#233857'
 			},
   			brand: {
   				'50': '#ffffe7',

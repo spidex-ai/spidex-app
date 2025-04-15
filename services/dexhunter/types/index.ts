@@ -113,6 +113,7 @@ export interface EsitmateSwapResponse {
     partner_fee: number
     communications: any[]
     partner_code: string
+    estimated_point: number
 }
 
 export interface PoolStatsResponse {

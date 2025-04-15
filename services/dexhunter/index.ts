@@ -39,7 +39,7 @@ export class DexHunterService {
     }
 
     async estimateSwap(payload: EsitmateSwapPayload): Promise<EsitmateSwapResponse> {
-        const response = await this.client.post<BuildSwapResponse>('swap/estimate', payload);
+        const response = await this.client.post<EsitmateSwapResponse>('swap/estimate', payload);
         return response;
     }
 

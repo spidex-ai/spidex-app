@@ -245,11 +245,11 @@ p, a, input, textarea, button, body {
 
 .gradient-border {
   position: relative;
-  display: inline-block;
-  padding: 12px 24px;
+  /* display: inline-block; */
+  /* padding: 12px 24px; */
   color: white;
   background-color: transparent;
-  border-radius: 8px;
+  /* border-radius: 8px; */
   z-index: 1;
 }
 
@@ -259,7 +259,7 @@ p, a, input, textarea, button, body {
   inset: 0;
   padding: 1px;
   background: linear-gradient(90deg, #BBF985,#009EFF);
-  border-radius: 8px;
+  border-radius: 4px;
   -webkit-mask: 
       linear-gradient(white 0 0) content-box, 
       linear-gradient(white 0 0);
