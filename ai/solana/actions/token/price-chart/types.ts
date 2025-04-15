@@ -7,6 +7,9 @@ export type TokenPriceChartSchemaType = typeof TokenPriceChartInputSchema;
 
 export type TokenPriceChartArgumentsType = z.infer<TokenPriceChartSchemaType>;
 
-export type TokenPriceChartResultBodyType = {}; 
+export type TokenPriceChartResultBodyType = {
+  tokenUnit: string;
+};
 
-export type TokenPriceChartResultType = SolanaActionResult<TokenPriceChartResultBodyType>;
+export type TokenPriceChartResultType =
+  SolanaActionResult<TokenPriceChartResultBodyType>;
