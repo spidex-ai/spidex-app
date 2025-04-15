@@ -2,7 +2,7 @@
 
 import React from 'react'
 
-import { Card, Skeleton } from '@/components/ui';
+import { Skeleton } from '@/components/ui';
 
 import Swap from '../../utils/swap';
 
@@ -25,7 +25,7 @@ const SwapCallBody: React.FC<Props> = ({ toolCallId, args }) => {
     const { data: outputTokenData, isLoading: outputTokenLoading } = useTokenDetail(args.outputMint || "");
     
     return (
-        <Card className="p-2">
+        <div className="p-2 bg-bg-secondary border border-border-main rounded-md">
             {
                 inputTokenLoading || outputTokenLoading ? (
                     <Skeleton className="h-48 w-96" />
@@ -62,7 +62,7 @@ const SwapCallBody: React.FC<Props> = ({ toolCallId, args }) => {
                     />
                 )
             }
-        </Card>
+        </div>
     )
 }
 
