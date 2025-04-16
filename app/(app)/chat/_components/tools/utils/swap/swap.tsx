@@ -42,7 +42,7 @@ export interface SwapWrapperProps {
 }
 
 export const adaTokenDetail: CardanoTokenDetail = {
-  token_id: " ",
+  token_id: "ADA",
   token_ascii: "ADA",
   ticker: "ADA",
   is_verified: true,
@@ -129,13 +129,13 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
     try {
       const api = await (window as any).cardano[enabledWallet as any].enable();
       const payload: SwapPayload = {
-        buyer_address: unusedAddresses?.[0].toString() || "",
-        token_in: inputToken?.token_id || " ",
-        token_out: outputToken?.token_id || " ",
+        buyerAddress: unusedAddresses?.[0].toString() || "",
+        tokenIn: inputToken?.token_id || " ",
+        tokenOut: outputToken?.token_id || " ",
         slippage: 1,
-        amount_in: Number(inputAmount),
-        tx_optimization: false,
-        blacklisted_dexes: [],
+        amountIn: Number(inputAmount),
+        txOptimization: false,
+        blacklistedDexes: [],
       };
 
       const buildSwap = await buildSwapRequest(payload);
@@ -148,6 +148,7 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
       const submitTx = await api?.submitTx(submitSwap?.cbor);
       onSuccess?.(submitTx);
     } catch (error) {
+      console.log("errorswap:::", error);
       onError?.(error instanceof Error ? error.message : "Unknown error");
     } finally {
       setIsSwapping(false);
@@ -187,15 +188,15 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
       // const addresses = await api.getUsedAddresses();
 
       const payload: SwapPayload = {
-        buyer_address:
+        buyerAddress:
           "addr1q9gykktajrgrmj5am8vwlhp65a72emlwn2s3e5cadkhe3vrfkfxs6yajls3ft0yn42uqlcnrq6qcn3l0lunkxy6aplgspxm6da",
-        token_in: "",
-        token_out:
+        tokenIn: "",
+        tokenOut:
           "279c909f348e533da5808898f87f9a14bb2c3dfbbacccd631d927a3f534e454b",
-        amount_in: 1,
+        amountIn: 1,
         slippage: 1,
-        tx_optimization: false,
-        blacklisted_dexes: [],
+        txOptimization: false,
+        blacklistedDexes: [],
       };
       console.log("payload:::", payload);
       const buildSwap = await buildSwapRequest(payload);
@@ -255,7 +256,7 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
   };
 
   useEffect(() => {
-    if (inputToken || outputToken) {
+    if (inputToken && outputToken) {
       checkPool();
     }
   }, [inputToken, outputToken]);

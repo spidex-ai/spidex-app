@@ -9,7 +9,9 @@ export const useTokenDetail = (address: string) => {
   const [data, setData] = useState<CardanoTokenDetail | null>(null);
 
   useEffect(() => {
-    getTokenDetail(address);
+    if (address) {
+      getTokenDetail(address);
+    }
   }, [address]);
 
   const getTokenDetail = async (address: string) => {

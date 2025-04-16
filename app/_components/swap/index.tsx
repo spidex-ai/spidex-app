@@ -109,13 +109,13 @@ const Swap: React.FC<Props> = ({
     try {
       const api = await (window as any).cardano[enabledWallet as any].enable();
       const payload: SwapPayload = {
-        buyer_address: unusedAddresses?.[0].toString() || "",
-        token_in: inputToken?.token_id || " ",
-        token_out: outputToken?.token_id || " ",
+        buyerAddress: unusedAddresses?.[0].toString() || "",
+        tokenIn: inputToken?.token_id || " ",
+        tokenOut: outputToken?.token_id || " ",
         slippage: 1,
-        amount_in: Number(inputAmount),
-        tx_optimization: false,
-        blacklisted_dexes: [],
+        amountIn: Number(inputAmount),
+        txOptimization: false,
+        blacklistedDexes: [],
       };
 
       const buildSwap = await buildSwapRequest(payload);

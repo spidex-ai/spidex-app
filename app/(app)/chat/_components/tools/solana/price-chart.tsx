@@ -1,15 +1,16 @@
 import React from 'react'
 
-import { Card, Skeleton } from '@/components/ui';
+import { Skeleton } from '@/components/ui';
 
 import TokenChart from '@/app/(app)/_components/token/chart';
 
 import ToolCard from '../tool-card';
 
-import { useTokenMetadata } from '@/hooks';
+import { useTokenDetail } from '@/hooks';
 
 import type { ToolInvocation } from 'ai';
 import type { TokenPriceChartResultType } from '@/ai';
+import Header from '@/app/(app)/token/[address]/_components/header';
 
 interface Props {
     tool: ToolInvocation,
@@ -37,7 +38,8 @@ const PriceChart: React.FC<Props> = ({ tool, prevToolAgent }) => {
 
 const PriceChartBody = ({ tokenAddress }: { tokenAddress: string }) => {
     
-    const { data: tokenMetadata, isLoading } = useTokenMetadata(tokenAddress);
+
+    const {data, isLoading} = useTokenDetail(tokenAddress);
 
     return (
         <div className="w-full flex flex-col gap-2">
@@ -45,23 +47,16 @@ const PriceChartBody = ({ tokenAddress }: { tokenAddress: string }) => {
                 isLoading ? (
                     <Skeleton className="w-full h-8" />
                 ) : (
-                    tokenMetadata && (
-                        <div className="w-full flex items-center gap-2">
-                            <img 
-                                src={tokenMetadata.logo_uri} 
-                                alt={tokenMetadata.name} 
-                                className="rounded-full h-8 w-8"
-                            />
-                            <h3 
-                                className="text-xl font-bold">{tokenMetadata.name} (${tokenMetadata.symbol})
-                            </h3>
-                        </div>
+                    data && (
+                        <Header data={data} isLoading={isLoading} />
                     )
                 )
             }
-            <Card className="overflow-hidden">
-                <TokenChart data={null} isLoadingTokenDetail={false} />
-            </Card>
+            <div className="h-96">
+                <TokenChart data={data} isLoadingTokenDetail={isLoading} />
+            </div>
+               
+       
         </div>
     )
 }

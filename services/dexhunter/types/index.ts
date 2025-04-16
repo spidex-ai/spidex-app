@@ -41,13 +41,13 @@ export interface EsitmateSwapPayload {
     blacklistedDexes: string[];
 }
 export interface SwapPayload {
-    buyer_address: string;
-    token_in: string;
-    token_out: string;
+    buyerAddress: string;
+    tokenIn: string;
+    tokenOut: string;
     slippage: number;
-    amount_in: number;
-    tx_optimization: boolean;
-    blacklisted_dexes: string[];
+    amountIn: number;
+    txOptimization: boolean;
+    blacklistedDexes: string[];
 }
 
 

@@ -27,7 +27,7 @@ export default function SwapPoint({ swapDetails, splits, estimatedPoints }: Prop
   const [isOpenMarketOffers, setIsOpenMarketOffers] = useState(true);
 
   return (
-    <div>
+    <div className="mt-2">
       <div className="border-border-main border rounded-lg relative">
         <div className="flex justify-between items-center gap-2 px-6 py-2 bg-bg-swap rounded-lg">
           <div className="text-xs">Swap details</div>
@@ -68,20 +68,20 @@ export default function SwapPoint({ swapDetails, splits, estimatedPoints }: Prop
               />
               <SwapDetailItem
                 label="Net Price"
-                value={swapDetails.inputAmount}
+                value={Number(swapDetails.netPrice).toFixed(2)}
               />
               <SwapDetailItem
                 label="Min Receive"
-                value={swapDetails.inputAmount}
+                value={Number(swapDetails.minReceive).toFixed(2)}
               />
-              <SwapDetailItem label="Dex Fee" value={swapDetails.inputAmount} />
+              <SwapDetailItem label="Dex Fee" value={Number(swapDetails.dexFee).toFixed(2)} />
               <SwapDetailItem
                 label="Dex Deposits"
-                value={swapDetails.inputAmount}
+                value={Number(swapDetails.dexDeposits).toFixed(2)}
               />
               <SwapDetailItem
                 label="Service Fee"
-                value={swapDetails.inputAmount}
+                value={Number(swapDetails.serviceFee).toFixed(2)}
               />
             </div>
           </div>
@@ -174,9 +174,9 @@ export default function SwapPoint({ swapDetails, splits, estimatedPoints }: Prop
       <div className="bg-bg-swap rounded-lg">
         <div className="gradient-border mt-4">
           <div className="flex justify-between items-center py-2 px-6 rounded-lg">
-            <TextGradient>Estimated Points</TextGradient>
-            <div className="flex items-center gap-1">
-              <div className="flex items-center justify-center">{estimatedPoints}</div>
+            <TextGradient className="text-sm">Estimated Points</TextGradient>
+            <div className="flex gap-1">
+              <div className="flex items-center  text-sm pt-1">{Number(estimatedPoints).toFixed(2)}</div>
               <div>
                 <Image
                   src="/icons/logo-gray.svg"

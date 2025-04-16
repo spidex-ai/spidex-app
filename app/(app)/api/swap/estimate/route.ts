@@ -6,22 +6,22 @@ export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
         const {
-            token_in,
-            token_out,
+            tokenIn,
+            tokenOut,
             slippage,
-            amount_in,
-            blacklisted_dexes
+            amountIn,
+            blacklistedDexes
         } = body as SwapPayload;
 
 
-        if (!token_out && !token_in) {
+        if (!tokenOut && !tokenIn) {
             return NextResponse.json(
                 { error: 'Input or output token is required' },
                 { status: 400 }
             );
         }
 
-        if (!amount_in) {
+        if (!amountIn) {
             return NextResponse.json(
                 { error: 'Input amount is required' },
                 { status: 400 }
@@ -29,11 +29,11 @@ export async function POST(request: NextRequest) {
         }
 
         const payload: EsitmateSwapPayload = {
-            tokenIn: token_in,
-            tokenOut: token_out,
+            tokenIn: tokenIn,
+            tokenOut: tokenOut,
             slippage: slippage ?? 1.0,
-            amountIn: amount_in,
-            blacklistedDexes: blacklisted_dexes ?? []
+            amountIn: amountIn,
+            blacklistedDexes: blacklistedDexes ?? []
         };
 
         const data = await dexHunterService.estimateSwap(payload);

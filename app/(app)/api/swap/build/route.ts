@@ -6,16 +6,16 @@ export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
         const {
-            buyer_address,
-            token_in,
-            token_out,
+            buyerAddress,
+            tokenIn,
+            tokenOut,
             slippage,
-            amount_in,
-            tx_optimization,
-            blacklisted_dexes
+            amountIn,
+            txOptimization,
+            blacklistedDexes
         } = body as SwapPayload;
 
-        if (!buyer_address) {
+        if (!buyerAddress) {
             return NextResponse.json(
                 { error: 'Buyer address is required' },
                 { status: 400 }
@@ -23,14 +23,14 @@ export async function POST(request: NextRequest) {
         }
 
 
-        if (!token_out && !token_in) {
+        if (!tokenOut && !tokenIn) {
             return NextResponse.json(
                 { error: 'Input or output token is required' },
                 { status: 400 }
             );
         }
 
-        if (!amount_in) {
+        if (!amountIn) {
             return NextResponse.json(
                 { error: 'Input amount is required' },
                 { status: 400 }
@@ -38,13 +38,13 @@ export async function POST(request: NextRequest) {
         }
 
         const payload: SwapPayload = {
-            buyer_address,
-            token_in,
-            token_out,
+            buyerAddress,
+            tokenIn,
+            tokenOut,
             slippage: slippage ?? 1.0,
-            amount_in,
-            tx_optimization: tx_optimization ?? false,
-            blacklisted_dexes: blacklisted_dexes ?? []
+            amountIn,
+            txOptimization: txOptimization ?? false,
+            blacklistedDexes: blacklistedDexes ?? []
         };
 
         const data = await dexHunterService.buildSwap(payload);

@@ -93,13 +93,13 @@ export const GradientButton = (props: any) => {
         "bg-gradient-to-r from-[#009EFF] to-[#BBF985] text-black px-6 md:px-8 py-2 md:py-3 rounded-lg font-semibold transition-all duration-200 cursor-pointer",
         "hover:opacity-70",
         "disabled:opacity-50 disabled:cursor-not-allowed",
-        "flex items-center gap-2"
+        "inline-flex items-center justify-center gap-2"
       )}
     >
        {isLoading && (
         <div className="w-3 h-3 border-2 pb-2 border-black border-t-transparent rounded-full animate-spin" />
       )}
-     <div className="flex items-center">{children}</div>
+     {children}
     </button>
   );
 };
