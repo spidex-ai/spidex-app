@@ -41,14 +41,14 @@ const AuthButton: React.FC = () => {
             <SidebarMenuItem>
                 {
                     open ? (
-                        <GradientButton  onClick={handleConnectWallet}>
+                        <GradientButton className='w-full'  onClick={handleConnectWallet}>
                            <div className='flex gap-2'>
                            <Image src="/icons/connect-wallet.svg" alt="connect-wallet" width={15} height={15} /> 
                             <div>Connect Wallet</div>
                            </div>
                         </GradientButton>
                     ) : (
-                        <GradientButtonIcon  onClick={handleConnectWallet}>
+                        <GradientButtonIcon className='w-full' onClick={handleConnectWallet}>
                             <Image src="/icons/connect-wallet.svg" alt="connect-wallet" width={15} height={15} />
                         </GradientButtonIcon>
                     )
@@ -64,8 +64,8 @@ const AuthButton: React.FC = () => {
                     <DropdownMenuTrigger asChild>
                         {
                             open ? (
-                                <GradientButton>
-                                    <div>
+                                <GradientButton className='w-full'>
+                                    <div className='flex gap-2'>
                                         <Image src="/icons/wallet.svg" alt="wallet-wallet" width={15} height={15} /> 
                                         <div>{truncateAddress(auth.user.walletAddress)}</div>
                                     </div>

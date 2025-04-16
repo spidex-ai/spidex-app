@@ -84,7 +84,7 @@ const GradientBorderButton = (props: any) => {
 };
 
 export const GradientButton = (props: any) => {
-  const { isLoading, children,disabled, ...rest } = props;
+  const { isLoading, children,disabled, className, ...rest } = props;
   return (
     <button
       {...rest}
@@ -93,7 +93,8 @@ export const GradientButton = (props: any) => {
         "bg-gradient-to-r from-[#009EFF] to-[#BBF985] text-black px-6 md:px-8 py-2 md:py-3 rounded-lg font-semibold transition-all duration-200 cursor-pointer",
         "hover:opacity-70",
         "disabled:opacity-50 disabled:cursor-not-allowed",
-        "inline-flex items-center justify-center gap-2"
+        "inline-flex items-center justify-center gap-2",
+        className
       )}
     >
        {isLoading && (
