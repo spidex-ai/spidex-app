@@ -34,7 +34,8 @@ export const POST = async (req: NextRequest) => {
   let model: any | undefined = undefined;
 
   if (modelName === Models.OpenAI) {
-    model = openrouter.languageModel("openai/o4-mini");
+    //openai/o4-mini
+    model = openrouter.languageModel("openai/gpt-4.1-mini");
     MAX_TOKENS = 128000;
     // const selected = pickRandomOpenAiModel();
     // console.log("🔁 Selected GPT-4 model:", selected);
