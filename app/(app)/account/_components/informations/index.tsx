@@ -76,7 +76,7 @@ const Information: React.FC<Props> = ({ user }) => {
           </div>
 
           <div>
-            <GradientBorderButton>Change profile picture</GradientBorderButton>
+            <GradientBorderButton className="px-8 py-2">Change profile picture</GradientBorderButton>
           </div>
         </div>
 

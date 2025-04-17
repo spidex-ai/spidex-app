@@ -34,7 +34,7 @@ const ConnectedAccount: React.FC<ConnectedAccountProps> = ({
           </div>
         </div>
         {!isConnected && (
-          <GradientBorderButton onClick={onConnect} disabled={isConnected}>
+          <GradientBorderButton onClick={onConnect} disabled={isConnected} className="px-8 py-2">
             Connect
           </GradientBorderButton>
         )}

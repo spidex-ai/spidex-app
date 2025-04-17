@@ -71,12 +71,17 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 Button.displayName = "Button";
 
 const GradientBorderButton = (props: any) => {
-  const { isLoading, children, ...rest } = props;
+  const { isLoading, children, className, ...rest } = props;
   return (
     <button
       {...rest}
       disabled={isLoading}
-      className="gradient-border cursor-pointer"
+      className={
+        cn(
+          "gradient-border cursor-pointer",
+          className
+        )
+      }
     >
       {children}
     </button>
