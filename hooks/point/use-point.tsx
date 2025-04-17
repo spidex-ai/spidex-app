@@ -56,7 +56,7 @@ export const useQuests = () => {
         }
     }
 
-    return { quests, loading, error };
+    return { quests, loading, error, fetchQuests };
 }
 
 export const usePointHistory = () => {

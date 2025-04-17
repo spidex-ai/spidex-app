@@ -505,6 +505,22 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     }
   }, [fetchWithAuth, auth]);
 
+  const triggerDailyLogin = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await fetchWithAuth(`/user-quest/check-in`, {
+        method: "PUT",
+      }); 
+      return data.data;
+    } catch (error) {
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  }, [fetchWithAuth, auth]);
+
+
   return {
     auth,
     loading,
@@ -534,7 +550,8 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     buildSwapRequest,
     estimateSwap,
     submitSwapRequest,
-    triggerSocialQuest
+    triggerSocialQuest,
+    triggerDailyLogin
   };
 };
 
