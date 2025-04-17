@@ -2,13 +2,13 @@ import { NextRequest } from "next/server";
 
 import {
   CoreTool,
-  generateText,
-  LanguageModelV1,
+  // generateText,
+  // LanguageModelV1,
   streamText,
   StreamTextResult,
 } from "ai";
 
-import { openai } from "@ai-sdk/openai";
+// import { openai } from "@ai-sdk/openai";
 
 import { Models } from "@/types/models";
 import { chooseAgent } from "./utils";
@@ -70,7 +70,7 @@ export const POST = async (req: NextRequest) => {
     any
   >;
 
-  let text: any;
+  // let text: any;
   if (!chosenAgent) {
     streamTextResult = streamText({
       model,

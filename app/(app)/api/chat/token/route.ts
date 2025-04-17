@@ -2,7 +2,7 @@ import { NextRequest } from "next/server";
 
 import { LanguageModelV1, streamText } from "ai";
 
-import { openai } from "@ai-sdk/openai";
+// import { openai } from "@ai-sdk/openai";
 import { anthropic } from "@ai-sdk/anthropic";
 import { xai } from "@ai-sdk/xai";
 import { google } from "@ai-sdk/google";
@@ -34,7 +34,7 @@ export const POST = async (req: NextRequest) => {
     await req.json();
 
   let MAX_TOKENS: number | undefined = undefined;
-  let model: LanguageModelV1 | undefined = undefined;
+  let model: LanguageModelV1 | any | undefined = undefined;
 
   console.log("===================>modelName", system(token));
   if (modelName === Models.OpenAI) {

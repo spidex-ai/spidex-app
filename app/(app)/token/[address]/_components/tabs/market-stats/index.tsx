@@ -28,14 +28,14 @@ const MarketStats: React.FC<Props> = ({ tokenId, tokenName, isLoadingTokenDetail
           <div className="bg-bg-tab p-2 flex flex-1 justify-center">
             <div className="min-h-[80px] flex flex-col justify-center items-center gap-3">
               <div className="text-xs font-semibold text-text-gray">Price USD</div>
-              <div className="text-sm text-white">{tokenStats?.usdPrice ? tokenStats?.usdPrice : "N/A"}</div>
+              <div className="text-xs text-white">{tokenStats?.usdPrice ? tokenStats?.usdPrice : "N/A"}</div>
             </div>
           </div>
 
           <div className="bg-bg-tab p-2 flex flex-1 justify-center">
             <div className="min-h-[80px] flex flex-col justify-center items-center gap-3">
               <div className="text-xs font-semibold text-text-gray">Liquidity</div>
-              <div className="text-sm text-white">
+              <div className="text-xs text-white">
                 {tokenStats?.mcap.circSupply
                   ? tokenStats?.mcap.circSupply
                   : "N/A"}
@@ -129,7 +129,7 @@ const StatItem: React.FC<StatItemProps> = ({
     <div className="col-span-1">
       <div className="min-h-[88px] flex flex-col gap-3 justify-center items-center rounded-md p-2 bg-bg-secondary">
         <div className="text-xs font-semibold text-text-gray">{label}</div>
-        <div className="text-sm tex-white">{value}</div>
+        <div className="text-xs text-white">{value}</div>
       </div>
     </div>
   );

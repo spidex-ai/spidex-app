@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { generateObject, LanguageModelV1, Message } from "ai";
+import { generateObject, Message } from "ai";
 
 import { agents } from "@/ai/agents";
 import { Agent } from "@/ai/agent";
