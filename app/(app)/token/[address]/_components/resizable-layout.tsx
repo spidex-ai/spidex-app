@@ -26,7 +26,7 @@ const ResizableLayout = ({
                         </Panel>
                         <PanelResizeHandle className="h-2 hover:bg-accent rounded-sm transition-colors" />
                         <Panel defaultSize={40} minSize={30}>
-                            <CardTab className="h-full overflow-hidden ">
+                            <CardTab className="h-full overflow-y-auto">
                                 {tabsComponent} 
                             </CardTab>
                         </Panel>

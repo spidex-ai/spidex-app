@@ -20,14 +20,16 @@ interface Props {
 const TradeHistory: React.FC<Props> = ({ tokenId, ticker }) => {
     console.log(tokenId);
     const { data, loading } = useTradeHistory(tokenId);
+    console.log("🚀 ~ data:", data)
 
     if(loading) {
         return <Skeleton className="h-[100px] w-full" />
     }
 
     return (
-        <Table> 
-            <TableHeader>
+        <div className="relative">
+            <Table> 
+            <TableHeader  className="sticky top-0 bg-background z-10">
                 <TableRow>
                     <TableHead className="pl-4">Date</TableHead>
                     <TableHead className="text-center">Type</TableHead>
@@ -37,7 +39,7 @@ const TradeHistory: React.FC<Props> = ({ tokenId, ticker }) => {
                     <TableHead className="text-right">TXN</TableHead>
                 </TableRow>
             </TableHeader>
-            <TableBody>
+            <TableBody className="overflow-y-auto max-h-[500px]">
                 {data.map((history, index) => (
                     <HistoryItem
                         key={index} 
@@ -46,6 +48,7 @@ const TradeHistory: React.FC<Props> = ({ tokenId, ticker }) => {
                 ))}
             </TableBody>
         </Table>
+        </div>
     )
 }
 
@@ -63,7 +66,7 @@ const HistoryItem: React.FC<HistoryItemProps> = ({ history }) => {
             <TableCell className={`text-center ${history.action === 'buy' ? 'text-green-500' : 'text-red-500'}`}>{history.action}</TableCell>
             <TableCell className="text-center">{history.price.toFixed(6)}</TableCell>
             <TableCell className="text-center">{history.tokenAAmount}</TableCell>
-            <TableCell className="text-center">{history.tokenBAmount}</TableCell>
+            <TableCell className="text-center">{history.tokenBAmount} {history.tokenBName}</TableCell>
             <TableCell className="text-right flex justify-end cursor-pointer" onClick={onClickTxn}><Image src="/icons/txn-gray.svg" alt="txn" width={16} height={16} /></TableCell>
         </TableRow>
     )

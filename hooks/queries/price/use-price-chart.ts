@@ -47,26 +47,21 @@ export const usePriceChartTaptools = (
   const [data, setData] = useState<TokenPriceCandlestick[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-//   const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     if (unit) {
       fetchDataChart();
-
-    //   if (intervalId) {
-    //     clearInterval(intervalId);
-    //   }
-
-    //   const newIntervalId = setInterval(fetchDataChart, 60000);
-    //   setIntervalId(newIntervalId);
     }
-
-    // return () => {
-    //   if (intervalId) {
-    //     clearInterval(intervalId);
-    //   }
-    // };
   }, [unit, interval, numIntervals]);
+
+  const refetchDataChart = async () => {
+    try {
+      const data = await getTokenOHLCV(unit, interval, numIntervals);
+      setData(data);
+    } catch (error) {
+      
+    }
+  }
 
   const fetchDataChart = async () => {
     try {
@@ -89,5 +84,6 @@ export const usePriceChartTaptools = (
     isLoading,
     error,
     fetchDataChart,
+    refetchDataChart,
   };
 };

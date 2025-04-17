@@ -394,7 +394,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     setLoading(true);
     setError(null);
     try {
-      const data = await fetchWithAuth(`/tokens/${tokenId}/trades?timeFrame=1h`);
+      const data = await fetchWithAuth(`/tokens/${tokenId}/trades?timeFrame=30d&limit=100&page=1`);
       return data.data;
     } catch (error) {
       return null;

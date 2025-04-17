@@ -48,7 +48,7 @@ const TrendingTokenCard: React.FC<Props> = ({ token }) => {
         </div>
         <div className="flex flex-col">
           <p className="text-xs text-muted-foreground">
-            24h Volume: $
+            Market Cap: $
             {token?.volume
               ? token?.volume?.toLocaleString()
               : token?.mcap?.toLocaleString()}

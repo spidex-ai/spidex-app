@@ -6,7 +6,7 @@ import { Tabs, TabsTrigger, TabsContent } from '@/components/ui'
 import DraggableTabsList from './draggable-tabs-list'
 
 import TopHolders from './top-holders';
-import TopTraders from './top-traders';
+// import TopTraders from './top-traders';
 // import BubbleMap from './bubble-map';
 
 // import TokenMarkets from './markets'
@@ -22,7 +22,7 @@ interface Props {
     isLoadingTokenDetail: boolean;
 }
 
-const TokenDashboardTabs: React.FC<Props> = ({ address, data, isLoadingTokenDetail }) => {
+const TokenDashboardTabs: React.FC<Props> = ({  data, isLoadingTokenDetail }) => {
     const [activeTab, setActiveTab] = React.useState('market-stats')
     const tabsRef = useRef<{ [key: string]: HTMLButtonElement }>({})
 
@@ -71,7 +71,7 @@ const TokenDashboardTabs: React.FC<Props> = ({ address, data, isLoadingTokenDeta
                    
                     Trade History
                 </TabsTrigger>
-                <TabsTrigger 
+                {/* <TabsTrigger 
                     value="traders"
                     ref={(el) => {
                         if (el) tabsRef.current['traders'] = el
@@ -80,7 +80,7 @@ const TokenDashboardTabs: React.FC<Props> = ({ address, data, isLoadingTokenDeta
                 >
                   
                     Top Traders
-                </TabsTrigger>
+                </TabsTrigger> */}
                 <TabsTrigger 
                     value="bubble"
                     ref={(el) => {
@@ -100,9 +100,9 @@ const TokenDashboardTabs: React.FC<Props> = ({ address, data, isLoadingTokenDeta
                 <TabsContent value="holders" className="h-full m-0">
                     <TradeHistory tokenId={data?.token_id || ''} ticker={data?.ticker || ''} />
                 </TabsContent>
-                <TabsContent value="traders" className="h-full m-0">
+                {/* <TabsContent value="traders" className="h-full m-0">
                     <TopTraders address={address} />
-                </TabsContent> 
+                </TabsContent>  */}
                 <TabsContent value="bubble" className="h-full m-0 p-2">
                     <TopHolders tokenId={data?.token_id || ''} />
                 </TabsContent>

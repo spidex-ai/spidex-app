@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { Button, CandlestickChart, Skeleton } from "@/components/ui";
 
@@ -85,11 +85,19 @@ const TokenChart: React.FC<Props> = ({ data: tokenDetail, isLoadingTokenDetail }
     CandleStickInterval.FOUR_HOURS
   );
   const [numDays, setNumDays] = useState<number>(180);
-  const { data, isLoading } = usePriceChartTaptools(
+  const { data, isLoading, refetchDataChart } = usePriceChartTaptools(
     tokenDetail?.unit ?? "",
     timeframe,
     numDays
   );
+
+  useEffect(() => {
+      const interval = setInterval(() => {
+          refetchDataChart();
+      }, 1000 * 60);
+
+      return () => clearInterval(interval);
+  }, [tokenDetail]);
 
   const price = data?.length > 0 ? data[data.length - 1].close : 0;
   const open = data?.length > 0 ? data[0].open : 0;
