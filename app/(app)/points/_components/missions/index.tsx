@@ -132,9 +132,11 @@ const Missions = () => {
         case 10:
           data = await triggerDailyLogin();
           break;
-
         default:
+          break;
       }
+      console.log('data');
+      return data;
     } catch (error) {
       console.log("🚀 ~ handleFinish ~ error:", error);
     } finally {

@@ -8,7 +8,6 @@ import { TextGradient } from "@/components/ui/text";
 import { Tooltip, TooltipProvider } from "@/components/ui/tooltip";
 import { TooltipTrigger } from "@/components/ui/tooltip";
 import { TooltipContent } from "@/components/ui/tooltip";
-import {Tooltip as TooltipRadix} from "radix-ui"
 import { TooltipArrow } from "@radix-ui/react-tooltip";
 
 const PointInformationWrapper = () => {
