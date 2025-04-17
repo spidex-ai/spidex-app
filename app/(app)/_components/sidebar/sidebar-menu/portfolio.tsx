@@ -32,7 +32,7 @@ const Portfolio: React.FC = () => {
                     <h1 className="flex items-center gap-2 font-semibold">
                         {
                             isActive ? (
-                                <Image src="/icons/portfolio-white.svg" alt="portfolio" width={5} height={5} className='w-4 h-4'/>
+                                <Image src="/icons/portfolio-blink.svg" alt="portfolio" width={5} height={5} className='w-4 h-4'/>
                             ) : (
                                 <Image src="/icons/portfolio-white.svg" alt="portfolio" width={5} height={5} className='w-4 h-4'/>
                             )
