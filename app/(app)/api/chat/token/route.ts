@@ -17,8 +17,11 @@ import {
 } from "@/ai";
 
 import type { TokenChatData } from "@/types";
-import { modelTokenLimits, pickRandomOpenAiModel } from "../cardano/utils";
+import { createOpenRouter } from "@openrouter/ai-sdk-provider";
 
+const openrouter = createOpenRouter({
+  apiKey: process.env.OPENROUTER_API_KEY,
+});
 const system = (tokenMetadata: TokenChatData) =>
   `You are a blockchain agent that helping the user analyze the following token: ${tokenMetadata.name} (${tokenMetadata.name}) with the address ${tokenMetadata?.address}.`;
 
@@ -35,10 +38,12 @@ export const POST = async (req: NextRequest) => {
 
   console.log("===================>modelName", system(token));
   if (modelName === Models.OpenAI) {
-    const selected = pickRandomOpenAiModel();
-    console.log("🔁 Selected GPT-4 model:", selected);
-    model = openai(selected);
-    MAX_TOKENS = modelTokenLimits[selected];
+    model = openrouter.languageModel("openai/o4-mini");
+    MAX_TOKENS = 128000;
+    // const selected = pickRandomOpenAiModel();
+    // console.log("🔁 Selected GPT-4 model:", selected);
+    // model = openai(selected);
+    // MAX_TOKENS = modelTokenLimits[selected];
   }
 
   if (modelName === Models.Anthropic) {

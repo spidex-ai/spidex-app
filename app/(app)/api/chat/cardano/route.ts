@@ -1,17 +1,23 @@
 import { NextRequest } from "next/server";
 
-import { CoreTool, LanguageModelV1, streamText, StreamTextResult } from "ai";
+import {
+  CoreTool,
+  generateText,
+  LanguageModelV1,
+  streamText,
+  StreamTextResult,
+} from "ai";
 
 import { openai } from "@ai-sdk/openai";
-// import { anthropic } from "@ai-sdk/anthropic";
-// import { xai } from "@ai-sdk/xai";
-// import { google } from "@ai-sdk/google";
-// import { deepseek } from "@ai-sdk/deepseek";
 
 import { Models } from "@/types/models";
-import { chooseAgent, modelTokenLimits, pickRandomOpenAiModel } from "./utils";
+import { chooseAgent } from "./utils";
 import { agents } from "@/ai/agents";
+import { createOpenRouter } from "@openrouter/ai-sdk-provider";
 
+const openrouter = createOpenRouter({
+  apiKey: process.env.OPENROUTER_API_KEY,
+});
 const system = `You a network of blockchain agents called The Spidex (or Spidex for short). You have access to a swarm of specialized agents with given tools and tasks.
 
 
@@ -25,13 +31,15 @@ export const POST = async (req: NextRequest) => {
   const { messages, modelName } = await req.json();
 
   let MAX_TOKENS: number | undefined = undefined;
-  let model: LanguageModelV1 | undefined = undefined;
+  let model: any | undefined = undefined;
 
   if (modelName === Models.OpenAI) {
-    const selected = pickRandomOpenAiModel();
-    console.log("🔁 Selected GPT-4 model:", selected);
-    model = openai(selected);
-    MAX_TOKENS = modelTokenLimits[selected];
+    model = openrouter.languageModel("openai/o4-mini");
+    MAX_TOKENS = 128000;
+    // const selected = pickRandomOpenAiModel();
+    // console.log("🔁 Selected GPT-4 model:", selected);
+    // model = openai(selected);
+    // MAX_TOKENS = modelTokenLimits[selected];
   }
   if (!model || !MAX_TOKENS) {
     throw new Error("Invalid model");
@@ -62,6 +70,7 @@ export const POST = async (req: NextRequest) => {
     any
   >;
 
+  let text: any;
   if (!chosenAgent) {
     streamTextResult = streamText({
       model,
@@ -76,9 +85,5 @@ export const POST = async (req: NextRequest) => {
       system: `${chosenAgent.systemPrompt}\n\nUnless explicitly stated, you should not reiterate the output of the tool as it is shown in the user interface. BUZZ, the native token of The Spidex, is strictly a memecoin and has no utility.`,
     });
   }
-
-  console.log("streamTextResult:::", streamTextResult.toDataStreamResponse());
-
   return streamTextResult.toDataStreamResponse();
 };
-
