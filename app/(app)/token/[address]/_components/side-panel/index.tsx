@@ -15,14 +15,14 @@ import type { TokenChatData } from '@/types';
 
 import { CardanoTokenDetail } from '@/services/dexhunter/types';
 import { adaTokenDetail } from '@/app/(app)/chat/_components/tools/utils/swap/swap';
-
+import { useSearchParams } from 'next/navigation';
 interface Props {
     data: CardanoTokenDetail | null;
     isLoadingTokenDetail: boolean;
 }
 
 const SidePanel: React.FC<Props> =  ({ data: tokenDetail, isLoadingTokenDetail }) => {
-
+    const searchParams = useSearchParams();
     console.log('================>>>>>>>>>>>>>tokenDetail', tokenDetail);
 
     if(isLoadingTokenDetail) {
@@ -40,8 +40,13 @@ const SidePanel: React.FC<Props> =  ({ data: tokenDetail, isLoadingTokenDetail }
         circulatingSupply: 10000
     }
 
+
+
+    const isTradeTab = searchParams.get('tab') === 'trade';
+
+
     return (
-        <Tabs className="h-full flex flex-col items-start w-full max-w-full" defaultValue="chat">
+        <Tabs className="h-full flex flex-col items-start w-full max-w-full" defaultValue={isTradeTab ? 'trade' : 'chat'}>
             <TabsList className="p-0 h-[44px] justify-start bg-neutral-100 dark:bg-bg-secondary w-full max-w-full overflow-x-auto rounded-none no-scrollbar">
                 <TabsTriggerGradient 
                     value="chat"

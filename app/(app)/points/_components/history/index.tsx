@@ -25,7 +25,7 @@ const Hisotry = () => {
     return <div>Error: {error}</div>;
   }
 
-  const results: HistoryItem[] = pointHistory.map(
+  const results: HistoryItem[] = pointHistory.length > 0 ? pointHistory.map(
     (item: PointHistory, index: number) => {
       return {
         task: item.questName,
@@ -34,7 +34,7 @@ const Hisotry = () => {
         isBorderBottom: index !== pointHistory.length - 1,
       };
     }
-  );
+  ) : [];
   return (
     <div className="border border-border-main rounded-lg bg-bg-secondary p-10">
       <div className="">
@@ -51,7 +51,7 @@ const Hisotry = () => {
           </div>
         </div>
         <div>
-          {results.map((result) => (
+          {results.length > 0 ? results.map((result) => (
             <div
               key={result.task}
               className={`grid grid-cols-3  ${
@@ -78,7 +78,7 @@ const Hisotry = () => {
                 <div>{result.createdAt}</div>
               </div>
             </div>
-          ))}
+          )) : null}
         </div>
       </div>
     </div>

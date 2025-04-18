@@ -40,7 +40,7 @@ const Missions = () => {
   // FOLLOW_X = 3,
 
   // DAILY_LOGIN = 10,
-  const results: MissionItem[] = quests.map((quest, index) => {
+  const results: MissionItem[] = quests.length > 0 ? quests.map((quest, index) => {
     let icon = null;
     switch (quest.type) {
       case 0:
@@ -107,7 +107,7 @@ const Missions = () => {
       status: quest.status,
       requireUrl: quest?.requirements?.url,
     };
-  });
+  }) : [];
 
   const toggleDescription = (id: number) => {
     setExpandedMissions((prev) =>
@@ -151,7 +151,7 @@ const Missions = () => {
         <div className="text-2xl font-bold text-white">Missions</div>
       </div>
       <div className="flex flex-col mt-6">
-        {results.map((result) => (
+        { results.length > 0 ? results.map((result) => (
           <div
             key={result.id}
             className={`grid grid-cols-3  ${
@@ -243,7 +243,7 @@ const Missions = () => {
               </div>
             </div>
           </div>
-        ))}
+        )) : null}
       </div>
     </div>
   );

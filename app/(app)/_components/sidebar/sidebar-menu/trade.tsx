@@ -18,9 +18,9 @@ const Trade: React.FC = () => {
     const tokenTrade = '29d222ce763455e3d7a09a665ce554f00ac89d2e99a1a83d267170c64d494e'
     const isActive = pathname.includes(`/token/${tokenTrade}`)
     return (
-        <Link href={`/token/${tokenTrade}`}>
+        <Link href={`/token/${tokenTrade}?tab=trade`}>
             <SidebarMenuItem>
-                <SidebarMenuButton isActive={isActive} >
+                <SidebarMenuButton isActive={isActive}>
                     <h1 className='flex items-center gap-2 font-semibold'>
                         {
                             isActive ? (
