@@ -11,6 +11,7 @@ import {
 import { generateText } from "ai";
 import { Message } from "ai";
 import { openai } from "@ai-sdk/openai";
+import { EAgentType } from "@/types/models";
 
 export const GET = async (
   req: NextRequest,
@@ -26,7 +27,6 @@ export const GET = async (
     }
 
     const token = authHeader.split(" ")[1];
-    console.log("🚀 ~ GET ~ tokenchatget:", token);
 
     const user = await fetch(
       `${process.env.NEXT_PUBLIC_SPIDEX_CORE_API_URL}/auth/me`,
@@ -58,7 +58,6 @@ export const POST = async (
   { params }: { params: Promise<{ chatId: string }> }
 ) => {
   const { chatId } = await params;
-  console.log("🚀 ~ chatId:", chatId);
 
   const { messages } = await req.json();
 
@@ -69,7 +68,6 @@ export const POST = async (
       return NextResponse.json(false, { status: 401 });
     }
     const token = authHeader.split(" ")[1];
-    console.log("🚀 ~ GET ~ tokenchatpost:", token);
 
     const user = await fetch(
       `${process.env.NEXT_PUBLIC_SPIDEX_CORE_API_URL}/auth/me`,
@@ -90,6 +88,64 @@ export const POST = async (
     const userData = await user.json();
 
     const chat = await getChat(chatId, userData.data.id);
+
+    const lastMessage = messages[messages.length - 1];
+
+    if (lastMessage.toolInvocations && lastMessage.toolInvocations.length > 0) {
+      const mapped = lastMessage.toolInvocations
+        .map((invocation: any) => {
+          const { toolName } = invocation;
+
+          let agentType: EAgentType | undefined;
+
+          if (toolName.startsWith("market")) agentType = EAgentType.MARKET;
+          else if (toolName.startsWith("knowledge"))
+            agentType = EAgentType.KNOWLEDGE;
+          else if (toolName.startsWith("wallet"))
+            agentType = EAgentType.PORTFOLIO;
+          else if (toolName.startsWith("tokenanalysis"))
+            agentType = EAgentType.TOKEN;
+          else if (toolName.startsWith("trade")) agentType = EAgentType.TRADING;
+
+          return {
+            toolName,
+            agentType,
+          };
+        })
+        .filter((item: any) => item.agentType !== undefined);
+
+      const triggerAgentQuests = async () => {
+        for (const item of mapped) {
+          try {
+            const response = await fetch(
+              `${process.env.NEXT_PUBLIC_SPIDEX_CORE_API_URL}/user-quest/trigger-agent-quest?agentType=${item.agentType}`,
+              {
+                method: "PUT",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            );
+
+            if (!response.ok) {
+              console.error(
+                `Failed to trigger quest for agentType ${item.agentType}`
+              );
+            } else {
+              console.log(`Triggered quest for agentType ${item.agentType}`);
+            }
+          } catch (error) {
+            console.error(
+              `Error triggering quest for agentType ${item.agentType}:`,
+              error
+            );
+          }
+        }
+      };
+
+      triggerAgentQuests();
+    }
 
     if (!chat) {
       return NextResponse.json(
@@ -127,7 +183,6 @@ export const DELETE = async (
     }
 
     const token = authHeader.split(" ")[1];
-    console.log("🚀 ~ GET ~ tokenchatdelete:", token);
 
     const user = await fetch(
       `${process.env.NEXT_PUBLIC_SPIDEX_CORE_API_URL}/auth/me`,

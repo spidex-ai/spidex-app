@@ -29,11 +29,9 @@ export async function getTokenData(
     if (!response) {
       throw new Error("Failed to fetch search results");
     }
-    console.log("🚀 ~ response:", response);
 
     const tokenAddress = response[0]?.token_id;
     if (!tokenAddress) {
-      console.log("🚀 ~ tokenAddress:", tokenAddress);
       return {
         message: `No token found for ${args.search}`,
       };
@@ -65,7 +63,6 @@ export async function getTokenData(
         `${response[0].ticker}.png`
       );
     }
-    console.log("🚀 ~ tokenDetail:", tokenDetail);
     const tokenStats: TokenStats = {
       price: mcap.price,
       usdPrice: usdPrice.price,
@@ -77,7 +74,6 @@ export async function getTokenData(
       tokenPriceChange,
       tokenLinks,
     };
-    console.log("🚀 ~ getTokenData ~ tokenStats:", tokenStats);
 
     return {
       message: `Token data for ${args.search}`,

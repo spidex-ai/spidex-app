@@ -21,22 +21,17 @@ export async function getSmartMoneyInflows(
   try {
     const response = await fetchTopVolumeToken(args.granularity, args.limit);
 
-
-
     for (const token of response) {
-      const existedKey = await s3Service.keyExists(
-        `${token.ticker}.png`)
+      const existedKey = await s3Service.keyExists(`${token.ticker}.png`);
       if (existedKey) {
         token.logo = encodeURI(`${process.env.S3_URL}/${token.ticker}.png`);
-      }
-      else {
+      } else {
         token.logo = await s3Service.uploadBase64Image(
           token.logo,
           `${token.ticker}.png`
         );
       }
     }
-    console.log("🚀 ~ response:", response)
 
     return {
       body: {

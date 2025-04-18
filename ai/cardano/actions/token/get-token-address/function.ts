@@ -18,8 +18,6 @@ import dexHunterService from "@/services/dexhunter";
 export async function getTokenAddress(
   args: CardanoGetTokenAddressArgumentsType
 ): Promise<CardanoActionResult<CardanoGetTokenAddressResultBodyType>> {
-  console.log("🚀 ~ getTokenAddress ~ args:", args);
-
   // Check if keyword matches any known ticker
   const localMatch = knownTokens.find(
     (token) => token.ticker.toLowerCase() === args.keyword.toLowerCase()
@@ -40,7 +38,6 @@ export async function getTokenAddress(
       0,
       1
     );
-    console.log("🚀 ~ getTokenAddress ~ response:", response);
     if (!response) {
       throw new Error("Failed to fetch search results");
     }

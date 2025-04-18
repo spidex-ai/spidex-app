@@ -13,7 +13,6 @@ export const GET = async (req: NextRequest) => {
       );
     }
     const token = authHeader.split(" ")[1];
-    console.log("🚀 ~ GET ~ tokenchats:", token);
 
     const user = await fetch(
       `${process.env.NEXT_PUBLIC_SPIDEX_CORE_API_URL}/auth/me`,

@@ -4,8 +4,6 @@ import { addSavedToken, deleteSavedToken, getSavedToken } from "@/db/services";
 
 import tokenCardanoService from "@/services/token-cardano";
 
-
-
 export const GET = async (
   request: Request,
   { params }: { params: Promise<{ address: string }> }
@@ -22,7 +20,6 @@ export const GET = async (
 
     // Extract the token
     const token = authHeader.split(" ")[1];
-    console.log("🚀 ~ GET ~ tokensavedToken:", token);
 
     const user = await fetch(
       `${process.env.NEXT_PUBLIC_SPIDEX_CORE_API_URL}/auth/me`,
@@ -91,7 +88,6 @@ export const POST = async (
     const { address } = await params;
 
     const tokenData = await tokenCardanoService.tokenInfo(address);
-    console.log("🚀 ~ tokenData:", tokenData);
 
     if (!tokenData) {
       return NextResponse.json(null, { status: 404 });
@@ -128,7 +124,6 @@ export const DELETE = async (
 
     // Extract the token
     const token = authHeader.split(" ")[1];
-    console.log("🚀 ~ GET ~ tokensavedToken:", token);
 
     const user = await fetch(
       `${process.env.NEXT_PUBLIC_SPIDEX_CORE_API_URL}/auth/me`,
