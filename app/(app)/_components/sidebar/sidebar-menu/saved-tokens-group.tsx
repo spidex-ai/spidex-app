@@ -34,7 +34,8 @@ const SavedTokensGroup: React.FC = () => {
     const { savedTokens, isLoading } = useSavedTokens();
 
     const [isOpen, setIsOpen] = useState(false);
-    const isActive = pathname.includes('/token');
+    const tokenTrade = '29d222ce763455e3d7a09a665ce554f00ac89d2e99a1a83d267170c64d494e'
+    const isActive = pathname.includes('/token') && !pathname.includes(`/token/${tokenTrade}`);
 
     return (
         <Collapsible className="group/collapsible" open={isOpen} onOpenChange={setIsOpen}>
@@ -45,7 +46,7 @@ const SavedTokensGroup: React.FC = () => {
                     >
                         <SidebarMenuButton 
                             className="justify-between w-full"
-                            isActive={pathname.includes('/token')}
+                            isActive={isActive}
                         >
                             <div className="flex items-center justify-between w-full">
                                 <div className="flex items-center gap-2">

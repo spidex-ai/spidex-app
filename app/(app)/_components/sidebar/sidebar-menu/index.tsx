@@ -11,6 +11,7 @@ import SavedTokensGroup from './saved-tokens-group';
 import Points from './points';
 import RefferalProgram from './referral-program';
 import PortfolioWapper from './portfolio-wapper';
+import Trade from './trade'; 
 
 const SidebarMenu: React.FC = () => {
     const { open } = useSidebar();
@@ -22,6 +23,7 @@ const SidebarMenu: React.FC = () => {
             <ChatsGroup />
             <SavedTokensGroup />
             <AccountButton />
+            <Trade />
             {/* <PortfolioButton /> */}
             <Points />
             <RefferalProgram />
