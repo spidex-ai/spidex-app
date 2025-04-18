@@ -17,7 +17,7 @@ interface SpidexCoreContextType {
   ) => Promise<any>;
   getTopTokensByMcap: (page?: number, perPage?: number) => Promise<any>;
   getNounce: () => Promise<any>;
-  signMessage: (message: any) => Promise<any>;
+  signMessage: (message: any, walletName: string) => Promise<any>;
   refreshToken: () => Promise<any>;
   connectX: (code: string, redirectUrl: string) => Promise<any>;
   connectGoogle: (idToken: string) => Promise<any>;
@@ -124,8 +124,8 @@ export const SpidexCoreProvider: React.FC<{ children: React.ReactNode }> = ({
     getTopTokensByVolume: spidexCore.getTopTokensByVolume,
     getTopTokensByMcap: spidexCore.getTopTokensByMcap,
     getNounce: spidexCore.getNounce,
-    signMessage: async (message) => {
-      const result = await spidexCore.signMessage(message);
+    signMessage: async (message, walletName) => {
+      const result = await spidexCore.signMessage(message, walletName);
       if (result) {
         handleSetLocalAuth(result);
       }

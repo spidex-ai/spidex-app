@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 
 import { ChevronDown } from "lucide-react";
 
@@ -8,7 +8,6 @@ import { ChevronDown } from "lucide-react";
 
 import { Button, GradientButton, Separator } from "@/components/ui";
 
-import LogInButton from "@/app/(app)/_components/log-in-button";
 
 import TokenInput from "./token-input";
 
@@ -23,9 +22,10 @@ import {
   SwapPayload,
 } from "@/services/dexhunter/types";
 
+import AuthButton from "@/app/(app)/_components/sidebar/auth-button";
+import SwapPoint from "@/app/_components/swap/swap-point";
 import { useSpidexCoreContext } from "@/app/_contexts/spidex-core";
 import { useCardano } from "@cardano-foundation/cardano-connect-with-wallet";
-import SwapPoint from "@/app/_components/swap/swap-point";
 import Image from "next/image";
 
 export interface SwapWrapperProps {
@@ -75,10 +75,12 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
     estimateSwap,
     buildSwapRequest,
     submitSwapRequest,
+    auth
   } = useSpidexCoreContext();
   const { enabledWallet, unusedAddresses, accountBalance } = useCardano();
-  console.log("🚀 ~ accountBalance:", accountBalance);
-
+  const isConnectedWallet = useMemo(() => {
+    return unusedAddresses?.[0]?.toString() == auth?.user?.walletAddress
+  }, [unusedAddresses, auth?.user?.walletAddress])
   const [inputAmount, setInputAmount] = useState<string>(
     initialInputAmount || ""
   );
@@ -321,7 +323,7 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
         TestSwap
       </button>
       <div className="flex flex-col gap-2">
-        {unusedAddresses?.[0]?.toString() ? (
+        {isConnectedWallet ? (
           <GradientButton
             variant="brand"
             className="w-full"
@@ -349,7 +351,7 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
               : swapText || "Swap"}
           </GradientButton>
         ) : (
-          <LogInButton />
+          <AuthButton />
         )}
         {estimatedPoints?.estimated_point && (
           <SwapPoint

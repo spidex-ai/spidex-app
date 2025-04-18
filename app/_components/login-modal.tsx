@@ -141,9 +141,13 @@ const LoginModal: React.FC = () => {
     signMessage,
     disconnect,
     enabledWallet,
+    isConnected
   } = useCardano({
     limitNetwork: NetworkType.MAINNET,
   })
+  console.log( "isConnected", isConnected)
+  console.log( "enabledWallet", enabledWallet)
+  console.log( "unusedAddresses", unusedAddresses)
   // Determine if any connection is in progress
   const anyConnectionInProgress = walletConnecting !== null || isConnecting
   
@@ -154,6 +158,12 @@ const LoginModal: React.FC = () => {
     }
     return ''
   }, [isClient])
+
+  // useEffect(() => {
+  //   if (auth?.walletName &&) {
+  //     handleSignMessage(unusedAddresses?.[0]?.toString())
+  //   }
+  // }, [auth?.walletName])
   
   const onWalletConnectSuccess = useCallback(() => {
     handleSignMessage(unusedAddresses?.[0]?.toString())
@@ -208,7 +218,7 @@ const LoginModal: React.FC = () => {
             signature,
             publicKey: key || "",
             role: "user",
-          })
+          }, enabledWallet || "")
           closeModal()
         },
         (error: any) => {

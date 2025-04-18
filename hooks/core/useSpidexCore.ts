@@ -14,6 +14,7 @@ export interface Auth {
   refreshToken: string;
   userId: number;
   user: UserSpidex;
+  walletName: string;
 }
 
 export interface UserSpidex {
@@ -139,7 +140,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
         throw err;
       }
     },
-    [auth]
+    [auth?.accessToken]
   );
 
   const getMe = useCallback(async () => {
@@ -193,13 +194,13 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
   }, [fetchWithAuth]);
 
   const signMessage = useCallback(
-    async (message: SignMessageData) => {
+    async (message: SignMessageData, walletName: string) => {
       try {
         const data = await fetchWithAuth("/auth/connect-wallet", {
           method: "POST",
           body: JSON.stringify(message),
         });
-        setAuth(data.data);
+        setAuth({ ...data.data, walletName });
         return data.data;
       } catch (err) {
         return null;
