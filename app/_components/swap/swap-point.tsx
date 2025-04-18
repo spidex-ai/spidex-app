@@ -68,7 +68,7 @@ export default function SwapPoint({ swapDetails, splits, estimatedPoints }: Prop
               />
               <SwapDetailItem
                 label="Net Price"
-                value={Number(swapDetails.netPrice).toFixed(2)}
+                value={'--'}
               />
               <SwapDetailItem
                 label="Min Receive"
@@ -81,7 +81,7 @@ export default function SwapPoint({ swapDetails, splits, estimatedPoints }: Prop
               />
               <SwapDetailItem
                 label="Service Fee"
-                value={Number(swapDetails.serviceFee).toFixed(2)}
+                value={'1 ADA + 0.1%'}
               />
             </div>
           </div>

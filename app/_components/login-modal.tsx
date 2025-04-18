@@ -4,7 +4,7 @@ import { useCardano } from "@cardano-foundation/cardano-connect-with-wallet"
 import { NetworkType } from "@cardano-foundation/cardano-connect-with-wallet-core"
 import { Loader2 } from 'lucide-react'
 import Image from 'next/image'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import {
@@ -105,12 +105,11 @@ const LoginModal: React.FC = () => {
   const [walletConnecting, setWalletConnecting] = useState<string | null>(null)
   const [isConnecting, setIsConnecting] = useState(false)
   const processedCodeRef = useRef<string | null>(null)
-  const router = useRouter()
   const params = useSearchParams()
   const [isClient, setIsClient] = useState(false)
 
   // Custom hooks
-  const { signMessage: signMessageSpidex, auth, getNounce } = useSpidexCoreContext()
+  const { signMessage: signMessageSpidex, getNounce } = useSpidexCoreContext()
   const { signInWithGoogle } = useGoogleLogin()
   const { signInWithX } = useXLogin()
   const { isOpen, closeModal, hideSocialLogin } = useLoginModal()
@@ -120,11 +119,11 @@ const LoginModal: React.FC = () => {
     setIsClient(true)
   }, [])
 
-  useEffect(() => {
-    if (auth?.userId) {
-      router.replace('/chat')
-    }
-  }, [auth?.userId])
+  // useEffect(() => {
+  //   if (auth?.userId) {
+  //     router.replace('/chat')
+  //   }
+  // }, [auth?.userId])
   
   // Only initialize NuFi SDK on client side
   useEffect(() => {
