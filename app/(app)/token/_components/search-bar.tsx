@@ -17,7 +17,11 @@ import { SearchTokenInfo } from "@/services/dexhunter/types";
 import { getLogoUrl } from "@/app/utils/logo";
 import { formatPrice } from "@/app/utils/format";
 
-const SearchBar: React.FC = () => {
+interface Props {
+  isTitle?: boolean;
+}
+
+const SearchBar: React.FC<Props> = ({isTitle = true}) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const [isFocused, setIsFocused] = useState(false);
@@ -64,7 +68,9 @@ const SearchBar: React.FC = () => {
 
   return (
     <div className="flex flex-col gap-2">
-      <h2 className="text-lg font-bold">Search</h2>
+      {isTitle && (
+        <h2 className="text-lg font-bold">Search</h2>
+      )}
       <div className="relative w-full">
         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground z-10 pointer-events-none" />
         <Input

@@ -10,13 +10,15 @@ import Address from "@/app/_components/address";
 import SaveToken from "@/app/(app)/_components/save-token";
 import { getLogoUrl } from "@/app/utils/logo";
 import { CardanoTokenDetail } from "@/services/dexhunter/types";
+import SearchBar from "../../../_components/search-bar";
 
 interface Props {
     data: CardanoTokenDetail | null;
     isLoading: boolean;
+    isSearch?: boolean;
 }
 
-const Header: React.FC<Props> = ({ data, isLoading }) => {
+const Header: React.FC<Props> = ({ data, isLoading, isSearch = false }) => {
 
 
   if (isLoading) {
@@ -25,7 +27,7 @@ const Header: React.FC<Props> = ({ data, isLoading }) => {
 
   return (
     <div className="flex flex-col md:flex-row justify-between gap-4">
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 mt-1">
         {data?.logo && (
           <img
             src={getLogoUrl(data.logo)}
@@ -42,6 +44,9 @@ const Header: React.FC<Props> = ({ data, isLoading }) => {
           </div>
         </div>
         <SaveToken address={data?.token_id ?? ""} />
+        {isSearch && (
+          <SearchBar isTitle={false} />
+        )}
       </div>
     </div>
   );

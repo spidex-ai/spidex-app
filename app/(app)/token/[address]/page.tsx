@@ -16,7 +16,7 @@ const TokenPage = ({ params }: { params: tParams }) => {
     console.log('data tokeen:::', data);
     return (
         <div className="flex flex-col gap-2 h-full max-h-full overflow-hidden">
-            <Header data={data} isLoading={isLoading} />
+            <Header data={data} isLoading={isLoading} isSearch={true} />
             <ResizableLayout 
                 chartComponent={<TokenChart data={data} isLoadingTokenDetail={isLoading} />}
                 tabsComponent={
