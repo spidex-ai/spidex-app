@@ -58,9 +58,11 @@ export const POST = async (
   { params }: { params: Promise<{ chatId: string }> }
 ) => {
   const { chatId } = await params;
+  console.log("🚀 ~ chatId:", chatId);
 
   const { messages } = await req.json();
 
+  console.log("🚀 ~ messages:", JSON.stringify(messages));
   try {
     // Get the authorization header
     const authHeader = req.headers.get("authorization");
@@ -86,13 +88,20 @@ export const POST = async (
     }
 
     const userData = await user.json();
+    console.log("🚀 ~ userData:", userData);
 
     const chat = await getChat(chatId, userData.data.id);
 
     const lastMessage = messages[messages.length - 1];
+    const secondLastMessage = messages[messages.length - 2];
+    console.log("🚀 ~ lastMessage:", lastMessage);
+    console.log("🚀 ~ secondLastMessage:", secondLastMessage);
 
-    if (lastMessage.toolInvocations && lastMessage.toolInvocations.length > 0) {
-      const mapped = lastMessage.toolInvocations
+    if (
+      secondLastMessage.toolInvocations &&
+      secondLastMessage.toolInvocations.length > 0
+    ) {
+      const mapped = secondLastMessage.toolInvocations
         .map((invocation: any) => {
           const { toolName } = invocation;
 
@@ -114,6 +123,7 @@ export const POST = async (
         })
         .filter((item: any) => item.agentType !== undefined);
 
+      console.log("🚀 ~ mapped:", mapped);
       const triggerAgentQuests = async () => {
         for (const item of mapped) {
           try {
