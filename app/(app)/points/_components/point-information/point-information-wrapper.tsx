@@ -1,5 +1,5 @@
 'use client'
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { Progress } from "@/components/ui/progress";
 import { usePointInfo } from "@/hooks/point/use-point";
@@ -14,6 +14,7 @@ const PointInformationWrapper = () => {
 
   const { pointInfo, loading, error } = usePointInfo();
   console.log("🚀 ~ PointInformation ~ pointInfo:", pointInfo)
+  const [copied, setCopied] = useState(false);
 
   if (loading) {
     return <Skeleton className="w-full h-[100px]" />;
@@ -26,6 +27,14 @@ const PointInformationWrapper = () => {
   const currentPoint = Number(pointInfo?.nextAchievement?.points) - Number(pointInfo?.nextAchievement?.pointsToNextAchievement)
 
   const progressValue = pointInfo?.nextAchievement?.pointsToNextAchievement ? (currentPoint / Number(pointInfo?.nextAchievement?.points)) * 100 : 0;
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_SPIDEX_APP_URL}/ref=${pointInfo?.referralInfo?.referralCode}`);
+    setCopied(true);
+    setTimeout(() => {
+      setCopied(false);
+    }, 2000);
+  }
 
   return (
     <div>
@@ -75,13 +84,17 @@ const PointInformationWrapper = () => {
               <span className="text-text-gray ">Invite link</span>{" "}
               <span className="text-white text-sm">{`${pointInfo?.referralInfo?.referralCode}`}</span>
             </div>
-            <div>
-              <Image
-                src="/icons/copy-gray.svg"
-                alt="gift"
-                width={15}
-                height={15}
-              />
+            <div onClick={handleCopy} className="cursor-pointer">
+              <TooltipProvider>
+                <Tooltip delayDuration={0}> 
+                  <TooltipTrigger asChild> 
+                    <Image src="/icons/copy-gray.svg" alt="copy" width={15} height={15} />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>{copied ? "Copied" : "Copy to clipboard"}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             </div>
           </div>
         </div>

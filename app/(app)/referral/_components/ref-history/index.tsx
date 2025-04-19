@@ -52,8 +52,8 @@ const RefHistory = () => {
                 </div>
               ))
             ) : (
-              <div className="flex items-center justify-center h-[100px] w-full">
-                No data
+              <div className="flex items-center justify-center h-[100px] w-full text-text-gray">
+                No data.
               </div>
             )}
           </div>

@@ -78,7 +78,7 @@ const Hisotry = () => {
                 <div>{result.createdAt}</div>
               </div>
             </div>
-          )) : null}
+          )) : <div className="text-center text-text-gray mt-8">No data.</div>}
         </div>
       </div>
     </div>

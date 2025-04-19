@@ -1,18 +1,28 @@
 'use client'
 
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { useRefInfo } from "@/hooks/referral/user-ref";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 const AgentClub: React.FC = () => {
   const { referralInfo, loading, error } = useRefInfo();
-
+  const [copied, setCopied] = useState(false); 
+  
   if (loading) {
     return <div>Loading...</div>;
   }
 
   if (error) {
     return <div>Error: {error}</div>;
+  }
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_SPIDEX_APP_URL}/ref=${referralInfo?.referralCode}`);
+    setCopied(true);
+    setTimeout(() => {
+      setCopied(false);
+    }, 2000);
   }
 
   return (
@@ -62,7 +72,18 @@ const AgentClub: React.FC = () => {
             <div>Your Referrals Link</div>
             <div className="flex justify-between bg-bg-main p-4 my-4 rounded-sm">
               <div>{`${process.env.NEXT_PUBLIC_SPIDEX_APP_URL}/ref=${referralInfo?.referralCode}`}</div>
-              <div><Image src="/icons/copy-gray.svg" alt="copy" width={24} height={24} /></div>
+              <div onClick={handleCopy} className="cursor-pointer">
+                <TooltipProvider> 
+                  <Tooltip delayDuration={0}> 
+                    <TooltipTrigger asChild> 
+                      <Image src="/icons/copy-gray.svg" alt="copy" width={24} height={24} />
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>{copied ? "Copied" : "Copy to clipboard"}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </div>
             </div>
           </div>
           <div className="flex justify-between gap-4">
