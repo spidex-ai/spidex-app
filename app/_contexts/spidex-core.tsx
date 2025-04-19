@@ -4,6 +4,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { Auth, useSpidexCore } from "@/hooks/core/useSpidexCore";
 import { SubmitSwapPayload, SwapPayload } from "@/services/dexhunter/types";
 import { EsitmateSwapPayload } from "@/services/dexhunter/types";
+import { UpdateUserPayload } from "@/hooks/core/type";
 
 interface SpidexCoreContextType {
   auth: Auth | null;
@@ -41,6 +42,8 @@ interface SpidexCoreContextType {
   submitSwapRequest: (payload: SubmitSwapPayload) => Promise<any>;
   triggerSocialQuest: (id: number) => Promise<any>;
   triggerDailyLogin: () => Promise<any>;
+  uploadAvatar: (file: FormData) => Promise<any>;
+  updateUserInfo: (payload: UpdateUserPayload) => Promise<any>;
 }
 
 const STORAGE_KEY = "spidex_auth";
@@ -171,7 +174,9 @@ export const SpidexCoreProvider: React.FC<{ children: React.ReactNode }> = ({
     estimateSwap: spidexCore.estimateSwap,
     submitSwapRequest: spidexCore.submitSwapRequest,
     triggerSocialQuest: spidexCore.triggerSocialQuest,
-    triggerDailyLogin: spidexCore.triggerDailyLogin
+    triggerDailyLogin: spidexCore.triggerDailyLogin,
+    uploadAvatar: spidexCore.uploadAvatar,
+    updateUserInfo: spidexCore.updateUserInfo
   };
 
   return (

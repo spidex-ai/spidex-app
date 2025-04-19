@@ -2,6 +2,7 @@ import { useSpidexCoreContext } from "@/app/_contexts/spidex-core";
 import { EsitmateSwapPayload, SubmitSwapPayload, SwapPayload } from "@/services/dexhunter/types";
 import { STORAGE_KEY } from "@raydium-io/raydium-sdk-v2";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { UpdateUserPayload } from "./type";
 export interface SignMessageData {
   signature: string;
   address: string;
@@ -69,10 +70,12 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
 
       // Default headers with content type and authorization if token exists
       const headers = {
-        "Content-Type": "application/json",
         ...(auth?.accessToken && {
           Authorization: `Bearer ${auth.accessToken}`,
         }),
+        ...(!options.body || !(options.body instanceof FormData) 
+        ? { "Content-Type": "application/json" }
+        : {}),
         ...options.headers,
       };
 
@@ -521,6 +524,37 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     }
   }, [fetchWithAuth, auth]);
 
+  const uploadAvatar = useCallback(async (file: FormData) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await fetchWithAuth(`/medias/image`, {
+        method: "POST",
+        body: file,
+      });
+      return data.data;
+    } catch (error) {
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  }, [fetchWithAuth, auth]); 
+
+  const updateUserInfo = useCallback(async (payload: UpdateUserPayload) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await fetchWithAuth(`/user/profile`, {
+        method: "PUT",
+        body: JSON.stringify(payload)
+      });
+      return data.data;
+    } catch (error) {
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  }, [fetchWithAuth, auth]);
 
   return {
     auth,
@@ -552,7 +586,9 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     estimateSwap,
     submitSwapRequest,
     triggerSocialQuest,
-    triggerDailyLogin
+    triggerDailyLogin,
+    uploadAvatar,
+    updateUserInfo
   };
 };
 
