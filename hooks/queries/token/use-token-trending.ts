@@ -12,13 +12,25 @@ export const useTokenTrending = () => {
   const { getTopTokensByVolume } = useSpidexCore();
 
   useEffect(() => {
-    fetchTopTokenTreding();
+    fetchTopTokenTreding({
+      timeframe: "24h",
+      page: 1,
+      perPage: 15
+    });
   }, []);
 
-  const fetchTopTokenTreding = async () => {
+  const fetchTopTokenTreding = async ({
+    timeframe = "24h",
+    page = 1,
+    perPage = 12
+  }: {
+    timeframe?: string;
+    page?: number;
+    perPage?: number;
+  }) => {
     setIsLoading(true);
     try {
-      const data = await getTopTokensByVolume();
+      const data = await getTopTokensByVolume(timeframe, page, perPage);
       setData(data);
     } catch (error) {
       setError(error as string);

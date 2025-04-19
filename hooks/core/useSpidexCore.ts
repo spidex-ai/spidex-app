@@ -160,7 +160,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     async (timeframe = "24h", page = 1, perPage = 10) => {
       try {
         const data = await fetchWithAuth(
-          `/tokens/top/volume?timeframe=${timeframe}&page=${page}&perPage=${perPage}`
+          `/tokens/top/volume?timeframe=${timeframe}&page=${page}&limit=${perPage}`
         );
         return data.data;
       } catch (err) {
@@ -174,7 +174,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     async (page = 1, perPage = 10) => {
       try {
         const data = await fetchWithAuth(
-          `/tokens/top/mcap?page=${page}&perPage=${perPage}`
+          `/tokens/top/mcap?page=${page}&limit=${perPage}`
         );
         return data.data;
       } catch (err) {
@@ -370,7 +370,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     try {
       const data = await fetchWithAuth(`/portfolio/${address || 'addr1q9gykktajrgrmj5am8vwlhp65a72emlwn2s3e5cadkhe3vrfkfxs6yajls3ft0yn42uqlcnrq6qcn3l0lunkxy6aplgspxm6da'}`);
       return data.data;
-    } catch (error) { 
+    } catch (error) {
       return null;
     } finally {
       setLoading(false);
@@ -389,7 +389,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     } finally {
       setLoading(false);
     }
-  }, [fetchWithAuth, auth]); 
+  }, [fetchWithAuth, auth]);
 
   const getTokenTradeHistory = useCallback(async (tokenId: string) => {
     setLoading(true);
@@ -452,7 +452,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
         body: JSON.stringify(payload)
       });
       return data.data;
-    } catch (error) { 
+    } catch (error) {
       return null;
     } finally {
       setLoading(false);
@@ -464,21 +464,21 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     setError(null);
     try {
       const data = await fetchWithAuth(`/swap/estimate`, {
-        method: "POST", 
+        method: "POST",
         body: JSON.stringify(payload)
       });
       return data.data;
     } catch (error) {
       return null;
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   }, [fetchWithAuth, auth]);
 
   const submitSwapRequest = useCallback(async (payload: SubmitSwapPayload) => {
     setLoading(true);
     setError(null);
-    try { 
+    try {
       const data = await fetchWithAuth(`/swap/submit`, {
         method: "POST",
         body: JSON.stringify(payload)
@@ -512,7 +512,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     try {
       const data = await fetchWithAuth(`/user-quest/check-in`, {
         method: "PUT",
-      }); 
+      });
       return data.data;
     } catch (error) {
       return null;
