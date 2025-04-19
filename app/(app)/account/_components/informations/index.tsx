@@ -98,7 +98,7 @@ const Information: React.FC<Props> = ({ user }) => {
             <div>
               {
                 avatar ? (
-                  <Image
+                  <img
                     src={avatar}
                     alt="profile"
                     width={40}
