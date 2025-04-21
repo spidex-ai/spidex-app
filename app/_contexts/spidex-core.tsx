@@ -46,7 +46,7 @@ interface SpidexCoreContextType {
   updateUserInfo: (payload: UpdateUserPayload) => Promise<any>;
 }
 
-const STORAGE_KEY = "spidex_auth";
+export const STORAGE_KEY = "spidex_auth";
 
 const SpidexCoreContext = createContext<SpidexCoreContextType | undefined>(
   undefined

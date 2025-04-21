@@ -41,15 +41,25 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
   const [auth, setAuth] = useState<Auth | null>(initialAuth);
   const [error, setError] = useState<string | null>(null);
 
-  // Cập nhật auth khi initialAuth thay đổi từ bên ngoài
+  // Update auth and localStorage when initialAuth changes
   useEffect(() => {
     if (
       initialAuth &&
       (!auth || initialAuth.accessToken !== auth.accessToken)
     ) {
       setAuth(initialAuth);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(initialAuth));
     }
   }, [initialAuth]);
+
+  // Update localStorage whenever auth changes
+  useEffect(() => {
+    if (auth) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(auth));
+    } else {
+      localStorage.removeItem(STORAGE_KEY);
+    }
+  }, [auth]);
 
   useEffect(() => {
     console.log("Current auth in useSpidexCoreInternal:", auth);
@@ -132,7 +142,6 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
         setLoading(false);
         if (!response.ok) {
           return null;
-          throw new Error(`API error: ${response.status}`);
         }
 
         return await response.json();
@@ -140,7 +149,6 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
         setError(err.message || "An error occurred");
         setLoading(false);
         console.error("Spidex API error:", err);
-        throw err;
       }
     },
     [auth?.accessToken]
@@ -272,7 +280,8 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
 
   const logout = useCallback(async () => {
     setAuth(null);
-  }, [fetchWithAuth]);
+    localStorage.removeItem(STORAGE_KEY);
+  }, []);
 
   const getUserRefMeInfo = useCallback(async () => {
     setLoading(true);
