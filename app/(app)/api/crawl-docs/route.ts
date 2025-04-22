@@ -3,8 +3,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { firecrawl } from "@/services/firecrawl";
 
 import {
-  CrawlStatusResponse,
-  ErrorResponse,
+  // CrawlStatusResponse,
+  // ErrorResponse,
   FirecrawlDocument,
 } from "@mendable/firecrawl-js";
 import { embed, generateText } from "ai";
