@@ -95,16 +95,16 @@ const TokenDashboardTabs: React.FC<Props> = ({  data, isLoadingTokenDetail }) =>
             </div>
             <div className="flex-1 h-0 overflow-y-auto w-full no-scrollbar mt-2">
                 <TabsContent value="market-stats" className="h-full m-0 p-2">
-                    <MarketStats tokenId={data?.token_id} tokenName={data?.ticker} isLoadingTokenDetail={isLoadingTokenDetail} />
+                    <MarketStats tokenId={data?.unit} tokenName={data?.ticker} isLoadingTokenDetail={isLoadingTokenDetail} />
                 </TabsContent>
                 <TabsContent value="holders" className="h-full m-0">
-                    <TradeHistory tokenId={data?.token_id || ''} ticker={data?.ticker || ''} />
+                    <TradeHistory tokenId={data?.unit || ''} ticker={data?.ticker || ''} />
                 </TabsContent>
                 {/* <TabsContent value="traders" className="h-full m-0">
                     <TopTraders address={address} />
                 </TabsContent>  */}
                 <TabsContent value="bubble" className="h-full m-0 p-2">
-                    <TopHolders tokenId={data?.token_id || ''} />
+                    <TopHolders tokenId={data?.unit || ''} />
                 </TabsContent>
             </div>
         </Tabs>

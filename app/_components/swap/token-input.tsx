@@ -42,8 +42,8 @@ const TokenInput: React.FC<Props> = ({ label, amount, onChange, token, onChangeT
                     token && address && (
                         <TokenBalance
                             address={address}
-                            tokenAddress={token.token_id}
-                            tokenSymbol={token.token_ascii}
+                            tokenAddress={token.unit ? token.unit : token.token_id}
+                            tokenSymbol={token.name ? token.name : token.token_ascii}
                             setAmount={onChange}
                         />
                     )

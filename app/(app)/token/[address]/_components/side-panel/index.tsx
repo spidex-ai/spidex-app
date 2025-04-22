@@ -30,9 +30,9 @@ const SidePanel: React.FC<Props> =  ({ data: tokenDetail, isLoadingTokenDetail }
     }
     
     const tokenChatData: TokenChatData = {
-        address: tokenDetail?.token_id ?? '',
-        name: tokenDetail?.token_ascii ?? '',
-        symbol: tokenDetail?.ticker ?? '',
+        address: tokenDetail?.unit ?? '',
+        name: tokenDetail?.name ?? '',
+        symbol: tokenDetail?.name ?? '',
         decimals: tokenDetail?.decimals ?? 0,
         extensions: {},
         logoURI: tokenDetail?.logo ?? '',

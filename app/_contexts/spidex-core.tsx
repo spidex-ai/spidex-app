@@ -44,6 +44,7 @@ interface SpidexCoreContextType {
   triggerDailyLogin: () => Promise<any>;
   uploadAvatar: (file: FormData) => Promise<any>;
   updateUserInfo: (payload: UpdateUserPayload) => Promise<any>;
+  getTokenDetailCore: (tokenId: string) => Promise<any>;
 }
 
 export const STORAGE_KEY = "spidex_auth";
@@ -176,7 +177,8 @@ export const SpidexCoreProvider: React.FC<{ children: React.ReactNode }> = ({
     triggerSocialQuest: spidexCore.triggerSocialQuest,
     triggerDailyLogin: spidexCore.triggerDailyLogin,
     uploadAvatar: spidexCore.uploadAvatar,
-    updateUserInfo: spidexCore.updateUserInfo
+    updateUserInfo: spidexCore.updateUserInfo,
+    getTokenDetailCore: spidexCore.getTokenDetailCore
   };
 
   return (

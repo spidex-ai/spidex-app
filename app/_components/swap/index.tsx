@@ -110,8 +110,8 @@ const Swap: React.FC<Props> = ({
       const api = await (window as any).cardano[enabledWallet as any].enable();
       const payload: SwapPayload = {
         buyerAddress: unusedAddresses?.[0].toString() || "",
-        tokenIn: inputToken?.token_id || " ",
-        tokenOut: outputToken?.token_id || " ",
+        tokenIn: inputToken?.unit ? inputToken?.unit : inputToken?.token_id || " ",
+        tokenOut: outputToken?.unit ? outputToken?.unit : outputToken?.token_id || " ",
         slippage: 1,
         amountIn: Number(inputAmount),
         txOptimization: false,
@@ -160,8 +160,8 @@ const Swap: React.FC<Props> = ({
     try {
       await new Promise((resolve) => setTimeout(resolve, 1000));
       const poolStats = await getSwapPoolStats(
-        inputToken?.token_id || "",
-        outputToken?.token_id || ""
+        inputToken?.unit ? inputToken?.unit : inputToken?.token_id || "",
+        outputToken?.unit ? outputToken?.unit : outputToken?.token_id || ""
       );
       if (poolStats) {
         setIsNotPool(false);
@@ -179,8 +179,8 @@ const Swap: React.FC<Props> = ({
     setOutputAmount("");
 
     const quote = await getQuoteCardano(
-      inputToken?.unit || inputToken?.token_id || "",
-      outputToken?.unit || outputToken?.token_id || "",
+      inputToken?.unit ? inputToken?.unit : inputToken?.token_id || "",
+      outputToken?.unit ? outputToken?.unit : outputToken?.token_id || "",
       Number(inputAmount)
     );
     setQuoteResponse(quote);

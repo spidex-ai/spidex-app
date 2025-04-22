@@ -10,6 +10,7 @@ export interface SearchTokenInfo {
     price: number
     logo?: string
     unit?: string
+    name?: string
 }
 
 

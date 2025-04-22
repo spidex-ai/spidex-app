@@ -53,7 +53,7 @@ const TokenSelect: React.FC<Props> = ({ value, onChange, priorityTokens = [] }) 
                                 value.logo ? (
                                     <img 
                                         src={getLogoUrl(value.logo)}
-                                        alt={value.token_ascii} 
+                                        alt={value.name ? value.name : value.token_ascii} 
                                         className="w-6 h-6 rounded-full" 
                                     />
                                 ) : (
@@ -68,7 +68,7 @@ const TokenSelect: React.FC<Props> = ({ value, onChange, priorityTokens = [] }) 
                         "text-xs font-bold",
                         value ? "opacity-100" : "opacity-50"
                     )}>
-                        {value ? value.token_ascii : "Select"}
+                        {value ? value.name ? value.name : value.token_ascii : "Select"}
                     </p>
                     <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />
                 </div>
@@ -105,15 +105,15 @@ const TokenSelect: React.FC<Props> = ({ value, onChange, priorityTokens = [] }) 
                                                     token.logo && (
                                                         <img 
                                                             src={getLogoUrl(token.logo)}
-                                                            alt={token.token_ascii}
+                                                            alt={token.name ? token.name : token.token_ascii}
                                                             className="w-6 h-6 rounded-full" 
                                                         />
                                                     )
                                                 }
                                                 <p className="text-sm font-bold">
-                                                    {token.token_ascii} ({token.ticker})
+                                                    {token.name ? token.name : token.token_ascii} ({token.ticker})
                                                 </p>
-                                                <SaveToken address={token.token_id} />
+                                                <SaveToken address={token.unit ? token.unit : token.token_id} />
                                             </Button>
                                         ))
                                     )

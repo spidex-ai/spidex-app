@@ -565,6 +565,19 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     }
   }, [fetchWithAuth, auth]);
 
+  const getTokenDetailCore = useCallback(async (tokenId: string) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await fetchWithAuth(`/tokens/${tokenId}`);
+      return data.data;
+    } catch (error) {
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  }, [fetchWithAuth, auth]); 
+
   return {
     auth,
     loading,
@@ -597,7 +610,8 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     triggerSocialQuest,
     triggerDailyLogin,
     uploadAvatar,
-    updateUserInfo
+    updateUserInfo,
+    getTokenDetailCore
   };
 };
 

@@ -31,19 +31,19 @@ const Header: React.FC<Props> = ({ data, isLoading, isSearch = false }) => {
         {data?.logo && (
           <img
             src={getLogoUrl(data.logo)}
-            alt={data.token_ascii}
+            alt={data?.unit ? data.unit : data?.token_ascii}
             className="w-6 h-6 rounded-full"
           />
         )}
         <div className="flex flex-col">
           <div className="flex items-center gap-2">
             <h1 className="text-lg font-bold">
-              {data?.token_ascii} ({data?.ticker})
+              ({data?.ticker})
             </h1>
-            <Address address={data?.token_id ?? ""} />
+            <Address address={data?.unit ?? ""} />
           </div>
         </div>
-        <SaveToken address={data?.token_id ?? ""} />
+        <SaveToken address={data?.unit ?? ""} />
         {isSearch && (
           <SearchBar isTitle={false} />
         )}

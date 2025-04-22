@@ -2,11 +2,12 @@
 
 import { CardanoTokenDetail } from "@/services/dexhunter/types";
 import { useEffect, useState } from "react";
-
+import { useSpidexCoreContext } from "@/app/_contexts/spidex-core";
 export const useTokenDetail = (address: string) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [data, setData] = useState<CardanoTokenDetail | null>(null);
+  const { getTokenDetailCore } = useSpidexCoreContext();
 
   useEffect(() => {
     if (address) {
@@ -17,9 +18,8 @@ export const useTokenDetail = (address: string) => {
   const getTokenDetail = async (address: string) => {
     setIsLoading(true);
     try {
-      const response = await fetch(`/api/token/${address}/detail`);
-      const data = await response.json();
-      setData(data);
+      const response = await getTokenDetailCore(address);
+      setData(response);
     } catch (error) {
       setError(error as string);
     } finally {
