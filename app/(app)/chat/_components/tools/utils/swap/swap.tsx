@@ -134,9 +134,9 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
         buyerAddress: unusedAddresses?.[0].toString() || "",
         tokenIn: inputToken?.token_id || " ",
         tokenOut: outputToken?.token_id || " ",
-        slippage: 1,
+        slippage: 5,
         amountIn: Number(inputAmount),
-        txOptimization: false,
+        txOptimization: true,
         blacklistedDexes: [],
       };
 
@@ -168,7 +168,7 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
         tokenIn: inputUnit,
         tokenOut: outputUnit,
         amountIn: amount,
-        slippage: 1,
+        slippage: 5,
         blacklistedDexes: [],
       };
       const swapEstResponse = await estimateSwap(swapEstPayload);
@@ -196,8 +196,8 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
         tokenOut:
           "279c909f348e533da5808898f87f9a14bb2c3dfbbacccd631d927a3f534e454b",
         amountIn: 1,
-        slippage: 1,
-        txOptimization: false,
+        slippage: 5,
+        txOptimization: true,
         blacklistedDexes: [],
       };
       console.log("payload:::", payload);

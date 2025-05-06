@@ -23,6 +23,7 @@ import { cn } from '@/lib/utils';
 import { SearchTokenInfo } from '@/services/dexhunter/types';
 import { getLogoUrl } from '../utils/logo';
 import Image from 'next/image';
+import { useDebounce } from '@/hooks/utils/use-debounce';
 interface Props {
     value: SearchTokenInfo | null,
     onChange: (token: SearchTokenInfo | null) => void,
@@ -34,8 +35,9 @@ const TokenSelect: React.FC<Props> = ({ value, onChange, priorityTokens = [] }) 
     const [open, setOpen] = useState(false);
 
     const [input, setInput] = useState("");
+    const debouncedInput = useDebounce(input, 500);
 
-    const { results, loading } = useTokenSearch(input);
+    const { results, loading } = useTokenSearch(debouncedInput);
     console.log("🚀 ~ results:", results)
 
     console.log("🚀 ~ TokenSelect ~ priorityTokens:", priorityTokens)

@@ -112,9 +112,9 @@ const Swap: React.FC<Props> = ({
         buyerAddress: unusedAddresses?.[0].toString() || "",
         tokenIn: inputToken?.unit ? inputToken?.unit : inputToken?.token_id || " ",
         tokenOut: outputToken?.unit ? outputToken?.unit : outputToken?.token_id || " ",
-        slippage: 1,
+        slippage: 5,
         amountIn: Number(inputAmount),
-        txOptimization: false,
+        txOptimization: true,
         blacklistedDexes: [],
       };
 
@@ -143,7 +143,7 @@ const Swap: React.FC<Props> = ({
       tokenIn: inputUnit,
       tokenOut: outputUnit,
       amountIn: amount,
-      slippage: 1,
+      slippage: 5,
       blacklistedDexes: [],
     };
     const swapEstResponse = await estimateSwap(swapEstPayload);

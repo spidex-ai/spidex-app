@@ -20,4 +20,4 @@ deploy:
 				. $(u)@$(h):$(dir)
 	ssh $(u)@$(h) "cd $(dir); docker compose up -d --build"
 deploy-dev: 
-	make deploy h=160.191.175.10 dir=/root/spidex-app
+	make deploy h=36.50.134.172 dir=/root/spidex-app
