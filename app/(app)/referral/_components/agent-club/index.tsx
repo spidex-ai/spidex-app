@@ -18,7 +18,7 @@ const AgentClub: React.FC = () => {
   }
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_SPIDEX_APP_URL}?ref=${referralInfo?.referralCode}`);
+    navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_SPIDEX_APP_URL}/chat?ref=${referralInfo?.referralCode}`);
     setCopied(true);
     setTimeout(() => {
       setCopied(false);
@@ -71,7 +71,7 @@ const AgentClub: React.FC = () => {
           <div>
             <div>Your Referrals Link</div>
             <div className="flex justify-between bg-bg-main p-4 my-4 rounded-sm">
-              <div>{`${process.env.NEXT_PUBLIC_SPIDEX_APP_URL}?ref=${referralInfo?.referralCode}`}</div>
+              <div>{`${process.env.NEXT_PUBLIC_SPIDEX_APP_URL}/chat?ref=${referralInfo?.referralCode}`}</div>
               <div onClick={handleCopy} className="cursor-pointer">
                 <TooltipProvider> 
                   <Tooltip delayDuration={0}> 
