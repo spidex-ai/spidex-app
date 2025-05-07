@@ -29,7 +29,7 @@ const PointInformationWrapper = () => {
   const progressValue = pointInfo?.nextAchievement?.pointsToNextAchievement ? (currentPoint / Number(pointInfo?.nextAchievement?.points)) * 100 : 0;
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_SPIDEX_APP_URL}/ref=${pointInfo?.referralInfo?.referralCode}`);
+    navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_SPIDEX_APP_URL}?ref=${pointInfo?.referralInfo?.referralCode}`);
     setCopied(true);
     setTimeout(() => {
       setCopied(false);

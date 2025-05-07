@@ -1,6 +1,6 @@
 "use client";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useQuests } from "@/hooks/point/use-point";
+import { usePointHistory, useQuests } from "@/hooks/point/use-point";
 import React from "react";
 import Image from "next/image";
 import { GradientButton, GradientSecondaryBtn } from "@/components/ui";
@@ -20,6 +20,7 @@ interface MissionItem {
 
 const Missions = () => {
   const { quests, loading, error, fetchQuests } = useQuests();
+  const { refetchPointHistory } = usePointHistory();
   const { triggerSocialQuest, triggerDailyLogin } = useSpidexCoreContext();
   const [loadingMissionId, setLoadingMissionId] = React.useState<number | null>(
     null
@@ -142,6 +143,7 @@ const Missions = () => {
     } finally {
       setLoadingMissionId(null);
       fetchQuests();
+      refetchPointHistory();
     }
   };
 

@@ -82,6 +82,10 @@ export const usePointHistory = () => {
         }
     }
 
-    return { pointHistory, loading, error };
+    const refetchPointHistory = async () => {
+        await fetchPointHistory();
+    }
+
+    return { pointHistory, loading, error, refetchPointHistory };
     
 }

@@ -208,6 +208,8 @@ const LoginModal: React.FC = () => {
       }
       const nonce = await getNounce()
       if (!nonce) return
+
+      const ref = params.get("ref")
       
       await signMessage(
         nonce,
@@ -217,6 +219,7 @@ const LoginModal: React.FC = () => {
             signature,
             publicKey: key || "",
             role: "user",
+            referralCode: ref || ""
           }, enabledWallet || "")
           closeModal()
         },
