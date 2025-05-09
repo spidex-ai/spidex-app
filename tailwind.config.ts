@@ -39,7 +39,8 @@ export default {
   			text: {
   				light: '#000000',
   				dark: '#ffffff',
-				gray: '#5D717D'
+				gray: '#5D717D',
+				icon: '#717A8C'
   			},
   			sidebar: {
   				DEFAULT: 'var(--sidebar-background)',
