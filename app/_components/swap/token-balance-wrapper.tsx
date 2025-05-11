@@ -19,7 +19,7 @@ interface Props {
 
 const TokenBalanceWrapper: React.FC<Props> = ({ address, tokenAddress, tokenSymbol, setAmount, digits = 2 }) => {
     const { accountBalance } = useCardano();
-    const { balance, isLoading } = useTokenBalance(tokenAddress, address);
+    const { balance, isLoading } = useTokenBalance(address, tokenAddress);
 
     const tokenBalance = tokenSymbol === 'ADA' ? accountBalance : balance;
 

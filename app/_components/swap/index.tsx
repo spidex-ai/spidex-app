@@ -86,8 +86,8 @@ const Swap: React.FC<Props> = ({
 
   const { balance: inputBalance, isLoading: inputBalanceLoading } =
     useTokenBalance(
-      inputToken?.token_id || "",
-      unusedAddresses?.[0]?.toString() || ""
+      unusedAddresses?.[0]?.toString() || "",
+      inputToken?.token_id || ""
     );
 
   const tokenInputBalance =
