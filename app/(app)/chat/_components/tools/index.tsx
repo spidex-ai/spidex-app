@@ -58,8 +58,10 @@ import {
     CARDANO_STAKE_NAME,
     CARDANO_UNSTAKE_NAME,
     CARDANO_TRANSACTION_NAME,
+    SEARCH_WEB_KNOWLEDGE_NAME,
 } from '@/ai/action-names'
 
+import SearchWebKnowledge from './knowledge/web-search-knowledge'
 import type { ToolInvocation as ToolInvocationType } from 'ai'
 
 interface Props {
@@ -97,6 +99,8 @@ const ToolInvocation: React.FC<Props> = ({ tool, prevToolAgent }) => {
             return <AllBalances tool={tool} prevToolAgent={prevToolAgent} />
         case SEARCH_KNOWLEDGE_NAME:
             return <SearchKnowledge tool={tool} prevToolAgent={prevToolAgent} />
+        case SEARCH_WEB_KNOWLEDGE_NAME:
+            return <SearchWebKnowledge tool={tool} prevToolAgent={prevToolAgent} />
         case INVOKE_AGENT_NAME:
             return <InvokeAgent tool={tool} prevToolAgent={prevToolAgent} />
         case CARDANO_GET_TOKEN_ADDRESS_NAME:    

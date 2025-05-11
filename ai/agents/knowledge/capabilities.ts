@@ -1,5 +1,6 @@
-export const KNOWLEDGE_AGENT_CAPABILITIES = `The Knowledge Agent has a vector database of information about Cardano and Minswap protocols and concepts.
+import { SEARCH_WEB_KNOWLEDGE_NAME } from "@/ai/action-names";
 
+export const KNOWLEDGE_AGENT_CAPABILITIES = `The Knowledge Agent has a vector database of information about Cardano and Minswap protocols and concepts.
 There are documents that cover:
 - Cardano blockchain L1 Blockchain
 - Minswap protocol Decentralized Exchange
@@ -27,4 +28,8 @@ There are documents that cover:
 - Lenfi decentralized lending and borrowing protocol
 - DexHunter Dex Aggregator
 - Muesli Swap Decentralized Exchange
-- Singularity DAO decentralized portfolio management protocol`;
+- Singularity DAO decentralized portfolio management protocol
+
+If the vector database does not have relevant information, you will search the web for relevant information.
+Choose one tool at a time(vector database or web search)
+`;

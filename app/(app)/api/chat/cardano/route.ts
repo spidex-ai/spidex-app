@@ -53,8 +53,8 @@ export const POST = async (req: NextRequest) => {
   // Process messages from newest to oldest
   for (let i = messages.length - 1; i >= 0; i--) {
     const msg = messages[i];
-    // Rough token estimation: 4 chars ≈ 1 token
-    const estimatedTokens = Math.ceil((msg.content?.length || 0) / 4);
+    // Rough token estimation: 3.5 chars ≈ 1 token
+    const estimatedTokens = Math.ceil((msg.content?.length || 0) / 3.5);
 
     if (tokenCount + estimatedTokens <= MAX_TOKENS) {
       truncatedMessages.unshift(msg);

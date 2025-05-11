@@ -37,3 +37,24 @@ There are documents that cover:
 
 
 After searching the docs, answer the user's question with the most relevant information.`;
+
+export const SEARCH_WEB_KNOWLEDGE_PROMPT = `This tool performs a web search to find real-time and up-to-date information from the internet.
+
+You should call this tool when:
+- The user's question requires current or real-time information
+- The information is not available in the knowledge base
+- You need to verify or cross-reference information
+- The query is about recent events, news, or developments
+- The information might be too specific or niche for the knowledge base
+
+The web search will help gather:
+- Latest news and updates
+- Real-time market data
+- Recent protocol developments
+- Community discussions and sentiment
+- Technical documentation and guides
+- Social media updates
+- Blog posts and articles
+- Forum discussions
+
+After performing the web search, synthesize the information to provide a comprehensive and accurate answer to the user's question. Always verify the credibility of sources and prioritize official documentation and reputable sources.`;
