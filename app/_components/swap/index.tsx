@@ -189,7 +189,7 @@ const Swap: React.FC<Props> = ({
   };
 
   useEffect(() => {
-    if (inputToken || outputToken) {
+    if (inputToken && outputToken) {
       checkPool();
     }
   }, [inputToken, outputToken]);

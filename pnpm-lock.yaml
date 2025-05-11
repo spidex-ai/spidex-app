@@ -131,6 +131,9 @@ importers:
       '@streamflow/stream':
         specifier: ^7.2.0
         version: 7.2.0(@types/react-dom@19.0.2(@types/react@19.0.2))(@types/react@19.0.2)(bufferutil@4.0.8)(encoding@0.1.13)(fastestsmallesttextencoderdecoder@1.0.22)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.7.2)(utf-8-validate@5.0.10)
+      '@tavily/core':
+        specifier: ^0.5.2
+        version: 0.5.2
       '@types/jsdom':
         specifier: ^21.1.7
         version: 21.1.7
@@ -3807,6 +3810,9 @@ packages:
 
   '@tanstack/virtual-core@3.11.2':
     resolution: {integrity: sha512-vTtpNt7mKCiZ1pwU9hfKPhpdVO2sVzFQsxoVBGtOSHxlrRRzYr8iQ2TlwbAcRYCcEiZ9ECAM8kBzH0v2+VzfKw==}
+
+  '@tavily/core@0.5.2':
+    resolution: {integrity: sha512-vaVneoxa0A2p+xcDHwBRWdMNVrYAkySM3vANXvAprpJufEWwVhgagpIw4Iy3TSus54nYPfIepXEWTEEpYfK9OA==}
 
   '@thaunknown/simple-peer@10.0.11':
     resolution: {integrity: sha512-A5MdmtZ6HUzRa4gwPOS4jG+09HvpTv2rFo4kk7Vwveo2ELm+WmbO124ZrJrQnZc2D7z2Q3AWKSitjl9OKXO88g==}
@@ -15075,6 +15081,15 @@ snapshots:
       react-dom: 19.0.0(react@19.0.0)
 
   '@tanstack/virtual-core@3.11.2': {}
+
+  '@tavily/core@0.5.2':
+    dependencies:
+      axios: 1.7.9
+      https-proxy-agent: 7.0.6
+      js-tiktoken: 1.0.16
+    transitivePeerDependencies:
+      - debug
+      - supports-color
 
   '@thaunknown/simple-peer@10.0.11':
     dependencies:
