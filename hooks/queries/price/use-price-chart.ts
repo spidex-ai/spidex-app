@@ -8,6 +8,7 @@ import {
 } from "@/services/hellomoon/types";
 import { useTaptools } from "@/hooks/useTaptools";
 import { useEffect, useState } from "react";
+import { useSpidexCoreContext } from "@/app/_contexts";
 
 export const usePriceChart = (
   mint: string,
@@ -79,6 +80,8 @@ export const usePriceChartTaptools = (
     }
   };
 
+
+
   return {
     data,
     isLoading,
@@ -86,4 +89,45 @@ export const usePriceChartTaptools = (
     fetchDataChart,
     refetchDataChart,
   };
+
 };
+
+
+export const usePriceChartCore = (
+  unit: string,
+  interval: CandleStickInterval,
+  numIntervals: number
+) => {
+  const { getTokenOHLCV } = useSpidexCoreContext();
+
+  const [data, setData] = useState<TokenPriceCandlestick[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null); 
+
+  useEffect(() => {
+   if (unit) {
+    fetchDataChart();
+   }
+  }, [unit, interval, numIntervals]);
+  
+  const fetchDataChart = async () => {
+    try {
+      setIsLoading(true);
+      const data = await getTokenOHLCV(unit, interval, numIntervals);
+      console.log("🚀 ~ fetchDataChart ~ data:", data)
+      setData(data);
+    } catch (error) {
+      setData([]);
+      console.error(error);
+      setError(error as string);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  const refetchDataChart = async () => {
+    await fetchDataChart();
+  }
+
+  return { data, isLoading, error, fetchDataChart, refetchDataChart };
+}

@@ -578,6 +578,32 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     }
   }, [fetchWithAuth, auth]); 
 
+  const getTokenOHLCV = useCallback(async (tokenId: string, interval: string, numIntervals: number) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await fetchWithAuth(`/tokens/${tokenId}/ohlcv/quote?interval=${interval}&numIntervals=${numIntervals}`);
+      return data.data;
+    } catch (error) {
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  }, [fetchWithAuth, auth]);
+
+  const getTokenStats = useCallback(async (tokenId: string) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await fetchWithAuth(`/tokens/${tokenId}/stats`);
+      return data.data;
+    } catch (error) {
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  }, [fetchWithAuth, auth]); 
+
   return {
     auth,
     loading,
@@ -611,7 +637,9 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     triggerDailyLogin,
     uploadAvatar,
     updateUserInfo,
-    getTokenDetailCore
+    getTokenDetailCore,
+    getTokenOHLCV,
+    getTokenStats
   };
 };
 

@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 
 import { Button, CandlestickChart, Skeleton } from "@/components/ui";
 
-import { usePriceChartTaptools } from "@/hooks";
+import { usePriceChartCore } from "@/hooks";
 
 import { cn } from "@/lib/utils";
 
@@ -85,7 +85,7 @@ const TokenChart: React.FC<Props> = ({ data: tokenDetail, isLoadingTokenDetail }
     CandleStickInterval.FOUR_HOURS
   );
   const [numDays, setNumDays] = useState<number>(180);
-  const { data, isLoading, refetchDataChart } = usePriceChartTaptools(
+  const { data, isLoading, refetchDataChart } = usePriceChartCore(
     tokenDetail?.unit ?? "",
     timeframe,
     numDays
