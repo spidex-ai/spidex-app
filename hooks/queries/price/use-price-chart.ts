@@ -126,8 +126,12 @@ export const usePriceChartCore = (
   }
 
   const refetchDataChart = async () => {
-    await fetchDataChart();
+    try {
+      const data = await getTokenOHLCV(unit, interval, numIntervals);
+      setData(data);
+    } catch (error) {
+      console.error(error);
+    }
   }
-
   return { data, isLoading, error, fetchDataChart, refetchDataChart };
 }

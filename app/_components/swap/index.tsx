@@ -292,17 +292,29 @@ const Swap: React.FC<Props> = ({
               inputAmount: inputAmount || "",
               outputAmount: estimatedPoints?.splits?.[0]?.amount_in
                 ? String(
-                    estimatedPoints?.splits?.[0]?.expected_output ||
+                    (estimatedPoints?.splits?.[0]?.expected_output ||
                       0 / estimatedPoints?.splits?.[0]?.amount_in ||
-                      0
+                      0).toLocaleString(undefined, {
+                    maximumFractionDigits: 4,
+                  })
                   )
                 : "",
               swapRoute: "",
-              netPrice: String(estimatedPoints?.net_price),
-              minReceive: String(estimatedPoints?.total_output),
-              dexFee: String(estimatedPoints?.dexhunter_fee),
-              dexDeposits: String(estimatedPoints?.deposits),
-              serviceFee: String(estimatedPoints?.partner_fee),
+              netPrice: String(estimatedPoints?.net_price.toLocaleString(undefined, {
+                maximumFractionDigits: 2,
+              })),
+              minReceive: String(estimatedPoints?.total_output.toLocaleString(undefined, {
+                maximumFractionDigits: 2,
+              })),
+              dexFee: String(estimatedPoints?.dexhunter_fee.toLocaleString(undefined, {
+                maximumFractionDigits: 2,
+              })),
+              dexDeposits: String(estimatedPoints?.deposits.toLocaleString(undefined, {
+                maximumFractionDigits: 2,
+              })),
+              serviceFee: String(estimatedPoints?.partner_fee.toLocaleString(undefined, {
+                maximumFractionDigits: 2,
+              })),
             }}
             splits={estimatedPoints?.splits || []}
             estimatedPoints={String(estimatedPoints?.estimated_point || "1")}

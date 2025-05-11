@@ -79,6 +79,8 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
   } = useSpidexCoreContext();
   const { enabledWallet, unusedAddresses, accountBalance } = useCardano();
   const isConnectedWallet = useMemo(() => {
+
+
     return unusedAddresses?.[0]?.toString() == auth?.user?.walletAddress
   }, [unusedAddresses, auth?.user?.walletAddress])
   const [inputAmount, setInputAmount] = useState<string>(
@@ -174,11 +176,13 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
       const swapEstResponse = await estimateSwap(swapEstPayload);
       if (swapEstResponse) {
         setEstimatedPoints(swapEstResponse);
+        console.log("🚀 ~ swapEstResponse:", swapEstResponse)
         return swapEstResponse?.total_output;
       } else {
         setIsNotPool(true);
         return "0";
       }
+ 
     } catch (error) {
       console.log("error:::", error);
     }
@@ -274,6 +278,8 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
     }
   }, [inputToken, outputToken, inputAmount]);
 
+  console.log("🚀 ~ estimatedPoints:", estimatedPoints)
+
   return (
     <div className="flex flex-col gap-4 w-96 max-w-full relative">
         <div className="absolute top-0 right-0 cursor-pointer" onClick={onCancel}>
@@ -361,17 +367,29 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
               inputAmount: inputAmount || "",
               outputAmount: estimatedPoints?.splits?.[0]?.amount_in
                 ? String(
-                    estimatedPoints?.splits?.[0]?.expected_output ||
+                    (estimatedPoints?.splits?.[0]?.expected_output ||
                       0 / estimatedPoints?.splits?.[0]?.amount_in ||
-                      0
+                      0).toLocaleString(undefined, {
+                    maximumFractionDigits: 4,
+                  })
                   )
                 : "",
               swapRoute: "",
-              netPrice: String(estimatedPoints?.net_price),
-              minReceive: String(estimatedPoints?.total_output),
-              dexFee: String(estimatedPoints?.dexhunter_fee),
-              dexDeposits: String(estimatedPoints?.deposits),
-              serviceFee: String(estimatedPoints?.partner_fee),
+              netPrice: String(estimatedPoints?.net_price.toLocaleString(undefined, {
+                maximumFractionDigits: 2,
+              })),
+              minReceive: String(estimatedPoints?.total_output.toLocaleString(undefined, {
+                maximumFractionDigits: 2,
+              })),
+              dexFee: String(estimatedPoints?.dexhunter_fee.toLocaleString(undefined, {
+                maximumFractionDigits: 2,
+              })),
+              dexDeposits: String(estimatedPoints?.deposits.toLocaleString(undefined, {
+                maximumFractionDigits: 2,
+              })),
+              serviceFee: String(estimatedPoints?.partner_fee.toLocaleString(undefined, {
+                maximumFractionDigits: 2,
+              })),
             }}
             splits={estimatedPoints?.splits || []}
             estimatedPoints={String(estimatedPoints?.estimated_point || "1")}

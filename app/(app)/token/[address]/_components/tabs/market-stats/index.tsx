@@ -14,7 +14,7 @@ interface Props {
   isLoadingTokenDetail: boolean;
 }
 
-const MarketStats: React.FC<Props> = ({ tokenId, tokenName, isLoadingTokenDetail }) => {
+const MarketStats: React.FC<Props> = ({ tokenId, isLoadingTokenDetail }) => {
   const { data: tokenStats, isLoading } = useTokenStats(tokenId);
 
   if (isLoading || isLoadingTokenDetail) {
@@ -28,7 +28,9 @@ const MarketStats: React.FC<Props> = ({ tokenId, tokenName, isLoadingTokenDetail
           <div className="bg-bg-tab p-2 flex flex-1 justify-center">
             <div className="min-h-[80px] flex flex-col justify-center items-center gap-3">
               <div className="text-xs font-semibold text-text-gray">Price USD</div>
-              <div className="text-xs text-white">{tokenStats?.usdPrice ? tokenStats?.usdPrice : "N/A"}</div>
+              <div className="text-xs text-white">{tokenStats?.usdPrice ? tokenStats?.usdPrice.toLocaleString(undefined, {
+                maximumFractionDigits: 4,
+              }) : "N/A"}</div>
             </div>
           </div>
 
@@ -37,7 +39,9 @@ const MarketStats: React.FC<Props> = ({ tokenId, tokenName, isLoadingTokenDetail
               <div className="text-xs font-semibold text-text-gray">Liquidity</div>
               <div className="text-xs text-white">
                 {tokenStats?.mcap.circSupply
-                  ? tokenStats?.mcap.circSupply
+                  ? tokenStats?.mcap.circSupply.toLocaleString(undefined, {
+                    maximumFractionDigits: 4,
+                  })
                   : "N/A"}
               </div>
             </div>
@@ -50,7 +54,11 @@ const MarketStats: React.FC<Props> = ({ tokenId, tokenName, isLoadingTokenDetail
           <StatItem
             label="Liquidity"
             value={
-               "--"
+              tokenStats?.mcap.circSupply
+                ? tokenStats?.mcap.circSupply.toLocaleString(undefined, {
+                  maximumFractionDigits: 4,
+                })
+                : "N/A"
             }
           />
           <StatItem
@@ -66,26 +74,26 @@ const MarketStats: React.FC<Props> = ({ tokenId, tokenName, isLoadingTokenDetail
               tokenStats?.mcap?.fdv ? `$${tokenStats?.mcap.fdv.toLocaleString()}` : "--"
             }
           />
-          <StatItem
+          {/* <StatItem
             label="Pooled USD"
             value={
                "--"
             }
-          />
+          /> */}
           <StatItem
             label="Holders"
             value={
-              tokenStats?.holders.holders
-                ? tokenStats?.holders.holders.toLocaleString()
+              tokenStats?.holders
+                ? tokenStats?.holders.toLocaleString()
                 : "--"
             }
           />
-          <StatItem
+          {/* <StatItem
             label="Token Listed"
             value={
                "--"
             }
-          />
+          /> */}
           <StatItem
             label="Circ Supply"
             value={
@@ -102,12 +110,12 @@ const MarketStats: React.FC<Props> = ({ tokenId, tokenName, isLoadingTokenDetail
                 : "--"
             }
           />
-          <StatItem
+          {/* <StatItem
             label={`% Pooled ${tokenName}`}
             value={
                "--"
             }
-          />
+          /> */}
         </div>
       </div>
     </div>

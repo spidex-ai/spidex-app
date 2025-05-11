@@ -107,6 +107,7 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
             userId: auth?.user?.id,
             chatId,
         },
+        
     });
     
     const addToolResult = <T,>(toolCallId: string, result: ToolResult<T>) => {

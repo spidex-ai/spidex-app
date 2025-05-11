@@ -479,7 +479,7 @@ export interface TokenStats {
   price: number;
   usdPrice: number;
   mcap: TokenMcap;
-  holders: TokenHolders;
+  holders: number;
   "24h": TokenTradingStats;
   tokenAddress?: string;
   tokenLogo?: string;

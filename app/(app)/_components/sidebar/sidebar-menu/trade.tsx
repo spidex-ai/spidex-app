@@ -15,7 +15,7 @@ const Trade: React.FC = () => {
     const { auth } = useSpidexCoreContext() 
 
     if(!auth?.user?.walletAddress) return null
-    const tokenTrade = '29d222ce763455e3d7a09a665ce554f00ac89d2e99a1a83d267170c64d494e'
+    const tokenTrade = 'c48cbb3d5e57ed56e276bc45f99ab39abe94e6cd7ac39fb402da47ad0014df105553444d'
     const isActive = pathname.includes(`/token/${tokenTrade}`)
     return (
         <Link href={`/token/${tokenTrade}?tab=trade`}>

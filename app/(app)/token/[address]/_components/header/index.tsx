@@ -38,7 +38,7 @@ const Header: React.FC<Props> = ({ data, isLoading, isSearch = false }) => {
         <div className="flex flex-col">
           <div className="flex items-center gap-2">
             <h1 className="text-lg font-bold">
-              ({data?.ticker})
+              ({`${data?.ticker}/USD`})
             </h1>
             <Address address={data?.unit ?? ""} />
           </div>

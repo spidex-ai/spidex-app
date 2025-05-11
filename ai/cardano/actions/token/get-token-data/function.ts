@@ -67,7 +67,7 @@ export async function getTokenData(
       price: mcap.price,
       usdPrice: usdPrice.price,
       mcap,
-      holders: holders,
+      holders: holders.holders,
       "24h": tradingStats,
       tokenAddress,
       tokenLogo,

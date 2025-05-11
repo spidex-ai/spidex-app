@@ -103,6 +103,8 @@ const TokenChart: React.FC<Props> = ({ data: tokenDetail, isLoadingTokenDetail }
   const open = data?.length > 0 ? data[0].open : 0;
   const change = ((price - open) / open) * 100;
 
+  const currentPrice = price.toFixed(2);
+
   return (
     <div className="flex flex-col h-full w-full">
       <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-1 bg-neutral-100 dark:bg-bg-secondary p-2">
@@ -113,9 +115,7 @@ const TokenChart: React.FC<Props> = ({ data: tokenDetail, isLoadingTokenDetail }
             {data?.length > 0 ? (
               <p className="text-md md:text-lg font-bold">
                 $
-                {data[data.length - 1].close.toLocaleString(undefined, {
-                  maximumFractionDigits: 5,
-                })}{" "}
+                {currentPrice}{" "}
                 <span
                   className={cn(change > 0 ? "text-green-500" : "text-red-500")}
                 >

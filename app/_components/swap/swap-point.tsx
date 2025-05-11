@@ -4,6 +4,12 @@ import { useState } from "react";
 import Image from "next/image";
 import { TextGradient } from "@/components/ui/text";
 import { Split } from "@/services/dexhunter/types";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 interface Props {
   swapDetails: {
@@ -22,7 +28,11 @@ interface Props {
   splits: Split[];
   estimatedPoints: string;
 }
-export default function SwapPoint({ swapDetails, splits, estimatedPoints }: Props) {
+export default function SwapPoint({
+  swapDetails,
+  splits,
+  estimatedPoints,
+}: Props) {
   const [isOpenSwapDetails, setIsOpenSwapDetails] = useState(true);
   const [isOpenMarketOffers, setIsOpenMarketOffers] = useState(true);
 
@@ -32,7 +42,7 @@ export default function SwapPoint({ swapDetails, splits, estimatedPoints }: Prop
         <div className="flex justify-between items-center gap-2 px-6 py-2 bg-bg-swap rounded-lg">
           <div className="text-xs">Swap details</div>
           <div className="flex items-center gap-2">
-            <div className="text-[10px] text-text-gray">{`1 ${swapDetails.inputToken} = ${swapDetails.outputAmount} ${swapDetails.outputToken}`}</div>
+            <div className="text-[10px] text-text-gray">{`${swapDetails.inputAmount} ${swapDetails.inputToken} = ${swapDetails.outputAmount} ${swapDetails.outputToken}`}</div>
             {!isOpenSwapDetails ? (
               <div
                 className="cursor-pointer"
@@ -68,21 +78,33 @@ export default function SwapPoint({ swapDetails, splits, estimatedPoints }: Prop
               />
               <SwapDetailItem
                 label="Net Price"
-                value={'--'}
+                value={`${swapDetails.netPrice}`}
               />
               <SwapDetailItem
                 label="Min Receive"
                 value={Number(swapDetails.minReceive).toFixed(2)}
               />
-              <SwapDetailItem label="Dex Fee" value={Number(swapDetails.dexFee).toFixed(2)} />
+              <SwapDetailItem
+                label="Dex Fee"
+                value={`${swapDetails.dexFee} ADA`}
+              />
               <SwapDetailItem
                 label="Dex Deposits"
                 value={Number(swapDetails.dexDeposits).toFixed(2)}
               />
-              <SwapDetailItem
-                label="Service Fee"
-                value={'1 ADA + 0.1%'}
-              />
+              <div className="text-left">
+                <TooltipProvider>
+                  <Tooltip delayDuration={0}>
+                    <TooltipTrigger>
+                      <SwapDetailItem
+                        label="Service Fee"
+                        value={"1 ADA + 0.1%"}
+                      />
+                    </TooltipTrigger>
+                    <TooltipContent>This fee will be collected by DexHunter</TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </div>
             </div>
           </div>
         )}
@@ -126,33 +148,39 @@ export default function SwapPoint({ swapDetails, splits, estimatedPoints }: Prop
         {isOpenMarketOffers && (
           <div className=" my-2 p-2">
             <div>
-                {splits.map((split, key) => (
-                    <div className="text-xs gradient-border" key={key}>
-                    <div className="flex items-center justify-between gap-1 p-2">
-                      <div className="flex items-center gap-1">
+              {splits.map((split, key) => (
+                <div className="text-xs gradient-border" key={key}>
+                  <div className="flex items-center justify-between gap-1 p-2">
+                    <div className="flex items-center gap-1">
+                      <Image
+                        src="/icons/logo-gray.svg"
+                        alt="logo-gray"
+                        width={20}
+                        height={20}
+                      />
+                      <div>{split.dex}</div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div>{`${split.amount_in} ${
+                        swapDetails.inputToken
+                      } = ${split.expected_output.toLocaleString(undefined, {
+                        maximumFractionDigits: 4,
+                      })} ${swapDetails.outputToken}`}</div>
+                      <div className="flex items-center">
                         <Image
-                          src="/icons/logo-gray.svg"
-                          alt="logo-gray"
-                          width={20}
-                          height={20}
+                          src="/icons/fee-gray.svg"
+                          alt="fee-gray"
+                          width={10}
+                          height={10}
                         />
-                        <div>{split.dex}</div>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <div>{`${split.amount_in} ${swapDetails.inputToken} = ${split.expected_output} ${swapDetails.outputToken}`}</div>
-                        <div className="flex items-center">
-                          <Image
-                            src="/icons/fee-gray.svg"
-                            alt="fee-gray"
-                            width={10}
-                            height={10}
-                          />
-                          <div className="text-xs text-text-gray">${split.fee}</div>
+                        <div className="text-xs text-text-gray">
+                          ${split.fee}
                         </div>
                       </div>
                     </div>
                   </div>
-                ))}
+                </div>
+              ))}
             </div>
           </div>
         )}
@@ -176,7 +204,9 @@ export default function SwapPoint({ swapDetails, splits, estimatedPoints }: Prop
           <div className="flex justify-between items-center py-2 px-6 rounded-lg">
             <TextGradient className="text-sm">Estimated Points</TextGradient>
             <div className="flex gap-1">
-              <div className="flex items-center  text-sm pt-1">{Number(estimatedPoints).toFixed(2)}</div>
+              <div className="flex items-center  text-sm pt-1">
+                {Number(estimatedPoints).toFixed(2)}
+              </div>
               <div>
                 <Image
                   src="/icons/logo-gray.svg"
@@ -202,7 +232,7 @@ const SwapDetailItem = ({
 }) => {
   return (
     <div>
-      <div className="text-[10px] text-text-gray">{label}</div>
+      <div className="text-[10px] text-text-gray text-left">{label}</div>
       <div className="text-[10px]">{value}</div>
     </div>
   );

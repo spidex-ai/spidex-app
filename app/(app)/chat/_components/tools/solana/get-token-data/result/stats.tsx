@@ -40,7 +40,7 @@ const Stats: React.FC<Props> = ({ token }) => {
                     <h3 className="text-sm font-semibold">
                         # of Holders
                     </h3>
-                    <p>{token.holders.holders.toLocaleString()}</p>
+                    <p>{token.holders.toLocaleString()}</p>
                 </div>
             </div>
         </Card>
