@@ -30,7 +30,7 @@ const AgentClub: React.FC = () => {
       <div className="flex gap-8">
         <div>
           <Image
-            src="/icons/agent-club.svg"
+            src="/icons/logo.svg"
             alt="agent-club"
             width={100}
             height={100}

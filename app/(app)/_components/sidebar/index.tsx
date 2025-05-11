@@ -77,6 +77,19 @@ const Sidebar: React.FC<Props> = ({ children }) => {
                                 </Link>
                             </SidebarMenuButton>
                         </SidebarMenuItem>
+                        <SidebarMenuItem>
+                            <SidebarMenuButton 
+                                asChild 
+                            >
+                                <Link 
+                                    href={process.env.NEXT_PUBLIC_DISCORD_URL || ''} 
+                                    target={'_blank'}
+                                >
+                                    <Image src="/icons/discord-white.svg" alt="discord" width={15} height={15} />
+                                    <span className='truncate'>Join Discord</span>
+                                </Link>
+                            </SidebarMenuButton>
+                        </SidebarMenuItem>
                     </SidebarMenuUI>
                 </SidebarFooter>
             </SidebarUI>

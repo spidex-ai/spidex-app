@@ -41,7 +41,9 @@ const PointInformationWrapper = () => {
       <div className="grid grid-cols-4 gap-4">
         <div className="col-span-1 bg-bg-secondary rounded-lg p-4 border border-border-main">
           <div className="flex items-center justify-between">
-            <div>{pointInfo?.point?.amount}</div>
+            <div>{Number(pointInfo?.point?.amount).toLocaleString(undefined, {
+              maximumFractionDigits: 2,
+            })}</div>
             <div>
               <Image
                 src="/icons/logo-gray.svg"
