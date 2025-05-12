@@ -36,13 +36,13 @@ const WALLET_METHODS = [
     description: "Connect Yoroi Wallet",
     link: "https://yoroi-wallet.com/"
   },
-  {
-    id: "subwallet",
-    name: "Subwallet",
-    icon: "/icons/subwallet.svg",
-    description: "Connect Subwallet Wallet",
-    link: "https://www.subwallet.app/"
-  },
+  // {
+  //   id: "subwallet",
+  //   name: "Subwallet",
+  //   icon: "/icons/subwallet.svg",
+  //   description: "Connect Subwallet Wallet",
+  //   link: "https://www.subwallet.app/"
+  // },
   {
     id: "vespr",
     name: "Vespr",
@@ -173,8 +173,6 @@ const LoginModal: React.FC = () => {
     if (error.name === "WrongNetworkTypeError") {
       console.log("WrongNetworkTypeError")
     } else if (error.name === "WalletNotInstalledError") {
-      // console.log(error.message)
-      // The wallet typhon is not installed.
       const walletName = error.message.split(' ')[2]
       const wallet = WALLET_METHODS.find(w => w.id === walletName)
       setNotInstalledWallet({ name: wallet?.name || '', logo: wallet?.icon || '', link: wallet?.link || '' })
@@ -213,7 +211,6 @@ const LoginModal: React.FC = () => {
       }
       const nonce = await getNounce()
       if (!nonce) return
-
       const ref = params.get("ref")
 
       await signMessage(
@@ -237,9 +234,7 @@ const LoginModal: React.FC = () => {
       disconnect()
       console.log("Sign message failed", error)
     } finally {
-      console.log("Sign message complete")
       setWalletConnecting(null)
-      // Close the modal when sign message is complete
     }
   }
 
