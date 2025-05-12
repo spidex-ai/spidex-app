@@ -51,7 +51,7 @@ const MarketStats: React.FC<Props> = ({ tokenId, isLoadingTokenDetail }) => {
 
       <div className="col-span-6 bg-bg-tab rounded-md p-2">
         <div className="grid grid-cols-5 gap-2">
-          <StatItem
+          {/* <StatItem
             label="Liquidity"
             value={
               tokenStats?.mcap.circSupply
@@ -60,7 +60,7 @@ const MarketStats: React.FC<Props> = ({ tokenId, isLoadingTokenDetail }) => {
                 })
                 : "N/A"
             }
-          />
+          /> */}
           <StatItem
             label="Market Cap"
             value={

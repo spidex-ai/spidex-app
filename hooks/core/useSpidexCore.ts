@@ -582,7 +582,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     setLoading(true);
     setError(null);
     try {
-      const data = await fetchWithAuth(`/tokens/${tokenId}/ohlcv/quote?interval=${interval}&numIntervals=${numIntervals}`);
+      const data = await fetchWithAuth(`/tokens/${tokenId}/ohlcv/quote?interval=${interval}&numIntervals=${numIntervals}&quote=USD`);
       return data.data;
     } catch (error) {
       return null;
