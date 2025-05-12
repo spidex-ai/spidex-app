@@ -76,10 +76,10 @@ const TopHolder = ({ topHolder, percentageOwned }: TopHolderProps) => {
                 <div className="w-3/4 flex justify-center items-center"><Progress value={percentageOwned} colorFill="bg-brand-1000 dark:bg-brand-1000" h="h-1" /></div>
             </TableCell>
             <TableCell className="text-center">
-                {topHolder.amount.toFixed(2)}
+                {topHolder.amount.toLocaleString(undefined, { maximumFractionDigits: 2 })}
             </TableCell>
             <TableCell className="text-center"> 
-                {topHolder.totalPrice.toFixed(2)}
+                {topHolder.totalPrice.toLocaleString(undefined, { maximumFractionDigits: 2 })}
             </TableCell>
         </TableRow>
     )

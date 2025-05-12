@@ -82,7 +82,7 @@ export default function SwapPoint({
               />
               <SwapDetailItem
                 label="Min Receive"
-                value={Number(swapDetails.minReceive).toFixed(2)}
+                value={swapDetails.minReceive}
               />
               <SwapDetailItem
                 label="Dex Fee"
@@ -90,7 +90,7 @@ export default function SwapPoint({
               />
               <SwapDetailItem
                 label="Dex Deposits"
-                value={Number(swapDetails.dexDeposits).toFixed(2)}
+                value={swapDetails.dexDeposits}
               />
               <div className="text-left">
                 <TooltipProvider>
@@ -128,7 +128,7 @@ export default function SwapPoint({
         <div className="flex justify-between items-center gap-2 px-6 py-2 bg-bg-swap rounded-lg">
           <div className="text-xs">Market Offers</div>
           <div className="flex items-center gap-2">
-            <div className="text-[10px] text-text-gray">{`Minswap (Dex hunter)`}</div>
+            <div className="text-[10px] text-text-gray">{``}</div>
             {!isOpenMarketOffers ? (
               <div
                 className="cursor-pointer"
@@ -166,15 +166,16 @@ export default function SwapPoint({
                       } = ${split.expected_output.toLocaleString(undefined, {
                         maximumFractionDigits: 4,
                       })} ${swapDetails.outputToken}`}</div>
-                      <div className="flex items-center">
+                      <div className="flex items-center gap-1">
                         <Image
                           src="/icons/fee-gray.svg"
                           alt="fee-gray"
                           width={10}
                           height={10}
                         />
-                        <div className="text-xs text-text-gray">
-                          ${split.fee}
+                        <div className="text-xs text-text-gray flex gap-1 items-center">
+                          <div>{split.fee}</div>
+                          <div><Image src="/icons/ada.svg" alt="ada" width={10} height={10} /></div>
                         </div>
                       </div>
                     </div>

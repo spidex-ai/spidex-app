@@ -17,7 +17,7 @@ const ResizableLayout = ({
     return (
         <div className="md:flex-1 md:h-0 overflow-y-auto md:overflow-hidden flex flex-col md:flex-row gap-2">
             <PanelGroup direction="horizontal" className="flex-1">
-                <Panel defaultSize={66} minSize={30} className="flex flex-col gap-2">
+                <Panel defaultSize={60} minSize={30} className="flex flex-col gap-2">
                     <PanelGroup direction="vertical" className="h-full">
                         <Panel defaultSize={60} minSize={20}>
                             <CardTab className="h-full overflow-hidden max-h-full">
@@ -33,7 +33,7 @@ const ResizableLayout = ({
                     </PanelGroup>
                 </Panel>
                 <PanelResizeHandle className="w-2 md:hover:bg-accent rounded-sm transition-colors" />
-                <Panel defaultSize={33} minSize={20}>
+                <Panel defaultSize={40} minSize={40}>
                     <CardTab className="h-full flex flex-col gap-2 overflow-hidden">
                         {sidePanelComponent}
                     </CardTab>

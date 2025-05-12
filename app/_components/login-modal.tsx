@@ -212,6 +212,7 @@ const LoginModal: React.FC = () => {
       const nonce = await getNounce()
       if (!nonce) return
       const ref = params.get("ref")
+      console.log("🚀 ~ handleSignMessage ~ ref:", ref)
 
       await signMessage(
         nonce,
@@ -245,7 +246,8 @@ const LoginModal: React.FC = () => {
     if (anyConnectionInProgress) return
     try {
       setIsConnecting(true)
-      await signInWithGoogle()
+      const ref = params.get("ref")
+      await signInWithGoogle(ref || '')
       // Close the modal when Google login is initiated
       closeModal()
     } catch (error: any) {
@@ -273,7 +275,8 @@ const LoginModal: React.FC = () => {
       if (isConnecting) return
 
       setIsConnecting(true)
-      const result = await signInWithX(code, redirectUri)
+      const ref = params.get("ref")
+      const result = await signInWithX(code, redirectUri, ref || '')
 
       if (result && typeof window !== 'undefined') {
         console.log("X login successful")

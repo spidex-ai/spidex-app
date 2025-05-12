@@ -64,9 +64,9 @@ const HistoryItem: React.FC<HistoryItemProps> = ({ history }) => {
         <TableRow>
             <TableCell>{new Date(history.time * 1000).toLocaleString()}</TableCell>
             <TableCell className={`text-center ${history.action === 'buy' ? 'text-green-500' : 'text-red-500'}`}>{history.action}</TableCell>
-            <TableCell className="text-center">{history.price.toFixed(6)}</TableCell>
-            <TableCell className="text-center">{history.tokenAAmount}</TableCell>
-            <TableCell className="text-center">{history.tokenBAmount} {history.tokenBName}</TableCell>
+            <TableCell className="text-center">{history.price.toLocaleString(undefined, { maximumFractionDigits: 6 })}</TableCell>
+            <TableCell className="text-center">{history.tokenAAmount.toLocaleString(undefined, { maximumFractionDigits: 2 })}</TableCell>
+            <TableCell className="text-center">{history.tokenBAmount.toLocaleString(undefined, { maximumFractionDigits: 2 })} {history.tokenBName}</TableCell>
             <TableCell className="text-right flex justify-end cursor-pointer" onClick={onClickTxn}><Image src="/icons/txn-gray.svg" alt="txn" width={16} height={16} /></TableCell>
         </TableRow>
     )

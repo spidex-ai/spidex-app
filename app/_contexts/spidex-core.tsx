@@ -20,8 +20,8 @@ interface SpidexCoreContextType {
   getNounce: () => Promise<any>;
   signMessage: (message: any, walletName: string) => Promise<any>;
   refreshToken: () => Promise<any>;
-  connectX: (code: string, redirectUrl: string) => Promise<any>;
-  connectGoogle: (idToken: string) => Promise<any>;
+  connectX: (code: string, redirectUrl: string, referralCode?: string) => Promise<any>;
+  connectGoogle: (idToken: string, referralCode?: string) => Promise<any>;
   fetchWithAuth: (url: string, options?: RequestInit) => Promise<any>;
   logout: () => Promise<void>;
   setLocalAuth: (auth: Auth) => void;
@@ -144,15 +144,15 @@ export const SpidexCoreProvider: React.FC<{ children: React.ReactNode }> = ({
       }
       return result;
     },
-    connectX: async (code, redirectUrl) => {
-      const result = await spidexCore.connectX(code, redirectUrl);
+    connectX: async (code, redirectUrl, referralCode) => {
+      const result = await spidexCore.connectX(code, redirectUrl, referralCode);
       if (result) {
         handleSetLocalAuth(result);
       }
       return result;
     },
-    connectGoogle: async (idToken) => {
-      const result = await spidexCore.connectGoogle(idToken);
+    connectGoogle: async (idToken, referralCode) => {
+      const result = await spidexCore.connectGoogle(idToken, referralCode);
       if (result) {
         handleSetLocalAuth(result);
       }

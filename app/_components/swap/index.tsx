@@ -149,6 +149,8 @@ const Swap: React.FC<Props> = ({
     const swapEstResponse = await estimateSwap(swapEstPayload);
     if (swapEstResponse) {
       setEstimatedPoints(swapEstResponse);
+      console.log("🚀 ~ swapEstResponse:", swapEstResponse)
+
       return swapEstResponse?.total_output;
     } else {
       setIsNotPool(true);

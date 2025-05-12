@@ -129,6 +129,7 @@ const Missions = () => {
         case 2:
         case 3:
           data = await triggerSocialQuest(result.id);
+          window.open(result.requireUrl, "_blank");
           break;
         case 10:
           data = await triggerDailyLogin();
@@ -219,7 +220,13 @@ const Missions = () => {
             </div>
             <div className="col-span-1 text-white flex items-start justify-end">
               <div>
-                {result.type === 20 ? null : (
+                {result.type === 20 ? null : result.status == 1 ? (
+                  <div>
+                    <GradientSecondaryBtn className="px-7 py-2" disabled={true}>
+                      Completed
+                    </GradientSecondaryBtn>
+                  </div>
+                ) : (
                   <div>
                     <GradientButton
                       onClick={() => handleFinish(result)}
@@ -233,13 +240,6 @@ const Missions = () => {
                     >
                       Verify
                     </GradientButton>
-                  </div>
-                )}
-                {result.status === 1 && (
-                  <div>
-                    <GradientSecondaryBtn className="px-7 py-2" disabled={true}>
-                      Completed
-                    </GradientSecondaryBtn>
                   </div>
                 )}
               </div>

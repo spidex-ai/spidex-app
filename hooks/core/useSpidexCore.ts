@@ -242,13 +242,14 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
   }, [fetchWithAuth, auth]);
 
   const connectX = useCallback(
-    async (code: string, redirectUri: string) => {
+    async (code: string, redirectUri: string, referralCode?: string) => {
       try {
         const data = await fetchWithAuth("/auth/connect/x", {
           method: "POST",
           body: JSON.stringify({
             code,
             redirectUri,
+            referralCode,
           }),
         });
         setAuth(data.data);
@@ -261,12 +262,13 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
   );
 
   const connectGoogle = useCallback(
-    async (idToken: string) => {
+    async (idToken: string, referralCode?: string) => {
       try {
         const data = await fetchWithAuth("/auth/connect/google", {
           method: "POST",
           body: JSON.stringify({
             idToken,
+            referralCode,
           }),
         });
         setAuth(data.data);
@@ -420,7 +422,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     setLoading(true);
     setError(null);
     try {
-      const data = await fetchWithAuth(`/tokens/${tokenId}/top-holders?limit=10&page=1`);
+      const data = await fetchWithAuth(`/tokens/${tokenId}/top-holders?limit=20&page=1`);
       return data.data;
     } catch (error) {
       return null;

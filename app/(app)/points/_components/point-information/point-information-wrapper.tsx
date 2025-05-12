@@ -190,7 +190,7 @@ const PointInformationWrapper = () => {
               </TooltipTrigger>
               <TooltipContent side="right" align="center" arrowPadding={1}>
                 {" "}
-                <div className="text-xs">$100 volume trading = 1</div>
+                <div className="text-xs">$100 volume trading = 1 SILK</div>
                 <TooltipArrow className="TooltipArrow" />
               </TooltipContent>
             </Tooltip>
