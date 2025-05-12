@@ -37,6 +37,13 @@ const WALLET_METHODS = [
     link: "https://yoroi-wallet.com/"
   },
   {
+    id: "subwallet",
+    name: "Subwallet",
+    icon: "/icons/subwallet.svg",
+    description: "Connect Subwallet Wallet",
+    link: "https://www.subwallet.app/"
+  },
+  {
     id: "vespr",
     name: "Vespr",
     icon: "/icons/vespr.svg",

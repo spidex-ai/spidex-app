@@ -110,7 +110,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
             }
           );
 
-          if (refreshResponse.ok) {
+          if (refreshResponse.status === 200) {
             const refreshData = await refreshResponse.json();
             const newAuth = { ...auth, ...refreshData.data };
             setAuth(newAuth);
@@ -129,7 +129,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
             );
 
             setLoading(false);
-            if (!retryResponse.ok) {
+            if (retryResponse.status !== 200) {
               throw new Error(`API error: ${retryResponse.status}`);
             }
             return await retryResponse.json();
@@ -140,7 +140,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
         }
 
         setLoading(false);
-        if (!response.ok) {
+        if (response.status !== 200) {
           return null;
         }
 
