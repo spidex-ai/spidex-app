@@ -103,7 +103,9 @@ const TokenChart: React.FC<Props> = ({ data: tokenDetail, isLoadingTokenDetail }
   const open = data?.length > 0 ? data[0].open : 0;
   const change = ((price - open) / open) * 100;
 
-  const currentPrice = price.toFixed(2);
+  const currentPrice = price < 0.0001 ? '~0.0001' : price.toLocaleString(undefined, {
+    maximumFractionDigits: 4,
+  });
 
   return (
     <div className="flex flex-col h-full w-full">

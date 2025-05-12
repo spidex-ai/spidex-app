@@ -7,7 +7,7 @@ import History from "./_components/history";
 
 const PointsPage: React.FC = () => {
   return (
-    <div className="flex flex-col gap-8 max-w-7xl mx-auto w-full h-full max-h-full overflow-y-auto px-1">
+    <div className="flex flex-col gap-8 max-w-7xl mx-auto w-full h-full max-h-full overflow-y-auto px-1 pr-4">
       <h1 className="text-2xl font-bold">Dashboard</h1>
       <PointInformation />
      
