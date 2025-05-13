@@ -38,8 +38,8 @@ const MarketStats: React.FC<Props> = ({ tokenId, isLoadingTokenDetail }) => {
             <div className="min-h-[80px] flex flex-col justify-center items-center gap-3">
               <div className="text-xs font-semibold text-text-gray">Liquidity</div>
               <div className="text-xs text-white">
-                {tokenStats?.mcap.circSupply
-                  ? tokenStats?.mcap.circSupply.toLocaleString(undefined, {
+                {tokenStats?.liquidity
+                  ? tokenStats?.liquidity.toLocaleString(undefined, {
                     maximumFractionDigits: 4,
                   })
                   : "N/A"}

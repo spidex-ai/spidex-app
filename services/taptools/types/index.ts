@@ -485,6 +485,7 @@ export interface TokenStats {
   tokenLogo?: string;
   tokenPriceChange?: TokenPriceChange;
   tokenLinks?: TokenLinks;
+  liquidity?: number;
 }
 
 export interface TokenData {
