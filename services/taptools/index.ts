@@ -139,8 +139,8 @@ export class TaptoolsService {
    * @param unit - Token unit (policy + hex name)
    * @returns Promise with token pools
    */
-  async getTokenPools(unit: string): Promise<TokenPool[]> {
-    return this.client.get<TokenPool[]>("token/pools", { unit });
+  async getTokenPools(unit: string, adaOnly?: number): Promise<TokenPool[]> {
+    return this.client.get<TokenPool[]>("token/pools", { unit, adaOnly });
   }
 
   /**

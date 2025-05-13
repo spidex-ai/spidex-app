@@ -9,6 +9,7 @@ import type {
 } from "./types";
 import taptoolsService from "@/services/taptools";
 import { TokenPool } from "@/services/taptools/types";
+import Decimal from "decimal.js";
 
 export async function getTokenPageLiquidity(
   token: TokenChatData,
@@ -16,41 +17,59 @@ export async function getTokenPageLiquidity(
 ): Promise<SolanaActionResult<any>> {
   try {
     // Get all markets (pools) for the token
-    const markets = await taptoolsService.getTokenPools(token.address);
+    const markets = await taptoolsService.getTokenPools(token.address, 1);
     console.log("🚀 ~ markets:", markets);
 
-    // Calculate total liquidity across all pools
-    const totalLiquidityUSD = markets.reduce(
-      (acc: number, market: TokenPool) => acc + market.tokenALocked,
+    const stats = await getTokenStats(token.address);
+    const tokenStats = stats.data;
+
+    console.log("🚀 ~ tokenStats:", tokenStats);
+
+    const usdPrice = new Decimal(tokenStats.usdPrice)
+      .div(tokenStats.mcap.price)
+      .toNumber();
+    const usdPriceToken = tokenStats.usdPrice;
+
+    // Calculate total liquidity across all pools using the provided formula
+    const liquidity = markets.reduce(
+      (acc, pool) =>
+        acc + pool.tokenALocked * usdPriceToken + pool.tokenBLocked * usdPrice,
       0
+    );
+    console.log("🚀 ~ liquidity:", liquidity);
+
+    // Find main pool (pool with highest total liquidity value)
+    const poolsWithLiquidity = markets.map((pool) => ({
+      ...pool,
+      totalLiquidity:
+        pool.tokenALocked * usdPriceToken + pool.tokenBLocked * usdPrice,
+    }));
+    console.log(
+      "🚀 ~ poolsWithLiquidity ~ poolsWithLiquidity:",
+      poolsWithLiquidity
     );
 
     // Find main pool (pool with highest liquidity)
-    const mainPool = markets.reduce((a: TokenPool, b: TokenPool) =>
-      a.tokenALocked > b.tokenALocked ? a : b
+    const mainPool = poolsWithLiquidity.reduce((a, b) =>
+      a.totalLiquidity > b.totalLiquidity ? a : b
     );
-
-    // Get volume metrics from the main pool
-    // const volumeMetrics = {
-    //   volume24h: mainPool.volume24h,
-    //   volumeChange24h: mainPool.trade24hChangePercent || 0,
-    // };
+    console.log("🚀 ~ mainPool:", mainPool);
 
     // Calculate liquidity concentration
-    const sortedPools = [...markets].sort(
-      (a, b) => b.tokenALocked - a.tokenALocked
+    const sortedPools = [...poolsWithLiquidity].sort(
+      (a, b) => b.totalLiquidity - a.totalLiquidity
     );
-    const topPoolShare = (mainPool.tokenALocked / totalLiquidityUSD) * 100;
+    console.log("🚀 ~ sortedPools:", sortedPools);
+
+    const topPoolShare = (mainPool.totalLiquidity / liquidity) * 100;
     const top3PoolsShare = sortedPools
       .slice(0, 3)
-      .reduce(
-        (acc, pool) => acc + (pool.tokenALocked / totalLiquidityUSD) * 100,
-        0
-      );
+      .reduce((acc, pool) => acc + (pool.totalLiquidity / liquidity) * 100, 0);
 
+    console.log("🚀 ~ top3PoolsShare:", top3PoolsShare);
     // Calculate liquidity health score (0-100)
     const healthScore = calculateLiquidityHealthScore({
-      totalLiquidity: totalLiquidityUSD,
+      totalLiquidity: liquidity,
       concentration: { topPoolShare, top3PoolsShare },
     });
 
@@ -60,8 +79,8 @@ export async function getTokenPageLiquidity(
       message: `Liquidity Analysis for ${token.symbol}:
 
 1. Overall Liquidity:
-   - Total liquidity across all pools: $${formatNumber(totalLiquidityUSD)}
-   - Main pool (${mainPool.tokenB}): $${formatNumber(mainPool.tokenBLocked)}
+   - Total liquidity across all pools: $${formatNumber(liquidity)}
+   - Main pool (${mainPool.exchange}): $${formatNumber(mainPool.totalLiquidity)}
    - Liquidity concentration: ${top3PoolsShare.toFixed(1)}% in top 3 pools
 2. Concentration Analysis:
    - Top pool share: ${topPoolShare.toFixed(1)}%
@@ -69,11 +88,11 @@ export async function getTokenPageLiquidity(
 
 Liquidity Health Score: ${healthScore}/100 - ${healthDescription}`,
       body: {
-        totalLiquidityUSD,
+        totalLiquidityUSD: tokenStats.liquidity,
         mainPool: {
           address: mainPool.lpTokenUnit,
-          liquidity: mainPool.tokenALocked,
-          source: mainPool.tokenA,
+          liquidity: mainPool.totalLiquidity,
+          source: mainPool.exchange,
         },
         liquidityConcentration: {
           topPoolShare,
@@ -126,4 +145,23 @@ function formatNumber(num: number): string {
   if (num >= 1_000_000) return `${(num / 1_000_000).toFixed(2)}M`;
   if (num >= 1_000) return `${(num / 1_000).toFixed(2)}K`;
   return num.toFixed(2);
+}
+
+export async function getTokenStats(tokenId: string) {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_SPIDEX_CORE_API_URL}/tokens/${tokenId}/stats`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  console.log("🚀 ~ getTokenStats ~ response:", response);
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch stats: ${response.statusText}`);
+  }
+
+  return await response.json();
 }

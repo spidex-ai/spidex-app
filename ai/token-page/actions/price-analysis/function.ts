@@ -1,3 +1,4 @@
+// ai/token-page/actions/price-analysis/function.ts
 import { getTokenCandlesticks } from "@/services/hellomoon/get-token-candlesticks";
 
 import type { SolanaActionResult } from "../../../solana/actions/solana-action";
@@ -14,6 +15,8 @@ import {
   TokenPriceCandlestick,
 } from "@/services/hellomoon/types";
 import taptoolsService from "@/services/taptools";
+import { getTokenStats } from "../liquidity/function";
+import { TokenStats } from "@/services/taptools/types";
 
 // Map timeframes to minutes for calculations
 const TIMEFRAME_TO_MINUTES: Record<CandlestickGranularity, number> = {
@@ -61,30 +64,61 @@ function getGranularity(days: number): CardanoCandlestickGranularity {
   return CardanoCandlestickGranularity.ONE_DAY;
 }
 
+/**
+ * Calculate the number of intervals needed based on days and timeframe
+ * @param numOfDays Number of days of historical data
+ * @param timeframeMinutes Timeframe string (e.g., "1h", "1d")
+ * @returns Number of intervals needed to cover the requested days
+ */
+function calculateNumIntervals(
+  numOfDays: number,
+  timeframeMinutes: string
+): number {
+  // Get the timeframe in minutes
+  const timeframe = GRANULARITY_TO_NUMBER[timeframeMinutes];
+
+  // Calculate total minutes in the requested days
+  const totalMinutes = numOfDays * 24 * 60;
+
+  // Calculate how many intervals we need to cover the requested days
+  return Math.ceil(totalMinutes / timeframe);
+}
+
 export async function analyzeTokenPrice(
   token: TokenChatData,
   args: TokenPagePriceAnalysisArgumentsType
 ): Promise<SolanaActionResult<TokenPagePriceAnalysisResultBodyType>> {
+  console.log("🚀 ~ token:", token);
   console.log("🚀 ~ args:", args);
   console.log("🚀 ~ token:", token.address);
   try {
     const granularity = getGranularity(args.length);
+    console.log("🚀 ~ granularity:", granularity);
 
+    const stats = await getTokenStats(token.address);
+    const tokenStats = stats.data;
+    console.log("🚀 ~ tokenStats:", tokenStats);
     const timeframeMinutes = TIMEFRAME_TO_GRANULARITY[granularity];
+    console.log("🚀 ~ timeframeMinutes:", timeframeMinutes);
+
+    // Calculate the number of intervals needed based on days and timeframe
+    const numIntervals = calculateNumIntervals(args.length, timeframeMinutes);
+    console.log("🚀 ~ numIntervals:", numIntervals);
 
     // Fetch OHLCV data
     const pricesResponse = await taptoolsService.getTokenOHLCV(
       token.address,
       timeframeMinutes,
-      args.length,
+      numIntervals,
       "ADA"
     );
+    console.log("🚀 ~ pricesResponse:", pricesResponse);
     if (!pricesResponse || pricesResponse.length === 0) {
       throw new Error("No price data available");
     }
 
     // Calculate current price and basic metrics
-    const currentPrice = pricesResponse[pricesResponse.length - 1].close;
+    const currentPrice = tokenStats.usdPrice;
     const volatility = calculateVolatility(pricesResponse, timeframeMinutes);
     const trendAnalysis = analyzeTrend(pricesResponse);
     const technicalLevels = findSupportResistanceLevels(pricesResponse);
@@ -92,7 +126,13 @@ export async function analyzeTokenPrice(
       pricesResponse,
       timeframeMinutes
     );
-    const marketMetrics = calculateMarketMetrics(currentPrice, token);
+    console.log("🚀 ~ tokenStats.mcap.supply:", tokenStats.mcap.supply);
+    console.log("🚀 ~ tokenStats.mcap.circSupply:", tokenStats.mcap.circSupply);
+    const marketMetrics = calculateMarketMetrics(
+      currentPrice,
+      tokenStats.mcap.mcap,
+      tokenStats.mcap.fdv
+    );
 
     // Construct the analysis message
     const message = `Price Analysis for ${token.symbol}:
@@ -242,10 +282,11 @@ function aggregateDailyVolumes(
 
 function calculateMarketMetrics(
   currentPrice: number,
-  token: TokenChatData & Pick<TokenOverview, "supply" | "circulatingSupply">
+  mcap: number,
+  fdv: number
 ) {
-  const marketCap = currentPrice * (token.circulatingSupply || 0);
-  const fullyDilutedValue = currentPrice * (token.supply || 0);
+  const marketCap = mcap;
+  const fullyDilutedValue = fdv;
 
   return {
     marketCap,
