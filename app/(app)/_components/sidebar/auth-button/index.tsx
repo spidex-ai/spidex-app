@@ -12,7 +12,6 @@ import {
     DropdownMenuSeparator,
     DropdownMenuItem,
     useSidebar,
-    Skeleton,
     GradientButtonIcon,
     GradientButton,
 } from '@/components/ui';
