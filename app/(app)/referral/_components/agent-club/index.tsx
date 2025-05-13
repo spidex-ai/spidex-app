@@ -63,7 +63,7 @@ const AgentClub: React.FC = () => {
                 />
               </div>
               <div>
-                <div>SILK Points Earned</div>
+                <div>SILK Earned</div>
                 <div>{referralInfo?.referralPointEarned}</div>
               </div>
             </div>

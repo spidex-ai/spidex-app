@@ -14,6 +14,7 @@ import { Skeleton } from "@/components/ui";
 
 const SmartMoneyTokens: React.FC = () => {
   const { data, isLoading } = useTokenTrending();
+  console.log("🚀 ~ data:", data)
 
   // const tokens = await getSmartMoneyInflows(Granularity.ONE_DAY, 9).catch((error) => {
   //     console.error(error);

@@ -14,6 +14,9 @@ interface Props {
 }
 
 const TrendingTokenCard: React.FC<Props> = ({ token }) => {
+  const usdPrice = Number(token?.usdPrice) < 0.00001 ? "~0.00001" : token?.usdPrice?.toLocaleString(undefined, {
+    maximumFractionDigits: 5,
+  });
   return (
     <Link href={`/token/${token.unit}`}>
       <Card className="flex flex-col gap-2 p-2 justify-between hover:border-brand-600 dark:hover:border-brand-600 transition-all duration-300 cursor-pointer h-full">
@@ -38,9 +41,7 @@ const TrendingTokenCard: React.FC<Props> = ({ token }) => {
               </p>
               <p className="text-xs text-muted-foreground">
                 $
-                {token?.usdPrice?.toLocaleString(undefined, {
-                  maximumFractionDigits: 5,
-                })}
+                {usdPrice}
               </p>
             </div>
           </div>
