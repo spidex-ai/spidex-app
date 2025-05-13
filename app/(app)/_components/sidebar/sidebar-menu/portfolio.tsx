@@ -11,16 +11,17 @@ import { usePathname } from "next/navigation";
 import { useSpidexCoreContext } from "@/app/_contexts";
 import { SidebarMenuButton, SidebarMenuItem } from "@/components/ui";
 import Image from "next/image";
+import { useCardano } from "@cardano-foundation/cardano-connect-with-wallet";
 
 const Portfolio: React.FC = () => {
   const pathname = usePathname();
-
+  const { stakeAddress } = useCardano();
   const { auth } = useSpidexCoreContext();
 
   if (!auth?.user?.walletAddress) return null;
   const isActive = pathname?.includes("/portfolio");
   return (
-    <Link href={`/portfolio/${auth?.user?.walletAddress}`}>
+    <Link href={`/portfolio/${stakeAddress}`}>
       <SidebarMenuItem>
         <SidebarMenuButton isActive={isActive}>
           <h1 className="flex items-center gap-2 font-semibold">
