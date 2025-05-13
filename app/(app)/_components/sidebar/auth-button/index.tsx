@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import {  LogOut, Wallet } from 'lucide-react'; 
+import { LogOut, Wallet } from 'lucide-react';
 import {
     SidebarMenu,
     SidebarMenuItem,
@@ -30,22 +30,20 @@ const AuthButton: React.FC = () => {
     const { openModal } = useLoginModal();
     const { isMobile, open } = useSidebar();
 
-    if (!auth) return <Skeleton className="w-full h-8" />;
-
     const handleConnectWallet = () => {
         openModal(true);
     }
 
-    if (!auth.user || !auth.user.walletAddress) return (
+    if (!auth || !auth.user || !auth.user.walletAddress) return (
         <SidebarMenu>
             <SidebarMenuItem>
                 {
                     open ? (
-                        <GradientButton className='w-full'  onClick={handleConnectWallet}>
-                           <div className='flex gap-2'>
-                           <Image src="/icons/connect-wallet.svg" alt="connect-wallet" width={15} height={15} /> 
-                            <div>Connect Wallet</div>
-                           </div>
+                        <GradientButton className='w-full' onClick={handleConnectWallet}>
+                            <div className='flex gap-2'>
+                                <Image src="/icons/connect-wallet.svg" alt="connect-wallet" width={15} height={15} />
+                                <div>Connect Wallet</div>
+                            </div>
                         </GradientButton>
                     ) : (
                         <GradientButtonIcon className='w-full' onClick={handleConnectWallet}>
@@ -66,7 +64,7 @@ const AuthButton: React.FC = () => {
                             open ? (
                                 <GradientButton className='w-full'>
                                     <div className='flex gap-2'>
-                                        <Image src="/icons/wallet.svg" alt="wallet-wallet" width={15} height={15} /> 
+                                        <Image src="/icons/wallet.svg" alt="wallet-wallet" width={15} height={15} />
                                         <div>{truncateAddress(auth.user.walletAddress)}</div>
                                     </div>
                                 </GradientButton>

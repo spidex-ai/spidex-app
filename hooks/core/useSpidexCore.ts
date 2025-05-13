@@ -40,7 +40,6 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [auth, setAuth] = useState<Auth | null>(initialAuth);
   const [error, setError] = useState<string | null>(null);
-
   // Update auth and localStorage when initialAuth changes
   useEffect(() => {
     if (

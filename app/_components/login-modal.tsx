@@ -381,12 +381,12 @@ const LoginModal: React.FC = () => {
         onClick={() => !isDisabled && handleClick()}
       >
         <div className="flex items-center justify-center">
-          <div className="flex py-1 items-center justify-center">
+          <div className="flex  items-center justify-center">
             <Image
               src={method.icon}
               alt={method.name}
-              width={30}
-              height={30}
+              width={25}
+              height={25}
             />
           </div>
         </div>
@@ -441,7 +441,7 @@ const LoginModal: React.FC = () => {
           </DialogHeader>
 
           <div className="space-y-4 py-4">
-            <div className="space-y-2 max-h-[350px] overflow-y-auto">
+            <div className="space-y-2 max-h-[350px] sm:max-h-[550px] scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 overflow-y-auto">
               <div className="space-y-2">
                 {renderMetamaskConnect()}
                 {WALLET_METHODS.map(renderWalletOption)}
@@ -455,7 +455,7 @@ const LoginModal: React.FC = () => {
                   <span className="text-white px-4">Or</span>
                   <div className="w-full h-[1px] bg-text-icon -translate-y-[2px]"></div>
                 </div>
-                <div className="flex justify-between items-center gap-3">
+                <div className="flex justify-between items-center gap-3 pt-2">
                   {SOCIAL_METHODS.map(renderSocialOption)}
                 </div>
               </div>
