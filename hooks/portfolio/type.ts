@@ -1,11 +1,11 @@
 
 export interface PortfolioToken {
     address: string;
-    amount: TokenAmount[]; 
+    amount: TokenAmount[];
     stakeAddress: string;
     type: string;
     script: boolean;
-    totalPrice: number; 
+    totalPrice: number;
     totalUsdPrice: number;
 }
 
@@ -17,15 +17,22 @@ export interface TokenAmount {
     price: number;
     ticket: "ADA";
     name: "Cardano";
-    totalPrice: number; 
+    totalPrice: number;
     usdPrice: number;
     usdTotalPrice: number;
     logo: string;
 }
 
 export interface PortfolioTransaction {
-    txHash: string;
-    txIndex: number;
-    blockHeight: number;
-    blockTime: number;
+    action: string;
+    time: number;
+    hash: string;
+    tokenA: string;
+    tokenAName: string;
+    tokenAIcon?: string;
+    tokenAAmount: number;
+    tokenB: string;
+    tokenBName: string;
+    tokenBAmount: number;
+    tokenBIcon?: string;
 }
