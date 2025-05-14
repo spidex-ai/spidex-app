@@ -2,9 +2,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
-
   GradientButton,
 } from "@/components/ui";
 import { useSearchParams } from "next/navigation";
@@ -71,7 +69,6 @@ const ReminderModal = ({ isOpen, onOpenChange }: ReminderModalProps) => {
   }, [params, baseUrl])
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogClose>test</DialogClose>
       <DialogContent>
         <div className="text-white text-2xl font-medium mt-5">Reminder</div>
         <div className="text-white text-sm">
