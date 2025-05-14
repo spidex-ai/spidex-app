@@ -143,13 +143,32 @@ export const AgentButton = (props: any) => {
 export const GradientSecondaryBtn = (props: any) => {
   const { children, className, disabled, ...rest } = props;
   return (
-    <button {...rest} disabled={disabled}  className={cn(
-      " bg-[linear-gradient(135deg,#010D0C_40%,#009EFF,#BBF985)] mt-0 text-white px-6 py-2 rounded-lg font-semibold hover:opacity-90 transition-all duration-200 border-[1px] border-transparent bg-clip-border p-[2px] [background:linear-gradient(135deg,#010D0C_40%,#009EFF,#BBF985)_padding-box,linear-gradient(135deg,#BBF985,#009EFF)_border-box]",
+    <button {...rest} disabled={disabled} className={cn(
+      "bg-[linear-gradient(90deg,#000000_33%,#009EFF_66%,#BBF985)] mt-0 text-white px-6 py-2 rounded-lg font-semibold transition-all duration-200 border-2 border-[#BBF985] bg-clip-border [background:linear-gradient(90deg,#000000_33%,#009EFF_66%,#BBF985)_padding-box]",
       disabled && "opacity-50 cursor-not-allowed",
       className
-      )}>
+    )}>
       {children}
     </button>
+  );
+};
+
+export const ButtonBlack = (props: any) => {
+  const { children, className, isLoading, ...rest } = props;
+  return (
+    <button
+    {...rest}
+    disabled={isLoading}
+    className={
+      cn(
+        "gradient-border-main cursor-pointer text-white bg-bg-tab",
+        "hover:shadow-[0_0_10px_#009EFF] transition-shadow duration-300", // Thêm hiệu ứng blur khi hover"hover:shadow-[0_0_10px_#009EFF] transition-shadow duration-300", // Thêm hiệu ứng blur khi hover
+        className
+      )
+    }
+  >
+    {children}
+  </button>
   );
 };
 export { Button, buttonVariants, GradientBorderButton };

@@ -52,9 +52,9 @@ const SmartMoneyTokens: React.FC = () => {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
-          {data.map((token) => (
+          {data.length > 0 ? data.map((token) => (
             <TrendingTokenCard key={token.unit} token={token} />
-          ))}
+          )) : <div className="text-left text-text-gray mt-8">No data.</div>}
         </div>
       )}
     </div>

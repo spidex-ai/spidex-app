@@ -128,7 +128,9 @@ export const usePriceChartCore = (
   const refetchDataChart = async () => {
     try {
       const data = await getTokenOHLCV(unit, interval, numIntervals);
-      setData(data);
+      if (data && data.length > 0) {
+        setData(data);
+      }
     } catch (error) {
       console.error(error);
     }

@@ -53,7 +53,7 @@ const PointInformationWrapper = () => {
             </div>
             <div>
               <Image
-                src="/icons/logo-gray.svg"
+                src="/icons/logo-border.svg"
                 alt="gift"
                 width={40}
                 height={40}
@@ -173,7 +173,7 @@ const PointInformationWrapper = () => {
       </div>
 
       <div className="flex gap-2 mt-8">
-        <TextGradient>
+        <TextGradient className="italic">
           Keep trading on Spidex AI to earn more SILK.
         </TextGradient>
         <div>

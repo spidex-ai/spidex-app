@@ -27,10 +27,16 @@ const Hisotry = () => {
 
   const results: HistoryItem[] = pointHistory.length > 0 ? pointHistory.map(
     (item: PointHistory, index: number) => {
+      const date = new Date(item.createdAt);
+      const hours = date.getHours().toString().padStart(2, '0');
+      const minutes = date.getMinutes().toString().padStart(2, '0');
+      const day = date.getDate().toString().padStart(2, '0');
+      const month = date.toLocaleString('en-US', { month: 'short' });
+      const year = date.getFullYear();
       return {
         task: item.questName,
         point: item.amount,
-        createdAt: item.createdAt,
+        createdAt: `${hours}:${minutes} ${day}-${month}-${year}`,
         isBorderBottom: index !== pointHistory.length - 1,
       };
     }
@@ -61,9 +67,11 @@ const Hisotry = () => {
               }`}
             >
               <div className="col-span-1 flex items-center gap-2">
-                <div>+{Number(result.point).toFixed(2)}</div>
+                <div>+{Number(result.point).toLocaleString(undefined, {
+                  maximumFractionDigits: 2,
+                })}</div>
                 <div>
-                  <Image
+                  <Image 
                     src="/icons/logo-gray.svg"
                     alt="arrow-right"
                     width={24}

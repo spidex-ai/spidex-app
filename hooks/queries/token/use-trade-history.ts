@@ -20,7 +20,11 @@ export const useTradeHistory = (tokenId: string) => {
         setError(null);
         try {
             const response = await getTokenTradeHistory(tokenId);
-            setData(response);
+            if (response && response.length > 0) {
+                setData(response);
+            } else {
+                setData([]);
+            }
         } catch (error) {
             setError(error as Error); 
         } finally {

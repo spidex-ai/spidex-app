@@ -17,6 +17,12 @@ const TrendingTokenCard: React.FC<Props> = ({ token }) => {
   const usdPrice = Number(token?.usdPrice) < 0.00001 ? "~0.00001" : token?.usdPrice?.toLocaleString(undefined, {
     maximumFractionDigits: 5,
   });
+  const mcap = Number(token?.mcap) < 0.0001 ? "~0.0001" : token?.mcap?.toLocaleString(undefined, {
+    maximumFractionDigits: 5,
+  });
+  const volume = Number(token?.volume) < 0.0001 ? "~0.0001" : token?.volume?.toLocaleString(undefined, {
+    maximumFractionDigits: 5,
+  });
   return (
     <Link href={`/token/${token.unit}`}>
       <Card className="flex flex-col gap-2 p-2 justify-between hover:border-brand-600 dark:hover:border-brand-600 transition-all duration-300 cursor-pointer h-full">
@@ -51,8 +57,8 @@ const TrendingTokenCard: React.FC<Props> = ({ token }) => {
           <p className="text-xs text-muted-foreground">
             Market Cap: $
             {token?.volume
-              ? token?.volume?.toLocaleString()
-              : token?.mcap?.toLocaleString()}
+              ? volume
+              : mcap}
           </p>
         </div>
       </Card>

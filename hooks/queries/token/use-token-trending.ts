@@ -31,7 +31,12 @@ export const useTokenTrending = () => {
     setIsLoading(true);
     try {
       const data = await getTopTokensByVolume(timeframe, page, perPage);
-      setData(data);
+      if (data.length > 0) {
+        setData(data);
+      } else {
+        setData([]);
+        setError("No data found");
+      }
     } catch (error) {
       setError(error as string);
     } finally {
@@ -63,7 +68,12 @@ export const useTokenTopMcap = (page: number, perPage: number) => {
     try {
       const data = await getTopTokensByMcap(page, perPage)
       console.log('data::: top mcap', data);
-      setData(data);
+      if (data.length > 0) {
+        setData(data);
+      } else {
+        setData([]);
+        setError("No data found");
+      }
     } catch (error) {
       setError(error as string);
     } finally {

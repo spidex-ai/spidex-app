@@ -18,6 +18,9 @@ const RefListItem: React.FC<RefListItemProps> = ({
   point,
   date,
 }: RefListItemProps) => {
+  const pointNumber = Number(point).toLocaleString(undefined, {
+    maximumFractionDigits: 2,
+  });
   return (
     <div className={`${index % 2 === 0 ? 'bg-bg-main' : ''}`}>
         <div className={`grid grid-cols-3 py-6`}>   
@@ -37,7 +40,7 @@ const RefListItem: React.FC<RefListItemProps> = ({
         <div>{username}</div>
       </div>
       <div className="flex items-center justify-center gap-2">
-        <GradientButton>{`+${point} CAPI`}</GradientButton>
+        <GradientButton>{`+${pointNumber} CAPI`}</GradientButton>
       </div>
       <div className="flex items-center justify-center gap-2">{date}</div>
     </div>

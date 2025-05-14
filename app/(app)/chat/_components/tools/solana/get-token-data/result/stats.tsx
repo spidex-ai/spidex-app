@@ -26,7 +26,7 @@ const Stats: React.FC<Props> = ({ token }) => {
                 </div>
                 <div className="flex flex-col">
                     <h3 className="text-sm font-semibold">
-                        Circulate Supply
+                        Circulating Supply
                     </h3>
                     <p>${token.mcap.circSupply.toLocaleString(undefined, { maximumFractionDigits: 2 })}</p>
                 </div>

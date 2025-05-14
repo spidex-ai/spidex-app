@@ -152,7 +152,7 @@ const MessageMarkdown = React.memo(({ content, compressed }: { content: string, 
                         return <li className="text-xs md:text-sm">{children}</li>
                     },
                     p({ children, node }) {
-                        const hasBlockElements = node?.children?.some((child: { type: string, tagName: string }) => 
+                        const hasBlockElements = node?.children?.some((child: any) => 
                             child.type === 'element' && 
                             ['div', 'p', 'blockquote', 'form'].includes(child.tagName)
                         );

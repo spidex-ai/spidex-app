@@ -23,7 +23,11 @@ export const useTopHolders = (tokenId: string) => {
         setError(null);
         try {
             const response = await getTokenTopHolders(tokenId);
-            setData(response);
+            if (response && response.length > 0) {
+                setData(response);
+            } else {
+                setData([]);
+            }
         } catch (error) {
             setError(error as Error);
         } finally {

@@ -22,15 +22,15 @@ const MarketStats: React.FC<Props> = ({ tokenId, isLoadingTokenDetail }) => {
   }
 
   return (
-    <div className="grid grid-cols-7 gap-2">
+    <div className="grid grid-cols-6 gap-2">
       <div className="col-span-1">
         <div className="flex flex-col gap-2">
           <div className="bg-bg-tab p-2 flex flex-1 justify-center">
             <div className="min-h-[80px] flex flex-col justify-center items-center gap-3">
               <div className="text-xs font-semibold text-text-gray">Price USD</div>
-              <div className="text-xs text-white">{tokenStats?.usdPrice ? tokenStats?.usdPrice.toLocaleString(undefined, {
-                maximumFractionDigits: 4,
-              }) : "N/A"}</div>
+                <div className="text-xs text-white">{tokenStats?.usdPrice ? `$${tokenStats?.usdPrice.toLocaleString(undefined, {
+                  maximumFractionDigits: 4,
+                })}` : "--"}</div>
             </div>
           </div>
 
@@ -39,18 +39,18 @@ const MarketStats: React.FC<Props> = ({ tokenId, isLoadingTokenDetail }) => {
               <div className="text-xs font-semibold text-text-gray">Liquidity</div>
               <div className="text-xs text-white">
                 {tokenStats?.liquidity
-                  ? tokenStats?.liquidity.toLocaleString(undefined, {
+                  ? `$${tokenStats?.liquidity.toLocaleString(undefined, {
                     maximumFractionDigits: 4,
-                  })
-                  : "N/A"}
+                  })}`
+                  : "--"}
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="col-span-6 bg-bg-tab rounded-md p-2">
-        <div className="grid grid-cols-5 gap-2">
+      <div className="col-span-5 bg-bg-tab rounded-md p-2">
+        <div className="grid grid-cols-4 gap-2">
           {/* <StatItem
             label="Liquidity"
             value={
