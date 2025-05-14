@@ -11,7 +11,7 @@ import SaveToken from "@/app/(app)/_components/save-token";
 import { getLogoUrl } from "@/app/utils/logo";
 import { CardanoTokenDetail } from "@/services/dexhunter/types";
 import SearchBar from "../../../_components/search-bar";
-
+import Image from "next/image";
 interface Props {
     data: CardanoTokenDetail | null;
     isLoading: boolean;
@@ -26,7 +26,7 @@ const Header: React.FC<Props> = ({ data, isLoading, isSearch = false }) => {
   }
 
   return (
-    <div className="flex flex-col md:flex-row justify-between gap-4">
+    <div className="flex flex-col md:flex-row justify-between gap-4 items-center">
       <div className="flex items-center gap-2 mt-1">
         {data?.logo && (
           <img
@@ -47,6 +47,11 @@ const Header: React.FC<Props> = ({ data, isLoading, isSearch = false }) => {
         {isSearch && (
           <SearchBar isTitle={false} />
         )}
+      </div>
+      <div className="cursor-pointer" onClick={() => {
+        window.open("https://farmroll.io", "_blank");
+      }}>
+        <Image src="/icons/banner-chat-ads.svg" alt="info" width={485} height={61} />
       </div>
     </div>
   );

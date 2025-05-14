@@ -101,7 +101,7 @@ const Tokens: React.FC<Props> = ({ address }) => {
                       <TableCell className="text-center">
                         $
                         {token.usdPrice.toLocaleString(undefined, {
-                          maximumFractionDigits: 5,
+                          maximumFractionDigits: 2,
                           minimumFractionDigits: 2,
                         })}
                       </TableCell>
@@ -118,7 +118,7 @@ const Tokens: React.FC<Props> = ({ address }) => {
                         >
                           Sell
                         </GradientBorderButton>
-                        <GradientButton onClick={() => openBuy(token.unit)}>
+                        <GradientButton className="py-2 md:py-2" onClick={() => openBuy(token.unit)}>
                           Buy
                         </GradientButton>
                       </TableCell>
