@@ -605,6 +605,19 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     }
   }, [fetchWithAuth, auth]); 
 
+  const getAchievements = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await fetchWithAuth(`/achievements`);
+      return data.data;
+    } catch (error) {
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  }, [fetchWithAuth, auth])
+
   return {
     auth,
     loading,
@@ -640,7 +653,8 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     updateUserInfo,
     getTokenDetailCore,
     getTokenOHLCV,
-    getTokenStats
+    getTokenStats,
+    getAchievements
   };
 };
 

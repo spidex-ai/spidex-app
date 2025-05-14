@@ -4,17 +4,19 @@
 import { useEffect, useState } from "react";
 
 import { useSpidexCoreContext } from "@/app/_contexts/spidex-core";
-import { PointHistory, PointInfo, Quest } from "./type";
+import { Achievement, PointHistory, PointInfo, Quest } from "./type";
 
 export const usePointInfo = () => {
-    const {getUserPointMeInfo} = useSpidexCoreContext()
+    const {getUserPointMeInfo, getAchievements} = useSpidexCoreContext()
 
     const [pointInfo, setPointInfo] = useState<PointInfo>();
+    const [achievements, setAchievements] = useState<Achievement[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         fetchPointInfo();
+        fetchAchievements();
     }, []);
 
     const fetchPointInfo = async () => {
@@ -29,7 +31,23 @@ export const usePointInfo = () => {
         }
     }
 
-    return { pointInfo, loading, error };
+    const fetchAchievements = async () => {
+        try {
+            const data = await getAchievements();
+            if (data.length > 0) {
+                setAchievements(data);
+            } else {
+                setAchievements([]);
+            }
+        } catch (error) {
+            setError(error as string);
+        } finally {
+         
+        }
+
+    }
+
+    return { pointInfo, loading, error, achievements };
 
 }
 

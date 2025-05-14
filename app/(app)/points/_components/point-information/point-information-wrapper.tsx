@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import Image from "next/image";
-import { Progress } from "@/components/ui/progress";
+
 import { usePointInfo } from "@/hooks/point/use-point";
 import { Skeleton } from "@/components/ui/skeleton";
 import { TextGradient } from "@/components/ui/text";
@@ -11,8 +11,7 @@ import { TooltipContent } from "@/components/ui/tooltip";
 import { TooltipArrow } from "@radix-ui/react-tooltip";
 
 const PointInformationWrapper = () => {
-  const { pointInfo, loading, error } = usePointInfo();
-  console.log("🚀 ~ PointInformation ~ pointInfo:", pointInfo);
+  const { pointInfo, loading, error, achievements } = usePointInfo();
   const [copied, setCopied] = useState(false);
 
   if (loading) {
@@ -23,13 +22,30 @@ const PointInformationWrapper = () => {
     return <div>Error: {error}</div>;
   }
 
-  const currentPoint =
-    Number(pointInfo?.nextAchievement?.points) -
-    Number(pointInfo?.nextAchievement?.pointsToNextAchievement);
+  let level = 0;
+  if (achievements.length > 0 && pointInfo?.nextAchievement) {
+    let achive = null;
+    let index = 0;
+    for (let i = 0; i < achievements.length; i++) {
+      if (achievements[i].id === pointInfo?.nextAchievement?.id) {
+        achive = achievements[i];
+        index = i;
+        break;
+      }
+    }
+    if (achive) {
+      const currentPoint = Number(pointInfo?.point?.amount);
+      const currentLevelPoint = Number(achive?.points);
+      if (currentPoint < currentLevelPoint) {
+        level = index;
+      }
 
-  const progressValue = pointInfo?.nextAchievement?.pointsToNextAchievement
-    ? (currentPoint / Number(pointInfo?.nextAchievement?.points)) * 100
-    : 0;
+      if (currentPoint >= currentLevelPoint) {
+        level = index + 1;
+      }
+    }
+  }
+
 
   const handleCopy = () => {
     navigator.clipboard.writeText(
@@ -154,20 +170,40 @@ const PointInformationWrapper = () => {
 
         <div className="col-span-1 bg-bg-secondary rounded-lg p-4 border border-border-main transition-all duration-300 hover:shadow-[0_0_15px_rgba(0,255,255,0.3)]">
           <div className="text-white text-lg">OG Level</div>
-          <div className="text-text-gray text-sm mt-7 mb-4">
+          {/* <div className="text-text-gray text-sm mt-7 mb-4">
             <Progress
               value={progressValue}
               colorFill="bg-brand-1000 dark:bg-brand-1000"
             />
-          </div>
-          <div className="w-full">
-            <Image
-              src="/icons/progress.svg"
-              alt="og-level"
-              width={100}
-              height={100}
-              className="w-full"
-            />
+          </div> */}
+          <div className="grid grid-cols-3 gap-2 mt-12">
+            <div className="col-span-1">
+              { 
+                level >= 1 ? (
+                  <Image src="/icons/first-level.svg" alt="og-level" width={50} height={50} />
+                ) : (
+                  <Image src="/icons/first-level-blur.svg" alt="og-level" width={50} height={50} />
+                )
+              }
+            </div>
+            <div className="col-span-1">
+              {
+                level >= 2 ? (
+                  <Image src="/icons/second-level.svg" alt="og-level" width={50} height={50} />
+                ) : (
+                  <Image src="/icons/second-level-blur.svg" alt="og-level" width={50} height={50} />
+                )
+              }
+            </div>
+            <div className="col-span-1">
+              {
+                level >= 3 ? (
+                  <Image src="/icons/third-level.svg" alt="og-level" width={50} height={50} />
+                ) : (
+                  <Image src="/icons/third-level-blur.svg" alt="og-level" width={50} height={50} />
+                )
+              }
+            </div>
           </div>
         </div>
       </div>

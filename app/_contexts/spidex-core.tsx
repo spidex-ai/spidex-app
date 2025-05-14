@@ -47,6 +47,7 @@ interface SpidexCoreContextType {
   getTokenDetailCore: (tokenId: string) => Promise<any>;
   getTokenOHLCV: (tokenId: string, interval: string, numIntervals: number) => Promise<any>;
   getTokenStats: (tokenId: string) => Promise<any>;
+  getAchievements: () => Promise<any>;
 }
 
 export const STORAGE_KEY = "spidex_auth";
@@ -182,7 +183,8 @@ export const SpidexCoreProvider: React.FC<{ children: React.ReactNode }> = ({
     updateUserInfo: spidexCore.updateUserInfo,
     getTokenDetailCore: spidexCore.getTokenDetailCore,
     getTokenOHLCV: spidexCore.getTokenOHLCV,
-    getTokenStats: spidexCore.getTokenStats
+    getTokenStats: spidexCore.getTokenStats,
+    getAchievements: spidexCore.getAchievements
   };
 
   return (

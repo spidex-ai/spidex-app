@@ -13,6 +13,17 @@ export interface PointInfo {
     tradingVolume: number;
 }
 
+export interface Achievement {
+    id: number;
+    name: string;
+    icon: string;
+    description: string;
+    points: string;
+    status: number;
+    createdAt: string;
+    updatedAt: string;
+}
+
 export interface NextAchievement {
     id: number;
     name: string;
