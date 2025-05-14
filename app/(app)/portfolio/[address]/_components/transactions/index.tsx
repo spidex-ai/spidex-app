@@ -76,8 +76,8 @@ const Transactions: React.FC<Props> = ({ address }) => {
                   <TableCell className="flex items-center gap-2">
                     <div className="font-medium flex gap-2 items-center">
                       <img
-                        src={tx.tokenAIcon}
-                        alt={tx.tokenAName}
+                        src={tx.tokenBIcon}
+                        alt={tx.tokenBName}
                         className="w-4 h-4 rounded-full"
                       />
                       <p>{tx.tokenBName}</p>
