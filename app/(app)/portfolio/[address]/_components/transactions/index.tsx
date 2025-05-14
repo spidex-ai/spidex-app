@@ -62,30 +62,26 @@ const Transactions: React.FC<Props> = ({ address }) => {
               {transactions.map((tx: PortfolioTransaction, idx: number) => (
                 <TableRow key={idx}>
                   <TableCell>{tx.action}</TableCell>
-                  <TableCell className="flex items-center gap-2">
-                    {tx.tokenAIcon && (
-                      <Image
+                  <TableCell>
+                    <div className="font-medium flex gap-2 items-center">
+                      <img
                         src={tx.tokenAIcon}
                         alt={tx.tokenAName}
-                        width={20}
-                        height={20}
-                        className="w-5 h-5"
+                        className="w-4 h-4 rounded-full"
                       />
-                    )}
-                    {tx.tokenAName}
+                      <p>{tx.tokenAName}</p>
+                    </div>
                   </TableCell>
                   <TableCell>{tx.tokenAAmount}</TableCell>
                   <TableCell className="flex items-center gap-2">
-                    {tx.tokenBIcon && (
-                      <Image
-                        src={tx.tokenBIcon}
-                        alt={tx.tokenBName}
-                        width={20}
-                        height={20}
-                        className="w-5 h-5"
+                    <div className="font-medium flex gap-2 items-center">
+                      <img
+                        src={tx.tokenAIcon}
+                        alt={tx.tokenAName}
+                        className="w-4 h-4 rounded-full"
                       />
-                    )}
-                    {tx.tokenBName}
+                      <p>{tx.tokenBName}</p>
+                    </div>
                   </TableCell>
                   <TableCell>{tx.tokenBAmount}</TableCell>
                   <TableCell>
