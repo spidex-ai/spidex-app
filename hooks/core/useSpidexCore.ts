@@ -3,6 +3,7 @@ import { STORAGE_KEY } from "@raydium-io/raydium-sdk-v2";
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { UpdateUserPayload } from "./type";
+import { QuoteType } from "@/app/(app)/token/[address]/_components/header/select-quote";
 export interface SignMessageData {
   signature: string;
   address: string;
@@ -581,11 +582,11 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     }
   }, [fetchWithAuth, auth]); 
 
-  const getTokenOHLCV = useCallback(async (tokenId: string, interval: string, numIntervals: number) => {
+  const getTokenOHLCV = useCallback(async (tokenId: string, interval: string, numIntervals: number, quote: QuoteType) => {
     setLoading(true);
     setError(null);
     try {
-      const data = await fetchWithAuth(`/tokens/${tokenId}/ohlcv/quote?interval=${interval}&numIntervals=${numIntervals}&quote=USD`);
+      const data = await fetchWithAuth(`/tokens/${tokenId}/ohlcv/quote?interval=${interval}&numIntervals=${numIntervals}&quote=${quote}`);
       return data.data;
     } catch (error) {
       return null;

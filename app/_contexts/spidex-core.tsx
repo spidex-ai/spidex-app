@@ -5,6 +5,7 @@ import { Auth, useSpidexCore } from "@/hooks/core/useSpidexCore";
 import { SubmitSwapPayload, SwapPayload } from "@/services/dexhunter/types";
 import { EsitmateSwapPayload } from "@/services/dexhunter/types";
 import { UpdateUserPayload } from "@/hooks/core/type";
+import { QuoteType } from "../(app)/token/[address]/_components/header/select-quote";
 
 interface SpidexCoreContextType {
   auth: Auth | null;
@@ -45,7 +46,7 @@ interface SpidexCoreContextType {
   uploadAvatar: (file: FormData) => Promise<any>;
   updateUserInfo: (payload: UpdateUserPayload) => Promise<any>;
   getTokenDetailCore: (tokenId: string) => Promise<any>;
-  getTokenOHLCV: (tokenId: string, interval: string, numIntervals: number) => Promise<any>;
+  getTokenOHLCV: (tokenId: string, interval: string, numIntervals: number, quote: QuoteType) => Promise<any>;
   getTokenStats: (tokenId: string) => Promise<any>;
   getAchievements: () => Promise<any>;
 }

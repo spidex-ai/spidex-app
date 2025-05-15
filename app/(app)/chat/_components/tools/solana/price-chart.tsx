@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import { Skeleton } from '@/components/ui';
 
@@ -11,6 +11,7 @@ import { useTokenDetail } from '@/hooks';
 import type { ToolInvocation } from 'ai';
 import type { TokenPriceChartResultType } from '@/ai';
 import Header from '@/app/(app)/token/[address]/_components/header';
+import { QuoteType } from '@/app/(app)/token/[address]/_components/header/select-quote';
 
 interface Props {
     tool: ToolInvocation,
@@ -40,6 +41,7 @@ const PriceChartBody = ({ tokenAddress }: { tokenAddress: string }) => {
     
 
     const {data, isLoading} = useTokenDetail(tokenAddress);
+    const [quote, setQuote] = useState<QuoteType>(QuoteType.USD);
 
     return (
         <div className="w-full flex flex-col gap-2">
@@ -48,12 +50,12 @@ const PriceChartBody = ({ tokenAddress }: { tokenAddress: string }) => {
                     <Skeleton className="w-full h-8" />
                 ) : (
                     data && (
-                        <Header data={data} isLoading={isLoading} />
+                        <Header data={data} isLoading={isLoading} quote={quote} onQuoteChange={setQuote} />
                     )
                 )
             }
             <div className="h-96">
-                <TokenChart data={data} isLoadingTokenDetail={isLoading} />
+                <TokenChart data={data} isLoadingTokenDetail={isLoading} quote={quote} />
             </div>
                
        

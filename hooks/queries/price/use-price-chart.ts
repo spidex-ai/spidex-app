@@ -9,6 +9,7 @@ import {
 import { useTaptools } from "@/hooks/useTaptools";
 import { useEffect, useState } from "react";
 import { useSpidexCoreContext } from "@/app/_contexts";
+import { QuoteType } from "@/app/(app)/token/[address]/_components/header/select-quote";
 
 export const usePriceChart = (
   mint: string,
@@ -96,7 +97,8 @@ export const usePriceChartTaptools = (
 export const usePriceChartCore = (
   unit: string,
   interval: CandleStickInterval,
-  numIntervals: number
+  numIntervals: number,
+  quote: QuoteType
 ) => {
   const { getTokenOHLCV } = useSpidexCoreContext();
 
@@ -108,12 +110,12 @@ export const usePriceChartCore = (
    if (unit) {
     fetchDataChart();
    }
-  }, [unit, interval, numIntervals]);
+  }, [unit, interval, numIntervals, quote]);
   
   const fetchDataChart = async () => {
     try {
       setIsLoading(true);
-      const data = await getTokenOHLCV(unit, interval, numIntervals);
+      const data = await getTokenOHLCV(unit, interval, numIntervals, quote);
       console.log("🚀 ~ fetchDataChart ~ data:", data)
       setData(data);
     } catch (error) {
@@ -127,7 +129,7 @@ export const usePriceChartCore = (
 
   const refetchDataChart = async () => {
     try {
-      const data = await getTokenOHLCV(unit, interval, numIntervals);
+      const data = await getTokenOHLCV(unit, interval, numIntervals, quote);
       if (data && data.length > 0) {
         setData(data);
       }

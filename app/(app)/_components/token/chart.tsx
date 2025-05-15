@@ -11,6 +11,7 @@ import { cn } from "@/lib/utils";
 import type { UTCTimestamp } from "lightweight-charts";
 import { CandleStickInterval } from "@/services/hellomoon/types";
 import { CardanoTokenDetail } from "@/services/dexhunter/types";
+import { QuoteType } from "../../token/[address]/_components/header/select-quote";
 
 const WINDOWS = [
   {
@@ -78,9 +79,10 @@ const WINDOWS = [
 interface Props {
   data: CardanoTokenDetail | null;
   isLoadingTokenDetail: boolean;
+  quote: QuoteType;
 }
 
-const TokenChart: React.FC<Props> = ({ data: tokenDetail, isLoadingTokenDetail }) => {
+const TokenChart: React.FC<Props> = ({ data: tokenDetail, isLoadingTokenDetail, quote }) => {
   const [timeframe, setTimeframe] = useState<CandleStickInterval>(
     CandleStickInterval.FOUR_HOURS
   );
@@ -88,7 +90,8 @@ const TokenChart: React.FC<Props> = ({ data: tokenDetail, isLoadingTokenDetail }
   const { data, isLoading, refetchDataChart } = usePriceChartCore(
     tokenDetail?.unit ?? "",
     timeframe,
-    numDays
+    numDays,
+    quote
   );
 
   useEffect(() => {
