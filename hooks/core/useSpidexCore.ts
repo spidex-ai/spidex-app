@@ -1,6 +1,6 @@
-import { useSpidexCoreContext } from "@/app/_contexts/spidex-core";
 import { EsitmateSwapPayload, SubmitSwapPayload, SwapPayload } from "@/services/dexhunter/types";
 import { STORAGE_KEY } from "@raydium-io/raydium-sdk-v2";
+import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { UpdateUserPayload } from "./type";
 export interface SignMessageData {
@@ -37,6 +37,7 @@ export interface UserSpidex {
 }
 
 export const useSpidexCore = (initialAuth: Auth | null = null) => {
+  const router = useRouter()
   const [loading, setLoading] = useState<boolean>(false);
   const [auth, setAuth] = useState<Auth | null>(initialAuth);
   const [error, setError] = useState<string | null>(null);
@@ -282,6 +283,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
   const logout = useCallback(async () => {
     setAuth(null);
     localStorage.removeItem(STORAGE_KEY);
+    router.push('/chat')
   }, []);
 
   const getUserRefMeInfo = useCallback(async () => {

@@ -26,70 +26,63 @@ const WALLET_METHODS = [
     id: "lace",
     name: "Lace",
     icon: "/icons/nami.svg",
-    description: "Connect Lace Wallet",
+    description: "Lace Wallet",
     link: "https://www.lace.io/"
   },
   {
     id: "yoroi",
     name: "Yoroi",
     icon: "/icons/yoroi.svg",
-    description: "Connect Yoroi Wallet",
+    description: "Yoroi Wallet",
     link: "https://yoroi-wallet.com/"
   },
-  // {
-  //   id: "subwallet",
-  //   name: "Subwallet",
-  //   icon: "/icons/subwallet.svg",
-  //   description: "Connect Subwallet Wallet",
-  //   link: "https://www.subwallet.app/"
-  // },
   {
     id: "vespr",
     name: "Vespr",
     icon: "/icons/vespr.svg",
-    description: "Connect Vespr Wallet",
+    description: "Vespr Wallet",
     link: "https://vespr.xyz/"
+  },
+  {
+    id: "eternl",
+    name: "Eternl",
+    icon: "/icons/eternl.svg",
+    description: "Eternl Wallet",
+    link: "https://eternl.io/"
   },
   {
     id: "gerowallet",
     name: "Gero",
     icon: "/icons/gero.svg",
-    description: "Connect Gero Wallet",
+    description: "Gero Wallet",
     link: "https://www.gerowallet.io/"
   },
   {
     id: "lucem",
     name: "Lucem",
     icon: "/icons/lucem.svg",
-    description: "Connect Lucem Wallet",
+    description: "Lucem Wallet",
     link: "https://chromewebstore.google.com/detail/lucem-wallet/mkbnofdoodemclcbcjpgpcdccjhaledi"
   },
   {
     id: "begin",
     name: "Begin",
     icon: "/icons/begin.svg",
-    description: "Connect Begin Wallet",
+    description: "Begin Wallet",
     link: "https://begin.is/"
-  },
-  {
-    id: "eternl",
-    name: "Eternl",
-    icon: "/icons/eternl.svg",
-    description: "Connect Eternl Wallet",
-    link: "https://eternl.io/"
   },
   {
     id: "typhon",
     name: "Typhon",
     icon: "/icons/typhon.svg",
-    description: "Connect Typhon Wallet",
+    description: "Typhon Wallet",
     link: "https://typhonwallet.io/"
   },
   {
     id: "nufi",
     name: "Nufi",
     icon: "/icons/nufi.svg",
-    description: "Connect Nufi Wallet",
+    description: "Nufi Wallet",
   },
 ];
 
@@ -335,7 +328,7 @@ const LoginModal: React.FC = () => {
       <div
         key={method.id}
         className={cn(
-          "p-3 rounded-md  text-white",
+          "p-2 rounded-md  text-white",
           isThisWalletConnecting ? "bg-blue-50" : "border-gray-200",
           isDisabled ? "cursor-not-allowed opacity-50" : "cursor-pointer hover:bg-blue-50 hover:text-black",
           "transition-all duration-200"
@@ -401,7 +394,7 @@ const LoginModal: React.FC = () => {
       <div
         key="metamask"
         className={cn(
-          "p-3 rounded-md border-gray-200 text-white",
+          "p-2 rounded-md border-gray-200 text-white",
           "cursor-pointer hover:bg-blue-50 hover:text-black",
           "transition-all duration-200"
         )}
@@ -418,7 +411,7 @@ const LoginModal: React.FC = () => {
               />
             </div>
             <div>
-              <span>Connect with Metamask</span>
+              <span>Metamask</span>
             </div>
           </div>
           {isThisWalletConnecting ? <Loader2 className="h-4 w-4 animate-spin text-blue-500" /> : <ChevronRight className="h-4 w-4 text-icon" />}
@@ -443,8 +436,8 @@ const LoginModal: React.FC = () => {
           <div className="space-y-4 py-4">
             <div className="space-y-2 max-h-[350px] sm:max-h-[550px] scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 overflow-y-auto">
               <div className="space-y-2">
-                {renderMetamaskConnect()}
                 {WALLET_METHODS.map(renderWalletOption)}
+                {renderMetamaskConnect()}
               </div>
             </div>
 
