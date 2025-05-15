@@ -10,6 +10,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { dexLogoMap } from "@/app/utils/logo";
 
 interface Props {
   swapDetails: {
@@ -113,7 +114,9 @@ export default function SwapPoint({
                         value={"1 ADA + 0.1%"}
                       />
                     </TooltipTrigger>
-                    <TooltipContent>This fee will be collected by DexHunter</TooltipContent>
+                    <TooltipContent>
+                      This fee will be collected by DexHunter
+                    </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
               </div> */}
@@ -173,7 +176,7 @@ export default function SwapPoint({
                   <div className="flex items-center justify-between gap-1 p-2">
                     <div className="flex items-center gap-1">
                       <Image
-                        src="/icons/logo-gray.svg"
+                        src={dexLogoMap[split.dex] || "/icons/logo-gray.svg"}
                         alt="logo-gray"
                         width={20}
                         height={20}
