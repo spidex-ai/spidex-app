@@ -84,15 +84,27 @@ export default function SwapPoint({
                 label="Min Receive"
                 value={swapDetails.minReceive}
               />
-              <SwapDetailItem
-                label="Dex Fee"
-                value={`${swapDetails.dexFee} ADA`}
-              />
+              <div className="text-left">
+                <TooltipProvider>
+                  <Tooltip delayDuration={0}>
+                    <TooltipTrigger>
+                      <SwapDetailItem
+                        label="Dex Fee"
+                        value={`${swapDetails.dexFee} ADA`}
+                      />
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      This fee will be collected by DexHunter
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </div>
+
               <SwapDetailItem
                 label="Dex Deposits"
                 value={swapDetails.dexDeposits}
               />
-              <div className="text-left">
+              {/* <div className="text-left">
                 <TooltipProvider>
                   <Tooltip delayDuration={0}>
                     <TooltipTrigger>
@@ -104,7 +116,7 @@ export default function SwapPoint({
                     <TooltipContent>This fee will be collected by DexHunter</TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
-              </div>
+              </div> */}
             </div>
           </div>
         )}
@@ -128,7 +140,15 @@ export default function SwapPoint({
         <div className="flex justify-between items-center gap-2 px-6 py-2 bg-bg-swap rounded-lg">
           <div className="text-xs">Market Offers</div>
           <div className="flex items-center gap-2">
-            <div className="text-[10px] text-text-gray">{``}</div>
+            <div className="text-[10px] text-white flex items-center gap-1">
+              <Image 
+                src="/icons/dex-hunter.svg"
+                alt="dex-hunter"
+                width={10}
+                height={10}
+              />
+              <div>DexHunter</div>
+            </div>
             {!isOpenMarketOffers ? (
               <div
                 className="cursor-pointer"
@@ -175,7 +195,14 @@ export default function SwapPoint({
                         />
                         <div className="text-xs text-text-gray flex gap-1 items-center">
                           <div>{split.fee}</div>
-                          <div><Image src="/icons/ada.svg" alt="ada" width={10} height={10} /></div>
+                          <div>
+                            <Image
+                              src="/icons/ada.svg"
+                              alt="ada"
+                              width={10}
+                              height={10}
+                            />
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -218,6 +245,18 @@ export default function SwapPoint({
               </div>
             </div>
           </div>
+        </div>
+      </div>
+      <div className="flex items-center gap-2 justify-center mt-2 text-xs">
+        <div className="text-text-gray font-medium pt-1">Powered by</div>
+        <Image
+          src="/icons/dex-hunter.svg"
+          alt="dex-hunter"
+          width={15}
+          height={15}
+        />
+        <div className="text-white text-[10px] flex items-center pt-1">
+          DexHunter
         </div>
       </div>
     </div>

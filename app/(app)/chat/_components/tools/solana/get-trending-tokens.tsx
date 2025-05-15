@@ -79,7 +79,7 @@ const TokenCard = ({ token }: { token: TopTokenMcap }) => {
               </p>
               <p className="text-xs text-muted-foreground">
                 $
-                {token.price.toLocaleString(undefined, {
+                {token.price < 0.0001 ? "~0.0001" : token.price.toLocaleString(undefined, {
                   maximumFractionDigits: 5,
                 })}
               </p>
@@ -89,7 +89,9 @@ const TokenCard = ({ token }: { token: TopTokenMcap }) => {
         </div>
         <div className="flex flex-col">
           <p className="text-xs text-muted-foreground">
-            Market Cap: ${token?.mcap < 0.0001 ? "~0.0001" : token?.mcap.toLocaleString()}
+            Market Cap: ${token?.mcap < 0.0001 ? "~0.0001" : token?.mcap.toLocaleString(undefined, {
+              maximumFractionDigits: 2,
+            })}
           </p>
         </div>
       </Card>

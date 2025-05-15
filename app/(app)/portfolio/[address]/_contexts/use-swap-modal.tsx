@@ -6,16 +6,17 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 
 import Swap from '@/app/_components/swap';
 
-import type { Token } from '@/db/types'
+import { useSpidexCoreContext } from '@/app/_contexts/spidex-core';
+import { CardanoTokenDetail } from '@/services/dexhunter/types';
 
 interface SwapModalContextType {
     isOpen: boolean;
     openSell: (tokenAddress: string) => Promise<void>;
     openBuy: (tokenAddress: string) => Promise<void>;
-    inputToken: Token | null;
-    outputToken: Token | null;
-    setInputToken: (token: Token) => void;
-    setOutputToken: (token: Token) => void;
+    inputToken: CardanoTokenDetail | null;
+    outputToken: CardanoTokenDetail | null;
+    setInputToken: (token: CardanoTokenDetail) => void;
+    setOutputToken: (token: CardanoTokenDetail) => void;
 }
 
 const SwapModalContextType = createContext<SwapModalContextType>({
@@ -29,14 +30,14 @@ const SwapModalContextType = createContext<SwapModalContextType>({
 });
 
 export const SwapModalProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-
+    const { getTokenDetailCore } = useSpidexCoreContext();
     const [isOpen, setIsOpen] = useState<boolean>(false);
 
-    const [inputToken, setInputToken] = useState<Token | null>(null);
-    const [outputToken, setOutputToken] = useState<Token | null>(null);
+    const [inputToken, setInputToken] = useState<CardanoTokenDetail | null>(null);
+    const [outputToken, setOutputToken] = useState<CardanoTokenDetail | null>(null);
 
     const openSell = async (tokenAddress: string) => {
-        const token = await fetch(`/api/token/${tokenAddress}/data`).then(res => res.json());
+        const token = await getTokenDetailCore(tokenAddress);
         if(!token) return;
         setInputToken(token);
         setOutputToken(null);
@@ -44,7 +45,7 @@ export const SwapModalProvider: React.FC<{ children: ReactNode }> = ({ children 
     }
 
     const openBuy = async (tokenAddress: string) => {
-        const token = await fetch(`/api/token/${tokenAddress}/data`).then(res => res.json());
+        const token = await getTokenDetailCore(tokenAddress);
         if(!token) return;
         setInputToken(null);
         setOutputToken(token);
@@ -62,21 +63,25 @@ export const SwapModalProvider: React.FC<{ children: ReactNode }> = ({ children 
             setOutputToken 
         }}>
             <Dialog open={isOpen} onOpenChange={setIsOpen}>
-                <DialogContent className="w-fit">
+             
+               <DialogContent className="w-fit dark:bg-bg-secondary">
                     <DialogHeader>
                         <DialogTitle>
                             Swap
                         </DialogTitle>
                     </DialogHeader>
+                    <div className="mt-5">
                     <Swap 
-                        initialInputToken={null}
-                        initialOutputToken={null}
+                        initialInputToken={inputToken}
+                        initialOutputToken={outputToken}
                         inputLabel="From"
                         outputLabel="To"
                         onSuccess={() => setIsOpen(false)}
                         onCancel={() => setIsOpen(false)}
                     />
+                    </div>
                 </DialogContent>
+               
             </Dialog>
             {children}
         </SwapModalContextType.Provider>
