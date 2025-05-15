@@ -144,7 +144,7 @@ export default function SwapPoint({
           <div className="text-xs">Market Offers</div>
           <div className="flex items-center gap-2">
             <div className="text-[10px] text-white flex items-center gap-1">
-              <Image 
+              <Image
                 src="/icons/dex-hunter.svg"
                 alt="dex-hunter"
                 width={10}
@@ -175,7 +175,7 @@ export default function SwapPoint({
                 <div className="text-xs gradient-border" key={key}>
                   <div className="flex items-center justify-between gap-1 p-2">
                     <div className="flex items-center gap-1">
-                      <Image
+                      <img
                         src={dexLogoMap[split.dex] || "/icons/logo-gray.svg"}
                         alt="logo-gray"
                         width={20}
