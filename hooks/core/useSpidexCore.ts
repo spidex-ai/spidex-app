@@ -17,6 +17,7 @@ export interface Auth {
   userId: number;
   user: UserSpidex;
   walletName: string;
+  avatar: string;
 }
 
 export interface UserSpidex {
@@ -159,7 +160,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     try {
       const data = await fetchWithAuth("/auth/me");
       if (auth) {
-        setAuth({ ...auth, user: data.data });
+        setAuth({ ...auth, user: data.data, avatar: data.data.avatar });
       }
       return data.data;
     } catch (err) {

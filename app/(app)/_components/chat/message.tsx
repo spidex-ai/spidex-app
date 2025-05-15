@@ -68,7 +68,7 @@ const Message: React.FC<Props> = ({ message, ToolComponent, className, previousM
                                 </AvatarFallback>
                                 {
                                     auth?.user && (
-                                        <AvatarImage src={pfpURL(auth.user, false)} />
+                                        <AvatarImage src={auth?.avatar ? auth?.avatar : pfpURL(auth.user, false)} />
                                     )
                                 }
                             </Avatar>
