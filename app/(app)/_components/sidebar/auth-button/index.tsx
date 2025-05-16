@@ -1,28 +1,28 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
-import { LogOut, Wallet } from 'lucide-react';
 import {
-    SidebarMenu,
-    SidebarMenuItem,
     DropdownMenu,
-    DropdownMenuTrigger,
     DropdownMenuContent,
+    DropdownMenuItem,
     DropdownMenuLabel,
     DropdownMenuSeparator,
-    DropdownMenuItem,
-    useSidebar,
-    GradientButtonIcon,
+    DropdownMenuTrigger,
     GradientButton,
+    GradientButtonIcon,
+    SidebarMenu,
+    SidebarMenuItem,
+    useSidebar,
 } from '@/components/ui';
+import { LogOut } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 
 import Balances from './balances';
 
-import { truncateAddress } from '@/lib/wallet';
-import Image from 'next/image';
+import { LOGIN_METHODS } from '@/app/_components/login-modal';
 import { useSpidexCoreContext } from '@/app/_contexts';
 import { useLoginModal } from '@/app/_contexts/login-modal-context';
-import { LOGIN_METHODS } from '@/app/_components/login-modal';
+import { truncateAddress } from '@/lib/wallet';
+import Image from 'next/image';
 
 const AuthButton: React.FC = () => {
 
