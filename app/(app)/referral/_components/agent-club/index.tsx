@@ -39,7 +39,7 @@ const AgentClub: React.FC = () => {
       <div className="flex gap-8">
         <div>
           {auth?.avatar ? (
-            <Image
+            <img
               src={auth?.avatar}
               alt="agent-club"
               width={100}

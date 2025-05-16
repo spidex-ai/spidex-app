@@ -22,12 +22,13 @@ const SidebarMenu: React.FC = () => {
         <SidebarMenuUI>
             <ChatsGroup />
             <SavedTokensGroup />
-            <AccountButton />
+           
             <Trade />
             {/* <PortfolioButton /> */}
             <Points />
             <RefferalProgram />
             <PortfolioWapper />
+            <AccountButton />
         </SidebarMenuUI>
     )
 }

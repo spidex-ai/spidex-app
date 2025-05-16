@@ -308,7 +308,7 @@ const Swap: React.FC<Props> = ({
               minReceive: String(estimatedPoints?.total_output.toLocaleString(undefined, {
                 maximumFractionDigits: 2,
               })),
-              dexFee: String(estimatedPoints?.dexhunter_fee.toLocaleString(undefined, {
+              dexFee: String(estimatedPoints?.partner_fee.toLocaleString(undefined, {
                 maximumFractionDigits: 2,
               })),
               dexDeposits: String(estimatedPoints?.deposits.toLocaleString(undefined, {
