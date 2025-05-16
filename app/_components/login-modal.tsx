@@ -102,6 +102,15 @@ const SOCIAL_METHODS = [
   },
 ];
 
+const METAMASK_METHOD = {
+  id: "metamask",
+  name: "Metamask",
+  icon: "/icons/metamask.svg",
+  description: "Metamask",
+}
+
+export const LOGIN_METHODS = [...WALLET_METHODS, ...SOCIAL_METHODS, METAMASK_METHOD]
+
 const LoginModal: React.FC = () => {
   const [walletConnecting, setWalletConnecting] = useState<string | null>(null)
   const [isConnecting, setIsConnecting] = useState(false)
@@ -404,14 +413,14 @@ const LoginModal: React.FC = () => {
           <div className="flex items-center gap-2">
             <div className="w-10 h-10 flex items-center justify-center">
               <Image
-                src="/icons/metamask.svg"
-                alt="Metamask"
+                src={METAMASK_METHOD.icon}
+                alt={METAMASK_METHOD.name}
                 width={30}
                 height={30}
               />
             </div>
             <div>
-              <span>Metamask</span>
+              <span>{METAMASK_METHOD.description}</span>
             </div>
           </div>
           {isThisWalletConnecting ? <Loader2 className="h-4 w-4 animate-spin text-blue-500" /> : <ChevronRight className="h-4 w-4 text-icon" />}

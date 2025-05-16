@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { UpdateUserPayload } from "./type";
 import { QuoteType } from "@/app/(app)/token/[address]/_components/header/select-quote";
+import { LOGIN_METHODS } from "@/app/_components/login-modal";
 export interface SignMessageData {
   signature: string;
   address: string;
@@ -254,7 +255,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
             referralCode,
           }),
         });
-        setAuth(data.data);
+        setAuth({...data.data, walletName: "xlogin"});
         return data.data;
       } catch (err) {
         return null;
@@ -273,7 +274,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
             referralCode,
           }),
         });
-        setAuth(data.data);
+        setAuth({...data.data, walletName: "google"});
         return data.data;
       } catch (err) {
         return null;

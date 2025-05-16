@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { LogOut, Wallet } from 'lucide-react';
 import {
     SidebarMenu,
@@ -22,17 +22,23 @@ import { truncateAddress } from '@/lib/wallet';
 import Image from 'next/image';
 import { useSpidexCoreContext } from '@/app/_contexts';
 import { useLoginModal } from '@/app/_contexts/login-modal-context';
+import { LOGIN_METHODS } from '@/app/_components/login-modal';
 
 const AuthButton: React.FC = () => {
 
     const { auth, logout } = useSpidexCoreContext();
     const { openModal } = useLoginModal();
     const { isMobile, open } = useSidebar();
+    const [walletIcon, setWalletIcon] = useState<string>("/icons/connect-wallet.svg");
 
     const handleConnectWallet = () => {
         openModal(true);
     }
-
+    useEffect(() => {
+        if (auth?.walletName) {
+            setWalletIcon(LOGIN_METHODS.find(method => method.id === auth.walletName)?.icon || "/icons/connect-wallet.svg");
+        }
+    }, [auth]);
     if (!auth || !auth.user || !auth.user.walletAddress) return (
         <SidebarMenu>
             <SidebarMenuItem>
@@ -40,13 +46,13 @@ const AuthButton: React.FC = () => {
                     open ? (
                         <GradientButton className='w-full' onClick={handleConnectWallet}>
                             <div className='flex gap-2'>
-                                <Image src="/icons/connect-wallet.svg" alt="connect-wallet" width={15} height={15} />
+                                <Image src="/icons/connect-wallet.svg" alt="connect-wallet" width={20} height={20} />
                                 <div>Connect Wallet</div>
                             </div>
                         </GradientButton>
                     ) : (
                         <GradientButtonIcon className='w-full' onClick={handleConnectWallet}>
-                            <Image src="/icons/connect-wallet.svg" alt="connect-wallet" width={15} height={15} />
+                            <Image src="/icons/connect-wallet.svg" alt="connect-wallet" width={20} height={20} />
                         </GradientButtonIcon>
                     )
                 }
@@ -63,13 +69,13 @@ const AuthButton: React.FC = () => {
                             open ? (
                                 <GradientButton className='w-full'>
                                     <div className='flex gap-2'>
-                                        <Image src="/icons/wallet.svg" alt="wallet-wallet" width={15} height={15} />
+                                        <Image src={walletIcon} alt="wallet-wallet" width={15} height={15} />
                                         <div>{truncateAddress(auth.user.walletAddress)}</div>
                                     </div>
                                 </GradientButton>
                             ) : (
                                 <GradientButtonIcon>
-                                    <Image src="/icons/wallet.svg" alt="wallet-wallet-1" width={15} height={15} />
+                                    <Image src={walletIcon} alt="wallet-wallet-1" width={15} height={15} />
                                 </GradientButtonIcon>
                             )
                         }
@@ -82,7 +88,7 @@ const AuthButton: React.FC = () => {
                     >
                         <DropdownMenuLabel className="p-0 font-normal">
                             <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                                <Wallet className="size-4" />
+                                <Image src={walletIcon} alt="wallet-wallet" width={20} height={20} />
                                 <div className="grid flex-1 text-left text-sm leading-tight">
                                     <span className="truncate font-semibold">{truncateAddress(auth.user.walletAddress)}</span>
                                 </div>
