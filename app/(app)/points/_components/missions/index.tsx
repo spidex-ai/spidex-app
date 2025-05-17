@@ -179,7 +179,7 @@ const Missions = () => {
   return (
     <div className="border border-border-main rounded-lg bg-bg-secondary p-10">
       <div className="">
-        <div className="text-2xl font-bold text-white">Missions</div>
+        <div className="text-[28px] font-medium text-white">Missions</div>
       </div>
       <div className="flex flex-col mt-6 gap-3">
         {results.length > 0
@@ -203,11 +203,11 @@ const Missions = () => {
                     <div className="w-full">
                       <div className="flex items-center gap-2">
                         <div className="flex items-center">{result.icon}</div>
-                        <div className="text-white">{result.name}</div>{" "}
+                        <div className="text-white text-lg">{result.name}</div>{" "}
                       </div>
                     </div>
                   </div>
-                  <div className="col-span-1 text-white flex justify-center gap-1 items-center">
+                  <div className="col-span-1 text-white text-lg flex justify-center gap-1 items-center">
                     <div>+{result.point} </div>
                     <div>
                       <Image

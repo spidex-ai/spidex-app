@@ -62,7 +62,7 @@ const PointInformationWrapper = () => {
       <div className="grid grid-cols-4 gap-4">
         <div className="col-span-1 bg-bg-secondary rounded-lg p-4 border border-border-main transition-all duration-300 hover:shadow-[0_0_15px_rgba(0,255,255,0.3)]">
           <div className="flex items-center justify-between">
-            <div>
+            <div className="text-white text-[28px] font-medium">
               {Number(pointInfo?.point?.amount).toLocaleString(undefined, {
                 maximumFractionDigits: 2,
               })}
@@ -85,7 +85,7 @@ const PointInformationWrapper = () => {
               width={10}
               height={9}
             />
-            <div className="text-text-gray text-sm">What is SILK?</div>
+            <div className="text-text-gray text-xs">What is SILK?</div>
             <Image
               src="/icons/warning-gray.svg"
               alt="gift"
@@ -97,7 +97,11 @@ const PointInformationWrapper = () => {
 
         <div className="col-span-1 bg-bg-secondary rounded-lg p-4 border border-border-main transition-all duration-300 hover:shadow-[0_0_15px_rgba(0,255,255,0.3)]">
           <div className="flex items-center justify-between">
-            <div>{pointInfo?.referralInfo?.referralPointEarned}</div>
+            <div className="text-white text-[28px] font-medium">
+              {Number(pointInfo?.referralInfo?.referralPointEarned).toLocaleString(undefined, {
+                maximumFractionDigits: 2,
+              })}
+            </div>
             <div>
               <Image src="/icons/gift.svg" alt="gift" width={40} height={40} />
             </div>
@@ -106,8 +110,8 @@ const PointInformationWrapper = () => {
           <div className="text-white text-lg">Referrals</div>
           <div className="flex items-center justify-between gap-4 bg-bg-main rounded-lg py-1 px-2 mt-1">
             <div className="text-sm">
-              <span className="text-text-gray ">Invite link:</span>{" "}
-              <span className="text-white text-sm">
+              <span className="text-text-gray text-xs">Invite link:</span>{" "}
+              <span className="text-white text-xs">
                 {" "}
                 {pointInfo?.referralInfo?.referralCode
                   ? `${pointInfo?.referralInfo?.referralCode.slice(
@@ -139,7 +143,11 @@ const PointInformationWrapper = () => {
 
         <div className="col-span-1 bg-bg-secondary rounded-lg p-4 border border-border-main transition-all duration-300 hover:shadow-[0_0_15px_rgba(0,255,255,0.3)]">
           <div className="flex justify-between">
-            <div>{pointInfo?.tradingVolume}</div>
+            <div className="text-white text-[28px] font-medium">
+              {Number(pointInfo?.tradingVolume).toLocaleString(undefined, {
+                maximumFractionDigits: 2,
+              })}
+            </div>
             <div>
               <Image
                 src="/icons/volume-color.svg"
@@ -158,7 +166,7 @@ const PointInformationWrapper = () => {
               width={10}
               height={9}
             />
-            <div className="text-text-gray text-sm">Transactions</div>
+            <div className="text-text-gray text-xs">Transactions</div>
             <Image
               src="/icons/warning-gray.svg"
               alt="gift"
@@ -169,7 +177,7 @@ const PointInformationWrapper = () => {
         </div>
 
         <div className="col-span-1 bg-bg-secondary rounded-lg p-4 border border-border-main transition-all duration-300 hover:shadow-[0_0_15px_rgba(0,255,255,0.3)]">
-          <div className="text-white text-lg">OG Level</div>
+          <div className="text-white text-[28px] font-medium">OG Level</div>
           {/* <div className="text-text-gray text-sm mt-7 mb-4">
             <Progress
               value={progressValue}
@@ -209,7 +217,7 @@ const PointInformationWrapper = () => {
       </div>
 
       <div className="flex gap-2 mt-8">
-        <TextGradient className="italic">
+        <TextGradient className="italic text-lg">
           Keep trading on Spidex AI to earn more SILK.
         </TextGradient>
         <div>

@@ -41,6 +41,19 @@ interface Props {
   priorityTokens?: string[];
 }
 
+export const adaTokenDetail: CardanoTokenDetail = {
+  token_id: "ADA",
+  token_ascii: "ADA",
+  ticker: "ADA",
+  is_verified: true,
+  token_policy: "ADA",
+  token_decimals: 6,
+  supply: 0,
+  creation_date: "",
+  price: 0,
+  logo: "",
+};
+
 const Swap: React.FC<Props> = ({
   initialInputToken,
   initialOutputToken,
@@ -66,11 +79,11 @@ const Swap: React.FC<Props> = ({
     initialInputAmount || ""
   );
   const [inputToken, setInputToken] = useState<CardanoTokenDetail | null>(
-    initialInputToken
+    initialInputToken || adaTokenDetail
   );
   const [outputAmount, setOutputAmount] = useState<string>("");
   const [outputToken, setOutputToken] = useState<CardanoTokenDetail | null>(
-    initialOutputToken
+    initialOutputToken || adaTokenDetail
   );
 
   const [isQuoteLoading, setIsQuoteLoading] = useState<boolean>(false);
