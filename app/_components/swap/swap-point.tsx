@@ -25,6 +25,7 @@ interface Props {
     dexFee: string;
     dexDeposits: string;
     serviceFee: string;
+    batcherFee: string;
   };
   splits: Split[];
   estimatedPoints: string;
@@ -36,6 +37,16 @@ export default function SwapPoint({
 }: Props) {
   const [isOpenSwapDetails, setIsOpenSwapDetails] = useState(true);
   const [isOpenMarketOffers, setIsOpenMarketOffers] = useState(true);
+
+  const totalDepositADA =
+    swapDetails?.inputToken === "ADA"
+      ? Number(swapDetails.inputAmount) +
+        Number(swapDetails.dexDeposits) +
+        Number(swapDetails.batcherFee) + 
+        Number(swapDetails.serviceFee)
+      :  Number(swapDetails.dexDeposits) +
+      Number(swapDetails.batcherFee) + 
+      Number(swapDetails.serviceFee);
 
   return (
     <div className="mt-2">
@@ -79,11 +90,11 @@ export default function SwapPoint({
               />
               <SwapDetailItem
                 label="Net Price"
-                value={`${swapDetails.netPrice}`}
+                value={`${swapDetails.netPrice} ${swapDetails.outputToken}`}
               />
               <SwapDetailItem
                 label="Min Receive"
-                value={swapDetails.minReceive}
+                value={`${swapDetails.minReceive} ${swapDetails.outputToken}`}
               />
               <div className="text-left">
                 <TooltipProvider>
@@ -95,16 +106,51 @@ export default function SwapPoint({
                       />
                     </TooltipTrigger>
                     <TooltipContent>
-                      This fee will be collected by DexHunter
+                      This fee will be collected by DexHunter.
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
               </div>
 
-              <SwapDetailItem
-                label="Dex Deposits"
-                value={swapDetails.dexDeposits}
-              />
+              <div className="text-left">
+                <TooltipProvider>
+                  <Tooltip delayDuration={0}>
+                    <TooltipTrigger>
+                      <SwapDetailItem
+                        label="Dex Deposits"
+                        value={`${swapDetails.dexDeposits} ADA`}
+                      />
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      This amount will be refunded when the swap transaction is
+                      completed.
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </div>
+
+              <div className="text-left">
+                <TooltipProvider>
+                  <Tooltip delayDuration={0}>
+                    <TooltipTrigger>
+                      <SwapDetailItem
+                        label="Total Deposit"
+                        value={`${swapDetails?.inputToken === 'ADA' ? `${totalDepositADA.toLocaleString(undefined, {
+                          maximumFractionDigits: 2,
+                        })} ADA` : `${Number(swapDetails.inputAmount).toLocaleString(undefined, {
+                          maximumFractionDigits: 2,
+                        })} ${swapDetails.inputToken} + ${totalDepositADA.toLocaleString(undefined, {
+                          maximumFractionDigits: 2,
+                        })} ADA`}`}
+                      />
+                    </TooltipTrigger>
+                    <TooltipContent>
+                    It does not include gas fee.
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </div>
+
               {/* <div className="text-left">
                 <TooltipProvider>
                   <Tooltip delayDuration={0}>
@@ -276,7 +322,7 @@ const SwapDetailItem = ({
   return (
     <div>
       <div className="text-[10px] text-text-gray text-left">{label}</div>
-      <div className="text-[10px]">{value}</div>
+      <div className="text-[10px] text-left">{value}</div>
     </div>
   );
 };

@@ -390,6 +390,9 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
               serviceFee: String(estimatedPoints?.partner_fee.toLocaleString(undefined, {
                 maximumFractionDigits: 2,
               })),
+              batcherFee: String(estimatedPoints?.batcher_fee.toLocaleString(undefined, {
+                maximumFractionDigits: 2,
+              })),
             }}
             splits={estimatedPoints?.splits || []}
             estimatedPoints={String(estimatedPoints?.estimated_point || "1")}

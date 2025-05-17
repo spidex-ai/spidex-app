@@ -119,12 +119,18 @@ const TokenChart: React.FC<Props> = ({ data: tokenDetail, isLoadingTokenDetail, 
           <>
             {data?.length > 0 ? (
               <p className="text-md md:text-lg font-bold">
-                $
-                {currentPrice}{" "}
+                {
+                  quote === QuoteType.USD ? (
+                    <>{`$${currentPrice}`}
+                      </>
+                  ) : (
+                    <>{`${currentPrice} ${quote}`}</>
+                  )
+                }
                 <span
                   className={cn(change > 0 ? "text-green-500" : "text-red-500")}
                 >
-                  ({change > 0 ? "+" : ""}
+                  {" "}({change > 0 ? "+" : ""}
                   {change.toLocaleString(undefined, {
                     maximumFractionDigits: 2,
                   })}

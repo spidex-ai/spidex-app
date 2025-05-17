@@ -69,7 +69,7 @@ const AuthButton: React.FC = () => {
                             open ? (
                                 <GradientButton className='w-full'>
                                     <div className='flex gap-2'>
-                                        <Image src={walletIcon} alt="wallet-wallet" width={15} height={15} />
+                                        <Image src={walletIcon} alt="wallet-wallet" width={25} height={25} />
                                         <div>{truncateAddress(auth.user.walletAddress)}</div>
                                     </div>
                                 </GradientButton>

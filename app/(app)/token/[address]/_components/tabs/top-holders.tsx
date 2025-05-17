@@ -34,7 +34,7 @@ const TopHolders: React.FC<Props> = ({ tokenId }) => {
             <TableHeader>
                 <TableRow>
                     <TableHead className="w-16 pl-4">Address</TableHead>
-                    <TableHead className="text-center">% Ownership</TableHead>
+                    <TableHead className="text-center w-1/3">% Ownership</TableHead>
                     <TableHead className="text-center">Token Balance</TableHead>
                     <TableHead className="text-center">Amount (ADA)</TableHead>
                  
@@ -71,7 +71,7 @@ const TopHolder = ({ topHolder, percentageOwned }: TopHolderProps) => {
                     address={topHolder.address}
                 />
             </TableCell>
-            <TableCell className="text-center flex justify-center">
+            <TableCell className="text-center flex justify-center sm:gap-1">
                 <div className="w-1/4">{percentageOwned.toFixed(2)}%</div>
                 <div className="w-3/4 flex justify-center items-center"><Progress value={percentageOwned} colorFill="bg-brand-1000 dark:bg-brand-1000" h="h-1" /></div>
             </TableCell>
