@@ -412,3 +412,8 @@ p, a, input, textarea, button, body {
   mask-composite: exclude;
   z-index: -1;
 }
+.customModal {
+  background: #0B0B0D !important;
+  min-width: 550px !important;
+}
+

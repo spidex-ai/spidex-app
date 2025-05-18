@@ -10,7 +10,8 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   Dialog,
   DialogContent,
-  DialogHeader
+  DialogHeader,
+  GradientButton
 } from '@/components/ui'
 import { useGoogleLogin, useXLogin } from '@/hooks/social/useSocialLogin'
 import { cn } from '@/lib/utils'
@@ -19,6 +20,7 @@ import nufiCoreSdk from '@nufi/dapp-client-core'
 import { useSpidexCoreContext } from '../_contexts'
 import { useLoginModal } from '../_contexts/login-modal-context'
 import WalletNotInstalledDialog from './wallet-not-installed-dialog'
+import CustomModal from "@/components/ui/custom-modal"
 
 // Wallet methods configuration
 const WALLET_METHODS = [
@@ -126,6 +128,8 @@ const LoginModal: React.FC = () => {
   const { signInWithX } = useXLogin()
   const { isOpen, closeModal, hideSocialLogin } = useLoginModal()
 
+  const [isReferralModalOpen, setIsReferralModalOpen] = useState<boolean>(false)
+
   // Initialize client-side state
   useEffect(() => {
     setIsClient(true)
@@ -185,10 +189,15 @@ const LoginModal: React.FC = () => {
     setWalletConnecting(null)
   }
 
+
   /**
    * Connect to Cardano wallet
    */
   const handleConnectWallet = async (walletName: string) => {
+    if (params.get("ref")) {
+      // setReferralCode(params.get("ref") || '')
+      setIsReferralModalOpen(true)
+    }
     if (anyConnectionInProgress) {
       console.log("Connection already in progress")
       return
@@ -475,6 +484,27 @@ const LoginModal: React.FC = () => {
         walletLogo={notInstalledWallet?.logo || ''}
         walletLink={notInstalledWallet?.link || ''}
       />
+
+      <CustomModal open={isReferralModalOpen} onClose={() => setIsReferralModalOpen(false)} title="Referral">
+        <div>
+            <div className="text-text-gray text-sm font-normal">Register referral code and receive a 10% boost in SILK</div>
+            <div className="flex items-center gap-2 mt-6">
+              <img src="/icons/dot-green.svg" alt="dot" /> 
+              <div>Inviter's Code</div>
+            </div>
+
+            <div className="flex justify-between items-center gap-2 mt-5 py-5 px-8 bg-bg-main rounded-lg">
+              <div>{params.get("ref")}</div>
+              <div>
+                <img src="/icons/tick-green.svg" alt="copy" />
+              </div>
+            </div>
+            <div className="flex justify-between items-center gap-2 mt-5">
+              <div></div>
+              <div><GradientButton>Next</GradientButton></div>
+            </div>
+        </div>
+      </CustomModal>
     </>
   )
 }
