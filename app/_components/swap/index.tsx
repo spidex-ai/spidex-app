@@ -23,6 +23,7 @@ import {
   SwapPayload,
 } from "@/services/dexhunter/types";
 import { useCardano } from "@cardano-foundation/cardano-connect-with-wallet";
+import {decodeHexAddress} from "@cardano-foundation/cardano-connect-with-wallet-core";
 import { useSpidexCoreContext } from "@/app/_contexts";
 import SwapPoint from "./swap-point";
 
@@ -121,8 +122,16 @@ const Swap: React.FC<Props> = ({
     setIsSwapping(true);
     try {
       const api = await (window as any).cardano[enabledWallet as any].enable();
+      const utxos = await api?.getUtxos();
+
+      if (!utxos || utxos.length === 0) {
+        console.error("No UTxOs available to spend.");
+        return;
+      }
+      const unusedAddressesHex = await api.getUnusedAddresses();
+      const unusedAddresses = decodeHexAddress(unusedAddressesHex[0]);
       const payload: SwapPayload = {
-        buyerAddress: unusedAddresses?.[0].toString() || "",
+        buyerAddress: unusedAddresses,
         tokenIn: inputToken?.unit ? inputToken?.unit : inputToken?.token_id || " ",
         tokenOut: outputToken?.unit ? outputToken?.unit : outputToken?.token_id || " ",
         slippage: 5,
@@ -285,10 +294,10 @@ const Swap: React.FC<Props> = ({
             {isQuoteLoading
               ? "Loading..."
               : Number(inputAmount) > Number(tokenInputBalance)
-              ? "Insufficient balance"
-              : isSwapping
-              ? swappingText || "Swapping..."
-              : swapText || "Swap"}
+                ? "Insufficient balance"
+                : isSwapping
+                  ? swappingText || "Swapping..."
+                  : swapText || "Swap"}
           </GradientButton>
         ) : (
           <LogInButton />
@@ -307,12 +316,12 @@ const Swap: React.FC<Props> = ({
               inputAmount: inputAmount || "",
               outputAmount: estimatedPoints?.splits?.[0]?.amount_in
                 ? String(
-                    (estimatedPoints?.splits?.[0]?.expected_output ||
-                      0 / estimatedPoints?.splits?.[0]?.amount_in ||
-                      0).toLocaleString(undefined, {
-                    maximumFractionDigits: 4,
-                  })
-                  )
+                  (estimatedPoints?.splits?.[0]?.expected_output ||
+                    0 / estimatedPoints?.splits?.[0]?.amount_in ||
+                    0).toLocaleString(undefined, {
+                      maximumFractionDigits: 4,
+                    })
+                )
                 : "",
               swapRoute: "",
               netPrice: String(estimatedPoints?.net_price.toLocaleString(undefined, {

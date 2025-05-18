@@ -1,7 +1,7 @@
 'use client'
 
 import { useCardano } from "@cardano-foundation/cardano-connect-with-wallet"
-import { NetworkType } from "@cardano-foundation/cardano-connect-with-wallet-core"
+import { NetworkType,  } from "@cardano-foundation/cardano-connect-with-wallet-core"
 import { ChevronRight, Loader2 } from 'lucide-react'
 import Image from 'next/image'
 import { useSearchParams } from 'next/navigation'
