@@ -30,7 +30,7 @@ interface Props {
     priorityTokens?: string[]
 }
 
-const TokenSelect: React.FC<Props> = ({ value, onChange, priorityTokens = [] }) => {
+const TokenSelect: React.FC<Props> = ({ value, onChange }) => {
 
     const [open, setOpen] = useState(false);
 
@@ -38,9 +38,6 @@ const TokenSelect: React.FC<Props> = ({ value, onChange, priorityTokens = [] }) 
     const debouncedInput = useDebounce(input, 500);
 
     const { results, loading } = useTokenSearch(debouncedInput);
-    console.log("🚀 ~ results:", results)
-
-    console.log("🚀 ~ TokenSelect ~ priorityTokens:", priorityTokens)
 
 
     return (

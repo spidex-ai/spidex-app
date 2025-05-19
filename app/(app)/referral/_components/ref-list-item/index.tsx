@@ -40,7 +40,7 @@ const RefListItem: React.FC<RefListItemProps> = ({
         <div>{username}</div>
       </div>
       <div className="flex items-center justify-center gap-2">
-        <GradientButton>{`+${pointNumber} CAPI`}</GradientButton>
+        <GradientButton>{`+${pointNumber} SILK`}</GradientButton>
       </div>
       <div className="flex items-center justify-center gap-2">{date}</div>
     </div>

@@ -23,7 +23,6 @@ interface Props {
 
 const SidePanel: React.FC<Props> =  ({ data: tokenDetail, isLoadingTokenDetail }) => {
     const searchParams = useSearchParams();
-    console.log('================>>>>>>>>>>>>>tokenDetail', tokenDetail);
 
     if(isLoadingTokenDetail) {
         return <Skeleton className="h-[100px] w-full" />

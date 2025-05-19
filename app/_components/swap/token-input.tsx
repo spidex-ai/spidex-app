@@ -56,7 +56,19 @@ const TokenInput: React.FC<Props> = ({ label, amount, onChange, token, onChangeT
                     <input 
                         type="number" 
                         value={amount}
-                        onChange={(e) => onChange && onChange(e.target.value)} 
+                        onChange={(e) => {
+                            const value = e.target.value;
+                            if (Number(value) >= 0) {
+                                if (onChange) {
+                                    onChange(value);
+                                }
+                            }
+                        }}
+                        onKeyDown={(e) => {
+                            if (e.key === '-') {
+                                e.preventDefault();
+                            }
+                        }}
                         onFocus={() => setIsFocused(true)}
                         onBlur={() => setIsFocused(false)}
                         className="w-full bg-transparent border-none outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
