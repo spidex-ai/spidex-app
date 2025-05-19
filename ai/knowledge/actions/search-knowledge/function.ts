@@ -45,7 +45,7 @@ export const searchWebKnowledgeFunction = async (
     topic: "general",
   });
 
-  console.log(result);
+
 
   return {
     message:

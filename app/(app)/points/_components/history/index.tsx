@@ -15,7 +15,7 @@ interface HistoryItem {
 
 const Hisotry = () => {
   const { pointHistory, loading, error } = usePointHistory();
-  console.log("🚀 ~ Missions ~ hisotory:", pointHistory);
+
 
   if (loading) {
     return <Skeleton className="w-full h-[100px]" />;

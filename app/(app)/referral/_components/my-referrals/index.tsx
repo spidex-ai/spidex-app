@@ -11,7 +11,6 @@ const MyReferrals: React.FC = () => {
 
     const { myRefUsers, loading } = useRefReferredUsers({ page, perPage }); 
 
-    console.log('myRefUsers:::', myRefUsers);
 
     const results: RefListItemProps[] = myRefUsers?.map((item, index) => {
         return {

@@ -14,7 +14,7 @@ import { Skeleton } from "@/components/ui";
 
 const SmartMoneyTokens: React.FC = () => {
   const { data, isLoading } = useTokenTrending();
-  console.log("🚀 ~ data:", data)
+
 
   // const tokens = await getSmartMoneyInflows(Granularity.ONE_DAY, 9).catch((error) => {
   //     console.error(error);
@@ -53,7 +53,7 @@ const SmartMoneyTokens: React.FC = () => {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
           {data.length > 0 ? data.map((token) => (
-            <TrendingTokenCard key={token.unit} token={token} />
+            <TrendingTokenCard key={token.unit} token={token} title="Volume" />
           )) : <div className="text-left text-text-gray mt-8">No data.</div>}
         </div>
       )}

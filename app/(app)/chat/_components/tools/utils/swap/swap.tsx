@@ -66,10 +66,7 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
   onError,
   onCancel,
 }) => {
-  console.log(
-    "initialInputTokeninitialInputTokeninitialInputTokeninitialInputTokeninitialInputToken:::",
-    initialInputToken
-  );
+
   const {
     getSwapPoolStats,
     estimateSwap,
@@ -112,7 +109,6 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
       unusedAddresses?.[0]?.toString() || "",
       inputToken?.unit || ""
     );
-  console.log("🚀 ~ unusedAddresses:", unusedAddresses);
 
   const tokenInputBalance =
     inputToken?.ticker === "ADA" ? accountBalance : inputBalance;
@@ -152,7 +148,6 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
       const submitTx = await api?.submitTx(submitSwap?.cbor);
       onSuccess?.(submitTx);
     } catch (error) {
-      console.log("errorswap:::", error);
       onError?.(error instanceof Error ? error.message : "Unknown error");
     } finally {
       setIsSwapping(false);
@@ -165,7 +160,6 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
     amount: number
   ) => {
     try {
-      console.log(inputUnit, outputUnit, amount);
       const swapEstPayload: EsitmateSwapPayload = {
         tokenIn: inputUnit,
         tokenOut: outputUnit,
@@ -176,7 +170,6 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
       const swapEstResponse = await estimateSwap(swapEstPayload);
       if (swapEstResponse) {
         setEstimatedPoints(swapEstResponse);
-        console.log("🚀 ~ swapEstResponse:", swapEstResponse)
         return swapEstResponse?.total_output;
       } else {
         setIsNotPool(true);
@@ -188,48 +181,15 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
     }
   };
 
-  const testSwap = useCallback(async () => {
-    try {
-      const api = await (window as any).cardano.lace.enable();
-      // const addresses = await api.getUsedAddresses();
-
-      const payload: SwapPayload = {
-        buyerAddress:
-          "addr1q9gykktajrgrmj5am8vwlhp65a72emlwn2s3e5cadkhe3vrfkfxs6yajls3ft0yn42uqlcnrq6qcn3l0lunkxy6aplgspxm6da",
-        tokenIn: "",
-        tokenOut:
-          "279c909f348e533da5808898f87f9a14bb2c3dfbbacccd631d927a3f534e454b",
-        amountIn: 1,
-        slippage: 5,
-        txOptimization: true,
-        blacklistedDexes: [],
-      };
-      console.log("payload:::", payload);
-      const buildSwap = await buildSwapRequest(payload);
-      console.log("buildSwap:::", buildSwap);
-      const signatures = await api?.signTx(buildSwap?.cbor, true);
-      console.log("signedSwap:::", signatures);
-      const submitSwap = await submitSwapRequest({
-        txCbor: buildSwap.cbor,
-        signatures: signatures,
-      });
-
-      console.log("submitSwap:::", submitSwap);
-
-      const submitTx = await api?.submitTx(submitSwap?.cbor);
-      console.log("submitTx:::", submitTx);
-    } catch (error) {
-      console.error("error:::", error);
-    }
-  }, [inputToken, outputToken, inputAmount]);
-
   const checkPool = useCallback(async () => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 1000));
+
       const poolStats = await getSwapPoolStats(
-        inputToken?.token_id || "",
-        outputToken?.token_id || ""
+        inputToken?.token_id || inputToken?.unit || "",
+        outputToken?.token_id || outputToken?.unit || ""
       );
+    
       if (poolStats) {
         setIsNotPool(false);
       } else {
@@ -278,8 +238,6 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
     }
   }, [inputToken, outputToken, inputAmount]);
 
-  console.log("🚀 ~ estimatedPoints:", estimatedPoints)
-
   return (
     <div className="flex flex-col gap-4 w-96 max-w-full relative">
         <div className="absolute top-0 right-0 cursor-pointer" onClick={onCancel}>
@@ -295,7 +253,7 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
           }}
           token={inputToken}
           onChangeToken={(token) => {
-            console.log("api:token:::", token);
+
             setIsNotPool(false);
             setInputToken(token);
           }}
@@ -314,7 +272,6 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
           amount={outputAmount}
           token={outputToken}
           onChangeToken={(token) => {
-            console.log("api:token:::", token);
             setIsNotPool(false);
             setOutputToken(token);
           }}
@@ -325,9 +282,6 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
         {isNotPool ? "No pool found" : null}
       </div>
       <Separator />
-      <button className="hidden" onClick={testSwap}>
-        TestSwap
-      </button>
       <div className="flex flex-col gap-2">
         {isConnectedWallet ? (
           <GradientButton

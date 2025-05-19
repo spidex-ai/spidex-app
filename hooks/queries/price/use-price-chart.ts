@@ -116,7 +116,7 @@ export const usePriceChartCore = (
     try {
       setIsLoading(true);
       const data = await getTokenOHLCV(unit, interval, numIntervals, quote);
-      console.log("🚀 ~ fetchDataChart ~ data:", data)
+
       setData(data);
     } catch (error) {
       setData([]);

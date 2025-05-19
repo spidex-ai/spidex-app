@@ -16,7 +16,7 @@ export async function getTraderTrades(
   try {
 
     const response = await taptoolsService.getWalletTokenTrades(args.address, undefined, 1, args.limit);
-    console.log("🚀 ~ response:", response)
+ 
     return {
       message: `Found ${response.length} trades for the trader. The user is shown the trades, do not list them. Ask the user what they want to do with the trades.`,
       body: {

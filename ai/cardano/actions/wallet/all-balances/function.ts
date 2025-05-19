@@ -10,7 +10,7 @@ export async function getAllBalances(
 ): Promise<CardanoActionResult<any>> {
   try {
     const balance = await coreService.getBalances(args.walletAddress);
-    console.log("🚀 ~ balance:", balance);
+
     // let balances: {
     //   balance: number;
     //   token: string;

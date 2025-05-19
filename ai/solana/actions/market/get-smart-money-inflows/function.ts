@@ -20,7 +20,7 @@ export async function getSmartMoneyInflows(
 
     const prices = await getPrices(response.map((token) => token.mint));
 
-    console.log(prices);
+
 
     return {
       body: {

@@ -149,7 +149,7 @@ const Missions = () => {
     }
     setLoadingMissionId(result.id);
     try {
-      console.log("🚀 ~ handleFinish ~ id:", result.id);
+  
       let data = null;
       switch (result.type) {
         case 0:

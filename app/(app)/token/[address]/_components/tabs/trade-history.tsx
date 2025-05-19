@@ -18,9 +18,8 @@ interface Props {
 }
 
 const TradeHistory: React.FC<Props> = ({ tokenId, ticker }) => {
-    console.log(tokenId);
+
     const { data, loading } = useTradeHistory(tokenId);
-    console.log("🚀 ~ data:", data)
 
     if(loading) {
         return <Skeleton className="h-[100px] w-full" />

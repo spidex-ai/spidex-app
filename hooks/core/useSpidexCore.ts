@@ -292,8 +292,6 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
   const getUserRefMeInfo = useCallback(async () => {
     setLoading(true);
     setError(null);
-    console.log("auth:::", auth);
-    console.log("auth?.accessToken:::", auth?.accessToken);
     try {
       const data = await fetchWithAuth("/user-referral/me/info");
       return data.data;

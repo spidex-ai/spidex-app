@@ -11,17 +11,18 @@ import { TopToken } from "@/services/taptools/types";
 import { getLogoUrl } from "@/app/utils/logo";
 interface Props {
   token: TopToken;
+  title?: string;
 }
 
-const TrendingTokenCard: React.FC<Props> = ({ token }) => {
+const TrendingTokenCard: React.FC<Props> = ({ token, title = "Market Cap" }) => {
   const usdPrice = Number(token?.usdPrice) < 0.00001 ? "~0.00001" : token?.usdPrice?.toLocaleString(undefined, {
     maximumFractionDigits: 5,
   });
   const mcap = Number(token?.mcap) < 0.0001 ? "~0.0001" : token?.mcap?.toLocaleString(undefined, {
-    maximumFractionDigits: 5,
+    maximumFractionDigits: 0,
   });
   const volume = Number(token?.volume) < 0.0001 ? "~0.0001" : token?.volume?.toLocaleString(undefined, {
-    maximumFractionDigits: 5,
+    maximumFractionDigits: 0,
   });
   return (
     <Link href={`/token/${token.unit}`}>
@@ -55,7 +56,7 @@ const TrendingTokenCard: React.FC<Props> = ({ token }) => {
         </div>
         <div className="flex flex-col">
           <p className="text-xs text-muted-foreground">
-            Market Cap: $
+            {title}: $
             {token?.volume
               ? volume
               : mcap}

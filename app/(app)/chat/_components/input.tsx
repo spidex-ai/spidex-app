@@ -60,7 +60,7 @@ const ChatInput: React.FC = () => {
                         ref={inputRef}
                         tabIndex={0}
                         onKeyDown={onKeyDown}
-                        placeholder="Ask spider anything..."
+                        placeholder="Ask spidex anything..."
                         className={cn(
                             "w-full max-h-60 resize-none bg-transparent px-3 py-3 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-neutral-600 dark:placeholder:text-neutral-400 disabled:cursor-not-allowed disabled:opacity-50",
                             "focus-visible:outline-none",

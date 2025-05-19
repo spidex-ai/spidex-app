@@ -18,8 +18,8 @@ interface Props {
     className?: string
 }
 
-const StarterButton: React.FC<Props> = ({ icon, title, prompt, className, description }) => {
-    console.log('prompt:::', icon, description);
+const StarterButton: React.FC<Props> = ({ title, prompt, className }) => {
+
     const { sendMessage } = useChat();
 
     return (
@@ -31,12 +31,10 @@ const StarterButton: React.FC<Props> = ({ icon, title, prompt, className, descri
         onClick={() => sendMessage(prompt)}
     >
         <div className="px-2 gap-2">
-            {/* <div className="col-span-1 flex justify-end items-start pt-1">
-                {icon}
-            </div> */}
+         
             <div className="col-span-5 text-left">
                 <div className="text-sm text-white">{title}</div>
-                {/* <div className='text-xs text-neutral-400'>{description}</div> */}
+         
             </div>
         </div>
     </div>

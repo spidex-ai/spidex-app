@@ -20,7 +20,7 @@ export async function getBalance(
     const walletTx = await coreService.getTransactionHistory(
       args.walletAddress
     );
-    console.log("🚀 ~ walletTx:", walletTx);
+
     return {
       message: `Found  latest ${walletTx.length} in ${args.walletAddress} transaction history. Do NOT reiterate the data you get from the tools afterwards, the user is shown the data in the UI.`,
       body: {

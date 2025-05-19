@@ -22,7 +22,7 @@ interface Props {
 }
 
 const Transactions: React.FC<Props> = ({ address }) => {
-  console.log("address: ", address);
+
 
   const { data: transactions, loading } = usePortfolioTransaction(address);
 

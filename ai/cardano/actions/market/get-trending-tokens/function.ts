@@ -32,7 +32,7 @@ export async function getTrendingTokens(
         );
       }
     }
-    console.log("🚀 ~ response:", response)
+
 
     return {
       message: `Found ${response.length} trending tokens. The user is shown the tokens, do not list them. Ask the user what they want to do with the coin.`,

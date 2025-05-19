@@ -42,11 +42,11 @@ export default function SwapPoint({
     swapDetails?.inputToken === "ADA"
       ? Number(swapDetails.inputAmount) +
         Number(swapDetails.dexDeposits) +
-        Number(swapDetails.batcherFee) + 
+        Number(swapDetails.batcherFee) +
         Number(swapDetails.serviceFee)
-      :  Number(swapDetails.dexDeposits) +
-      Number(swapDetails.batcherFee) + 
-      Number(swapDetails.serviceFee);
+      : Number(swapDetails.dexDeposits) +
+        Number(swapDetails.batcherFee) +
+        Number(swapDetails.serviceFee);
 
   return (
     <div className="mt-2">
@@ -84,7 +84,13 @@ export default function SwapPoint({
                       width={5}
                       height={5}
                     />
-                    <div>DIRECT</div>
+                    {splits.length > 1 ? (
+                      <div className="text-green-800 font-bold">
+                        {splits.length} ROUTES
+                      </div>
+                    ) : (
+                      <div>DIRECT</div>
+                    )}
                   </div>
                 }
               />
@@ -135,17 +141,26 @@ export default function SwapPoint({
                     <TooltipTrigger>
                       <SwapDetailItem
                         label="Total Deposit"
-                        value={`${swapDetails?.inputToken === 'ADA' ? `${totalDepositADA.toLocaleString(undefined, {
-                          maximumFractionDigits: 2,
-                        })} ADA` : `${Number(swapDetails.inputAmount).toLocaleString(undefined, {
-                          maximumFractionDigits: 2,
-                        })} ${swapDetails.inputToken} + ${totalDepositADA.toLocaleString(undefined, {
-                          maximumFractionDigits: 2,
-                        })} ADA`}`}
+                        value={`${
+                          swapDetails?.inputToken === "ADA"
+                            ? `${totalDepositADA.toLocaleString(undefined, {
+                                maximumFractionDigits: 2,
+                              })} ADA`
+                            : `${Number(swapDetails.inputAmount).toLocaleString(
+                                undefined,
+                                {
+                                  maximumFractionDigits: 2,
+                                }
+                              )} ${
+                                swapDetails.inputToken
+                              } + ${totalDepositADA.toLocaleString(undefined, {
+                                maximumFractionDigits: 2,
+                              })} ADA`
+                        }`}
                       />
                     </TooltipTrigger>
                     <TooltipContent>
-                    It does not include gas fee.
+                      It does not include gas fee.
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -196,7 +211,7 @@ export default function SwapPoint({
                 width={10}
                 height={10}
               />
-              <div>DexHunter</div>
+              <div className="flex items-end">DexHunter</div>
             </div>
             {!isOpenMarketOffers ? (
               <div
@@ -216,41 +231,45 @@ export default function SwapPoint({
 
         {isOpenMarketOffers && (
           <div className=" my-2 p-2">
-            <div>
+            <div className="flex flex-col gap-2">
               {splits.map((split, key) => (
-                <div className="text-xs gradient-border" key={key}>
-                  <div className="flex items-center justify-between gap-1 p-2">
-                    <div className="flex items-center gap-1">
-                      <img
-                        src={dexLogoMap[split.dex] || "/icons/logo-gray.svg"}
-                        alt="logo-gray"
-                        width={20}
-                        height={20}
-                      />
-                      <div>{split.dex}</div>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <div>{`${split.amount_in} ${
-                        swapDetails.inputToken
-                      } = ${split.expected_output.toLocaleString(undefined, {
-                        maximumFractionDigits: 4,
-                      })} ${swapDetails.outputToken}`}</div>
+                <div className="text-xs gradient-border-market-offer" key={key}>
+                  <div className="grid grid-cols-2 p-2">
+                    <div className="col-span-1">
                       <div className="flex items-center gap-1">
-                        <Image
-                          src="/icons/fee-gray.svg"
-                          alt="fee-gray"
-                          width={10}
-                          height={10}
+                        <img
+                          src={dexLogoMap[split.dex] || "/icons/logo-gray.svg"}
+                          alt="logo-gray"
+                          width={20}
+                          height={20}
                         />
-                        <div className="text-xs text-text-gray flex gap-1 items-center">
-                          <div>{split.fee}</div>
-                          <div>
-                            <Image
-                              src="/icons/ada.svg"
-                              alt="ada"
-                              width={10}
-                              height={10}
-                            />
+                        <div>{split.dex}</div>
+                      </div>
+                    </div>
+                    <div className="col-span-1 flex items-center">
+                      <div className="flex items-center justify-between gap-1">
+                        <div>{`${split.amount_in} ${
+                          swapDetails.inputToken
+                        } = ${split.expected_output.toLocaleString(undefined, {
+                          maximumFractionDigits: 2,
+                        })} ${swapDetails.outputToken}`}</div>
+                        <div className="flex items-center gap-1">
+                          <Image
+                            src="/icons/fee-gray.svg"
+                            alt="fee-gray"
+                            width={10}
+                            height={10}
+                          />
+                          <div className="text-xs text-text-gray flex gap-1 items-center">
+                            <div>{split.fee}</div>
+                            <div>
+                              <Image
+                                src="/icons/ada.svg"
+                                alt="ada"
+                                width={10}
+                                height={10}
+                              />
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -277,8 +296,8 @@ export default function SwapPoint({
         ) : null}
       </div>
       <div className="bg-bg-swap rounded-lg">
-        <div className="gradient-border mt-4">
-          <div className="flex justify-between items-center py-2 px-6 rounded-lg">
+        <div className="gradient-border-market-offer mt-4">
+          <div className="flex justify-between items-center py-2 px-4 rounded-lg">
             <TextGradient className="text-sm">Estimated Points</TextGradient>
             <div className="flex gap-1">
               <div className="flex items-center  text-sm pt-1">
@@ -296,7 +315,7 @@ export default function SwapPoint({
           </div>
         </div>
       </div>
-      <div className="flex items-center gap-2 justify-center mt-2 text-xs">
+      <div className="flex items-center gap-2 justify-center mt-2 text-xs mb-2">
         <div className="text-text-gray font-medium pt-1">Powered by</div>
         <Image
           src="/icons/dex-hunter.svg"

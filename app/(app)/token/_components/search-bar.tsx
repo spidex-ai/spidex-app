@@ -51,7 +51,6 @@ const SearchBar: React.FC<Props> = ({isTitle = true}) => {
         throw new Error("Failed to fetch search results");
       }
       const data = await response.json();
-      console.log("data:", data);
 
       setResults(data.data);
     } catch (err) {

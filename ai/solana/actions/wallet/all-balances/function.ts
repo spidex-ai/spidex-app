@@ -16,7 +16,7 @@ export async function getAllBalances(
 ): Promise<SolanaActionResult<any>> {
   try {
     const balance = await coreService.getBalances(args.walletAddress);
-    console.log("🚀 ~ balance:", balance);
+
 
     // for (const token of balance.amount) {
     //   delete token.logo;

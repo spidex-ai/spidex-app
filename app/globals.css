@@ -386,3 +386,29 @@ p, a, input, textarea, button, body {
   mask-composite: exclude;
   z-index: -1;
 }
+
+
+.gradient-border-market-offer {
+  position: relative;
+  /* display: inline-block; */
+  padding: 8px 8px;
+  color: white;
+  background-color: transparent;
+  border-radius: 10px;
+  z-index: 1;
+}
+
+.gradient-border-market-offer::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  background: linear-gradient(90deg, #BBF985,#009EFF);
+  border-radius: 10px;
+  -webkit-mask: 
+      linear-gradient(white 0 0) content-box, 
+      linear-gradient(white 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  z-index: -1;
+}

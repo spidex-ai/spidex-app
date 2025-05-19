@@ -10,7 +10,7 @@ export async function getTopHolders(
 ): Promise<CardanoActionResult<CardanoTopHoldersResultBodyType>> {
   try {
     let topHolders = await taptoolsService.getTopTokenHolders(args.tokenAddress, 1, args.limit);
-    console.log("🚀 ~ topHolders:", topHolders)
+
 
     if (!topHolders || topHolders.length === 0) {
       throw new Error('Failed to fetch top holders');

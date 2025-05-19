@@ -8,7 +8,7 @@ import {
 export async function getPriceChart(
   args: CardanoTokenPriceChartArgumentsType
 ): Promise<CardanoActionResult<TokenPriceChartResultBodyType>> {
-  console.log("🚀 ~ args:", args);
+
   try {
     return {
       message: `The price chart has been retrieved and displayed to the user. Do not reiterate the raw data.`,
