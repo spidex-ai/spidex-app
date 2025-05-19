@@ -14,7 +14,7 @@ const starterButtons = [
         title: "Liquidity Pools",
         description: "Analyze the liquidity pools of this token",
         icon: <Image src="/icons/news-white.svg" alt="Trending" width={13} height={13} />,
-        prompt: "Analyze the liquidity pools of this tokeno"
+        prompt: "Analyze the liquidity pools of this token"
     },
     {
         title: "Top Holders",

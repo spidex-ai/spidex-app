@@ -60,13 +60,16 @@ const HistoryItem: React.FC<HistoryItemProps> = ({ history }) => {
     const onClickTxn = () => {
         window.open(`${process.env.NEXT_PUBLIC_CARDANO_SCAN_URL}/transaction/${history.hash}`, '_blank');
     }
+    const price = history.price < 0.0001 ? "~0.0001" : `$${history.price.toLocaleString(undefined, { maximumFractionDigits: 4 })}`;
+    const totalToken = history.tokenAAmount < 0.0001 ? "~0.0001" : history.tokenAAmount.toLocaleString(undefined, { maximumFractionDigits: 2 });
+    const totalTokenB = history.tokenBAmount < 0.0001 ? "~0.0001" : history.tokenBAmount.toLocaleString(undefined, { maximumFractionDigits: 2 });
     return (
         <TableRow>
             <TableCell>{new Date(history.time * 1000).toLocaleString()}</TableCell>
             <TableCell className={`text-center ${history.action === 'buy' ? 'text-green-500' : 'text-red-500'}`}>{history.action}</TableCell>
-            <TableCell className="text-center">{history.price.toLocaleString(undefined, { maximumFractionDigits: 6 })}</TableCell>
-            <TableCell className="text-center">{history.tokenAAmount.toLocaleString(undefined, { maximumFractionDigits: 2 })}</TableCell>
-            <TableCell className="text-center">{history.tokenBAmount.toLocaleString(undefined, { maximumFractionDigits: 2 })} {history.tokenBName}</TableCell>
+            <TableCell className="text-center">{price}</TableCell>
+            <TableCell className="text-center">{totalToken}</TableCell>
+            <TableCell className="text-center">{totalTokenB}</TableCell>
             <TableCell className="text-right flex justify-end cursor-pointer" onClick={onClickTxn}><Image src="/icons/txn-gray.svg" alt="txn" width={16} height={16} /></TableCell>
         </TableRow>
     )

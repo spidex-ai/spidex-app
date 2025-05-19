@@ -98,7 +98,7 @@ const PointInformationWrapper = () => {
         <div className="col-span-1 bg-bg-secondary rounded-lg p-4 border border-border-main transition-all duration-300 hover:shadow-[0_0_15px_rgba(0,255,255,0.3)]">
           <div className="flex items-center justify-between">
             <div className="text-white text-[28px] font-medium">
-              {Number(pointInfo?.referralInfo?.referralPointEarned).toLocaleString(undefined, {
+              {Number(pointInfo?.referralInfo?.referralUserCount).toLocaleString(undefined, {
                 maximumFractionDigits: 2,
               })}
             </div>
