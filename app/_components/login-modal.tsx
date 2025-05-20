@@ -65,13 +65,13 @@ const WALLET_METHODS = [
     description: "Gero Wallet",
     link: "https://www.gerowallet.io/",
   },
-  {
-    id: "lucem",
-    name: "Lucem",
-    icon: "/icons/lucem.svg",
-    description: "Lucem Wallet",
-    link: "https://chromewebstore.google.com/detail/lucem-wallet/mkbnofdoodemclcbcjpgpcdccjhaledi",
-  },
+  // {
+  //   id: "lucem",
+  //   name: "Lucem",
+  //   icon: "/icons/lucem.svg",
+  //   description: "Lucem Wallet",
+  //   link: "https://chromewebstore.google.com/detail/lucem-wallet/mkbnofdoodemclcbcjpgpcdccjhaledi",
+  // },
   {
     id: "begin",
     name: "Begin",
