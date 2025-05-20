@@ -140,7 +140,7 @@ const TokenChart: React.FC<Props> = ({ data: tokenDetail, isLoadingTokenDetail, 
             ) : null}
           </>
         )}
-        <div className="flex flex-row gap-1 ">
+        <div className="flex flex-row gap-1 items-center">
           {WINDOWS.map((window) => (
             <Button
               key={window.label}
@@ -163,6 +163,9 @@ const TokenChart: React.FC<Props> = ({ data: tokenDetail, isLoadingTokenDetail, 
               {window.label}
             </Button>
           ))}
+          <div className="w-4 h-4 cursor-pointer" onClick={() => refetchDataChart()}>
+            <img src="/icons/reload.svg" alt="reload" className="w-4 h-4" />
+          </div>
         </div>
       </div>
       <div className="p-2 flex-1 h-0">
