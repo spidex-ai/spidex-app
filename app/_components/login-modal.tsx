@@ -91,6 +91,7 @@ const WALLET_METHODS = [
     name: "Nufi",
     icon: "/icons/nufi.svg",
     description: "Nufi Wallet",
+    link: "https://nu.fi/",
   },
 ];
 
@@ -166,11 +167,10 @@ const LoginModal: React.FC = () => {
     }
   }, []);
 
-  const { unusedAddresses, connect, signMessage, disconnect, enabledWallet } =
+  const { connect, signMessage, disconnect, enabledWallet } =
     useCardano({
       limitNetwork: NetworkType.MAINNET,
     });
-    console.log(enabledWallet, "enabledWallet");
   // Determine if any connection is in progress
   const anyConnectionInProgress = walletConnecting !== null || isConnecting;
 
@@ -221,7 +221,6 @@ const LoginModal: React.FC = () => {
   };
 
   const handleCheckReferral = (method: string) => {
-    console.log
     if (params.get("ref")) {
       setIsReferralModalOpen(true);
       setMethod(method);
