@@ -1,7 +1,7 @@
 "use client";
 
 import { useCardano } from "@cardano-foundation/cardano-connect-with-wallet";
-import { NetworkType } from "@cardano-foundation/cardano-connect-with-wallet-core";
+import { decodeHexAddress, NetworkType } from "@cardano-foundation/cardano-connect-with-wallet-core";
 import { ChevronRight, Loader2 } from "lucide-react";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
@@ -170,6 +170,7 @@ const LoginModal: React.FC = () => {
     useCardano({
       limitNetwork: NetworkType.MAINNET,
     });
+    console.log(enabledWallet, "enabledWallet");
   // Determine if any connection is in progress
   const anyConnectionInProgress = walletConnecting !== null || isConnecting;
 
@@ -181,15 +182,12 @@ const LoginModal: React.FC = () => {
     return "";
   }, [isClient]);
 
-  const onWalletConnectSuccess = useCallback(() => {
-    handleSignMessage(unusedAddresses?.[0]?.toString());
-  }, [unusedAddresses, enabledWallet]);
-
   const onWalletConnectError = (error: Error) => {
     console.log("Wallet connection error", error);
     if (error.name === "WrongNetworkTypeError") {
       console.log("WrongNetworkTypeError");
     } else if (error.name === "WalletNotInstalledError") {
+      console.log("WalletNotInstalledError");
       const walletName = error.message.split(" ")[2];
       const wallet = WALLET_METHODS.find((w) => w.id === walletName);
       setNotInstalledWallet({
@@ -201,6 +199,7 @@ const LoginModal: React.FC = () => {
     } else {
       console.log("Error", error);
     }
+    disconnect();
     setWalletConnecting(null);
   };
 
@@ -212,17 +211,17 @@ const LoginModal: React.FC = () => {
       console.log("Connection already in progress");
       return;
     }
-
     setWalletConnecting(walletName);
 
     connect(
       walletName,
-      () => onWalletConnectSuccess(),
+      () => handleSignMessage(walletName) as any,
       (error: Error) => onWalletConnectError(error)
     );
   };
 
   const handleCheckReferral = (method: string) => {
+    console.log
     if (params.get("ref")) {
       setIsReferralModalOpen(true);
       setMethod(method);
@@ -248,8 +247,26 @@ const LoginModal: React.FC = () => {
   /**
    * Sign message with connected wallet
    */
-  const handleSignMessage = async (address?: string) => {
+  const handleSignMessage = async (walletName: string) => {
     try {
+      if (!enabledWallet) {
+        console.log("No wallet connected");
+        return;
+      }
+      let address = null;
+      const api = await (window as any).cardano[walletName as any].enable();
+      await api?.getUtxos();
+      const unusedAddressesHex = await api.getUnusedAddresses();
+      if (!unusedAddressesHex || unusedAddressesHex.length === 0) {
+        console.log("No unused addresses found");
+        const usedAddresses = await api.getUsedAddresses();
+        if (usedAddresses && usedAddresses.length > 0) {
+          address = decodeHexAddress(usedAddresses[0]);
+        }
+      } else {
+        address = decodeHexAddress(unusedAddressesHex[0]);
+      }
+      console.log("🚀 ~ handleSignMessage ~ address:", address);
       if (!address) {
         return;
       }
@@ -275,12 +292,12 @@ const LoginModal: React.FC = () => {
         },
         (error: any) => {
           disconnect();
-          console.log("Sign message failed", error);
+          console.log("Sign message failed1", error);
         }
       );
     } catch (error: any) {
       disconnect();
-      console.log("Sign message failed", error);
+      console.log("Sign message failed2", error);
     } finally {
       setWalletConnecting(null);
     }
