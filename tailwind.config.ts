@@ -20,7 +20,8 @@ export default {
 				main: '#131E2F',
 				secondary: '#0B1320',
 				tab: '#010A19',
-				swap: '#233857'
+				swap: '#233857',
+				modal: '#0B0B0D'
 			},
   			brand: {
   				'50': '#ffffe7',
