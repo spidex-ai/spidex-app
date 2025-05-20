@@ -324,25 +324,12 @@ const Swap: React.FC<Props> = ({
                 )
                 : "",
               swapRoute: "",
-              netPrice: String(estimatedPoints?.net_price.toLocaleString(undefined, {
-                maximumFractionDigits: 2,
-              })),
-              minReceive: String(estimatedPoints?.total_output.toLocaleString(undefined, {
-                maximumFractionDigits: 2,
-              })),
-              dexFee: String(estimatedPoints?.partner_fee.toLocaleString(undefined, {
-                maximumFractionDigits: 2,
-              })),
-              dexDeposits: String(estimatedPoints?.deposits.toLocaleString(undefined, {
-                maximumFractionDigits: 2,
-              })),
-              serviceFee: String(estimatedPoints?.partner_fee.toLocaleString(undefined, {
-                maximumFractionDigits: 2,
-              })),
-
-              batcherFee: String(estimatedPoints?.batcher_fee.toLocaleString(undefined, {
-                maximumFractionDigits: 2,
-              })),
+              netPrice: estimatedPoints?.net_price,
+              minReceive: estimatedPoints?.total_output,
+              dexFee: estimatedPoints?.partner_fee,
+              dexDeposits: estimatedPoints?.deposits,
+              serviceFee: estimatedPoints?.partner_fee,
+              batcherFee: estimatedPoints?.batcher_fee,
             }}
             splits={estimatedPoints?.splits || []}
             estimatedPoints={String(estimatedPoints?.estimated_point || "1")}

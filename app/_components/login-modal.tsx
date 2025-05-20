@@ -15,7 +15,6 @@ import React, {
 
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogHeader,
   GradientButton,
@@ -555,7 +554,6 @@ const LoginModal: React.FC = () => {
             </div>
           </div>
         </DialogContent>
-        <DialogClose> test</DialogClose>
     
       </Dialog>
     </>

@@ -20,12 +20,12 @@ interface Props {
     outputAmount: string;
 
     swapRoute: string;
-    netPrice: string;
-    minReceive: string;
-    dexFee: string;
-    dexDeposits: string;
-    serviceFee: string;
-    batcherFee: string;
+    netPrice: number;
+    minReceive: number;
+    dexFee: number;
+    dexDeposits: number;
+    serviceFee: number;
+    batcherFee: number;
   };
   splits: Split[];
   estimatedPoints: string;
@@ -35,18 +35,41 @@ export default function SwapPoint({
   splits,
   estimatedPoints,
 }: Props) {
+
   const [isOpenSwapDetails, setIsOpenSwapDetails] = useState(true);
   const [isOpenMarketOffers, setIsOpenMarketOffers] = useState(true);
 
+  const {
+    inputToken,
+    outputToken,
+    inputAmount,
+    netPrice,
+    minReceive,
+    dexFee,
+    dexDeposits,
+    serviceFee,
+    batcherFee,
+  } = swapDetails;
+
+  const outputAmount = splits?.[0]?.amount_in
+    ? String(
+        (
+          splits?.[0]?.expected_output ||
+          0 / splits?.[0]?.amount_in ||
+          0
+        ).toLocaleString(undefined, {
+          maximumFractionDigits: 4,
+        })
+      )
+    : "";
+
   const totalDepositADA =
-    swapDetails?.inputToken === "ADA"
-      ? Number(swapDetails.inputAmount) +
-        Number(swapDetails.dexDeposits) +
-        Number(swapDetails.batcherFee) +
-        Number(swapDetails.serviceFee)
-      : Number(swapDetails.dexDeposits) +
-        Number(swapDetails.batcherFee) +
-        Number(swapDetails.serviceFee);
+    inputToken === "ADA"
+      ? Number(inputAmount) +
+        Number(dexDeposits) +
+        Number(batcherFee) +
+        Number(serviceFee)
+      : Number(dexDeposits) + Number(batcherFee) + Number(serviceFee);
 
   return (
     <div className="mt-2">
@@ -54,7 +77,7 @@ export default function SwapPoint({
         <div className="flex justify-between items-center gap-2 px-6 py-2 bg-bg-swap rounded-lg">
           <div className="text-xs">Swap details</div>
           <div className="flex items-center gap-2">
-            <div className="text-[10px] text-text-gray">{`${swapDetails.inputAmount} ${swapDetails.inputToken} = ${swapDetails.outputAmount} ${swapDetails.outputToken}`}</div>
+            <div className="text-[10px] text-text-gray">{`${inputAmount} ${inputToken} = ${outputAmount} ${outputToken}`}</div>
             {!isOpenSwapDetails ? (
               <div
                 className="cursor-pointer"
@@ -96,11 +119,15 @@ export default function SwapPoint({
               />
               <SwapDetailItem
                 label="Net Price"
-                value={`${swapDetails.netPrice} ${swapDetails.outputToken}`}
+                value={`${netPrice.toLocaleString(undefined, {
+                  maximumFractionDigits: 2,
+                })} ${outputToken}`}
               />
               <SwapDetailItem
                 label="Min Receive"
-                value={`${swapDetails.minReceive} ${swapDetails.outputToken}`}
+                value={`${minReceive.toLocaleString(undefined, {
+                  maximumFractionDigits: 2,
+                })} ${outputToken}`}
               />
               <div className="text-left">
                 <TooltipProvider>
@@ -108,7 +135,9 @@ export default function SwapPoint({
                     <TooltipTrigger>
                       <SwapDetailItem
                         label="Dex Fee"
-                        value={`${swapDetails.dexFee} ADA`}
+                        value={`${dexFee.toLocaleString(undefined, {
+                          maximumFractionDigits: 2,
+                        })} ${outputToken}`}
                       />
                     </TooltipTrigger>
                     <TooltipContent>
@@ -124,7 +153,9 @@ export default function SwapPoint({
                     <TooltipTrigger>
                       <SwapDetailItem
                         label="Dex Deposits"
-                        value={`${swapDetails.dexDeposits} ADA`}
+                        value={`${dexDeposits.toLocaleString(undefined, {
+                          maximumFractionDigits: 2,
+                        })} ${outputToken}`}
                       />
                     </TooltipTrigger>
                     <TooltipContent>
@@ -246,13 +277,17 @@ export default function SwapPoint({
                         <div>{split.dex}</div>
                       </div>
                     </div>
-                    <div className="col-span-1 flex items-center">
-                      <div className="flex items-center justify-between gap-1">
-                        <div>{`${split.amount_in} ${
-                          swapDetails.inputToken
-                        } = ${split.expected_output.toLocaleString(undefined, {
-                          maximumFractionDigits: 2,
-                        })} ${swapDetails.outputToken}`}</div>
+
+                   
+                      <div className="col-span-1 flex items-center justify-between gap-1">
+                        <div>{`${
+                          split.amount_in
+                        } ${inputToken} = ${split.expected_output.toLocaleString(
+                          undefined,
+                          {
+                            maximumFractionDigits: 2,
+                          }
+                        )} ${outputToken}`}</div>
                         <div className="flex items-center gap-1">
                           <Image
                             src="/icons/fee-gray.svg"
@@ -273,7 +308,8 @@ export default function SwapPoint({
                           </div>
                         </div>
                       </div>
-                    </div>
+                
+
                   </div>
                 </div>
               ))}
