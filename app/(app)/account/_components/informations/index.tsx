@@ -103,7 +103,7 @@ const Information: React.FC<Props> = ({ user }) => {
                     alt="profile"
                     width={40}
                     height={40}
-                    className="rounded-full"
+                    className="rounded-full w-[40px] h-[40px] object-cover"
                   />
                 ) : (
                   <Image

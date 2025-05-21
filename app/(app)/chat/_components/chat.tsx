@@ -34,7 +34,7 @@ const Chat: React.FC = () => {
         </div>
         {cleanedMessages.length === 0 && (
           <div className="absolute top-0 right-10 cursor-pointer" onClick={() => {
-            window.open("https://farmroll.io", "_blank");
+            window.open("https://spidex.ag/", "_blank");
           }}>
             <Image
               src="/icons/spidex-ai-banner-ads.svg"
