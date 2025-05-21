@@ -35,7 +35,7 @@ const TokenSelect: React.FC<Props> = ({ value, onChange }) => {
     const [open, setOpen] = useState(false);
 
     const [input, setInput] = useState("");
-    const debouncedInput = useDebounce(input, 500);
+    const debouncedInput = useDebounce(input, 800);
 
     const { results, loading } = useTokenSearch(debouncedInput);
 
