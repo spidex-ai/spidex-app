@@ -67,7 +67,7 @@ export const useTokenTopMcap = (page: number, perPage: number) => {
     setIsLoading(true);
     try {
       const data = await getTopTokensByMcap(page, perPage)
-      console.log('data::: top mcap', data);
+    
       if (data.length > 0) {
         setData(data);
       } else {

@@ -27,6 +27,7 @@ import SwapPoint from "@/app/_components/swap/swap-point";
 import { useSpidexCoreContext } from "@/app/_contexts/spidex-core";
 import { useCardano } from "@cardano-foundation/cardano-connect-with-wallet";
 import Image from "next/image";
+import toast from "react-hot-toast";
 
 export interface SwapWrapperProps {
   initialInputToken: CardanoTokenDetail | null;
@@ -147,8 +148,10 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
 
       const submitTx = await api?.submitTx(submitSwap?.cbor);
       onSuccess?.(submitTx);
+      toast.success('You have swapped successfully!')
     } catch (error) {
       onError?.(error instanceof Error ? error.message : "Unknown error");
+      toast.error('You have swapped failed! Please try again later!')
     } finally {
       setIsSwapping(false);
     }
@@ -177,7 +180,7 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
       }
  
     } catch (error) {
-      console.log("error:::", error);
+      console.error("error:::", error);
     }
   };
 
@@ -217,7 +220,7 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
       
       
     } catch (error) {
-      console.log("errorrrrr:::", error);
+      console.error("error:::", error);
     }
   };
 

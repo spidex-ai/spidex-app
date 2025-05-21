@@ -24,6 +24,7 @@ import { useLoginModal } from '@/app/_contexts/login-modal-context';
 import { truncateAddress } from '@/lib/wallet';
 import Image from 'next/image';
 
+
 const AuthButton: React.FC = () => {
 
     const { auth, logout } = useSpidexCoreContext();
@@ -34,6 +35,8 @@ const AuthButton: React.FC = () => {
     const handleConnectWallet = () => {
         openModal(true);
     }
+
+
     useEffect(() => {
         if (auth?.walletName) {
             setWalletIcon(LOGIN_METHODS.find(method => method.id === auth.walletName)?.icon || "/icons/connect-wallet.svg");

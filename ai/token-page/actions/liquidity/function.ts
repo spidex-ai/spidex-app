@@ -18,12 +18,12 @@ export async function getTokenPageLiquidity(
   try {
     // Get all markets (pools) for the token
     const markets = await taptoolsService.getTokenPools(token.address, 1);
-    console.log("🚀 ~ markets:", markets);
+
 
     const stats = await getTokenStats(token.address);
     const tokenStats = stats.data;
 
-    console.log("🚀 ~ tokenStats:", tokenStats);
+
 
     const usdPrice = new Decimal(tokenStats.usdPrice)
       .div(tokenStats.mcap.price)
@@ -36,7 +36,7 @@ export async function getTokenPageLiquidity(
         acc + pool.tokenALocked * usdPriceToken + pool.tokenBLocked * usdPrice,
       0
     );
-    console.log("🚀 ~ liquidity:", liquidity);
+
 
     // Find main pool (pool with highest total liquidity value)
     const poolsWithLiquidity = markets.map((pool) => ({

@@ -8,6 +8,7 @@ import { TextGradient } from "@/components/ui/text";
 import { UserSpidex } from "@/hooks/core/useSpidexCore";
 import { useSpidexCoreContext } from "@/app/_contexts";
 import Address from "@/app/_components/address";
+
 interface Props {
   user: UserSpidex;
 }

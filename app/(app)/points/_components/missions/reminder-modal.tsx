@@ -69,7 +69,7 @@ const ReminderModal = ({ isOpen, onOpenChange }: ReminderModalProps) => {
   }, [params, baseUrl])
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent className="!bg-bg-modal">
         <div className="text-white text-2xl font-medium mt-5">Reminder</div>
         <div className="text-white text-sm">
           To participate in this quest, please link your X

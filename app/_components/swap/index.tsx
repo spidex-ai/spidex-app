@@ -171,7 +171,6 @@ const Swap: React.FC<Props> = ({
     const swapEstResponse = await estimateSwap(swapEstPayload);
     if (swapEstResponse) {
       setEstimatedPoints(swapEstResponse);
-      console.log("🚀 ~ swapEstResponse:", swapEstResponse)
 
       return swapEstResponse?.total_output;
     } else {
@@ -241,7 +240,7 @@ const Swap: React.FC<Props> = ({
           }}
           token={inputToken}
           onChangeToken={(token) => {
-            console.log("api:token:::", token);
+        
             setIsNotPool(false);
             setInputToken(token);
           }}
@@ -260,7 +259,7 @@ const Swap: React.FC<Props> = ({
           amount={outputAmount}
           token={outputToken}
           onChangeToken={(token) => {
-            console.log("api:token:::", token);
+         
             setIsNotPool(false);
             setOutputToken(token);
           }}

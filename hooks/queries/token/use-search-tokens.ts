@@ -19,7 +19,7 @@ export const useSearchTokens = () => {
             )}&verified=true`
         );
         const res = await response.json();
-        console.log('res', res);
+ 
 
 
         return response.json();

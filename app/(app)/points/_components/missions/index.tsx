@@ -6,6 +6,7 @@ import Image from "next/image";
 import { ButtonBlack, GradientSecondaryBtn } from "@/components/ui";
 import { useSpidexCoreContext } from "@/app/_contexts/spidex-core";
 import ReminderModalWrapper from "./reminder-modal-wrapper";
+import toast from "react-hot-toast";
 
 interface MissionItem {
   id: number;
@@ -28,7 +29,7 @@ const Missions = () => {
     null
   );
   const [expandedMissions, setExpandedMissions] = React.useState<number[]>([]);
-  console.log("🚀 ~ Missions ~ quests:", quests);
+
   const [isReminderModalOpen, setIsReminderModalOpen] = React.useState<boolean>(false); 
 
 
@@ -165,10 +166,13 @@ const Missions = () => {
         default:
           break;
       }
-      console.log("data");
+ 
+      toast.success('You have completed the mission!')
       return data;
     } catch (error) {
-      console.log("🚀 ~ handleFinish ~ error:", error);
+      console.error("🚀 ~ handleFinish ~ error:", error);
+
+      toast.error('You have failed the mission! Please try again.')
     } finally {
       setLoadingMissionId(null);
       fetchQuests();
