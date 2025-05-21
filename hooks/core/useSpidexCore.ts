@@ -143,15 +143,17 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
         }
 
         setLoading(false);
+        const data = await response.json();
         if (response.status !== 200) {
-          return null;
+          throw data?.message || "An error occurred";
         }
 
-        return await response.json();
+        return data;
       } catch (err: any) {
         setError(err.message || "An error occurred");
         setLoading(false);
         console.error("Spidex API error:", err);
+        throw err || "An error occurred";
       }
     },
     [auth?.accessToken]
@@ -217,7 +219,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
         setAuth({ ...data.data, walletName });
         return data.data;
       } catch (err) {
-        return null;
+        throw err;
       }
     },
     [fetchWithAuth]
@@ -258,7 +260,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
         setAuth({...data.data, walletName: "xlogin"});
         return data.data;
       } catch (err) {
-        return null;
+        throw err;
       }
     },
     [fetchWithAuth]
@@ -277,7 +279,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
         setAuth({...data.data, walletName: "google"});
         return data.data;
       } catch (err) {
-        return null;
+        throw err;
       }
     },
     [fetchWithAuth]

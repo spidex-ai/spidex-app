@@ -25,6 +25,7 @@ import { initNufiDappCardanoSdk } from "@nufi/dapp-client-cardano";
 import nufiCoreSdk from "@nufi/dapp-client-core";
 import { useSpidexCoreContext } from "../_contexts";
 import { useLoginModal } from "../_contexts/login-modal-context";
+import toast from "react-hot-toast";
 import WalletNotInstalledDialog from "./wallet-not-installed-dialog";
 
 
@@ -186,8 +187,8 @@ const LoginModal: React.FC = () => {
     console.log("Wallet connection error", error);
     if (error.name === "WrongNetworkTypeError") {
       console.log("WrongNetworkTypeError");
+      toast.error("Please connect to the mainnet");
     } else if (error.name === "WalletNotInstalledError") {
-      console.log("WalletNotInstalledError");
       const walletName = error.message.split(" ")[2];
       const wallet = WALLET_METHODS.find((w) => w.id === walletName);
       setNotInstalledWallet({
@@ -198,6 +199,7 @@ const LoginModal: React.FC = () => {
       setShowWalletNotInstalled(true);
     } else {
       console.log("Error", error);
+      toast.error("Wallet connection error");
     }
     disconnect();
     setWalletConnecting(null);
@@ -225,11 +227,11 @@ const LoginModal: React.FC = () => {
       setIsReferralModalOpen(true);
       setMethod(method);
     } else {
-      handleConnectWallet(method);
+      handleConnect(method);
     }
   }
 
-  const handleConnect = useCallback(() => {
+  const handleConnect = (method: string) => {
     console.log("🚀 ~ handleConnect ~ method:", method);
     setIsReferralModalOpen(false);
     if (method === "nufi") {
@@ -241,23 +243,18 @@ const LoginModal: React.FC = () => {
     } else {
       handleConnectWallet(method);
     }
-  }, [method])
+  }
 
   /**
    * Sign message with connected wallet
    */
   const handleSignMessage = async (walletName: string) => {
     try {
-      if (!enabledWallet) {
-        console.log("No wallet connected");
-        return;
-      }
       let address = null;
       const api = await (window as any).cardano[walletName as any].enable();
       await api?.getUtxos();
       const unusedAddressesHex = await api.getUnusedAddresses();
       if (!unusedAddressesHex || unusedAddressesHex.length === 0) {
-        console.log("No unused addresses found");
         const usedAddresses = await api.getUsedAddresses();
         if (usedAddresses && usedAddresses.length > 0) {
           address = decodeHexAddress(usedAddresses[0]);
@@ -265,42 +262,64 @@ const LoginModal: React.FC = () => {
       } else {
         address = decodeHexAddress(unusedAddressesHex[0]);
       }
-      console.log("🚀 ~ handleSignMessage ~ address:", address);
       if (!address) {
+        toast.error("No address found");
         return;
       }
       const nonce = await getNounce();
       if (!nonce) return;
       const ref = params.get("ref");
-      console.log("🚀 ~ handleSignMessage ~ ref:", ref);
 
       await signMessage(
         nonce,
         async (signature: string, key: string | undefined) => {
-          await signMessageSpidex(
-            {
-              address,
-              signature,
-              publicKey: key || "",
-              role: "user",
-              referralCode: ref || "",
-            },
-            enabledWallet || ""
+          await handleSignMessageSpidex(
+            address,
+            signature,
+            key,
+            ref
           );
-          closeModal();
         },
         (error: any) => {
           disconnect();
-          console.log("Sign message failed1", error);
+          toast.error("Sign message failed");
         }
       );
     } catch (error: any) {
-      disconnect();
-      console.log("Sign message failed2", error);
+      console.log("Error signing message", error);
+      if (typeof error === "string") {
+        toast.error(error);
+      } else {
+        disconnect();
+        toast.error("Sign message failed");
+      }
     } finally {
       setWalletConnecting(null);
     }
   };
+
+  const handleSignMessageSpidex = async (address: string, signature: string, key: string | undefined, ref: string | null) => {
+    try {
+      await signMessageSpidex(
+        {
+          address,
+          signature,
+          publicKey: key || "",
+          role: "user",
+          referralCode: ref || "",
+        },
+        enabledWallet || ""
+      );
+      closeModal();
+    } catch (error: any) {
+      console.log("Error signing message with Spidex", error);
+      if (typeof error === "string") {
+        toast.error(error);
+      } else {
+        toast.error("Sign message failed");
+      }
+    }
+  }
 
   /**
    * Connect with Google
@@ -314,7 +333,11 @@ const LoginModal: React.FC = () => {
       // Close the modal when Google login is initiated
       closeModal();
     } catch (error: any) {
-      console.log("Google login error", error);
+      if (typeof error === "string") {
+        toast.error(error);
+      } else {
+        toast.error("Google login failed");
+      }
     } finally {
       setIsConnecting(false);
     }
@@ -353,7 +376,11 @@ const LoginModal: React.FC = () => {
       // Close the modal when X login is initiated
       closeModal();
     } catch (error: any) {
-      console.log("X login error", error);
+      if (typeof error === "string") {
+        toast.error(error);
+      } else {
+        toast.error("X login failed");
+      }
     } finally {
       setIsConnecting(false);
     }
@@ -570,7 +597,7 @@ const LoginModal: React.FC = () => {
             </div>
           </div>
         </DialogContent>
-    
+
       </Dialog>
     </>
   );
