@@ -289,7 +289,8 @@ const LoginModal: React.FC = () => {
             address,
             signature,
             key,
-            ref
+            ref,
+            walletName
           );
         },
         (error: any) => {
@@ -311,7 +312,7 @@ const LoginModal: React.FC = () => {
     }
   };
 
-  const handleSignMessageSpidex = async (address: string, signature: string, key: string | undefined, ref: string | null) => {
+  const handleSignMessageSpidex = async (address: string, signature: string, key: string | undefined, ref: string | null, walletName: string) => {
     try {
       await signMessageSpidex(
         {
@@ -321,7 +322,7 @@ const LoginModal: React.FC = () => {
           role: "user",
           referralCode: ref || "",
         },
-        enabledWallet || ""
+        walletName || ""
       );
       closeModal();
     } catch (error: any) {
