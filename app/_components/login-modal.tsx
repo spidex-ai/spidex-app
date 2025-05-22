@@ -227,11 +227,11 @@ const LoginModal: React.FC = () => {
       setIsReferralModalOpen(true);
       setMethod(method);
     } else {
-      handleConnect(method);
+      handleConnect();
     }
   }
 
-  const handleConnect = (method: string) => {
+  const handleConnect = useCallback(() => {
     console.log("🚀 ~ handleConnect ~ method:", method);
     setIsReferralModalOpen(false);
     if (method === "nufi") {
@@ -243,7 +243,7 @@ const LoginModal: React.FC = () => {
     } else {
       handleConnectWallet(method);
     }
-  }
+  }, [method]);
 
   /**
    * Sign message with connected wallet
@@ -281,6 +281,7 @@ const LoginModal: React.FC = () => {
           );
         },
         (error: any) => {
+          console.error("Sign message failed", error);
           disconnect();
           toast.error("Sign message failed");
         }

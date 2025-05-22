@@ -6,7 +6,7 @@ export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
         const {
-            buyerAddress,
+            addresses,
             tokenIn,
             tokenOut,
             slippage,
@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
             blacklistedDexes
         } = body as SwapPayload;
 
-        if (!buyerAddress) {
+        if (!addresses) {
             return NextResponse.json(
                 { error: 'Buyer address is required' },
                 { status: 400 }
@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
         }
 
         const payload: SwapPayload = {
-            buyerAddress,
+            addresses,
             tokenIn,
             tokenOut,
             slippage: slippage ?? 1.0,

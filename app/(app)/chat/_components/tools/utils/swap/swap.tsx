@@ -28,6 +28,7 @@ import { useSpidexCoreContext } from "@/app/_contexts/spidex-core";
 import { useCardano } from "@cardano-foundation/cardano-connect-with-wallet";
 import Image from "next/image";
 import toast from "react-hot-toast";
+import { decodeHexAddress } from "@cardano-foundation/cardano-connect-with-wallet-core";
 
 export interface SwapWrapperProps {
   initialInputToken: CardanoTokenDetail | null;
@@ -129,8 +130,13 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
     setIsSwapping(true);
     try {
       const api = await (window as any).cardano[enabledWallet as any].enable();
+      const usedAddresses = await api.getUsedAddresses(); 
+      const addresses = [];
+      for (const address of usedAddresses) {
+        addresses.push(decodeHexAddress(address));
+      }
       const payload: SwapPayload = {
-        buyerAddress: unusedAddresses?.[0].toString() || "",
+        addresses: addresses,
         tokenIn: inputToken?.token_id || " ",
         tokenOut: outputToken?.token_id || " ",
         slippage: 5,

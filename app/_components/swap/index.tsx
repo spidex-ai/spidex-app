@@ -23,7 +23,7 @@ import {
   SwapPayload,
 } from "@/services/dexhunter/types";
 import { useCardano } from "@cardano-foundation/cardano-connect-with-wallet";
-import {decodeHexAddress} from "@cardano-foundation/cardano-connect-with-wallet-core";
+import { decodeHexAddress } from "@cardano-foundation/cardano-connect-with-wallet-core";
 import { useSpidexCoreContext } from "@/app/_contexts";
 import SwapPoint from "./swap-point";
 
@@ -128,12 +128,23 @@ const Swap: React.FC<Props> = ({
         console.error("No UTxOs available to spend.");
         return;
       }
-      const unusedAddressesHex = await api.getUnusedAddresses();
-      const unusedAddresses = decodeHexAddress(unusedAddressesHex[0]);
+
+      const usedAddressesHex = await api.getUsedAddresses();
+      console.log("usedAddressesHex", usedAddressesHex);
+      const addresses = [];
+      for (const address of usedAddressesHex) {
+        const unusedAddresses = decodeHexAddress(address);
+        addresses.push(unusedAddresses);
+      }
+
       const payload: SwapPayload = {
-        buyerAddress: unusedAddresses,
-        tokenIn: inputToken?.unit ? inputToken?.unit : inputToken?.token_id || " ",
-        tokenOut: outputToken?.unit ? outputToken?.unit : outputToken?.token_id || " ",
+        addresses: addresses,
+        tokenIn: inputToken?.unit
+          ? inputToken?.unit
+          : inputToken?.token_id || " ",
+        tokenOut: outputToken?.unit
+          ? outputToken?.unit
+          : outputToken?.token_id || " ",
         slippage: 5,
         amountIn: Number(inputAmount),
         txOptimization: true,
@@ -240,7 +251,6 @@ const Swap: React.FC<Props> = ({
           }}
           token={inputToken}
           onChangeToken={(token) => {
-        
             setIsNotPool(false);
             setInputToken(token);
           }}
@@ -259,7 +269,6 @@ const Swap: React.FC<Props> = ({
           amount={outputAmount}
           token={outputToken}
           onChangeToken={(token) => {
-         
             setIsNotPool(false);
             setOutputToken(token);
           }}
@@ -293,10 +302,10 @@ const Swap: React.FC<Props> = ({
             {isQuoteLoading
               ? "Loading..."
               : Number(inputAmount) > Number(tokenInputBalance)
-                ? "Insufficient balance"
-                : isSwapping
-                  ? swappingText || "Swapping..."
-                  : swapText || "Swap"}
+              ? "Insufficient balance"
+              : isSwapping
+              ? swappingText || "Swapping..."
+              : swapText || "Swap"}
           </GradientButton>
         ) : (
           <LogInButton />
@@ -315,12 +324,14 @@ const Swap: React.FC<Props> = ({
               inputAmount: inputAmount || "",
               outputAmount: estimatedPoints?.splits?.[0]?.amount_in
                 ? String(
-                  (estimatedPoints?.splits?.[0]?.expected_output ||
-                    0 / estimatedPoints?.splits?.[0]?.amount_in ||
-                    0).toLocaleString(undefined, {
+                    (
+                      estimatedPoints?.splits?.[0]?.expected_output ||
+                      0 / estimatedPoints?.splits?.[0]?.amount_in ||
+                      0
+                    ).toLocaleString(undefined, {
                       maximumFractionDigits: 4,
                     })
-                )
+                  )
                 : "",
               swapRoute: "",
               netPrice: estimatedPoints?.net_price,

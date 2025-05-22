@@ -42,7 +42,7 @@ export interface EsitmateSwapPayload {
     blacklistedDexes: string[];
 }
 export interface SwapPayload {
-    buyerAddress: string;
+    addresses: string[];
     tokenIn: string;
     tokenOut: string;
     slippage: number;
