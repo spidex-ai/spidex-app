@@ -223,15 +223,27 @@ const LoginModal: React.FC = () => {
   };
 
   const handleCheckReferral = (method: string) => {
+    setMethod(method);
     if (params.get("ref")) {
       setIsReferralModalOpen(true);
-      setMethod(method);
     } else {
-      handleConnect();
+      handleConnect(method);
     }
   }
 
-  const handleConnect = useCallback(() => {
+  const handleConnect = (method: string) => {
+    if (method === "nufi") {
+      handleConnectMetamask();
+    } else if (method === "google") {
+      handleConnectGoogle();
+    } else if (method === "xlogin") {
+      handleConnectX();
+    } else {
+      handleConnectWallet(method);
+    }
+  }
+
+  const handleConnectReferral = useCallback(() => {
     console.log("🚀 ~ handleConnect ~ method:", method);
     setIsReferralModalOpen(false);
     if (method === "nufi") {
@@ -593,7 +605,7 @@ const LoginModal: React.FC = () => {
             <div className="flex justify-between items-center gap-2 mt-5">
               <div></div>
               <div>
-                <GradientButton onClick={handleConnect}>Next</GradientButton>
+                <GradientButton onClick={handleConnectReferral}>Next</GradientButton>
               </div>
             </div>
           </div>
