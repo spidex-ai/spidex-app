@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/tooltip";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { dexLogoMap } from "@/app/utils/logo";
+import { dexNameMap } from "@/app/utils/dexes";
 
 interface Props {
   swapDetails: {
@@ -112,7 +113,8 @@ export default function SwapPoint({
                             />
                           </TooltipTrigger>
                           <TooltipContent>
-                            The trade is only routed multi-dex when output is <br />
+                            The trade is only routed multi-dex when output is{" "}
+                            <br />
                             better than the extra dex fees.
                           </TooltipContent>
                         </Tooltip>
@@ -154,7 +156,8 @@ export default function SwapPoint({
                             />
                           </TooltipTrigger>
                           <TooltipContent>
-                            The net price is the average price you get for your <br />
+                            The net price is the average price you get for your{" "}
+                            <br />
                             tokens after the fees.
                           </TooltipContent>
                         </Tooltip>
@@ -182,7 +185,8 @@ export default function SwapPoint({
                             />
                           </TooltipTrigger>
                           <TooltipContent>
-                            The minimum amount of tokens you should receive <br />
+                            The minimum amount of tokens you should receive{" "}
+                            <br />
                             after the swap completes
                           </TooltipContent>
                         </Tooltip>
@@ -355,7 +359,7 @@ export default function SwapPoint({
                           width={20}
                           height={20}
                         />
-                        <div>{split.dex}</div>
+                        <div>{dexNameMap[split.dex]}</div>
                       </div>
                     </div>
 
