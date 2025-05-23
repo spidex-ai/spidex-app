@@ -48,12 +48,12 @@ export const adaTokenDetail: CardanoTokenDetail = {
   token_ascii: "ADA",
   ticker: "ADA",
   is_verified: true,
-  token_policy: "ADA",
+  token_policy: "lovelace",
   token_decimals: 6,
-  supply: 0,
+  supply: 45000000000,
   creation_date: "",
-  price: 0,
-  logo: "",
+  price: 1,
+  logo: "https://core.spidex.ag/public/icons/tokens/ada.svg",
 };
 
 const SwapWrapper: React.FC<SwapWrapperProps> = ({
@@ -76,7 +76,7 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
     submitSwapRequest,
     auth
   } = useSpidexCoreContext();
-  const { enabledWallet, unusedAddresses, accountBalance } = useCardano();
+  const { enabledWallet, unusedAddresses, accountBalance, stakeAddress } = useCardano();
   const isConnectedWallet = useMemo(() => {
 
 
@@ -108,12 +108,26 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
 
   const { balance: inputBalance, isLoading: inputBalanceLoading } =
     useTokenBalance(
-      unusedAddresses?.[0]?.toString() || "",
+      stakeAddress || "",
       inputToken?.unit || ""
     );
 
   const tokenInputBalance =
     inputToken?.ticker === "ADA" ? accountBalance : inputBalance;
+
+    const isInsufficientBalance = useMemo(() => {
+      if (Number(inputAmount) > Number(tokenInputBalance)) return true;
+      if (Number(accountBalance) < 5) return true;
+      if (inputToken?.ticker === "ADA") {
+        const totalDepositADA = Number(inputAmount) +
+        Number(estimatedPoints?.deposits) +
+        Number(estimatedPoints?.batcher_fee) +
+        Number(estimatedPoints?.partner_fee)
+  
+        if (Number(accountBalance) < totalDepositADA) return true;
+      };
+      return false;
+    }, [inputAmount, tokenInputBalance, accountBalance, inputToken, estimatedPoints]);
 
   const onChangeInputOutput = () => {
     const tempInputToken = inputToken;
@@ -308,12 +322,12 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
               !outputAmount ||
               !tokenInputBalance ||
               inputBalanceLoading ||
-              Number(inputAmount) > Number(tokenInputBalance)
+              isInsufficientBalance
             }
           >
             {isQuoteLoading
               ? "Loading..."
-              : Number(inputAmount) > Number(tokenInputBalance)
+              : isInsufficientBalance
               ? "Insufficient balance"
               : isSwapping
               ? swappingText || "Swapping..."

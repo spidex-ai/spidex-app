@@ -35,7 +35,6 @@ export default function SwapPoint({
   splits,
   estimatedPoints,
 }: Props) {
-
   const [isOpenSwapDetails, setIsOpenSwapDetails] = useState(true);
   const [isOpenMarketOffers, setIsOpenMarketOffers] = useState(true);
 
@@ -98,7 +97,29 @@ export default function SwapPoint({
           <div className="px-6 py-2">
             <div className="grid grid-cols-3 gap-2">
               <SwapDetailItem
-                label="Swap Route"
+                label={
+                  <div className="flex items-center gap-1">
+                    <div>Swap Route</div>
+                    <div>
+                      <TooltipProvider>
+                        <Tooltip delayDuration={0}>
+                          <TooltipTrigger>
+                            <img
+                              src="/icons/warning-gray.svg"
+                              alt="warning-gray"
+                              width={10}
+                              height={10}
+                            />
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            The trade is only routed multi-dex when output is <br />
+                            better than the extra dex fees.
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </div>
+                  </div>
+                }
                 value={
                   <div className="flex items-center gap-1">
                     <Image
@@ -118,100 +139,160 @@ export default function SwapPoint({
                 }
               />
               <SwapDetailItem
-                label="Net Price"
+                label={
+                  <div className="flex items-center gap-1">
+                    <div>Net Price</div>
+                    <div>
+                      <TooltipProvider>
+                        <Tooltip delayDuration={0}>
+                          <TooltipTrigger>
+                            <img
+                              src="/icons/warning-gray.svg"
+                              alt="warning-gray"
+                              width={10}
+                              height={10}
+                            />
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            The net price is the average price you get for your <br />
+                            tokens after the fees.
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </div>
+                  </div>
+                }
                 value={`${netPrice.toLocaleString(undefined, {
                   maximumFractionDigits: 2,
                 })} ${outputToken}`}
               />
               <SwapDetailItem
-                label="Min Receive"
+                label={
+                  <div className="flex items-center gap-1">
+                    <div>Min Receive</div>
+                    <div>
+                      <TooltipProvider>
+                        <Tooltip delayDuration={0}>
+                          <TooltipTrigger>
+                            <img
+                              src="/icons/warning-gray.svg"
+                              alt="warning-gray"
+                              width={10}
+                              height={10}
+                            />
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            The minimum amount of tokens you should receive <br />
+                            after the swap completes
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </div>
+                  </div>
+                }
                 value={`${minReceive.toLocaleString(undefined, {
                   maximumFractionDigits: 2,
                 })} ${outputToken}`}
               />
-              <div className="text-left">
-                <TooltipProvider>
-                  <Tooltip delayDuration={0}>
-                    <TooltipTrigger>
-                      <SwapDetailItem
-                        label="Dex Fee"
-                        value={`${dexFee.toLocaleString(undefined, {
+              <SwapDetailItem
+                label={
+                  <div className="flex items-center gap-1">
+                    <div>Dex Fee</div>
+                    <div>
+                      <TooltipProvider>
+                        <Tooltip delayDuration={0}>
+                          <TooltipTrigger>
+                            <img
+                              src="/icons/warning-gray.svg"
+                              alt="warning-gray"
+                              width={10}
+                              height={10}
+                            />
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            Dex fees are the fees paid to the DexHunter for the
+                            swap. <br /> This does not include pool fee 0.3-1%
+                            on average <br /> which is paid to the liquidity
+                            providers.
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </div>
+                  </div>
+                }
+                value={`${dexFee.toLocaleString(undefined, {
+                  maximumFractionDigits: 2,
+                })} ${outputToken}`}
+              />
+
+              <SwapDetailItem
+                label={
+                  <div className="flex items-center gap-1">
+                    <div>Dex Deposits</div>
+                    <div>
+                      <TooltipProvider>
+                        <Tooltip delayDuration={0}>
+                          <TooltipTrigger>
+                            <img
+                              src="/icons/warning-gray.svg"
+                              alt="warning-gray"
+                              width={10}
+                              height={10}
+                            />
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            Returned ADA on successful swap.
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </div>
+                  </div>
+                }
+                value={`${dexDeposits.toLocaleString(undefined, {
+                  maximumFractionDigits: 2,
+                })} ${outputToken}`}
+              />
+
+              <SwapDetailItem
+                label={
+                  <div className="flex items-center gap-1">
+                    <div>Total Deposits</div>
+                    <div>
+                      <TooltipProvider>
+                        <Tooltip delayDuration={0}>
+                          <TooltipTrigger>
+                            <img
+                              src="/icons/warning-gray.svg"
+                              alt="warning-gray"
+                              width={10}
+                              height={10}
+                            />
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            It does not include gas fee.
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </div>
+                  </div>
+                }
+                value={`${
+                  swapDetails?.inputToken === "ADA"
+                    ? `${totalDepositADA.toLocaleString(undefined, {
+                        maximumFractionDigits: 2,
+                      })} ADA`
+                    : `${Number(swapDetails.inputAmount).toLocaleString(
+                        undefined,
+                        {
                           maximumFractionDigits: 2,
-                        })} ${outputToken}`}
-                      />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      This fee will be collected by DexHunter.
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </div>
-
-              <div className="text-left">
-                <TooltipProvider>
-                  <Tooltip delayDuration={0}>
-                    <TooltipTrigger>
-                      <SwapDetailItem
-                        label="Dex Deposits"
-                        value={`${dexDeposits.toLocaleString(undefined, {
-                          maximumFractionDigits: 2,
-                        })} ${outputToken}`}
-                      />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      This amount will be refunded when the swap transaction is
-                      completed.
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </div>
-
-              <div className="text-left">
-                <TooltipProvider>
-                  <Tooltip delayDuration={0}>
-                    <TooltipTrigger>
-                      <SwapDetailItem
-                        label="Total Deposit"
-                        value={`${
-                          swapDetails?.inputToken === "ADA"
-                            ? `${totalDepositADA.toLocaleString(undefined, {
-                                maximumFractionDigits: 2,
-                              })} ADA`
-                            : `${Number(swapDetails.inputAmount).toLocaleString(
-                                undefined,
-                                {
-                                  maximumFractionDigits: 2,
-                                }
-                              )} ${
-                                swapDetails.inputToken
-                              } + ${totalDepositADA.toLocaleString(undefined, {
-                                maximumFractionDigits: 2,
-                              })} ADA`
-                        }`}
-                      />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      It does not include gas fee.
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </div>
-
-              {/* <div className="text-left">
-                <TooltipProvider>
-                  <Tooltip delayDuration={0}>
-                    <TooltipTrigger>
-                      <SwapDetailItem
-                        label="Service Fee"
-                        value={"1 ADA + 0.1%"}
-                      />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      This fee will be collected by DexHunter
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </div> */}
+                        }
+                      )} ${
+                        swapDetails.inputToken
+                      } + ${totalDepositADA.toLocaleString(undefined, {
+                        maximumFractionDigits: 2,
+                      })} ADA`
+                }`}
+              />
             </div>
           </div>
         )}
@@ -278,38 +359,84 @@ export default function SwapPoint({
                       </div>
                     </div>
 
-                   
-                      <div className="col-span-1 flex items-center justify-between gap-1">
-                        <div>{`${
-                          split.amount_in
-                        } ${inputToken} = ${split.expected_output.toLocaleString(
-                          undefined,
-                          {
-                            maximumFractionDigits: 2,
-                          }
-                        )} ${outputToken}`}</div>
-                        <div className="flex items-center gap-1">
-                          <Image
-                            src="/icons/fee-gray.svg"
-                            alt="fee-gray"
-                            width={10}
-                            height={10}
-                          />
-                          <div className="text-xs text-text-gray flex gap-1 items-center">
-                            <div>{split.fee}</div>
-                            <div>
-                              <Image
-                                src="/icons/ada.svg"
-                                alt="ada"
-                                width={10}
-                                height={10}
-                              />
-                            </div>
+                    <div className="col-span-1 flex items-center justify-between gap-1">
+                      <div>{`${
+                        split.amount_in
+                      } ${inputToken} = ${split.expected_output.toLocaleString(
+                        undefined,
+                        {
+                          maximumFractionDigits: 2,
+                        }
+                      )} ${outputToken}`}</div>
+                      <div className="flex items-center gap-1">
+                        <Image
+                          src="/icons/fee-gray.svg"
+                          alt="fee-gray"
+                          width={10}
+                          height={10}
+                        />
+                        <div className="text-xs text-text-gray flex gap-1 items-center">
+                          <div>{`A${split.fee}`}</div>
+                          <div>
+                            <TooltipProvider>
+                              <Tooltip delayDuration={0}>
+                                <TooltipTrigger>
+                                  <Image
+                                    src="/icons/warning-blink.svg"
+                                    alt="ada"
+                                    width={10}
+                                    height={10}
+                                  />
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                  <div className="flex flex-col gap-1 min-w-60">
+                                    <div className="flex gap-1 justify-between items-center">
+                                      <div>Minimum receive</div>
+                                      <div className="font-semibold">{`${split.expected_output.toLocaleString(
+                                        undefined,
+                                        {
+                                          maximumFractionDigits: 2,
+                                        }
+                                      )}A`}</div>
+                                    </div>
+
+                                    <div className="flex gap-1 justify-between items-center">
+                                      <div>Price impact</div>
+                                      <div className="font-semibold">{`${split.price_impact.toLocaleString(
+                                        undefined,
+                                        {
+                                          maximumFractionDigits: 2,
+                                        }
+                                      )}A`}</div>
+                                    </div>
+
+                                    <div className="flex gap-1 justify-between items-center">
+                                      <div>Batcher fee</div>
+                                      <div className="text-text-tooltip font-semibold">{`${split.batcher_fee.toLocaleString(
+                                        undefined,
+                                        {
+                                          maximumFractionDigits: 2,
+                                        }
+                                      )}A`}</div>
+                                    </div>
+
+                                    <div className="flex gap-1 justify-between items-center">
+                                      <div>Refundable deposit</div>
+                                      <div className=" font-semibold">{`${split.deposits.toLocaleString(
+                                        undefined,
+                                        {
+                                          maximumFractionDigits: 2,
+                                        }
+                                      )}A`}</div>
+                                    </div>
+                                  </div>
+                                </TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
                           </div>
                         </div>
                       </div>
-                
-
+                    </div>
                   </div>
                 </div>
               ))}
@@ -371,7 +498,7 @@ const SwapDetailItem = ({
   label,
   value = "1",
 }: {
-  label: string;
+  label: string | React.ReactNode;
   value: string | React.ReactNode;
 }) => {
   return (

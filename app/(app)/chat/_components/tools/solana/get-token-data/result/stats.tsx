@@ -12,6 +12,7 @@ interface Props {
 }
 
 const Stats: React.FC<Props> = ({ token }) => {
+    console.log("🚀 ~ token:", token)
     return (
         <Card className='p-2 flex flex-col gap-2'>
             <h2 className="text-lg font-semibold">

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 
 import { ChevronDown } from "lucide-react";
 
@@ -26,6 +26,7 @@ import { useCardano } from "@cardano-foundation/cardano-connect-with-wallet";
 import { decodeHexAddress } from "@cardano-foundation/cardano-connect-with-wallet-core";
 import { useSpidexCoreContext } from "@/app/_contexts";
 import SwapPoint from "./swap-point";
+import { toast } from "react-hot-toast";
 
 interface Props {
   initialInputToken: CardanoTokenDetail | null;
@@ -47,12 +48,12 @@ export const adaTokenDetail: CardanoTokenDetail = {
   token_ascii: "ADA",
   ticker: "ADA",
   is_verified: true,
-  token_policy: "ADA",
+  token_policy: "lovelace",
   token_decimals: 6,
-  supply: 0,
+  supply: 45000000000,
   creation_date: "",
-  price: 0,
-  logo: "",
+  price: 1,
+  logo: "https://core.spidex.ag/public/icons/tokens/ada.svg",
 };
 
 const Swap: React.FC<Props> = ({
@@ -74,7 +75,7 @@ const Swap: React.FC<Props> = ({
     buildSwapRequest,
     submitSwapRequest,
   } = useSpidexCoreContext();
-  const { enabledWallet, unusedAddresses, accountBalance } = useCardano();
+  const { enabledWallet, unusedAddresses, accountBalance, stakeAddress } = useCardano();
 
   const [inputAmount, setInputAmount] = useState<string>(
     initialInputAmount || ""
@@ -100,18 +101,32 @@ const Swap: React.FC<Props> = ({
 
   const { balance: inputBalance, isLoading: inputBalanceLoading } =
     useTokenBalance(
-      unusedAddresses?.[0]?.toString() || "",
-      inputToken?.token_id || ""
+      stakeAddress || "",
+      inputToken?.unit || ""
     );
 
   const tokenInputBalance =
     inputToken?.ticker === "ADA" ? accountBalance : inputBalance;
 
+  const isInsufficientBalance = useMemo(() => {
+    if (Number(inputAmount) > Number(tokenInputBalance)) return true;
+    if (Number(accountBalance) < 5) return true;
+    if (inputToken?.ticker === "ADA") {
+      const totalDepositADA = Number(inputAmount) +
+      Number(estimatedPoints?.deposits) +
+      Number(estimatedPoints?.batcher_fee) +
+      Number(estimatedPoints?.partner_fee)
+
+      if (Number(accountBalance) < totalDepositADA) return true;
+    };
+    return false;
+  }, [inputAmount, tokenInputBalance, accountBalance, inputToken, estimatedPoints]);
+
   const onChangeInputOutput = () => {
     const tempInputToken = inputToken;
     const tempInputAmount = inputAmount;
     setInputToken(outputToken);
-    setInputAmount(outputAmount);
+    setInputAmount(outputAmount); 
     setOutputToken(tempInputToken);
     setOutputAmount(tempInputAmount);
   };
@@ -160,6 +175,7 @@ const Swap: React.FC<Props> = ({
 
       const submitTx = await api?.submitTx(submitSwap?.cbor);
       onSuccess?.(submitTx);
+      toast.success("You have swapped successfully!");
     } catch (error) {
       onError?.(error instanceof Error ? error.message : "Unknown error");
     } finally {
@@ -193,6 +209,10 @@ const Swap: React.FC<Props> = ({
   const checkPool = useCallback(async () => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 1000));
+      if (inputToken?.token_id === outputToken?.token_id || inputToken?.ticker === outputToken?.ticker || inputToken?.unit === outputToken?.unit) {
+        setIsNotPool(true);
+        return;
+      }
       const poolStats = await getSwapPoolStats(
         inputToken?.unit ? inputToken?.unit : inputToken?.token_id || "",
         outputToken?.unit ? outputToken?.unit : outputToken?.token_id || ""
@@ -223,7 +243,10 @@ const Swap: React.FC<Props> = ({
   };
 
   useEffect(() => {
-    if (inputToken && outputToken) {
+    console.log("inputToken", inputToken);
+    console.log("outputToken", outputToken);
+    if (inputToken?.ticker && outputToken?.ticker) {
+      console.log("checkPool");
       checkPool();
     }
   }, [inputToken, outputToken]);
@@ -296,12 +319,12 @@ const Swap: React.FC<Props> = ({
               !outputAmount ||
               !tokenInputBalance ||
               inputBalanceLoading ||
-              Number(inputAmount) > Number(tokenInputBalance)
+              isInsufficientBalance
             }
           >
             {isQuoteLoading
               ? "Loading..."
-              : Number(inputAmount) > Number(tokenInputBalance)
+              : isInsufficientBalance
               ? "Insufficient balance"
               : isSwapping
               ? swappingText || "Swapping..."

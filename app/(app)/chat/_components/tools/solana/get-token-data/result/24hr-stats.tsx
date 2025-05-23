@@ -23,12 +23,13 @@ const TwentyFourHrStats: React.FC<Props> = ({ token }) => {
                 buy={token['24h'].buyVolume}
                 sell={token['24h'].sellVolume}
                 prefix="$"
+                address={token.tokenAddress}
             />
             <div className="flex flex-col">
                 <h3 className="text-sm font-semibold">
                     Unique Traders
                 </h3>
-                <p>{(token['24h'].buyers + token['24h'].sellers).toLocaleString()} Traders</p>
+                <p>{token.tokenAddress === 'lovelace' ? "N/A" : `${(token['24h'].buyers + token['24h'].sellers).toLocaleString()} Traders`}</p>
             </div>
         </Card>
     )

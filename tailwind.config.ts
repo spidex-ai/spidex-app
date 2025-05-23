@@ -41,7 +41,8 @@ export default {
   				light: '#000000',
   				dark: '#ffffff',
 				gray: '#5D717D',
-				icon: '#717A8C'
+				icon: '#717A8C',
+				tooltip: '#BBF985'
   			},
   			sidebar: {
   				DEFAULT: 'var(--sidebar-background)',
