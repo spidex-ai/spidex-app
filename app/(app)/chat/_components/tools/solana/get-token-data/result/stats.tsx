@@ -22,28 +22,28 @@ const Stats: React.FC<Props> = ({ token }) => {
                     <h3 className="text-sm font-semibold">
                         Market Cap
                     </h3>
-                    <p>${token.mcap.mcap.toLocaleString()}</p>
+                    <p>${token?.mcap?.mcap?.toLocaleString() || "N/A"}</p>
                 </div>
                 <div className="flex flex-col">
                     <h3 className="text-sm font-semibold">
                         Circulating Supply
                     </h3>
-                    <p>${token.mcap.circSupply.toLocaleString(undefined, { maximumFractionDigits: 2 })}</p>
+                    <p>${token?.mcap?.circSupply?.toLocaleString(undefined, { maximumFractionDigits: 2 }) || "N/A"}</p>
                 </div>
                 <div className="flex flex-col">
                     <h3 className="text-sm font-semibold">
                         Total Supply
                     </h3>
-                    <p>{token.mcap.totalSupply.toLocaleString(undefined, { maximumFractionDigits: 0 })}</p>
+                    <p>{token?.mcap?.totalSupply?.toLocaleString(undefined, { maximumFractionDigits: 0 }) || "N/A"}</p>
                 </div>
                 <div className="flex flex-col">
                     <h3 className="text-sm font-semibold">
                         # of Holders
-                    </h3>
-                    <p>{token.holders.toLocaleString()}</p>
-                </div>
-            </div>
-        </Card>
+          </h3>
+          <p>{token?.holders?.toLocaleString() ?? "N/A"}</p>
+        </div>
+      </div>
+    </Card>
     )
 }
 
