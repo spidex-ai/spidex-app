@@ -168,7 +168,7 @@ const LoginModal: React.FC = () => {
     }
   }, []);
 
-  const { connect, signMessage, disconnect, enabledWallet } =
+  const { connect, signMessage, disconnect } =
     useCardano({
       limitNetwork: NetworkType.MAINNET,
     });

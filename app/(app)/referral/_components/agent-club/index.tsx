@@ -38,21 +38,20 @@ const AgentClub: React.FC = () => {
     <div className="p-8 border border-border-main rounded-lg bg-bg-secondary">
       <div className="flex gap-8">
         <div>
-          {auth?.avatar ? (
+        {auth?.avatar ? (
             <img
               src={auth?.avatar}
               alt="agent-club"
-              width={100}
-              height={100}
-              className="rounded-full"
+              className="rounded-full w-[80px] h-[80px] object-cover"
+              style={{ width: '80px', height: '80px', minWidth: '80px', minHeight: '80px' }}
             />
           ) : (
             <Image
               src="/icons/logo.svg"
               alt="agent-club"
-              width={100}
-              height={100}
-              className="rounded-full"
+              width={80}
+              height={80}
+              className="w-[80px] h-[80px] object-cover"
             />
           )}
         </div>
