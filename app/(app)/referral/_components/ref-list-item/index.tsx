@@ -1,5 +1,4 @@
 import React from "react";
-import Image from "next/image";
 import { GradientButton } from "@/components/ui";
 export interface RefListItemProps {
     index: number;
@@ -27,13 +26,12 @@ const RefListItem: React.FC<RefListItemProps> = ({
       <div className="flex items-center justify-center gap-2">
         <div>
           {avatar ? (
-            <Image src={avatar} alt={username} width={32} height={32} />
+            <img src={avatar} alt={username} width={32} height={32} className="rounded-full w-[32px] h-[32px] object-cover" />
           ) : (
-            <Image
+            <img
               src="/icons/agent-club.svg"
               alt="agent-club"
-              width={32}
-              height={32}
+              className="rounded-full w-[32px] h-[32px] object-cover"
             />
           )}
         </div>

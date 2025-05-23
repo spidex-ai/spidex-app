@@ -277,7 +277,7 @@ const Swap: React.FC<Props> = ({
             setIsNotPool(false);
             setInputToken(token);
           }}
-          address={unusedAddresses?.[0]?.toString()}
+          address={stakeAddress || ""}
         />
         <Button
           variant="ghost"
@@ -295,7 +295,7 @@ const Swap: React.FC<Props> = ({
             setIsNotPool(false);
             setOutputToken(token);
           }}
-          address={unusedAddresses?.[0]?.toString()}
+          address={stakeAddress || ""}
         />
       </div>
       <div className="text-sm text-red-500">
@@ -303,7 +303,7 @@ const Swap: React.FC<Props> = ({
       </div>
       <Separator />
       <div className="flex flex-col gap-2">
-        {unusedAddresses?.[0]?.toString() ? (
+        {stakeAddress ? (
           <GradientButton
             variant="brand"
             className="w-full"
