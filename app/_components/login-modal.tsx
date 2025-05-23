@@ -266,12 +266,10 @@ const LoginModal: React.FC = () => {
       const api = await (window as any).cardano[walletName as any].enable();
       await api?.getUtxos();
       const unusedAddressesHex = await api.getUnusedAddresses();
-      if (!unusedAddressesHex || unusedAddressesHex.length === 0) {
-        const usedAddresses = await api.getUsedAddresses();
-        if (usedAddresses && usedAddresses.length > 0) {
-          address = decodeHexAddress(usedAddresses[0]);
-        }
-      } else {
+      const usedAddresses = await api.getUsedAddresses();
+      if (usedAddresses && usedAddresses.length > 0) {
+        address = decodeHexAddress(usedAddresses[0]);
+      } else if (unusedAddressesHex && unusedAddressesHex.length > 0) {
         address = decodeHexAddress(unusedAddressesHex[0]);
       }
       if (!address) {
