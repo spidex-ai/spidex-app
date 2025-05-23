@@ -25,7 +25,7 @@ const TradeHistory: React.FC<Props> = ({ tokenId, ticker }) => {
   }
 
   return (
-    <div className="relative h-[calc(100vh-700px)]">
+    <div className="relative h-full">
       <div className="overflow-auto h-full">
         <Table>
           <TableHeader className="sticky top-0 bg-background z-10">

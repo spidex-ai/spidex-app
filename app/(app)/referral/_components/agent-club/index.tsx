@@ -44,6 +44,7 @@ const AgentClub: React.FC = () => {
               alt="agent-club"
               width={100}
               height={100}
+              className="rounded-full"
             />
           ) : (
             <Image
@@ -51,6 +52,7 @@ const AgentClub: React.FC = () => {
               alt="agent-club"
               width={100}
               height={100}
+              className="rounded-full"
             />
           )}
         </div>
