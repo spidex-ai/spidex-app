@@ -46,12 +46,10 @@ const AgentClub: React.FC = () => {
               style={{ width: '80px', height: '80px', minWidth: '80px', minHeight: '80px' }}
             />
           ) : (
-            <Image
-              src="/icons/logo.svg"
+            <img
+              src="/icons/spider.svg"
               alt="agent-club"
-              width={80}
-              height={80}
-              className="w-[80px] h-[80px] object-cover"
+              className="w-[80px] object-cover"
             />
           )}
         </div>
