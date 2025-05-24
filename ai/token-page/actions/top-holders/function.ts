@@ -12,6 +12,14 @@ import type { TokenChatData } from "@/types";
 import { AddressType, KnownAddress } from "@/types/known-address";
 import taptoolsService from "@/services/taptools";
 
+interface TopHolder {
+  address: string;
+  amount: number;
+  ownershipPercentage: number;
+  totalPrice: number;
+  usdTotalPrice: number;
+}
+
 export async function getTokenPageTopHolders(
   token: TokenChatData,
   _: TokenPageTopHoldersArgumentsType
@@ -19,8 +27,13 @@ export async function getTokenPageTopHolders(
   try {
     const numHolders = 50;
 
-    const [topHolders, tokenDebtLoan, totalSupply] = await Promise.all([
-      taptoolsService.getTopTokenHolders(token.address, 1, numHolders),
+    const [topHoldersResponse, tokenDebtLoan, totalSupply] = await Promise.all([
+      fetch(
+        `https://core.spidex.ag/api/tokens/29d222ce763455e3d7a09a665ce554f00ac89d2e99a1a83d267170c64d494e/top-holders?limit=20&page=1`,
+        {
+          method: "GET",
+        }
+      ),
       taptoolsService.getTokenDebtLoans(
         token.address,
         "collateral,debt",
@@ -31,35 +44,64 @@ export async function getTokenPageTopHolders(
       ),
       taptoolsService.getTokenMcap(token.address),
     ]);
-    console.log("🚀 ~ totalSupply:", totalSupply);
-    console.log("🚀 ~ topHolders:", topHolders);
+
+    const responseData = await topHoldersResponse.json();
+    console.log("API Response:", responseData);
+
+    // Ensure we have an array of holders
+    const topHolders: TopHolder[] = Array.isArray(responseData)
+      ? responseData
+      : responseData.data || responseData.holders || [];
+
+    if (!Array.isArray(topHolders)) {
+      throw new Error(
+        "Invalid response format: top holders data is not an array"
+      );
+    }
 
     // Calculate basic holder percentages
     const top10Holders = topHolders
       .slice(0, 10)
-      .reduce((acc, curr) => acc + curr.amount, 0);
+      .reduce(
+        (acc: number, curr: TopHolder) => acc + curr.ownershipPercentage,
+        0
+      );
+    console.log("🚀 ~ top10Holders:", top10Holders);
     const top20Holders = topHolders
       .slice(0, 20)
-      .reduce((acc, curr) => acc + curr.amount, 0);
+      .reduce(
+        (acc: number, curr: TopHolder) => acc + curr.ownershipPercentage,
+        0
+      );
 
-    const top10HoldersPercent = top10Holders / totalSupply.totalSupply;
-    const top20HoldersPercent = top20Holders / totalSupply.totalSupply;
-    const totalDebt = tokenDebtLoan.slice(0, 100).reduce((acc, curr) => {
-      const amount = curr.debtAmount || 0;
-      return acc + amount;
-    }, 0);
-    const totalCollateral = tokenDebtLoan.slice(0, 100).reduce((acc, curr) => {
-      const amount = curr.collateralAmount || 0;
-      return acc + amount;
-    }, 0);
+    const top10HoldersPercent = top10Holders;
+    const top20HoldersPercent = top20Holders;
+
+    const totalDebt = tokenDebtLoan
+      .slice(0, 100)
+      .reduce((acc: number, curr: any) => {
+        const amount = curr.debtAmount || 0;
+        return acc + amount;
+      }, 0);
+
+    const totalCollateral = tokenDebtLoan
+      .slice(0, 100)
+      .reduce((acc: number, curr: any) => {
+        const amount = curr.collateralAmount || 0;
+        return acc + amount;
+      }, 0);
 
     const totalDebtPercent = totalDebt / totalSupply.totalSupply;
     const totalCollateralPercent = totalCollateral / totalSupply.totalSupply;
+
     // Calculate concentration metrics
     const top5HoldersPercent = topHolders
       .slice(0, 5)
-      .reduce((acc, curr) => acc + curr.amount / totalSupply.totalSupply, 0);
-    const largestHolder = topHolders[0]?.amount / totalSupply.totalSupply || 0;
+      .reduce(
+        (acc: number, curr: TopHolder) => acc + curr.ownershipPercentage,
+        0
+      );
+    const largestHolder = topHolders[0]?.ownershipPercentage || 0;
 
     // Calculate distribution patterns
     const totalAnalyzedPercent =
@@ -89,12 +131,10 @@ export async function getTokenPageTopHolders(
       message: `Analysis of token distribution patterns:
 
 1. Concentration Metrics:
-   - The largest single holder controls ${(largestHolder * 100).toFixed(
-     2
-   )}% of the supply
-   - Top 5 holders control ${(top5HoldersPercent * 100).toFixed(2)}%
-   - Top 10 holders control ${(top10HoldersPercent * 100).toFixed(2)}%
-   - Top 20 holders control ${(top20HoldersPercent * 100).toFixed(2)}%
+   - The largest single holder controls ${largestHolder}% of the supply
+   - Top 5 holders control ${top5HoldersPercent}%
+   - Top 10 holders control ${top10HoldersPercent}%
+   - Top 20 holders control ${top20HoldersPercent}%
 
 2. Debt & Collateral Distribution:
    - ${(totalDebtPercent * 100).toFixed(
@@ -111,10 +151,10 @@ export async function getTokenPageTopHolders(
    )}% is distributed among smaller holders
 
 4. Key Metrics:
-   - Average top 10 holder owns ${(avgTop10Holding * 100).toFixed(2)}%
-   - Ratio of collateral to debt tokens: ${(
+   - Average top 10 holder owns ${avgTop10Holding}%
+   - Ratio of collateral to debt tokens: ${
      totalCollateralPercent / (totalDebtPercent || 1)
-   ).toFixed(2)}x
+   }x
    
 Discuss only the notable metrics unless asked for further details.`,
       body: {
@@ -134,7 +174,7 @@ Discuss only the notable metrics unless asked for further details.`,
       },
     };
   } catch (error) {
-    console.error(error);
+    console.error("Error in getTokenPageTopHolders:", error);
     return {
       message: `Error getting top holders: ${error}`,
     };
