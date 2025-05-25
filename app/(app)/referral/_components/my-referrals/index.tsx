@@ -13,13 +13,19 @@ const MyReferrals: React.FC = () => {
 
 
     const results: RefListItemProps[] = myRefUsers?.map((item, index) => {
+        const date = new Date(item.createdAt);
+        const hours = date.getHours().toString().padStart(2, '0');
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = date.toLocaleString('en-US', { month: 'short' });
+        const year = date.getFullYear();
         return {
             index: index,
             key: index,
             avatar: item.avatar,
             username: item.username,
             point: item.totalReferralPointEarned,
-            date: item.createdAt
+            date: `${hours}:${minutes} ${day}-${month}-${year}`
         }
     })
 
