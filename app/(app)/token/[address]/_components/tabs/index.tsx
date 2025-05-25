@@ -6,14 +6,8 @@ import { Tabs, TabsTrigger, TabsContent } from "@/components/ui";
 import DraggableTabsList from "./draggable-tabs-list";
 
 import TopHolders from "./top-holders";
-// import TopTraders from './top-traders';
-// import BubbleMap from './bubble-map';
-
-// import TokenMarkets from './markets'
-// import TokenUsersOverTime from './users-over-time'
 import MarketStats from "./market-stats";
 import { CardanoTokenDetail } from "@/services/dexhunter/types";
-import Image from "next/image";
 import TradeHistory from "./trade-history";
 
 interface Props {
@@ -54,7 +48,10 @@ const TokenDashboardTabs: React.FC<Props> = ({
       >
         <div className="flex gap-4">
           <div className="flex items-center gap-1 px-4 py-1 bg-bg-tab rounded-md">
-            <Image src="/icons/red-dot.svg" alt="Live" width={6} height={6} />
+          <span className="relative flex h-2 w-2">
+              <span className="animate-[ping_3s_ease-in-out_infinite] absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 border-2 border-red-500"></span>
+            </span>
             <span className="text-xs">Live</span>
           </div>
           <DraggableTabsList

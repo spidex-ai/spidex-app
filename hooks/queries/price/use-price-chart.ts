@@ -134,7 +134,7 @@ export const usePriceChartCore = (
         setData(data);
       }
     } catch (error) {
-      console.error(error);
+      throw error;
     }
   }
   return { data, isLoading, error, fetchDataChart, refetchDataChart };

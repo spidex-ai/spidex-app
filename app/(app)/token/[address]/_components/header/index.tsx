@@ -34,7 +34,7 @@ const Header: React.FC<Props> = ({
   return (
     <div className="grid grid-cols-10 gap-4">
       <div className="col-span-6 flex items-center">
-        <div className="flex items-center gap-2 mt-1">
+        <div className="flex items-center gap-2 mt-1 w-full">
           {data?.logo && (
             <img
               src={getLogoUrl(data.logo)}
@@ -54,7 +54,9 @@ const Header: React.FC<Props> = ({
             </div>
           </div>
           <SaveToken address={data?.unit ?? ""} />
+          <div className="flex-1">
           {isSearch && <SearchBar isTitle={false} />}
+          </div>
         </div>
       </div>
       <div className="col-span-4">

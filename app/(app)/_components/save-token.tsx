@@ -10,6 +10,8 @@ import { useSaveToken } from '@/hooks'
 
 import { cn } from '@/lib/utils'
 
+import { toast } from 'react-hot-toast'
+
 interface Props {
     address: string
     className?: string
@@ -25,6 +27,30 @@ const SaveToken: React.FC<Props> = ({ address, className }) => {
         )
     }
 
+    const removeSaveToken = async () => {
+        try {
+            await deleteToken();
+            const searchInput = document.querySelector('input[placeholder="Search tokens..."]') as HTMLInputElement;
+            if (searchInput) {
+                searchInput.focus();
+            }
+            toast.success("Token removed from saved tokens");
+        } catch (error) {
+            toast.error("Failed to remove token from saved tokens");
+            throw error;
+        }
+    }
+    
+    const addSaveToken = async () => {
+        try {
+            await saveToken();
+            toast.success("Token added to saved tokens");
+        } catch (error) {
+            toast.error("Failed to add token to saved tokens");
+            throw error;
+        }
+    }
+
     const handleClick = async (e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
@@ -34,13 +60,9 @@ const SaveToken: React.FC<Props> = ({ address, className }) => {
         }
 
         if (isTokenSaved) {
-            await deleteToken();
-            const searchInput = document.querySelector('input[placeholder="Search tokens..."]') as HTMLInputElement;
-            if (searchInput) {
-                searchInput.focus();
-            }
+            await removeSaveToken();
         } else {
-            await saveToken();
+            await addSaveToken();
         }
     }
 

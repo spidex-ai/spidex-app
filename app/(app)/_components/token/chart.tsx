@@ -12,6 +12,7 @@ import type { UTCTimestamp } from "lightweight-charts";
 import { CandleStickInterval } from "@/services/hellomoon/types";
 import { CardanoTokenDetail } from "@/services/dexhunter/types";
 import { QuoteType } from "../../token/[address]/_components/header/select-quote";
+import toast from "react-hot-toast";
 
 const WINDOWS = [
   {
@@ -94,6 +95,16 @@ const TokenChart: React.FC<Props> = ({ data: tokenDetail, isLoadingTokenDetail, 
     quote
   );
 
+  const onRefetchDataChart = async () => {
+    try {
+      await refetchDataChart();
+      toast.success("Data chart refreshed");
+    } catch (error) {
+      toast.error("Failed to refresh data chart");
+      throw error;
+    }
+  }
+
   useEffect(() => {
       const interval = setInterval(() => {
           refetchDataChart();
@@ -163,8 +174,31 @@ const TokenChart: React.FC<Props> = ({ data: tokenDetail, isLoadingTokenDetail, 
               {window.label}
             </Button>
           ))}
-          <div className="w-4 h-4 cursor-pointer" onClick={() => refetchDataChart()}>
+              <div 
+            className="w-4 h-4 cursor-pointer" 
+            onClick={onRefetchDataChart}
+            style={{
+              animation: 'none'
+            }}
+            onMouseDown={(e) => {
+              const target = e.currentTarget;
+              target.style.animation = 'smooth-spin 1s ease-in-out';
+              setTimeout(() => {
+                target.style.animation = 'none';
+              }, 1500);
+            }}
+          >
             <img src="/icons/reload.svg" alt="reload" className="w-4 h-4" />
+            <style jsx>{`
+              @keyframes smooth-spin {
+                0% {
+                  transform: rotate(0deg);
+                }
+                100% {
+                  transform: rotate(360deg);
+                }
+              }
+            `}</style>
           </div>
         </div>
       </div>
