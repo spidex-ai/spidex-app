@@ -86,7 +86,7 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
 
   const [outputAmount, setOutputAmount] = useState<string>("");
   const [outputToken, setOutputToken] = useState<CardanoTokenDetail | null>(
-    initialOutputToken
+    initialOutputToken || adaTokenDetail
   );
 
   const [isQuoteLoading, setIsQuoteLoading] = useState<boolean>(false);
@@ -139,15 +139,28 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
     setIsSwapping(true);
     try {
       const api = await (window as any).cardano[enabledWallet as any].enable();
-      const usedAddresses = await api.getUsedAddresses(); 
+      const utxos = await api?.getUtxos();
+
+      if (!utxos || utxos.length === 0) {
+        console.error("No UTxOs available to spend.");
+        return;
+      }
+
+      const usedAddressesHex = await api.getUsedAddresses();
+      console.log("usedAddressesHex", usedAddressesHex);
       const addresses = [];
-      for (const address of usedAddresses) {
-        addresses.push(decodeHexAddress(address));
+      for (const address of usedAddressesHex) {
+        const unusedAddresses = decodeHexAddress(address);
+        addresses.push(unusedAddresses);
       }
       const payload: SwapPayload = {
         addresses: addresses,
-        tokenIn: inputToken?.token_id || " ",
-        tokenOut: outputToken?.token_id || " ",
+        tokenIn: inputToken?.unit
+        ? inputToken?.unit
+        : inputToken?.token_id || " ",
+      tokenOut: outputToken?.unit
+        ? outputToken?.unit
+        : outputToken?.token_id || " ",
         slippage: 5,
         amountIn: Number(inputAmount),
         txOptimization: true,
@@ -204,8 +217,8 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       const poolStats = await getSwapPoolStats(
-        inputToken?.token_id || inputToken?.unit || "",
-        outputToken?.token_id || outputToken?.unit || ""
+         inputToken?.unit ? inputToken?.unit : inputToken?.token_id || "",
+        outputToken?.unit ? outputToken?.unit : outputToken?.token_id || ""
       );
     
       if (poolStats) {
@@ -257,7 +270,7 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
   }, [inputToken, outputToken, inputAmount]);
 
   return (
-    <div className="flex flex-col gap-4 w-96 max-w-full relative">
+    <div className="flex flex-col gap-4 w-[26rem] max-w-full relative">
         <div className="absolute top-0 right-0 cursor-pointer" onClick={onCancel}>
             <Image src="/icons/close-blink.svg" alt="swap-bg" width={15} height={15} />
         </div>

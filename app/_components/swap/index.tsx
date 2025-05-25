@@ -178,6 +178,7 @@ const Swap: React.FC<Props> = ({
       toast.success("You have swapped successfully!");
     } catch (error) {
       onError?.(error instanceof Error ? error.message : "Unknown error");
+      toast.error('You have swapped failed! Please try again later!')
     } finally {
       setIsSwapping(false);
     }

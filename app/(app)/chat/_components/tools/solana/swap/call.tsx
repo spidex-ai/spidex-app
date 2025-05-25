@@ -18,6 +18,7 @@ interface Props {
 }
 
 const SwapCallBody: React.FC<Props> = ({ toolCallId, args }) => {
+console.log("🚀 ~ args:", args)
 
     const { addToolResult } = useChat();
 
