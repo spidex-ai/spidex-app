@@ -85,13 +85,9 @@ const PointInformationWrapper = () => {
               width={10}
               height={9}
             />
-            <div className="text-text-gray text-xs">What is SILK?</div>
-            <Image
-              src="/icons/warning-gray.svg"
-              alt="gift"
-              width={10}
-              height={9}
-            />
+            <div className="text-text-gray text-xs cursor-pointer" onClick={() => {
+              window.open("https://spidex-ai.gitbook.io/spidex-ai-docs/silk-score-system/silk-score-system", "_blank");
+            }}>What is SILK?</div>
           </div>
         </div>
 

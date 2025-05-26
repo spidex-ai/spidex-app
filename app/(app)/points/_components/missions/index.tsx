@@ -30,8 +30,8 @@ const Missions = () => {
   );
   const [expandedMissions, setExpandedMissions] = React.useState<number[]>([]);
 
-  const [isReminderModalOpen, setIsReminderModalOpen] = React.useState<boolean>(false); 
-
+  const [isReminderModalOpen, setIsReminderModalOpen] =
+    React.useState<boolean>(false);
 
   if (loading) {
     return <Skeleton className="w-full h-[100px]" />;
@@ -150,7 +150,6 @@ const Missions = () => {
     }
     setLoadingMissionId(result.id);
     try {
-  
       let data = null;
       switch (result.type) {
         case 0:
@@ -166,13 +165,13 @@ const Missions = () => {
         default:
           break;
       }
- 
-      toast.success('You have completed the mission!')
+
+      toast.success("You have completed the mission!");
       return data;
     } catch (error) {
       console.error("🚀 ~ handleFinish ~ error:", error);
 
-      toast.error('You have failed the mission! Please try again.')
+      toast.error("You have failed the mission! Please try again.");
     } finally {
       setLoadingMissionId(null);
       fetchQuests();
@@ -190,7 +189,10 @@ const Missions = () => {
           ? results.map((result) => (
               <div className="bg-bg-main rounded-lg p-4" key={result.id}>
                 <div className={`grid grid-cols-3 `}>
-                  <div className="col-span-1 flex gap-2 items-center cursor-pointer"  onClick={() => toggleDescription(result.id)}>
+                  <div
+                    className="col-span-1 flex gap-2 items-center cursor-pointer"
+                    onClick={() => toggleDescription(result.id)}
+                  >
                     <div className="">
                       <Image
                         src="/icons/arrow-right.svg"
@@ -207,7 +209,9 @@ const Missions = () => {
                     <div className="w-full">
                       <div className="flex items-center gap-2">
                         <div className="flex items-center">{result.icon}</div>
-                        <div className="text-white text-lg">{result.name}</div>{" "}
+                        <div className="text-white text-lg">
+                          {result.name}
+                        </div>{" "}
                       </div>
                     </div>
                   </div>
@@ -225,7 +229,7 @@ const Missions = () => {
                   </div>
                   <div className="col-span-1 text-white flex items-start justify-end">
                     <div>
-                      {(result.type === 20 || result.type === 32 || result.type === 41) ? null : result.status == 1 ? (
+                      {result.status == 1 ? (
                         <div>
                           <GradientSecondaryBtn
                             className="px-7 py-2"
@@ -234,7 +238,9 @@ const Missions = () => {
                             Completed
                           </GradientSecondaryBtn>
                         </div>
-                      ) : (
+                      ) : result.type === 20 ||
+                        result.type === 32 ||
+                        result.type === 41 ? null : (
                         <div>
                           <ButtonBlack
                             onClick={() => handleFinish(result)}
@@ -264,7 +270,6 @@ const Missions = () => {
                   <div className="px-5 py-2 w-full text-text-gray">
                     {result.description}
                   </div>
-                  
                 </div>
               </div>
             ))
