@@ -162,13 +162,10 @@ const PointInformationWrapper = () => {
               width={10}
               height={9}
             />
-            <div className="text-text-gray text-xs">Transactions</div>
-            <Image
-              src="/icons/warning-gray.svg"
-              alt="gift"
-              width={10}
-              height={9}
-            />
+            <div className="text-text-gray text-xs cursor-pointer" onClick={() => {
+              window.open("https://cardanoscan.io", "_blank");
+            }}>Transactions</div>
+       
           </div>
         </div>
 

@@ -144,7 +144,7 @@ const Missions = () => {
   };
 
   const handleFinish = async (result: MissionItem) => {
-    if (!auth?.user?.xUsername) {
+    if (!auth?.user?.xUsername && (result.type === 0 || result.type === 3)) {
       setIsReminderModalOpen(true);
       return;
     }
