@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Card } from "@/components/ui";
+import { Card, Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui";
 
 // import type { TrendingToken } from '@/services/birdeye/types'
 import Link from "next/link";
@@ -26,34 +26,42 @@ const TrendingTokenCard: React.FC<Props> = ({ token, title = "Market Cap" }) => 
   });
   return (
     <Link href={`/token/${token.unit}`}>
-      <Card className="flex flex-col gap-2 p-2 justify-between hover:border-brand-600 dark:hover:border-brand-600 transition-all duration-300 cursor-pointer h-full">
-        <div className="flex flex-row items-center justify-between">
-          <div className="flex flex-row items-center gap-2">
-            {token.logo ? (
-              <img
-                src={getLogoUrl(token.logo)}
-                alt={token.ticker}
-                className="size-8 rounded-full"
-              />
-            ) : (
-              <img
-                src={"/icons/logo.svg"}
-                alt={token.ticker}
-                className="size-8 rounded-full"
-              />
-            )}
-            <div className="flex flex-col">
-              <p className="text-sm font-bold">
+      <Card className="flex flex-col gap-2 p-2 justify-between hover:border-brand-600 dark:hover:border-brand-600 transition-all duration-300 cursor-pointer h-full">        <div className="flex flex-row gap-2 justify-between">
+        <div className="flex flex-row items-center gap-2 flex-1 min-w-0">
+          {token.logo ? (
+            <img
+              src={getLogoUrl(token.logo)}
+              alt={token.ticker}
+              className="size-8 rounded-full flex-shrink-0"
+            />
+          ) : (
+            <img
+              src={"/icons/logo.svg"}
+              alt={token.ticker}
+              className="size-8 rounded-full flex-shrink-0"
+            />
+          )}
+          <div className="flex flex-col min-w-0 flex-1">
+            <Tooltip delayDuration={0}>
+              <TooltipTrigger asChild>
+                <p className="text-sm font-bold truncate cursor-help">
+                  {token.name} ({token.ticker})
+                </p>
+              </TooltipTrigger>
+              <TooltipContent>
                 {token.name} ({token.ticker})
-              </p>
-              <p className="text-xs text-muted-foreground">
-                $
-                {usdPrice}
-              </p>
-            </div>
+              </TooltipContent>
+            </Tooltip>
+            <p className="text-xs text-muted-foreground">
+              $
+              {usdPrice}
+            </p>
           </div>
+        </div>
+        <div className="flex-shrink-0 self-start">
           <SaveToken address={token.unit} />
         </div>
+      </div>
         <div className="flex flex-col">
           <p className="text-xs text-muted-foreground">
             {title}: $
