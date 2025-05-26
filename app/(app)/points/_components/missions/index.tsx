@@ -225,7 +225,7 @@ const Missions = () => {
                   </div>
                   <div className="col-span-1 text-white flex items-start justify-end">
                     <div>
-                      {result.type === 20 ? null : result.status == 1 ? (
+                      {(result.type === 20 || result.type === 32 || result.type === 41) ? null : result.status == 1 ? (
                         <div>
                           <GradientSecondaryBtn
                             className="px-7 py-2"
