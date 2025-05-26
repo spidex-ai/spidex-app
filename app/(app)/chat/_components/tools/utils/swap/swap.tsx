@@ -8,7 +8,6 @@ import { ChevronDown } from "lucide-react";
 
 import { Button, GradientButton, Separator } from "@/components/ui";
 
-
 import TokenInput from "./token-input";
 
 import { useTokenBalance } from "@/hooks";
@@ -68,14 +67,14 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
   onError,
   onCancel,
 }) => {
-
   const {
     getSwapPoolStats,
     estimateSwap,
     buildSwapRequest,
     submitSwapRequest,
   } = useSpidexCoreContext();
-  const { enabledWallet, unusedAddresses, accountBalance, stakeAddress } = useCardano();
+  const { enabledWallet, unusedAddresses, accountBalance, stakeAddress } =
+    useCardano();
 
   const [inputAmount, setInputAmount] = useState<string>(
     initialInputAmount || ""
@@ -102,27 +101,35 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
     useState<EsitmateSwapResponse>();
 
   const { balance: inputBalance, isLoading: inputBalanceLoading } =
-    useTokenBalance(
-      stakeAddress || "",
-      inputToken?.unit || ""
-    );
+    useTokenBalance(stakeAddress || "", inputToken?.unit || "");
 
   const tokenInputBalance =
     inputToken?.ticker === "ADA" ? accountBalance : inputBalance;
 
-    const isInsufficientBalance = useMemo(() => {
-      if (Number(inputAmount) > Number(tokenInputBalance)) return true;
-      if (Number(accountBalance) < 5) return true;
-      if (inputToken?.ticker === "ADA") {
-        const totalDepositADA = Number(inputAmount) +
+  const isInsufficientBalance = useMemo(() => {
+
+    if (Number(inputAmount) > Number(tokenInputBalance)) return true;
+    if (Number(accountBalance) < 5) return true;
+    if (inputToken?.ticker === "ADA") {
+      const totalDepositADA =
+        Number(inputAmount) +
         Number(estimatedPoints?.deposits) +
         Number(estimatedPoints?.batcher_fee) +
-        Number(estimatedPoints?.partner_fee)
-  
-        if (Number(accountBalance) < totalDepositADA) return true;
-      };
-      return false;
-    }, [inputAmount, tokenInputBalance, accountBalance, inputToken, estimatedPoints]);
+        Number(estimatedPoints?.partner_fee);
+
+
+      if (Number(accountBalance) < totalDepositADA + 5) return true;
+    }
+    return false;
+  }, [
+    inputAmount,
+    tokenInputBalance,
+    accountBalance,
+    inputToken,
+    estimatedPoints?.deposits,
+    estimatedPoints?.batcher_fee,
+    estimatedPoints?.partner_fee,
+  ]);
 
   const onChangeInputOutput = () => {
     const tempInputToken = inputToken;
@@ -156,11 +163,11 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
       const payload: SwapPayload = {
         addresses: addresses,
         tokenIn: inputToken?.unit
-        ? inputToken?.unit
-        : inputToken?.token_id || " ",
-      tokenOut: outputToken?.unit
-        ? outputToken?.unit
-        : outputToken?.token_id || " ",
+          ? inputToken?.unit
+          : inputToken?.token_id || " ",
+        tokenOut: outputToken?.unit
+          ? outputToken?.unit
+          : outputToken?.token_id || " ",
         slippage: 5,
         amountIn: Number(inputAmount),
         txOptimization: true,
@@ -176,10 +183,10 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
 
       const submitTx = await api?.submitTx(submitSwap?.cbor);
       onSuccess?.(submitTx);
-      toast.success('You have swapped successfully!')
+      toast.success("You have swapped successfully!");
     } catch (error) {
       onError?.(error instanceof Error ? error.message : "Unknown error");
-      toast.error('You have swapped failed! Please try again later!')
+      toast.error("You have swapped failed! Please try again later!");
     } finally {
       setIsSwapping(false);
     }
@@ -206,7 +213,6 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
         setIsNotPool(true);
         return "0";
       }
- 
     } catch (error) {
       console.error("error:::", error);
     }
@@ -217,10 +223,10 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       const poolStats = await getSwapPoolStats(
-         inputToken?.unit ? inputToken?.unit : inputToken?.token_id || "",
+        inputToken?.unit ? inputToken?.unit : inputToken?.token_id || "",
         outputToken?.unit ? outputToken?.unit : outputToken?.token_id || ""
       );
-    
+
       if (poolStats) {
         setIsNotPool(false);
       } else {
@@ -234,19 +240,17 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
 
   const fetchQuoteAndUpdate = async () => {
     try {
-        setIsQuoteLoading(true);
-        setOutputAmount("");
-    
-        const quote = await getQuoteCardano(
-          inputToken?.unit || inputToken?.token_id || "",
-          outputToken?.unit || outputToken?.token_id || "",
-          Number(inputAmount)
-        );
-        setQuoteResponse(quote);
-        setOutputAmount(quote);
-        setIsQuoteLoading(false);
-      
-      
+      setIsQuoteLoading(true);
+      setOutputAmount("");
+
+      const quote = await getQuoteCardano(
+        inputToken?.unit || inputToken?.token_id || "",
+        outputToken?.unit || outputToken?.token_id || "",
+        Number(inputAmount)
+      );
+      setQuoteResponse(quote);
+      setOutputAmount(quote);
+      setIsQuoteLoading(false);
     } catch (error) {
       console.error("error:::", error);
     }
@@ -271,10 +275,19 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
 
   return (
     <div className="flex flex-col gap-4 w-[26rem] max-w-full relative">
-        <div className="absolute top-0 right-0 cursor-pointer" onClick={onCancel}>
-            <Image src="/icons/close-blink.svg" alt="swap-bg" width={15} height={15} />
-        </div>
-      <div className={`flex flex-col gap-2 items-center w-full ${onCancel ? "mt-6" : ""}`}>
+      <div className="absolute top-0 right-0 cursor-pointer" onClick={onCancel}>
+        <Image
+          src="/icons/close-blink.svg"
+          alt="swap-bg"
+          width={15}
+          height={15}
+        />
+      </div>
+      <div
+        className={`flex flex-col gap-2 items-center w-full ${
+          onCancel ? "mt-6" : ""
+        }`}
+      >
         <TokenInput
           label={inputLabel}
           amount={inputAmount}
@@ -284,7 +297,6 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
           }}
           token={inputToken}
           onChangeToken={(token) => {
-
             setIsNotPool(false);
             setInputToken(token);
           }}
@@ -352,11 +364,13 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
               inputAmount: inputAmount || "",
               outputAmount: estimatedPoints?.splits?.[0]?.amount_in
                 ? String(
-                    (estimatedPoints?.splits?.[0]?.expected_output ||
+                    (
+                      estimatedPoints?.splits?.[0]?.expected_output ||
                       0 / estimatedPoints?.splits?.[0]?.amount_in ||
-                      0).toLocaleString(undefined, {
-                    maximumFractionDigits: 4,
-                  })
+                      0
+                    ).toLocaleString(undefined, {
+                      maximumFractionDigits: 4,
+                    })
                   )
                 : "",
               swapRoute: "",

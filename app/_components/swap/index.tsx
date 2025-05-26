@@ -117,7 +117,7 @@ const Swap: React.FC<Props> = ({
       Number(estimatedPoints?.batcher_fee) +
       Number(estimatedPoints?.partner_fee)
 
-      if (Number(accountBalance) < totalDepositADA) return true;
+      if (Number(accountBalance) < totalDepositADA + 5) return true;
     };
     return false;
   }, [inputAmount, tokenInputBalance, accountBalance, inputToken, estimatedPoints]);
