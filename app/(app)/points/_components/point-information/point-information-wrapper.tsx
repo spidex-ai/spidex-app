@@ -126,7 +126,7 @@ const PointInformationWrapper = () => {
                 <Tooltip delayDuration={0}>
                   <TooltipTrigger asChild>
                     <Image
-                      src="/icons/copy-gray.svg"
+                      src={`/icons/${copied ? "tick-blue.svg" : "copy-gray.svg"}`}
                       alt="copy"
                       width={15}
                       height={15}

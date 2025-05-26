@@ -6,6 +6,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 
 import { cn } from '@/lib/utils';
 import { truncateAddress } from '@/lib/wallet';
+import Image from 'next/image';
 
 interface Props {
     address: string;
@@ -25,11 +26,19 @@ const Address: React.FC<Props> = ({ address, className }) => {
         <TooltipProvider>
             <Tooltip>
                 <TooltipTrigger asChild>
-                    <p 
-                        className={cn("text-sm text-muted-foreground cursor-pointer hover:bg-neutral-200 dark:hover:bg-neutral-700 rounded-md w-fit px-1", className)}
+                    <p
+                        className={cn("text-sm cursor-pointer hover:bg-neutral-200 flex gap-2 items-center dark:hover:bg-neutral-700 rounded-md w-fit px-1",
+                            copied ? "text-green-600" : "text-muted-foreground",
+                            className)}
                         onClick={handleCopy}
                     >
                         {address === 'lovelace' ? 'lovelace' : truncateAddress(address)}
+                        <Image
+                            src={`/icons/${copied ? "tick-blue.svg" : "copy-gray.svg"}`}
+                            alt="copy"
+                            width={15}
+                            height={15}
+                        />
                     </p>
                 </TooltipTrigger>
                 <TooltipContent side="bottom">

@@ -38,7 +38,7 @@ const AgentClub: React.FC = () => {
     <div className="p-8 border border-border-main rounded-lg bg-bg-secondary">
       <div className="flex gap-8">
         <div>
-        {auth?.avatar ? (
+          {auth?.avatar ? (
             <img
               src={auth?.avatar}
               alt="agent-club"
@@ -94,7 +94,7 @@ const AgentClub: React.FC = () => {
                   <Tooltip delayDuration={0}>
                     <TooltipTrigger asChild>
                       <Image
-                        src="/icons/copy-gray.svg"
+                        src={`/icons/${copied ? "tick-blue.svg" : "copy-gray.svg"}`}
                         alt="copy"
                         width={24}
                         height={24}

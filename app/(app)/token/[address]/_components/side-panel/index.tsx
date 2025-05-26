@@ -21,13 +21,13 @@ interface Props {
     isLoadingTokenDetail: boolean;
 }
 
-const SidePanel: React.FC<Props> =  ({ data: tokenDetail, isLoadingTokenDetail }) => {
+const SidePanel: React.FC<Props> = ({ data: tokenDetail, isLoadingTokenDetail }) => {
     const searchParams = useSearchParams();
 
-    if(isLoadingTokenDetail) {
+    if (isLoadingTokenDetail) {
         return <Skeleton className="h-[100px] w-full" />
     }
-    
+
     const tokenChatData: TokenChatData = {
         address: tokenDetail?.unit ?? '',
         name: tokenDetail?.name ?? '',
@@ -47,14 +47,14 @@ const SidePanel: React.FC<Props> =  ({ data: tokenDetail, isLoadingTokenDetail }
     return (
         <Tabs className="h-full flex flex-col items-start w-full max-w-full" defaultValue={isTradeTab ? 'trade' : 'chat'}>
             <TabsList className="p-0 h-[44px] justify-start bg-neutral-100 dark:bg-bg-secondary w-full max-w-full overflow-x-auto rounded-none no-scrollbar">
-                <TabsTriggerGradient 
+                <TabsTriggerGradient
                     value="chat"
                     className="h-full"
                 >
                     <MessageSquare className="w-4 h-4" />
                     Chat
                 </TabsTriggerGradient>
-                <TabsTriggerGradient 
+                <TabsTriggerGradient
                     value="trade"
                     className="h-full"
                 >
@@ -62,22 +62,22 @@ const SidePanel: React.FC<Props> =  ({ data: tokenDetail, isLoadingTokenDetail }
                     Trade
                 </TabsTriggerGradient>
             </TabsList>
-            <div className="flex-1 h-0 overflow-y-auto w-full no-scrollbar">
-                <TabsContent value="chat" className="h-full m-0 p-2">
-                    <ChatProvider token={tokenChatData}>
+            <ChatProvider token={tokenChatData}>
+                <div className="flex-1 h-0 overflow-y-auto w-full no-scrollbar">
+                    <TabsContent value="chat" className="h-full m-0 p-2">
                         <Chat token={tokenChatData} />
-                    </ChatProvider>
-                </TabsContent>
-                <TabsContent value="trade" className="h-full m-0 p-2">
-                    <Swap 
-                        initialInputToken={adaTokenDetail}
-                        initialOutputToken={tokenDetail}
-                        inputLabel="Sell"
-                        outputLabel="Buy"
-                        className="w-full"
-                    />
-                </TabsContent>
-            </div>
+                    </TabsContent>
+                    <TabsContent value="trade" className="h-full m-0 p-2">
+                        <Swap
+                            initialInputToken={adaTokenDetail}
+                            initialOutputToken={tokenDetail}
+                            inputLabel="Sell"
+                            outputLabel="Buy"
+                            className="w-full"
+                        />
+                    </TabsContent>
+                </div>
+            </ChatProvider>
         </Tabs>
     )
 }

@@ -29,10 +29,10 @@ const TopHolders: React.FC<Props> = ({ tokenId }) => {
   // return <div>Nodata available</div>
 
   return (
-    <div className="relative h-[calc(100vh-700px)]">
+    <div className="relative h-full">
       <div className="overflow-auto h-full">
         <Table>
-          <TableHeader>
+          <TableHeader className="sticky top-0 bg-background z-10">
             <TableRow className="bg-bg-tab">
               <TableHead className="w-16 pl-4">Address</TableHead>
               <TableHead className="text-center w-1/3">% Ownership</TableHead>

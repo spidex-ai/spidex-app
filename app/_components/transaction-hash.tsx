@@ -11,6 +11,7 @@ import { Button, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from
 import { cn } from '@/lib/utils';
 
 import { truncateAddress } from '@/lib/wallet';
+import Image from 'next/image';
 
 interface Props {
     hash: string;
@@ -39,11 +40,18 @@ const TransactionHash: React.FC<Props> = ({ hash, className, hideTransactionText
             <TooltipProvider>
                 <Tooltip delayDuration={0}>
                     <TooltipTrigger asChild>
-                        <p 
-                            className={cn("text-sm cursor-pointer text-brand-600 hover:bg-neutral-200 dark:hover:bg-neutral-700 rounded-md w-fit px-1", className)}
+                        <p
+                            className={cn("text-sm cursor-pointer hover:bg-neutral-200 flex gap-2 items-center dark:hover:bg-neutral-700 rounded-md w-fit px-1",
+                                copied ? "text-green-600" : "text-brand-600", className)}
                             onClick={handleCopy}
                         >
                             {truncateAddress(hash)}
+                            <Image
+                                src={`/icons/${copied ? "tick-blue.svg" : "copy-gray.svg"}`}
+                                alt="copy"
+                                width={15}
+                                height={15}
+                            />
                         </p>
                     </TooltipTrigger>
                     <TooltipContent side="bottom" className="p-2">

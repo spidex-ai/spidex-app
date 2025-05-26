@@ -37,16 +37,16 @@ const TokenDashboardTabs: React.FC<Props> = ({
   useEffect(() => {
     scrollToTab(activeTab);
   }, [activeTab]);
-
   return (
-    <div className="p-2">
+    <div className="p-2 h-full flex flex-col">
       <Tabs
         className="h-full flex flex-col items-start w-full max-w-full"
         defaultValue="market-stats"
         value={activeTab}
         onValueChange={setActiveTab}
       >
-        <div className="flex gap-4">
+        {/* Fixed header section */}
+        <div className="flex gap-4 sticky top-0 z-10 bg-white dark:bg-gray-900 pb-2">
           <div className="flex items-center gap-1 px-4 py-1 bg-bg-tab rounded-md">
           <span className="relative flex h-2 w-2">
               <span className="animate-[ping_3s_ease-in-out_infinite] absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
@@ -88,22 +88,24 @@ const TokenDashboardTabs: React.FC<Props> = ({
             </TabsTrigger>
           </DraggableTabsList>
         </div>
-        <div className="flex-1 w-full no-scrollbar mt-1">
-          <TabsContent value="market-stats" className="h-full m-0 p-2">
+        
+        {/* Scrollable content section */}
+        <div className="flex-1 w-full mt-1 overflow-hidden">
+          <TabsContent value="market-stats" className="h-full m-0 p-2 overflow-y-auto">
             <MarketStats
               tokenId={data?.unit}
               tokenName={data?.ticker}
               isLoadingTokenDetail={isLoadingTokenDetail}
             />
           </TabsContent>
-          <TabsContent value="holders" className="h-full m-0">
+          <TabsContent value="holders" className="h-full m-0 overflow-y-auto">
             <TradeHistory
               tokenId={data?.unit || ""}
               ticker={data?.ticker || ""}
             />
           </TabsContent>
 
-          <TabsContent value="bubble" className="h-full m-0">
+          <TabsContent value="bubble" className="h-full m-0 overflow-y-auto">
             <TopHolders tokenId={data?.unit || ""} />
           </TabsContent>
         </div>
