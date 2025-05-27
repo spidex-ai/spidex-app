@@ -5,6 +5,7 @@ import React from "react";
 import Image from "next/image";
 
 import { PointHistory } from "@/hooks/point/type";
+import { formatSILK } from "@/app/utils/format";
 
 interface HistoryItem {
   task: string;
@@ -16,7 +17,6 @@ interface HistoryItem {
 const Hisotry = () => {
   const { pointHistory, loading, error } = usePointHistory();
 
-
   if (loading) {
     return <Skeleton className="w-full h-[100px]" />;
   }
@@ -25,22 +25,23 @@ const Hisotry = () => {
     return <div>Error: {error}</div>;
   }
 
-  const results: HistoryItem[] = pointHistory.length > 0 ? pointHistory.map(
-    (item: PointHistory, index: number) => {
-      const date = new Date(item.createdAt);
-      const hours = date.getHours().toString().padStart(2, '0');
-      const minutes = date.getMinutes().toString().padStart(2, '0');
-      const day = date.getDate().toString().padStart(2, '0');
-      const month = date.toLocaleString('en-US', { month: 'short' });
-      const year = date.getFullYear();
-      return {
-        task: item.questName,
-        point: item.amount,
-        createdAt: `${hours}:${minutes} ${day}-${month}-${year}`,
-        isBorderBottom: index !== pointHistory.length - 1,
-      };
-    }
-  ) : [];
+  const results: HistoryItem[] =
+    pointHistory.length > 0
+      ? pointHistory.map((item: PointHistory, index: number) => {
+          const date = new Date(item.createdAt);
+          const hours = date.getHours().toString().padStart(2, "0");
+          const minutes = date.getMinutes().toString().padStart(2, "0");
+          const day = date.getDate().toString().padStart(2, "0");
+          const month = date.toLocaleString("en-US", { month: "short" });
+          const year = date.getFullYear();
+          return {
+            task: item.questName,
+            point: item.amount,
+            createdAt: `${hours}:${minutes} ${day}-${month}-${year}`,
+            isBorderBottom: index !== pointHistory.length - 1,
+          };
+        })
+      : [];
   return (
     <div className="border border-border-main rounded-lg bg-bg-secondary p-10">
       <div className="">
@@ -57,36 +58,38 @@ const Hisotry = () => {
           </div>
         </div>
         <div>
-          {results.length > 0 ? results.map((result) => (
-            <div
-              key={result.task}
-              className={`grid grid-cols-3 text-sm ${
-                result.isBorderBottom
-                  ? "border-b border-border-main py-6"
-                  : "pt-6"
-              }`}
-            >
-              <div className="col-span-1 flex items-center gap-2">
-                <div>+{Number(result.point).toLocaleString(undefined, {
-                  maximumFractionDigits: 2,
-                })}</div>
-                <div>
-                  <Image 
-                    src="/icons/logo-gray.svg"
-                    alt="arrow-right"
-                    width={24}
-                    height={24}
-                  />
+          {results.length > 0 ? (
+            results.map((result) => (
+              <div
+                key={result.task}
+                className={`grid grid-cols-3 text-sm ${
+                  result.isBorderBottom
+                    ? "border-b border-border-main py-6"
+                    : "pt-6"
+                }`}
+              >
+                <div className="col-span-1 flex items-center gap-2">
+                  <div>+ {formatSILK(result.point)}</div>
+                  <div>
+                    <Image
+                      src="/icons/logo-gray.svg"
+                      alt="arrow-right"
+                      width={24}
+                      height={24}
+                    />
+                  </div>
+                </div>
+                <div className="col-span-1 text-white flex items-center justify-center gap-1">
+                  <div>{result.task}</div>
+                </div>
+                <div className="col-span-1 text-white flex items-center justify-center">
+                  <div>{result.createdAt}</div>
                 </div>
               </div>
-              <div className="col-span-1 text-white flex items-center justify-center gap-1">
-                <div>{result.task}</div>
-              </div>
-              <div className="col-span-1 text-white flex items-center justify-center">
-                <div>{result.createdAt}</div>
-              </div>
-            </div>
-          )) : <div className="text-center text-text-gray mt-8">No data.</div>}
+            ))
+          ) : (
+            <div className="text-center text-text-gray mt-8">No data.</div>
+          )}
         </div>
       </div>
     </div>

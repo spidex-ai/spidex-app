@@ -10,6 +10,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useSpidexCoreContext } from "@/app/_contexts/spidex-core";
+import { formatSILK } from "@/app/utils/format";
 
 const AgentClub: React.FC = () => {
   const { referralInfo, loading, error } = useRefInfo();
@@ -81,7 +82,7 @@ const AgentClub: React.FC = () => {
               </div>
               <div>
                 <div>SILK Earned</div>
-                <div>{referralInfo?.referralPointEarned}</div>
+                <div>{formatSILK(referralInfo?.referralPointEarned || 0)}</div>
               </div>
             </div>
           </div>
