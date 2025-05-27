@@ -1,14 +1,17 @@
-import React from 'react'
+import React from 'react';
 
 import AgentPage from '../_components';
 
+import ProtectedClient from '@/app/components/protected-client';
 import { tradingAgent } from './_data';
 
 const TradingAgentPage: React.FC = () => {
     return (
-        <AgentPage
-            agent={tradingAgent}
-        />
+        <ProtectedClient>
+            <AgentPage
+                agent={tradingAgent}
+            />
+        </ProtectedClient>
     )
 }
 
