@@ -11,11 +11,13 @@ import {
 } from "@/components/ui/tooltip";
 import { useSpidexCoreContext } from "@/app/_contexts/spidex-core";
 import { formatSILK } from "@/app/utils/format";
+import SharePostModalWrapper from "./share-post-modal-wrapper";
 
 const AgentClub: React.FC = () => {
   const { referralInfo, loading, error } = useRefInfo();
   const { auth } = useSpidexCoreContext();
   const [copied, setCopied] = useState(false);
+  const [postModalOpen, setPostModalOpen] = useState(false);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -113,30 +115,19 @@ const AgentClub: React.FC = () => {
             <div></div>
             <div className="flex gap-4">
               <div className="flex items-center">Share to</div>
-              <div className="flex gap-4">
+              <div className="flex gap-4 cursor-pointer" onClick={() => setPostModalOpen(true)}>
                 <Image
                   src="/icons/x-white.svg"
                   alt="whatsapp"
                   width={30}
                   height={30}
                 />
-                {/* <Image
-                  src="/icons/discord-white.svg"
-                  alt="facebook"
-                  width={30}
-                  height={30}
-                />
-                <Image
-                  src="/icons/tele-white.svg"
-                  alt="telegram"
-                  width={30}
-                  height={30}
-                /> */}
               </div>
             </div>
           </div>
         </div>
       </div>
+      <SharePostModalWrapper isOpen={postModalOpen} onOpenChange={(value) => setPostModalOpen(value)} refCode={referralInfo?.referralCode || ""} />
     </div>
   );
 };
