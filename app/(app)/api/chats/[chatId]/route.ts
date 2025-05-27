@@ -92,70 +92,60 @@ export const POST = async (
 
     const chat = await getChat(chatId, userData.data.id);
 
-    const lastMessage = messages[messages.length - 1];
-    const secondLastMessage = messages[messages.length - 2];
-    console.log("🚀 ~ lastMessage:", lastMessage);
-    console.log("🚀 ~ secondLastMessage:", secondLastMessage);
-
-    if (
-      secondLastMessage.toolInvocations &&
-      secondLastMessage.toolInvocations.length > 0
-    ) {
-      const mapped = secondLastMessage.toolInvocations
-        .map((invocation: any) => {
-          const { toolName } = invocation;
-
-          let agentType: EAgentType | undefined;
-
-          if (toolName.startsWith("market")) agentType = EAgentType.MARKET;
-          else if (toolName.startsWith("knowledge"))
-            agentType = EAgentType.KNOWLEDGE;
-          else if (toolName.startsWith("wallet"))
-            agentType = EAgentType.PORTFOLIO;
-          else if (toolName.startsWith("tokenanalysis"))
-            agentType = EAgentType.TOKEN;
-          else if (toolName.startsWith("trade")) agentType = EAgentType.TRADING;
-
-          return {
-            toolName,
-            agentType,
-          };
-        })
-        .filter((item: any) => item.agentType !== undefined);
-
-      console.log("🚀 ~ mapped:", mapped);
-      const triggerAgentQuests = async () => {
-        for (const item of mapped) {
-          try {
-            const response = await fetch(
-              `${process.env.NEXT_PUBLIC_SPIDEX_CORE_API_URL}/user-quest/trigger-agent-quest?agentType=${item.agentType}`,
-              {
-                method: "PUT",
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization: `Bearer ${token}`,
-                },
-              }
-            );
-
-            if (!response.ok) {
-              console.error(
-                `Failed to trigger quest for agentType ${item.agentType}`
-              );
-            } else {
-              console.log(`Triggered quest for agentType ${item.agentType}`);
-            }
-          } catch (error) {
-            console.error(
-              `Error triggering quest for agentType ${item.agentType}:`,
-              error
-            );
+    const triggerAgentQuests = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_SPIDEX_CORE_API_URL}/user-quest/trigger-agent-quest`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
           }
-        }
-      };
+        );
 
-      triggerAgentQuests();
-    }
+        if (!response.ok) {
+          console.error(`Failed to trigger  prompt quest`);
+        } else {
+          console.log(`Triggered prompt quest`);
+        }
+      } catch (error) {
+        console.error(`Error triggering prompt quest:`, error);
+      }
+    };
+
+    triggerAgentQuests();
+
+    // if (
+    //   secondLastMessage.toolInvocations &&
+    //   secondLastMessage.toolInvocations.length > 0
+    // ) {
+    //   const mapped = secondLastMessage.toolInvocations
+    //     .map((invocation: any) => {
+    //       const { toolName } = invocation;
+
+    //       let agentType: EAgentType | undefined;
+
+    //       if (toolName.startsWith("market")) agentType = EAgentType.MARKET;
+    //       else if (toolName.startsWith("knowledge"))
+    //         agentType = EAgentType.KNOWLEDGE;
+    //       else if (toolName.startsWith("wallet"))
+    //         agentType = EAgentType.PORTFOLIO;
+    //       else if (toolName.startsWith("tokenanalysis"))
+    //         agentType = EAgentType.TOKEN;
+    //       else if (toolName.startsWith("trade")) agentType = EAgentType.TRADING;
+
+    //       return {
+    //         toolName,
+    //         agentType,
+    //       };
+    //     })
+    //     .filter((item: any) => item.agentType !== undefined);
+
+    //   console.log("🚀 ~ mapped:", mapped);
+
+    // }
 
     if (!chat) {
       return NextResponse.json(
