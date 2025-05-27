@@ -24,6 +24,9 @@ const TrendingTokenCard: React.FC<Props> = ({ token, title = "Market Cap" }) => 
   const volume = Number(token?.volume) < 0.0001 ? "~0.0001" : token?.volume?.toLocaleString(undefined, {
     maximumFractionDigits: 0,
   });
+  const price24hChg = token?.price24hChg?.toLocaleString(undefined, {
+    maximumFractionDigits: 4,
+  });
   return (
     <Link href={`/token/${token.unit}`}>
       <Card className="flex flex-col gap-2 p-2 justify-between hover:border-brand-600 dark:hover:border-brand-600 transition-all duration-300 cursor-pointer h-full">        <div className="flex flex-row gap-2 justify-between">
@@ -53,8 +56,11 @@ const TrendingTokenCard: React.FC<Props> = ({ token, title = "Market Cap" }) => 
               </TooltipContent>
             </Tooltip>
             <p className="text-xs text-muted-foreground">
-              $
-              {usdPrice}
+              <span>$
+              {usdPrice}</span> {" "}
+              <span className={`${Number(price24hChg) > 0 ? "text-green-500" : "text-red-500"}`}>
+                {`(${price24hChg && Number(price24hChg) > 0 ? `+${price24hChg}` : price24hChg}%)`}
+              </span>
             </p>
           </div>
         </div>

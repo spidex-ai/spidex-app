@@ -7,6 +7,7 @@ import { ButtonBlack, GradientSecondaryBtn } from "@/components/ui";
 import { useSpidexCoreContext } from "@/app/_contexts/spidex-core";
 import ReminderModalWrapper from "./reminder-modal-wrapper";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 interface MissionItem {
   id: number;
@@ -21,6 +22,7 @@ interface MissionItem {
 }
 
 const Missions = () => {
+  const router = useRouter();
   const { auth } = useSpidexCoreContext();
   const { quests, loading, error, fetchQuests } = useQuests();
   const { refetchPointHistory } = usePointHistory();
@@ -162,11 +164,17 @@ const Missions = () => {
         case 10:
           data = await triggerDailyLogin();
           break;
+        case 32:
+          const tokenTrade = 'c48cbb3d5e57ed56e276bc45f99ab39abe94e6cd7ac39fb402da47ad0014df105553444d'
+          router.push(`/token/${tokenTrade}?tab=trade`);
+          return;
         default:
-          break;
+          return;
       }
 
       toast.success("You have completed the mission!");
+      fetchQuests();
+      refetchPointHistory();
       return data;
     } catch (error) {
       console.error("🚀 ~ handleFinish ~ error:", error);
@@ -174,8 +182,7 @@ const Missions = () => {
       toast.error("You have failed the mission! Please try again.");
     } finally {
       setLoadingMissionId(null);
-      fetchQuests();
-      refetchPointHistory();
+ 
     }
   };
 
