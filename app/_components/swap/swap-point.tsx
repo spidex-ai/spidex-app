@@ -75,7 +75,12 @@ export default function SwapPoint({
     <div className="mt-2">
       <div className="border-border-main border rounded-lg relative">
         <div className="flex justify-between items-center gap-2 px-6 py-2 bg-bg-swap rounded-lg">
-          <div className="text-xs">Swap details</div>
+          <div className="flex items-center gap-2">
+            <div className="text-xs">Swap details</div>
+            <div className="text-xs">
+              <TextGradient>( Spidex Dex Fee = 0 )</TextGradient>
+            </div>
+          </div>
           <div className="flex items-center gap-2">
             <div className="text-[10px] text-text-gray">{`${inputAmount} ${inputToken} = ${outputAmount} ${outputToken}`}</div>
             {!isOpenSwapDetails ? (

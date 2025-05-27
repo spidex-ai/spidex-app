@@ -188,12 +188,15 @@ const Missions = () => {
         {results.length > 0
           ? results.map((result) => (
               <div className="bg-bg-main rounded-lg p-4" key={result.id}>
-                <div className={`grid grid-cols-3 `}>
+                <div className={`grid grid-cols-3 cursor-pointer`}       onClick={() => handleFinish(result)}>
                   <div
                     className="col-span-1 flex gap-2 items-center cursor-pointer"
-                    onClick={() => toggleDescription(result.id)}
+                 
                   >
-                    <div className="">
+                    <div className=""  onClick={(e) => {
+                      e.stopPropagation();
+                      toggleDescription(result.id)
+                    }}>
                       <Image
                         src="/icons/arrow-right.svg"
                         alt="arrow-down"
@@ -243,7 +246,7 @@ const Missions = () => {
                         result.type === 41 ? null : (
                         <div>
                           <ButtonBlack
-                            onClick={() => handleFinish(result)}
+                          
                             isLoading={loadingMissionId === result.id}
                             disabled={
                               (loadingMissionId !== null &&

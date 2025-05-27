@@ -7,11 +7,10 @@ import {
   deleteChat,
 } from "@/db/services";
 
-// import { privy } from "@/services/privy";
 import { generateText } from "ai";
 import { Message } from "ai";
 import { openai } from "@ai-sdk/openai";
-import { EAgentType } from "@/types/models";
+
 
 export const GET = async (
   req: NextRequest,
