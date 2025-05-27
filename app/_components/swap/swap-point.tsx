@@ -78,7 +78,7 @@ export default function SwapPoint({
           <div className="flex items-center gap-2">
             <div className="text-xs">Swap details</div>
             <div className="text-xs">
-              <TextGradient>( Spidex Dex Fee = 0 )</TextGradient>
+              <TextGradient>( Spidex AI Fee = 0 )</TextGradient>
             </div>
           </div>
           <div className="flex items-center gap-2">
