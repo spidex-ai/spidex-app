@@ -66,13 +66,13 @@ const WALLET_METHODS = [
     description: "Gero Wallet",
     link: "https://www.gerowallet.io/",
   },
-  // {
-  //   id: "lucem",
-  //   name: "Lucem",
-  //   icon: "/icons/lucem.svg",
-  //   description: "Lucem Wallet",
-  //   link: "https://chromewebstore.google.com/detail/lucem-wallet/mkbnofdoodemclcbcjpgpcdccjhaledi",
-  // },
+  {
+    id: "subwallet",
+    name: "Sub Wallet",
+    icon: "/icons/subwallet.svg",
+    description: "Sub Wallet",
+    link: "https://www.subwallet.app/download.html?lang=1",
+  },
   {
     id: "begin",
     name: "Begin",
@@ -137,6 +137,7 @@ const LoginModal: React.FC = () => {
   const processedCodeRef = useRef<string | null>(null);
   const params = useSearchParams();
   const [isClient, setIsClient] = useState(false);
+  const [isPrivacyAccepted, setIsPrivacyAccepted] = useState(false);
 
   // Custom hooks
   const { signMessage: signMessageSpidex, getNounce } = useSpidexCoreContext();
@@ -221,8 +222,11 @@ const LoginModal: React.FC = () => {
       (error: Error) => onWalletConnectError(error)
     );
   };
-
   const handleCheckReferral = (method: string) => {
+    if (!isPrivacyAccepted) {
+      toast.error("Please accept the Privacy Policy and Terms of Use to continue");
+      return;
+    }
     setMethod(method);
     if (params.get("ref")) {
       setIsReferralModalOpen(true);
@@ -427,17 +431,16 @@ const LoginModal: React.FC = () => {
       }
     });
   };
-
   // Render wallet option
   const renderWalletOption = (method: (typeof WALLET_METHODS)[0]) => {
     const isThisWalletConnecting = walletConnecting === method.id;
-    const isDisabled = anyConnectionInProgress && !isThisWalletConnecting;
+    const isDisabled = anyConnectionInProgress && !isThisWalletConnecting || !isPrivacyAccepted;
 
     return (
       <div
         key={method.id}
         className={cn(
-          "p-2 rounded-md  text-white",
+          "p-2 py-1 rounded-md  text-white  bg-bg-secondary",
           isThisWalletConnecting ? "bg-blue-50" : "border-gray-200",
           isDisabled
             ? "cursor-not-allowed opacity-50"
@@ -470,12 +473,11 @@ const LoginModal: React.FC = () => {
       </div>
     );
   };
-
   // Render social login option
   const renderSocialOption = (method: (typeof SOCIAL_METHODS)[0]) => {
     // const handleClick =
     //   method.id === "google" ? handleConnectGoogle : handleConnectX;
-    const isDisabled = anyConnectionInProgress && walletConnecting !== null;
+    const isDisabled = anyConnectionInProgress && walletConnecting !== null || !isPrivacyAccepted;
 
     return (
       <div
@@ -501,12 +503,15 @@ const LoginModal: React.FC = () => {
   // Render Metamask option
   const renderMetamaskConnect = () => {
     const isThisWalletConnecting = walletConnecting === "nufisnap";
+    const isDisabled = anyConnectionInProgress && !isThisWalletConnecting || !isPrivacyAccepted;
     return (
       <div
         key="metamask"
         className={cn(
-          "p-2 rounded-md border-gray-200 text-white",
-          "cursor-pointer hover:bg-blue-50 hover:text-black",
+          "p-2 py-1 rounded-md border-gray-200 text-white  bg-bg-secondary",
+          isDisabled
+            ? "cursor-not-allowed opacity-50"
+            : "cursor-pointer hover:bg-blue-50 hover:text-black",
           "transition-all duration-200"
         )}
         onClick={() => handleConnectMetamask()}
@@ -543,31 +548,59 @@ const LoginModal: React.FC = () => {
   return (
     <>
       <Dialog open={isOpen} onOpenChange={closeModal}>
-        <DialogContent className="sm:max-w-[425px] !bg-bg-tab !border-none !p-8">
+        <DialogContent className="sm:max-w-[445px] !bg-bg-tab !border-none !p-8">
           <DialogHeader>
             <p className="self-start text-2xl">Connect Wallet</p>
           </DialogHeader>
-
-          <div className="space-y-4 py-4">
-            <div className="space-y-2 max-h-[350px] sm:max-h-[550px] scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 overflow-y-auto">
-              <div className="space-y-2">
-                {WALLET_METHODS.map(renderWalletOption)}
-                {renderMetamaskConnect()}
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4">
+              <div className="flex items-center gap-3">
+                <div className="px-2 py-1 text-black font-bold rounded-lg text-xs" style={{ background: 'linear-gradient(90deg, #BBF985,#009EFF)' }}>
+                  1
+                </div>
+                <span>Accept the <span className="relative cursor-pointer bg-gradient-to-r from-[#FFFFFF] via-[#BBF985] to-[#009EFF] text-transparent bg-clip-text after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-full after:h-[1px] after:bg-gradient-to-r after:from-[#FFFFFF] after:via-[#BBF985] after:to-[#009EFF]">Privacy Policy and Terms of Use</span></span>
+              </div>
+              <div className="flex gap-2 items-start pl-8">
+                <input
+                  type="checkbox"
+                  name="privacy-policy"
+                  id="privacy-policy"
+                  className="mt-0.5"
+                  checked={isPrivacyAccepted}
+                  onChange={(e) => setIsPrivacyAccepted(e.target.checked)}
+                />
+                <label htmlFor="privacy-policy" className="text-sm font-light">
+                  I have read and accepted the terms of the Spidex AI Privacy Policy and Terms of Use
+                </label>
               </div>
             </div>
-
-            {!hideSocialLogin && (
-              <div className="flex flex-col gap-2">
-                <div className="flex items-center justify-between gap-2">
-                  <div className="w-full h-[1px] bg-text-icon -translate-y-[2px]"></div>
-                  <span className="text-white px-4">Or</span>
-                  <div className="w-full h-[1px] bg-text-icon -translate-y-[2px]"></div>
+            <div className="space-y-4 py-4">
+              <div className="flex items-center gap-3 py-2">
+                <div className="px-2 py-1 text-black font-bold rounded-lg text-xs" style={{ background: 'linear-gradient(90deg, #BBF985,#009EFF)' }}>
+                  2
                 </div>
-                <div className="flex justify-between items-center gap-3 pt-2">
-                  {SOCIAL_METHODS.map(renderSocialOption)}
+                <span>Choose Wallet</span>
+              </div>
+              <div className="space-y-2 max-h-[350px] sm:max-h-[550px] scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 overflow-y-auto">
+                <div className="space-y-2 flex flex-col gap-2">
+                  {WALLET_METHODS.map(renderWalletOption)}
+                  {renderMetamaskConnect()}
                 </div>
               </div>
-            )}
+
+              {!hideSocialLogin && (
+                <div className="flex flex-col gap-2">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="w-full h-[1px] bg-text-icon -translate-y-[2px]"></div>
+                    <span className="text-white px-4">Or</span>
+                    <div className="w-full h-[1px] bg-text-icon -translate-y-[2px]"></div>
+                  </div>
+                  <div className="flex justify-between items-center gap-3 pt-2">
+                    {SOCIAL_METHODS.map(renderSocialOption)}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </DialogContent>
       </Dialog>
