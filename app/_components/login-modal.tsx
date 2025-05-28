@@ -236,7 +236,7 @@ const LoginModal: React.FC = () => {
   }
 
   const handleConnect = (method: string) => {
-    if (method === "nufi") {
+    if (method === "nufisnap") {
       handleConnectMetamask();
     } else if (method === "google") {
       handleConnectGoogle();
@@ -250,7 +250,7 @@ const LoginModal: React.FC = () => {
   const handleConnectReferral = useCallback(() => {
     console.log("🚀 ~ handleConnect ~ method:", method);
     setIsReferralModalOpen(false);
-    if (method === "nufi") {
+    if (method === "nufisnap") {
       handleConnectMetamask();
     } else if (method === "google") {
       handleConnectGoogle();
@@ -558,7 +558,19 @@ const LoginModal: React.FC = () => {
                 <div className="px-2 py-1 text-black font-bold rounded-lg text-xs" style={{ background: 'linear-gradient(90deg, #BBF985,#009EFF)' }}>
                   1
                 </div>
-                <span>Accept the <span className="relative cursor-pointer bg-gradient-to-r from-[#FFFFFF] via-[#BBF985] to-[#009EFF] text-transparent bg-clip-text after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-full after:h-[1px] after:bg-gradient-to-r after:from-[#FFFFFF] after:via-[#BBF985] after:to-[#009EFF]">Privacy Policy and Terms of Use</span></span>
+                <span>Accept the
+                  <span className="mx-1 relative cursor-pointer bg-gradient-to-r from-[#FFFFFF] via-[#BBF985] to-[#009EFF] text-transparent bg-clip-text after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-full after:h-[1px] after:bg-gradient-to-r after:from-[#FFFFFF] after:via-[#BBF985] after:to-[#009EFF]"
+                    onClick={() => window.open("https://spidex-ai.gitbook.io/spidex-ai-docs/privacy-policy", "_blank")}
+                  >
+                    Privacy Policy
+                  </span>
+                  and
+                  <span className="mx-1 relative cursor-pointer bg-gradient-to-r from-[#FFFFFF] via-[#BBF985] to-[#009EFF] text-transparent bg-clip-text after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-full after:h-[1px] after:bg-gradient-to-r after:from-[#FFFFFF] after:via-[#BBF985] after:to-[#009EFF]"
+                    onClick={() => window.open("https://spidex-ai.gitbook.io/spidex-ai-docs/terms-of-use", "_blank")}
+                  >
+                    Terms of Use
+                  </span>
+                </span>
               </div>
               <div className="flex gap-2 items-start pl-8">
                 <input
