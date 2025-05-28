@@ -10,6 +10,7 @@ interface WalletNotInstalledDialogProps {
   walletName: string
   walletLogo: string
   walletLink: string
+  walletId: string
 }
 
 const WalletNotInstalledDialog: React.FC<WalletNotInstalledDialogProps> = ({
@@ -17,7 +18,8 @@ const WalletNotInstalledDialog: React.FC<WalletNotInstalledDialogProps> = ({
   onClose,
   walletName,
   walletLogo,
-  walletLink
+  walletLink,
+  walletId
 }) => {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -33,7 +35,7 @@ const WalletNotInstalledDialog: React.FC<WalletNotInstalledDialogProps> = ({
 
         <div className="py-4 flex flex-col items-center gap-6">
           <p className="text-white text-2xl">
-            Connect to {walletName} Wallet
+            Connect to {walletName} {walletId === "subwallet" ? null : "Wallet"}
           </p>
           <div className='flex items-center gap-4 justify-center flex-col p-6 rounded-lg w-[302px] h-[244px] bg-bg-secondary'>
             <Image
@@ -43,7 +45,7 @@ const WalletNotInstalledDialog: React.FC<WalletNotInstalledDialogProps> = ({
               height={150}
             />
             <p className="text-white text-lg">
-              {walletName} Wallet
+              {walletName} {walletId === "subwallet" ? null : "Wallet"}
             </p>
           </div>
           <div className='flex items-center gap-3'>

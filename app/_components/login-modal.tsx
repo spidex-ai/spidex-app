@@ -133,6 +133,7 @@ const LoginModal: React.FC = () => {
     name: string;
     logo: string;
     link: string;
+    id: string;
   } | null>(null);
   const processedCodeRef = useRef<string | null>(null);
   const params = useSearchParams();
@@ -196,6 +197,7 @@ const LoginModal: React.FC = () => {
         name: wallet?.name || "",
         logo: wallet?.icon || "",
         link: wallet?.link || "",
+        id: wallet?.id || "",
       });
       setShowWalletNotInstalled(true);
     } else {
@@ -623,6 +625,7 @@ const LoginModal: React.FC = () => {
         walletName={notInstalledWallet?.name || ""}
         walletLogo={notInstalledWallet?.logo || ""}
         walletLink={notInstalledWallet?.link || ""}
+        walletId={notInstalledWallet?.id || ""}
       />
 
       <Dialog open={isReferralModalOpen} onOpenChange={() => setIsReferralModalOpen(false)}>

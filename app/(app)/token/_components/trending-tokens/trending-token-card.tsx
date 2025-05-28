@@ -24,8 +24,9 @@ const TrendingTokenCard: React.FC<Props> = ({ token, title = "Market Cap" }) => 
   const volume = Number(token?.volume) < 0.0001 ? "~0.0001" : token?.volume?.toLocaleString(undefined, {
     maximumFractionDigits: 0,
   });
-  const price24hChg = token?.price24hChg?.toLocaleString(undefined, {
-    maximumFractionDigits: 4,
+  const price24hChange = token?.price24hChg ? token?.price24hChg * 100 : 0;
+  const price24hChg = price24hChange.toLocaleString(undefined, {
+    maximumFractionDigits: 2,
   });
   return (
     <Link href={`/token/${token.unit}`}>
