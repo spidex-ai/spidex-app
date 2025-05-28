@@ -21,7 +21,7 @@ const TokenBalanceWrapper: React.FC<Props> = ({ address, tokenAddress, tokenSymb
     const { accountBalance } = useCardano();
     const { balance, isLoading } = useTokenBalance(address, tokenAddress);
 
-    const tokenBalance = tokenSymbol === 'ADA' ? accountBalance : balance;
+    const tokenBalance = tokenAddress === 'ADA' ? accountBalance : balance;
 
     if (isLoading) return <Skeleton className="w-16 h-4" />;
 

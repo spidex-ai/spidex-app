@@ -37,7 +37,7 @@ export const SwapModalProvider: React.FC<{ children: ReactNode }> = ({ children 
     const [outputToken, setOutputToken] = useState<CardanoTokenDetail | null>(null);
 
     const openSell = async (tokenAddress: string) => {
-        const token = await getTokenDetailCore(tokenAddress);
+        const token = await getTokenDetailCore(tokenAddress === 'lovelace' ? 'ADA' : tokenAddress);
         if(!token) return;
         setInputToken(token);
         setOutputToken(null);
@@ -45,7 +45,7 @@ export const SwapModalProvider: React.FC<{ children: ReactNode }> = ({ children 
     }
 
     const openBuy = async (tokenAddress: string) => {
-        const token = await getTokenDetailCore(tokenAddress);
+        const token = await getTokenDetailCore(tokenAddress === 'lovelace' ? 'ADA' : tokenAddress);
         if(!token) return;
         setInputToken(null);
         setOutputToken(token);
