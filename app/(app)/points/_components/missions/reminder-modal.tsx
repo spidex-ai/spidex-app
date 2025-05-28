@@ -29,7 +29,7 @@ const ReminderModal = ({ isOpen, onOpenChange }: ReminderModalProps) => {
   const handleConnectX = () => {
 
     setIsConnecting(true)
-    const xAuthUrl = `https://twitter.com/i/oauth2/authorize?response_type=code&client_id=MFkxSjU3TjVWUGpMLVhYV08tblU6MTpjaQ&redirect_uri=${baseUrl}&scope=tweet.read%20users.read&state=state&code_challenge=challenge&code_challenge_method=plain`
+    const xAuthUrl = `https://twitter.com/i/oauth2/authorize?response_type=code&client_id=THpPdER1Nm1NZ3FCbm1lbnU5OXI6MTpjaQ&redirect_uri=${baseUrl}&scope=tweet.read%20users.read&state=state&code_challenge=challenge&code_challenge_method=plain`
     window.location.href = xAuthUrl
   }
   const handleXCallback = async (code: string, redirectUri: string) => {
