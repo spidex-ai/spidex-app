@@ -10,10 +10,15 @@ import { TooltipTrigger } from "@/components/ui/tooltip";
 import { TooltipContent } from "@/components/ui/tooltip";
 import { TooltipArrow } from "@radix-ui/react-tooltip";
 import { formatSILK } from "@/app/utils/format";
+import { useRouter } from "next/navigation";
+import { useCardano } from "@cardano-foundation/cardano-connect-with-wallet";
 
 const PointInformationWrapper = () => {
   const { pointInfo, loading, error, achievements } = usePointInfo();
   const [copied, setCopied] = useState(false);
+  const { stakeAddress } = useCardano();
+  const router = useRouter();
+
 
   if (loading) {
     return <Skeleton className="w-full h-[100px]" />;
@@ -56,6 +61,12 @@ const PointInformationWrapper = () => {
       setCopied(false);
     }, 2000);
   };
+
+  const handleClickTx =() => {
+    if (stakeAddress) {
+      router.push(`/portfolio/${stakeAddress}`);
+    }
+  }
 
   return (
     <div>
@@ -150,9 +161,9 @@ const PointInformationWrapper = () => {
         <div className="col-span-1 bg-bg-secondary rounded-lg p-4 border border-border-main transition-all duration-300 hover:shadow-[0_0_15px_rgba(0,255,255,0.3)]">
           <div className="flex justify-between">
             <div className="text-white text-[28px] font-medium">
-              {Number(pointInfo?.tradingVolume).toLocaleString(undefined, {
+              {`$${Number(pointInfo?.tradingVolume).toLocaleString(undefined, {
                 maximumFractionDigits: 2,
-              })}
+              })}`}
             </div>
             <div>
               <Image
@@ -174,9 +185,7 @@ const PointInformationWrapper = () => {
             />
             <div
               className="text-text-gray text-xs cursor-pointer"
-              onClick={() => {
-                window.open("https://cardanoscan.io", "_blank");
-              }}
+              onClick={handleClickTx}
             >
               Transactions
             </div>

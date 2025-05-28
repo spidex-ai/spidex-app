@@ -58,8 +58,8 @@ const TrendingTokenCard: React.FC<Props> = ({ token, title = "Market Cap" }) => 
             <p className="text-xs text-muted-foreground">
               <span>$
               {usdPrice}</span> {" "}
-              <span className={`${Number(price24hChg) > 0 ? "text-green-500" : "text-red-500"}`}>
-                {`(${price24hChg && Number(price24hChg) > 0 ? `+${price24hChg}` : price24hChg}%)`}
+              <span className={`${token?.price24hChg &&  token?.price24hChg > 0 ? "text-green-500" : "text-red-500"}`}>
+                {`(${token?.price24hChg &&  token?.price24hChg > 0 ? `+${price24hChg}` : price24hChg}%)`}
               </span>
             </p>
           </div>

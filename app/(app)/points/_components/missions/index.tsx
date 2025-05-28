@@ -164,6 +164,12 @@ const Missions = () => {
         case 10:
           data = await triggerDailyLogin();
           break;
+        case 20: 
+          router.push(`/referral`);
+          return;
+        case 41:
+          router.push(`/chat`); 
+          return;
         case 32:
           const tokenTrade = 'c48cbb3d5e57ed56e276bc45f99ab39abe94e6cd7ac39fb402da47ad0014df105553444d'
           router.push(`/token/${tokenTrade}?tab=trade`);
@@ -194,7 +200,7 @@ const Missions = () => {
       <div className="flex flex-col mt-6 gap-3">
         {results.length > 0
           ? results.map((result) => (
-              <div className="bg-bg-main rounded-lg p-4" key={result.id}>
+              <div className="bg-bg-main rounded-lg p-4" key={result.type}>
                 <div className={`grid grid-cols-3 cursor-pointer`}       onClick={() => handleFinish(result)}>
                   <div
                     className="col-span-1 flex gap-2 items-center cursor-pointer"
