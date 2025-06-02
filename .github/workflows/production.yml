@@ -1,0 +1,62 @@
+name: Deploy main
+run-name: ${{ github.actor }} is deploying production branch🚀
+on:
+  push:
+    branches:
+      - 'production'
+jobs:
+  Deploy:
+    runs-on: [spidex-app-prod]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Create .env file 
+        run: |
+          echo "${{ secrets.COSMOS_ENDPOINT }}" > .env
+          echo "${{ secrets.COSMOS_KEY }}" >> .env
+          echo "${{ secrets.NEXT_PUBLIC_PRIVY_APP_ID }}" >> .env
+          echo "${{ secrets.PRIVY_APP_SECRET }}" >> .env
+          echo "${{ secrets.NEXT_PUBLIC_SOLANA_RPC_URL }}" >> .env
+          echo "${{ secrets.OPENAI_API_KEY }}" >> .env
+          echo "${{ secrets.FIRECRAWL_API_KEY }}" >> .env
+          echo "${{ secrets.CRAWL_AUTH_CODE }}" >> .env
+          echo "${{ secrets.NEXT_PUBLIC_POSTHOG_KEY }}" >> .env
+          echo "${{ secrets.NEXT_PUBLIC_POSTHOG_HOST }}" >> .env
+          echo "${{ secrets.TAPTOOLS_API_KEY }}" >> .env
+          echo "${{ secrets.TAPTOOLS_API_URL }}" >> .env
+          echo "${{ secrets.DEXHUNTER_API_URL }}" >> .env
+          echo "${{ secrets.DEXHUNTER_API_KEY }}" >> .env
+          echo "${{ secrets.TOKEN_CARDANO_API_URL }}" >> .env
+          echo "${{ secrets.NEXT_PUBLIC_X_URL }}" >> .env
+          echo "${{ secrets.NEXT_PUBLIC_TELEGRAM_URL }}" >> .env
+          echo "${{ secrets.NEXT_PUBLIC_DISCORD_URL }}" >> .env
+          echo "${{ secrets.S3_ACCESS_KEY_ID }}" >> .env
+          echo "${{ secrets.S3_SECRET_ACCESS_KEY }}" >> .env
+          echo "${{ secrets.S3_BUCKET }}" >> .env
+          echo "${{ secrets.S3_REGION }}" >> .env
+          echo "${{ secrets.S3_PREVIEW_URL }}" >> .env
+          echo "${{ secrets.S3_URL }}" >> .env
+          echo "${{ secrets.NEXT_PUBLIC_SPIDEX_CORE_API_URL }}" >> .env
+          echo "${{ secrets.NEXT_PUBLIC_SPIDEX_CORE_API_KEY }}" >> .env
+          echo "${{ secrets.NEXT_PUBLIC_SPIDEX_APP_URL }}" >> .env
+          echo "${{ secrets.NEXT_PUBLIC_CARDANO_SCAN_URL }}" >> .env
+          echo "${{ secrets.OPENROUTER_API_KEY }}" >> .env
+          echo "${{ secrets.TAVILY_API_KEY }}" >> .env
+          echo "${{ secrets.COINMARKETCAP_API_KEY }}" >> .env
+
+      - name: Use Node.js 22.11
+        uses: actions/setup-node@v2
+        with:
+          node-version: 22.11
+      - name: Clean up old Docker images (optional but recommended)
+        run: |
+          docker system prune -a -f
+
+      - name: Setup docker 
+        run: |
+          docker compose up -d --build
+      
+      - name: Verify deployment
+        run: |
+          docker ps -a
+          curl -v http://localhost:3333 || true
