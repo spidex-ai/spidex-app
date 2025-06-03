@@ -43,6 +43,8 @@ jobs:
           echo "OPENROUTER_API_KEY=${{ secrets.OPENROUTER_API_KEY }}" >> .env
           echo "TAVILY_API_KEY=${{ secrets.TAVILY_API_KEY }}" >> .env
           echo "COINMARKETCAP_API_KEY=${{ secrets.COINMARKETCAP_API_KEY }}" >> .env
+          echo "AUTH_USER=${{ secrets.AUTH_USER }}" >> .env
+          echo "AUTH_PASS=${{ secrets.AUTH_PASS }}" >> .env
 
       - name: Use Node.js 22.11
         uses: actions/setup-node@v2
