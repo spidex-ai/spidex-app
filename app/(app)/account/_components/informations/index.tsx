@@ -8,7 +8,7 @@ import { TextGradient } from "@/components/ui/text";
 import { UserSpidex } from "@/hooks/core/useSpidexCore";
 import { useSpidexCoreContext } from "@/app/_contexts";
 import Address from "@/app/_components/address";
-
+import toast from "react-hot-toast";
 interface Props {
   user: UserSpidex;
 }
@@ -51,10 +51,10 @@ const Information: React.FC<Props> = ({ user }) => {
           }
 
           setAvatar(avatar);
-
+          toast.success("Avatar updated successfully!");
         } catch (error) {
           console.error("Error uploading image:", error);
-         
+          toast.error("Error uploading avatar! Please try again.");
         } finally {
           setUploading(false);
         }
