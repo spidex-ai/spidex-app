@@ -12,12 +12,19 @@ import {
 import { useSpidexCoreContext } from "@/app/_contexts/spidex-core";
 import { formatSILK } from "@/app/utils/format";
 import SharePostModalWrapper from "./share-post-modal-wrapper";
+import toast from "react-hot-toast";
 
 const AgentClub: React.FC = () => {
   const { referralInfo, loading, error } = useRefInfo();
+  const { uploadAvatar, updateUserInfo } = useSpidexCoreContext();
   const { auth } = useSpidexCoreContext();
   const [copied, setCopied] = useState(false);
   const [postModalOpen, setPostModalOpen] = useState(false);
+  const [avatar, setAvatar] = useState(
+    auth?.user?.avatar || "/icons/spider.svg"
+  );
+
+  const [uploading, setUploading] = useState(false);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -37,24 +44,77 @@ const AgentClub: React.FC = () => {
     }, 2000);
   };
 
+  const handleAvatarChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    try {
+      // Thay thế URL API này bằng API thực tế của bạn
+      setUploading(true);
+
+      // Tạo FormData để gửi file
+      const formData = new FormData();
+      formData.append("file", file);
+
+      // Gọi API để upload ảnh
+      const avatar = await uploadAvatar(formData);
+      console.log("🚀 ~ input.onchange= ~ avatar:", avatar)
+      
+      const updateUser = await updateUserInfo({
+        avatar: avatar,
+        fullName: auth?.user?.fullName || "",
+        username: auth?.user?.username || "",
+        bio: auth?.user?.bio || "",
+      });
+
+      if (!updateUser) {
+        throw new Error("Upload failed");
+      }
+
+      setAvatar(avatar);
+      toast.success("Avatar updated successfully");
+    } catch (error) {
+      console.error("Error uploading avatar:", error);
+      toast.error("Error uploading avatar! Please try again.");
+    } finally {
+      setUploading(false);
+    }
+  };
+
   return (
     <div className="p-8 border border-border-main rounded-lg bg-bg-secondary">
       <div className="flex gap-8">
-        <div>
-          {auth?.avatar ? (
-            <img
-              src={auth?.avatar}
-              alt="agent-club"
-              className="rounded-full w-[80px] h-[80px] object-cover"
-              style={{ width: '80px', height: '80px', minWidth: '80px', minHeight: '80px' }}
-            />
-          ) : (
-            <img
-              src="/icons/spider.svg"
-              alt="agent-club"
-              className="w-[80px] object-cover"
-            />
-          )}
+        <div className="relative group cursor-pointer">
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleAvatarChange}
+            className="hidden"
+            id="avatar-input"
+          />
+          <label htmlFor="avatar-input" className="cursor-pointer">
+            <div className="relative w-[120px] h-[120px] group">
+              <img
+                src={avatar}
+                alt="agent-club"
+                className="rounded-full w-[120px] h-[120px] object-cover"
+                style={{
+                  width: "120px",
+                  height: "120px",
+                  minWidth: "120px",
+                  minHeight: "120px",
+                }}
+              />
+              <div className={`
+                absolute inset-0 bg-black/50 rounded-full flex items-center justify-center text-white text-sm opacity-0  transition-opacity duration-100
+                ${uploading ? "opacity-100" : "group-hover:opacity-100"}
+                `}>
+                {uploading ? "Uploading..." : "Change avatar"}
+              </div>
+            </div>
+          </label>
         </div>
         <div className="w-full">
           <div className="text-lg">Spidex Agent Club</div>
@@ -97,7 +157,9 @@ const AgentClub: React.FC = () => {
                   <Tooltip delayDuration={0}>
                     <TooltipTrigger asChild>
                       <Image
-                        src={`/icons/${copied ? "tick-blue.svg" : "copy-gray.svg"}`}
+                        src={`/icons/${
+                          copied ? "tick-blue.svg" : "copy-gray.svg"
+                        }`}
                         alt="copy"
                         width={24}
                         height={24}
@@ -115,7 +177,10 @@ const AgentClub: React.FC = () => {
             <div></div>
             <div className="flex gap-4">
               <div className="flex items-center">Share to</div>
-              <div className="flex gap-4 cursor-pointer" onClick={() => setPostModalOpen(true)}>
+              <div
+                className="flex gap-4 cursor-pointer"
+                onClick={() => setPostModalOpen(true)}
+              >
                 <Image
                   src="/icons/x-white.svg"
                   alt="whatsapp"
@@ -127,7 +192,11 @@ const AgentClub: React.FC = () => {
           </div>
         </div>
       </div>
-      <SharePostModalWrapper isOpen={postModalOpen} onOpenChange={(value) => setPostModalOpen(value)} refCode={referralInfo?.referralCode || ""} />
+      <SharePostModalWrapper
+        isOpen={postModalOpen}
+        onOpenChange={(value) => setPostModalOpen(value)}
+        refCode={referralInfo?.referralCode || ""}
+      />
     </div>
   );
 };
