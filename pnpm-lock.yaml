@@ -212,6 +212,9 @@ importers:
       next:
         specifier: 15.1.2
         version: 15.1.2(@babel/core@7.26.0)(@opentelemetry/api@1.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      nextjs-basic-auth-middleware:
+        specifier: ^3.1.0
+        version: 3.1.0(next@15.1.2(@babel/core@7.26.0)(@opentelemetry/api@1.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))
       pnpm:
         specifier: ^9.15.1
         version: 9.15.1
@@ -7314,8 +7317,8 @@ packages:
       react-dom:
         optional: true
 
-  mrcolor@https://codeload.github.com/rook2pawn/mrcolor/tar.gz/refs/heads/master:
-    resolution: {tarball: https://codeload.github.com/rook2pawn/mrcolor/tar.gz/refs/heads/master}
+  mrcolor@https://github.com/rook2pawn/mrcolor/archive/master.tar.gz:
+    resolution: {tarball: https://github.com/rook2pawn/mrcolor/archive/master.tar.gz}
     version: 0.0.1
 
   ms@2.0.0:
@@ -7397,6 +7400,11 @@ packages:
         optional: true
       sass:
         optional: true
+
+  nextjs-basic-auth-middleware@3.1.0:
+    resolution: {integrity: sha512-k1GSYiLMYj4tK6swAmArTUBheSkv7roUUF2KI8Cv8HYHmSYep5Y0AP0RB/1sez7xTRi2Fw2SxYbQA/jAmBJCug==}
+    peerDependencies:
+      next: '>=13.1'
 
   no-case@3.0.4:
     resolution: {integrity: sha512-fgAN3jGAh+RoxUGZHTSOLJIqUc2wmoBwGR4tbpNAKmmovFoWq0OdRkb0VkldReO2a2iBT/OEulG9XSUc10r3zg==}
@@ -16592,7 +16600,7 @@ snapshots:
     dependencies:
       hashish: 0.0.4
       hat: 0.0.3
-      mrcolor: https://codeload.github.com/rook2pawn/mrcolor/tar.gz/refs/heads/master
+      mrcolor: https://github.com/rook2pawn/mrcolor/archive/master.tar.gz
 
   chokidar@3.6.0:
     dependencies:
@@ -19463,7 +19471,7 @@ snapshots:
       react: 19.0.0
       react-dom: 19.0.0(react@19.0.0)
 
-  mrcolor@https://codeload.github.com/rook2pawn/mrcolor/tar.gz/refs/heads/master:
+  mrcolor@https://github.com/rook2pawn/mrcolor/archive/master.tar.gz:
     dependencies:
       color-convert: 0.2.1
 
@@ -19551,6 +19559,10 @@ snapshots:
     transitivePeerDependencies:
       - '@babel/core'
       - babel-plugin-macros
+
+  nextjs-basic-auth-middleware@3.1.0(next@15.1.2(@babel/core@7.26.0)(@opentelemetry/api@1.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)):
+    dependencies:
+      next: 15.1.2(@babel/core@7.26.0)(@opentelemetry/api@1.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
 
   no-case@3.0.4:
     dependencies:
