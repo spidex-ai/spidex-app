@@ -8,6 +8,7 @@ import Image from "next/image";
 import { UserSpidex } from "@/hooks/core/useSpidexCore";
 import { useGoogleLogin, useXLogin } from "@/hooks/social/useSocialLogin";
 import ConnectedAccountWrapper from "./connected-account-wrapper";
+import toast from "react-hot-toast";
 
 interface Props {
   user: UserSpidex;
@@ -35,6 +36,18 @@ const ConnectedAccounts: React.FC<Props> = ({ user }) => {
     return "";
   }, [isClient]);
 
+  const handleConnectGoogle = async () => {
+    try {
+      await signInWithGoogle();
+    } catch (error) {
+      if (typeof error === "string") {
+        toast.error(error);
+      } else {
+        toast.error("Google login failed");
+      }
+    } finally {
+    }
+  };
   // Handle X login
   const handleConnectX = () => {
     if (isConnecting) return;
@@ -113,9 +126,7 @@ const ConnectedAccounts: React.FC<Props> = ({ user }) => {
             name="Google"
             value={user.email ?? undefined}
             isConnected={!!user.email}
-            onConnect={() => {
-              signInWithGoogle();
-            }}
+            onConnect={handleConnectGoogle}
           />
         </div>
       </div>

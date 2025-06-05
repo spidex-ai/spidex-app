@@ -53,7 +53,7 @@ export const adaTokenDetail: CardanoTokenDetail = {
   supply: 45000000000,
   creation_date: "",
   price: 1,
-  logo: "https://core.spidex.ag/public/icons/tokens/ada.svg",
+  logo: "https://api.spidex.ag/public/icons/tokens/ada.svg",
 };
 
 const Swap: React.FC<Props> = ({

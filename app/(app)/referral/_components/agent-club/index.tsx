@@ -18,10 +18,11 @@ const AgentClub: React.FC = () => {
   const { referralInfo, loading, error } = useRefInfo();
   const { uploadAvatar, updateUserInfo } = useSpidexCoreContext();
   const { auth } = useSpidexCoreContext();
+  console.log("🚀 ~ auth:", auth)
   const [copied, setCopied] = useState(false);
   const [postModalOpen, setPostModalOpen] = useState(false);
   const [avatar, setAvatar] = useState(
-    auth?.user?.avatar || "/icons/spider.svg"
+    auth?.user?.avatar ? auth?.user?.avatar : "/icons/spider.svg"
   );
 
   const [uploading, setUploading] = useState(false);
@@ -51,16 +52,21 @@ const AgentClub: React.FC = () => {
     if (!file) return;
 
     try {
-      // Thay thế URL API này bằng API thực tế của bạn
+    
       setUploading(true);
 
-      // Tạo FormData để gửi file
+      const maxSize = 1024 * 1024; 
+      if (file.size > maxSize) {
+        toast.error("Image size must be less than 1MB!");
+        return;
+      }
+
+
       const formData = new FormData();
       formData.append("file", file);
 
-      // Gọi API để upload ảnh
+
       const avatar = await uploadAvatar(formData);
-      console.log("🚀 ~ input.onchange= ~ avatar:", avatar)
       
       const updateUser = await updateUserInfo({
         avatar: avatar,
@@ -76,8 +82,11 @@ const AgentClub: React.FC = () => {
       setAvatar(avatar);
       toast.success("Avatar updated successfully");
     } catch (error) {
-      console.error("Error uploading avatar:", error);
-      toast.error("Error uploading avatar! Please try again.");
+      if (typeof error === "string") {
+        toast.error(error);
+      } else {
+        toast.error("Error uploading avatar! Please try again.");
+      }
     } finally {
       setUploading(false);
     }

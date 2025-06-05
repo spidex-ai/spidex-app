@@ -29,7 +29,7 @@ export async function getTokenPageTopHolders(
 
     const [topHoldersResponse, tokenDebtLoan, totalSupply] = await Promise.all([
       fetch(
-        `https://core.spidex.ag/api/tokens/${token.address}/top-holders?limit=20&page=1`,
+        `${process.env.NEXT_PUBLIC_SPIDEX_CORE_API_URL}/tokens/${token.address}/top-holders?limit=20&page=1`,
         {
           method: "GET",
         }

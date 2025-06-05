@@ -549,7 +549,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
       });
       return data.data;
     } catch (error) {
-      return null;
+      throw error;
     } finally {
       setLoading(false);
     }
@@ -565,7 +565,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
       });
       return data.data;
     } catch (error) {
-      return null;
+      throw error;
     } finally {
       setLoading(false);
     }

@@ -49,7 +49,7 @@ export async function getTokenData(
               },
             }
           ),
-          fetch(`https://core.spidex.ag/api/tokens/lovelace`, {
+          fetch(`${process.env.NEXT_PUBLIC_SPIDEX_CORE_API_URL}/tokens/lovelace`, {
             method: "GET",
           }),
         ]);
