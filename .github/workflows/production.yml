@@ -10,41 +10,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Create .env file 
-        run: |
-          echo "COSMOS_ENDPOINT=${{ secrets.COSMOS_ENDPOINT }}" > .env
-          echo "COSMOS_KEY=${{ secrets.COSMOS_KEY }}" >> .env
-          echo "NEXT_PUBLIC_PRIVY_APP_ID=${{ secrets.NEXT_PUBLIC_PRIVY_APP_ID }}" >> .env
-          echo "PRIVY_APP_SECRET=${{ secrets.PRIVY_APP_SECRET }}" >> .env
-          echo "NEXT_PUBLIC_SOLANA_RPC_URL=${{ secrets.NEXT_PUBLIC_SOLANA_RPC_URL }}" >> .env
-          echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> .env
-          echo "FIRECRAWL_API_KEY=${{ secrets.FIRECRAWL_API_KEY }}" >> .env
-          echo "CRAWL_AUTH_CODE=${{ secrets.CRAWL_AUTH_CODE }}" >> .env
-          echo "NEXT_PUBLIC_POSTHOG_KEY=${{ secrets.NEXT_PUBLIC_POSTHOG_KEY }}" >> .env
-          echo "NEXT_PUBLIC_POSTHOG_HOST=${{ secrets.NEXT_PUBLIC_POSTHOG_HOST }}" >> .env
-          echo "TAPTOOLS_API_KEY=${{ secrets.TAPTOOLS_API_KEY }}" >> .env
-          echo "TAPTOOLS_API_URL=${{ secrets.TAPTOOLS_API_URL }}" >> .env
-          echo "DEXHUNTER_API_URL=${{ secrets.DEXHUNTER_API_URL }}" >> .env
-          echo "DEXHUNTER_API_KEY=${{ secrets.DEXHUNTER_API_KEY }}" >> .env
-          echo "TOKEN_CARDANO_API_URL=${{ secrets.TOKEN_CARDANO_API_URL }}" >> .env
-          echo "NEXT_PUBLIC_X_URL=${{ secrets.NEXT_PUBLIC_X_URL }}" >> .env
-          echo "NEXT_PUBLIC_TELEGRAM_URL=${{ secrets.NEXT_PUBLIC_TELEGRAM_URL }}" >> .env
-          echo "NEXT_PUBLIC_DISCORD_URL=${{ secrets.NEXT_PUBLIC_DISCORD_URL }}" >> .env
-          echo "S3_ACCESS_KEY_ID=${{ secrets.S3_ACCESS_KEY_ID }}" >> .env
-          echo "S3_SECRET_ACCESS_KEY=${{ secrets.S3_SECRET_ACCESS_KEY }}" >> .env
-          echo "S3_BUCKET=${{ secrets.S3_BUCKET }}" >> .env
-          echo "S3_REGION=${{ secrets.S3_REGION }}" >> .env
-          echo "S3_PREVIEW_URL=${{ secrets.S3_PREVIEW_URL }}" >> .env
-          echo "S3_URL=${{ secrets.S3_URL }}" >> .env
-          echo "NEXT_PUBLIC_SPIDEX_CORE_API_URL=${{ secrets.NEXT_PUBLIC_SPIDEX_CORE_API_URL }}" >> .env
-          echo "NEXT_PUBLIC_SPIDEX_CORE_API_KEY=${{ secrets.NEXT_PUBLIC_SPIDEX_CORE_API_KEY }}" >> .env
-          echo "NEXT_PUBLIC_SPIDEX_APP_URL=${{ secrets.NEXT_PUBLIC_SPIDEX_APP_URL }}" >> .env
-          echo "NEXT_PUBLIC_CARDANO_SCAN_URL=${{ secrets.NEXT_PUBLIC_CARDANO_SCAN_URL }}" >> .env
-          echo "OPENROUTER_API_KEY=${{ secrets.OPENROUTER_API_KEY }}" >> .env
-          echo "TAVILY_API_KEY=${{ secrets.TAVILY_API_KEY }}" >> .env
-          echo "COINMARKETCAP_API_KEY=${{ secrets.COINMARKETCAP_API_KEY }}" >> .env
-          echo "AUTH_USER=${{ secrets.AUTH_USER }}" >> .env
-          echo "AUTH_PASS=${{ secrets.AUTH_PASS }}" >> .env
 
       - name: Use Node.js 22.11
         uses: actions/setup-node@v2
@@ -53,6 +18,10 @@ jobs:
       - name: Clean up old Docker images (optional but recommended)
         run: |
           docker system prune -a -f
+
+      - name: Copy environment based on branch    
+        run: |
+           cp .env.docker .env
 
       - name: Setup docker 
         run: |
