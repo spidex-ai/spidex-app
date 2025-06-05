@@ -30,6 +30,11 @@ const Information: React.FC<Props> = ({ user }) => {
       if (file) {
         try {
           setUploading(true);
+          const maxSize = 1024 * 1024; // 1MB
+          if (file.size > maxSize) {
+            toast.error("Image size must be less than 1MB!");
+            return;
+          }
 
           // Tạo FormData để gửi file
           const formData = new FormData();
@@ -53,8 +58,11 @@ const Information: React.FC<Props> = ({ user }) => {
           setAvatar(avatar);
           toast.success("Avatar updated successfully!");
         } catch (error) {
-          console.error("Error uploading image:", error);
-          toast.error("Error uploading avatar! Please try again.");
+          if (typeof error === "string") {
+            toast.error(error);
+          } else {
+            toast.error("Error uploading avatar! Please try again.");
+          }
         } finally {
           setUploading(false);
         }
