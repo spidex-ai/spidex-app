@@ -2,9 +2,9 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { nextBasicAuthMiddleware } from "nextjs-basic-auth-middleware";
 
-export async function middleware(request: NextRequest) {
+export function middleware(request: NextRequest) {
   // Bước 1: Áp dụng basic auth
-  const response =  nextBasicAuthMiddleware({
+  const response = nextBasicAuthMiddleware({
     users: [
       {
         name: process.env.AUTH_USER!,
@@ -30,3 +30,11 @@ export async function middleware(request: NextRequest) {
 
   return NextResponse.next({ headers });
 }
+
+
+export const config = {
+  matcher: [
+    // match all routes except static files and APIs
+    "/((?!api|_next/static|_next/image|favicon.ico).*)",
+  ],
+};

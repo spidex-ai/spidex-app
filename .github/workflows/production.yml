@@ -15,10 +15,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 22.11
-      - name: Clean up old Docker images (optional but recommended)
-        run: |
-          docker system prune -a -f
-
+          
       - name: Copy environment based on branch    
         run: |
            cp .env.docker .env
@@ -26,6 +23,10 @@ jobs:
       - name: Setup docker 
         run: |
           docker compose up -d --build
+
+      - name: Clean up old Docker images
+        run: |
+          docker system prune -a -f
       
       - name: Verify deployment
         run: |
