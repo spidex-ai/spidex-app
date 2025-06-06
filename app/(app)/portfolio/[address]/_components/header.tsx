@@ -12,8 +12,8 @@ const Header: React.FC<Props> = ({ address }) => {
     return (
         <div>
             <div className="flex items-end gap-2">
-                <Image src="/icons/portfolio-white.svg" width={12} height={12} alt="portfolio" className="h-6 w-6" />
-                <TextGradient className="text-2xl font-bold leading-none">
+                <Image src="/icons/portfolio-white.svg" width={5} height={5} alt="portfolio" className="h-6 w-6" />
+                <TextGradient className="text-2xl font-medium leading-none">
                     Portfolio
                 </TextGradient>
                 <Address

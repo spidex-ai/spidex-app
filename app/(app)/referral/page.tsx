@@ -10,8 +10,8 @@ const ReferralPage: React.FC = () => {
         <ProtectedClient>
             <div className="flex flex-col gap-8 max-w-5xl mx-auto w-full h-full max-h-full overflow-y-auto px-1">
                 <div className="flex items-center gap-2">
-                    <Image src="/icons/ref-white.svg" alt="ref-program" width={5} height={5} className='w-4 h-4' />
-                    <TextGradient className="text-2xl font-bold leading-none">Referral Program</TextGradient>
+                    <Image src="/icons/ref-white.svg" alt="ref-program" width={5} height={5} className='w-6 h-6' />
+                    <TextGradient className="text-2xl font-medium leading-none">Referral Program</TextGradient>
                 </div>
                 <AgentClub />
                 <MyReferrals />

@@ -91,7 +91,16 @@ const Transactions: React.FC<Props> = ({ address }) => {
                     })}
                   </TableCell>
                   <TableCell>
-                    {new Date(tx.time * 1000).toLocaleString()}
+                  {new Date(tx.time * 1000).toLocaleDateString('en-GB', {
+                      day: '2-digit',
+                      month: '2-digit',
+                      year: 'numeric'
+                    }) + ', ' + new Date(tx.time * 1000).toLocaleTimeString('en-GB', {
+                      hour12: false,
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      second: '2-digit'
+                    })}
                   </TableCell>
                   <TableCell
                     className="text-right flex justify-end cursor-pointer"
