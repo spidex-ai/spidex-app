@@ -20,6 +20,11 @@ jobs:
         run: |
            cp .env.docker .env
 
+      - name: re-run docker service
+        run: |
+          docker compose down -v 
+          docekr compose up -d
+
       - name: Setup docker 
         run: |
           docker compose up -d --build
