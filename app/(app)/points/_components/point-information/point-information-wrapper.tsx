@@ -12,7 +12,7 @@ import { TooltipArrow } from "@radix-ui/react-tooltip";
 import { formatSILK } from "@/app/utils/format";
 import { useRouter } from "next/navigation";
 import { useCardano } from "@cardano-foundation/cardano-connect-with-wallet";
-
+import { formatNumber } from "@/lib/utils";
 const PointInformationWrapper = () => {
   const { pointInfo, loading, error, achievements } = usePointInfo();
   const [copied, setCopied] = useState(false);
@@ -111,11 +111,9 @@ const PointInformationWrapper = () => {
         <div className="col-span-1 bg-bg-secondary rounded-lg p-4 border border-border-main transition-all duration-300 hover:shadow-[0_0_15px_rgba(0,255,255,0.3)]">
           <div className="flex items-center justify-between">
             <div className="text-white text-[28px] font-medium">
-              {Number(
-                pointInfo?.referralInfo?.referralUserCount
-              ).toLocaleString(undefined, {
-                maximumFractionDigits: 2,
-              })}
+              {formatNumber(
+                Number(pointInfo?.referralInfo?.referralUserCount)
+              )}
             </div>
             <div>
               <Image src="/icons/gift.svg" alt="gift" width={40} height={40} />
@@ -161,9 +159,7 @@ const PointInformationWrapper = () => {
         <div className="col-span-1 bg-bg-secondary rounded-lg p-4 border border-border-main transition-all duration-300 hover:shadow-[0_0_15px_rgba(0,255,255,0.3)]">
           <div className="flex justify-between">
             <div className="text-white text-[28px] font-medium">
-              {`$${Number(pointInfo?.tradingVolume).toLocaleString(undefined, {
-                maximumFractionDigits: 2,
-              })}`}
+              {`$${formatNumber(Number(pointInfo?.tradingVolume), 2)}`}
             </div>
             <div>
               <Image
@@ -194,12 +190,6 @@ const PointInformationWrapper = () => {
 
         <div className="col-span-1 bg-bg-secondary rounded-lg p-4 border border-border-main transition-all duration-300 hover:shadow-[0_0_15px_rgba(0,255,255,0.3)]">
           <div className="text-white text-[28px] font-medium">OG Level</div>
-          {/* <div className="text-text-gray text-sm mt-7 mb-4">
-            <Progress
-              value={progressValue}
-              colorFill="bg-brand-1000 dark:bg-brand-1000"
-            />
-          </div> */}
           <div className="grid grid-cols-3 gap-2 mt-12">
             <div className="col-span-1">
               {level >= 1 ? (

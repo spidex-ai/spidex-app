@@ -2,6 +2,7 @@
 
 import { Button, Skeleton } from '@/components/ui'
 import { useTokenBalance } from '@/hooks'
+import { formatNumber } from '@/lib/utils'
 import { useCardano } from '@cardano-foundation/cardano-connect-with-wallet'
 import { Wallet } from 'lucide-react'
 import React from 'react'
@@ -28,7 +29,7 @@ const TokenBalanceWrapper: React.FC<Props> = ({ address, tokenAddress, tokenSymb
         <div className="flex items-center gap-2 text-neutral-500 dark:text-neutral-400">
             <Wallet className="w-3 h-3" />
             <p className="text-xs">
-                {tokenBalance.toLocaleString(undefined, { maximumFractionDigits: digits })} {tokenSymbol}
+                {formatNumber(Number(tokenBalance), digits)} {tokenSymbol}
             </p>
             {
                 setAmount && (

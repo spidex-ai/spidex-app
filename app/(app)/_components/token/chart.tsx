@@ -6,7 +6,7 @@ import { Button, CandlestickChart, Skeleton } from "@/components/ui";
 
 import { usePriceChartCore } from "@/hooks";
 
-import { cn } from "@/lib/utils";
+import { cn, formatNumber } from "@/lib/utils";
 
 import type { UTCTimestamp } from "lightweight-charts";
 import { CandleStickInterval } from "@/services/hellomoon/types";
@@ -117,9 +117,7 @@ const TokenChart: React.FC<Props> = ({ data: tokenDetail, isLoadingTokenDetail, 
   const open = data?.length > 0 ? data[0].open : 0;
   const change = ((price - open) / open) * 100;
 
-  const currentPrice = price < 0.0001 ? '~0.0001' : price.toLocaleString(undefined, {
-    maximumFractionDigits: 4,
-  });
+  const currentPrice = price < 0.0001 ? '~0.0001' : formatNumber(price, 4);
 
   return (
     <div className="flex flex-col h-full w-full">
@@ -142,9 +140,7 @@ const TokenChart: React.FC<Props> = ({ data: tokenDetail, isLoadingTokenDetail, 
                   className={cn(change > 0 ? "text-green-500" : "text-red-500")}
                 >
                   {" "}({change > 0 ? "+" : ""}
-                  {change.toLocaleString(undefined, {
-                    maximumFractionDigits: 2,
-                  })}
+                  {formatNumber(change, 2)}
                   %)
                 </span>
               </p>

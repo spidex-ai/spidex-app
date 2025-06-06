@@ -16,6 +16,7 @@ import {
 import { usePortfolioTransaction } from "@/hooks/portfolio";
 import Image from "next/image";
 import type { PortfolioTransaction } from "@/hooks/portfolio/type";
+import { formatNumber } from "@/lib/utils";
 
 interface Props {
   address: string;
@@ -72,10 +73,7 @@ const Transactions: React.FC<Props> = ({ address }) => {
                       <p>{tx.tokenAName}</p>
                     </div>
                   </TableCell>
-                  <TableCell>{tx.tokenAAmount.toLocaleString(undefined, {
-                      maximumFractionDigits: 2,
-                    })}
-                  </TableCell>
+                    <TableCell>{formatNumber(tx.tokenAAmount, 2)}</TableCell>
                   <TableCell className="flex items-center gap-2">
                     <div className="font-medium flex gap-2 items-center">
                       <img
@@ -86,10 +84,7 @@ const Transactions: React.FC<Props> = ({ address }) => {
                       <p>{tx.tokenBName}</p>
                     </div>
                   </TableCell>
-                  <TableCell>{tx.tokenBAmount.toLocaleString(undefined, {
-                      maximumFractionDigits: 2,
-                    })}
-                  </TableCell>
+                  <TableCell>{formatNumber(tx.tokenBAmount, 2)}</TableCell>
                   <TableCell>
                   {new Date(tx.time * 1000).toLocaleDateString('en-GB', {
                       day: '2-digit',

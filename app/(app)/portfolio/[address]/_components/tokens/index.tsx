@@ -20,6 +20,7 @@ import {
 import { useSwapModal } from "../../_contexts/use-swap-modal";
 // import { usePortfolio } from '@/hooks';
 import { usePortfolioToken } from "@/hooks/portfolio";
+import { formatNumber } from "@/lib/utils";
 
 interface Props {
   address: string;
@@ -93,24 +94,13 @@ const Tokens: React.FC<Props> = ({ address }) => {
                         </div>
                       </TableCell>
                       <TableCell className="text-center">
-                        {Number(token.quantity).toLocaleString(undefined, {
-                          maximumFractionDigits: 2,
-                          minimumFractionDigits: 2,
-                        })}
+                        {formatNumber(Number(token.quantity), 2)}
                       </TableCell>
                       <TableCell className="text-center">
-                        $
-                        {token.usdPrice.toLocaleString(undefined, {
-                          maximumFractionDigits: 2,
-                          minimumFractionDigits: 2,
-                        })}
+                        ${formatNumber(Number(token.usdPrice), 2)}
                       </TableCell>
                       <TableCell className="text-center">
-                        $
-                        {token.usdTotalPrice.toLocaleString(undefined, {
-                          maximumFractionDigits: 2,
-                          minimumFractionDigits: 2,
-                        })}
+                        ${formatNumber(Number(token.usdTotalPrice), 2)}
                       </TableCell>
                       <TableCell className="flex items-center gap-2 justify-end">
                         <GradientBorderButton

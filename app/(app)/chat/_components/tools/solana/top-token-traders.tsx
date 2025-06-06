@@ -12,6 +12,7 @@ import { knownAddresses } from '@/lib/known-addresses';
 
 import type { ToolInvocation } from 'ai';
 import type { TopTokenTradersResultType, TopTokenTradersResultBodyType } from '@/ai';
+import { formatNumber } from '@/lib/utils';
 
 interface Props {
     tool: ToolInvocation,
@@ -105,10 +106,10 @@ const TopTokenTraders = ({ body }: { body: TopTokenTradersResultBodyType }) => {
                                     </div>
                                     <div className="flex justify-between text-xs">
                                         <span className="text-red-500">
-                                            {trader.tradeSell.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+                                            {formatNumber(trader.tradeSell)}
                                         </span>
                                         <span className="text-green-500">
-                                            {trader.tradeBuy.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+                                            {formatNumber(trader.tradeBuy)}
                                         </span>
                                     </div>
                                 </div>
@@ -139,10 +140,10 @@ const TopTokenTraders = ({ body }: { body: TopTokenTradersResultBodyType }) => {
                                     </div>
                                     <div className="flex justify-between text-xs">
                                         <span className="text-green-500">
-                                            {new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 }).format(trader.volumeBuy)}
+                                            {formatNumber(trader.volumeBuy)}
                                         </span>
                                         <span className="text-red-500">
-                                            {new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 }).format(trader.volumeSell)}
+                                            {formatNumber(trader.volumeSell)}
                                         </span>
                                     </div>
                                 </div>

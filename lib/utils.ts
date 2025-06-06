@@ -16,3 +16,11 @@ export function chunkArray<T>(array: T[], size: number): T[][] {
         return acc;
     }, [] as T[][]);
 }
+
+export const formatNumber = (num: number, decimalPlaces?: number): string => {
+    const options: Intl.NumberFormatOptions = {
+      maximumFractionDigits: decimalPlaces ?? 2
+    };
+    
+    return num.toLocaleString('en-US', options);
+  };
