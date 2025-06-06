@@ -9,25 +9,18 @@ import SaveToken from "@/app/(app)/_components/save-token";
 import { TopToken } from "@/services/taptools/types";
 
 import { getLogoUrl } from "@/app/utils/logo";
+import { formatNumber } from "@/lib/utils";
 interface Props {
   token: TopToken;
   title?: string;
 }
 
 const TrendingTokenCard: React.FC<Props> = ({ token, title = "Market Cap" }) => {
-  const usdPrice = Number(token?.usdPrice) < 0.00001 ? "~0.00001" : token?.usdPrice?.toLocaleString(undefined, {
-    maximumFractionDigits: 5,
-  });
-  const mcap = Number(token?.mcap) < 0.0001 ? "~0.0001" : token?.mcap?.toLocaleString(undefined, {
-    maximumFractionDigits: 0,
-  });
-  const volume = Number(token?.volume) < 0.0001 ? "~0.0001" : token?.volume?.toLocaleString(undefined, {
-    maximumFractionDigits: 0,
-  });
+  const usdPrice = token?.usdPrice ? (Number(token?.usdPrice) < 0.00001 ? "~0.00001" : formatNumber(token?.usdPrice, 5)) : "--";
+  const mcap = token?.mcap ? (Number(token?.mcap) < 0.0001 ? "~0.0001" : formatNumber(token?.mcap, 0)) : "--";
+  const volume = token?.volume ? formatNumber(token?.volume, 0) : "--";
   const price24hChange = token?.price24hChg ? token?.price24hChg * 100 : 0;
-  const price24hChg = price24hChange.toLocaleString(undefined, {
-    maximumFractionDigits: 2,
-  });
+  const price24hChg = formatNumber(price24hChange, 2);
   return (
     <Link href={`/token/${token.unit}`}>
       <Card className="flex flex-col gap-2 p-2 justify-between hover:border-brand-600 dark:hover:border-brand-600 transition-all duration-300 cursor-pointer h-full">        <div className="flex flex-row gap-2 justify-between">

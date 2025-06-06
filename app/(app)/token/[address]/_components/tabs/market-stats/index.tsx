@@ -7,6 +7,7 @@ import { Skeleton } from "@/components/ui";
 // import TimeStats from "./time-stats";
 
 import { useTokenStats } from "@/hooks";
+import { formatNumber } from "@/lib/utils";
 
 interface Props {
   tokenId: string | undefined;
@@ -20,9 +21,7 @@ const MarketStats: React.FC<Props> = ({ tokenId, isLoadingTokenDetail }) => {
   if (isLoading || isLoadingTokenDetail) {
     return <Skeleton className="h-[100px] w-full" />;
   }
-  const usdPrice = tokenStats?.usdPrice ? tokenStats?.usdPrice < 0.0001 ? "~0.0001" : `$${tokenStats?.usdPrice.toLocaleString(undefined, {
-    maximumFractionDigits: 4,
-  })}` : "--";
+  const usdPrice = tokenStats?.usdPrice ? tokenStats?.usdPrice < 0.0001 ? "~0.0001" : `$${formatNumber(tokenStats?.usdPrice, 4)}` : "--";
 
   return (
     <div className="grid grid-cols-6 gap-2">
@@ -40,9 +39,7 @@ const MarketStats: React.FC<Props> = ({ tokenId, isLoadingTokenDetail }) => {
               <div className="text-xs font-semibold text-text-gray">Liquidity</div>
               <div className="text-xs text-white">
                 {tokenStats?.liquidity
-                  ? `$${tokenStats?.liquidity.toLocaleString(undefined, {
-                    maximumFractionDigits: 0,
-                  })}`
+                  ? `$${formatNumber(tokenStats?.liquidity, 0)}`
                   : "--"}
               </div>
             </div>
@@ -65,18 +62,14 @@ const MarketStats: React.FC<Props> = ({ tokenId, isLoadingTokenDetail }) => {
           <StatItem
             label="Market Cap"
             value={
-              tokenStats?.mcap.mcap ? `$${tokenStats?.mcap.mcap.toLocaleString(undefined, {
-                maximumFractionDigits: 0,
-              })}` : "--"
+              tokenStats?.mcap.mcap ? `$${formatNumber(tokenStats?.mcap.mcap, 0)}` : "--"
             }
           />
 
           <StatItem
             label="FDV"
             value={
-              tokenStats?.mcap?.fdv ? `$${tokenStats?.mcap.fdv.toLocaleString(undefined, {
-                maximumFractionDigits: 0,
-              })}` : "--"
+              tokenStats?.mcap?.fdv ? `$${formatNumber(tokenStats?.mcap.fdv, 0)}` : "--"
             }
           />
           {/* <StatItem
@@ -89,9 +82,7 @@ const MarketStats: React.FC<Props> = ({ tokenId, isLoadingTokenDetail }) => {
             label="Holders"
             value={
               tokenStats?.holders
-                ? tokenStats?.holders.toLocaleString(undefined, {
-                  maximumFractionDigits: 0,
-                })
+                ? formatNumber(tokenStats?.holders)
                 : "--"
             }
           />
@@ -105,9 +96,7 @@ const MarketStats: React.FC<Props> = ({ tokenId, isLoadingTokenDetail }) => {
             label="Circ Supply"
             value={
               tokenStats?.mcap.circSupply
-                ? tokenStats?.mcap.circSupply.toLocaleString(undefined, {
-                  maximumFractionDigits: 0,
-                })
+                ? formatNumber(tokenStats?.mcap.circSupply)
                 : "--"
             }
           />
@@ -115,9 +104,7 @@ const MarketStats: React.FC<Props> = ({ tokenId, isLoadingTokenDetail }) => {
             label="Total Supply"
             value={
               tokenStats?.mcap.totalSupply
-                ? tokenStats?.mcap.totalSupply.toLocaleString(undefined, {
-                  maximumFractionDigits: 0,
-                })
+                ? formatNumber(tokenStats?.mcap.totalSupply)
                 : "--"
             }
           />
