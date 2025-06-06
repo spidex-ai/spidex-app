@@ -23,8 +23,3 @@ jobs:
       - name: Setup docker 
         run: |
           docker compose up -d --build
-      
-      - name: Verify deployment
-        run: |
-          docker ps -a
-          curl -v http://localhost:3333 || true
