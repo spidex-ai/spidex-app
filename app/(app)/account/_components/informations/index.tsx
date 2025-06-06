@@ -82,9 +82,10 @@ const Information: React.FC<Props> = ({ user }) => {
               alt="profile"
               width={12}
               height={12}
+              className="w-6 h-6"
             />
           </div>
-          <TextGradient className="text-2xl">Account</TextGradient>
+          <TextGradient className="text-2xl font-medium leading-none">Account</TextGradient>
         </div>
         <div
           className="flex items-center gap-2 cursor-pointer"
