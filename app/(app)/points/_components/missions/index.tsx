@@ -1,14 +1,14 @@
-'use client';
-import { Skeleton } from '@/components/ui/skeleton';
-import { usePointHistory, useQuests } from '@/hooks/point/use-point';
-import React from 'react';
-import Image from 'next/image';
-import { ButtonBlack, GradientSecondaryBtn } from '@/components/ui';
-import { useSpidexCoreContext } from '@/app/_contexts/spidex-core';
-import ReminderModalWrapper from './reminder-modal-wrapper';
-import toast from 'react-hot-toast';
-import { useRouter } from 'next/navigation';
-import Pagination from '@/app/(app)/_components/pagination';
+"use client";
+import { Skeleton } from "@/components/ui/skeleton";
+import { usePointHistory, useQuests } from "@/hooks/point/use-point";
+import React, { useState } from "react";
+import Image from "next/image";
+import { ButtonBlack, GradientSecondaryBtn } from "@/components/ui";
+import { useSpidexCoreContext } from "@/app/_contexts/spidex-core";
+import ReminderModalWrapper, { Platform } from "./reminder-modal-wrapper";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+import Pagination from "@/app/(app)/_components/pagination";
 
 interface MissionItem {
   id: number;
@@ -20,6 +20,7 @@ interface MissionItem {
   requireUrl?: string;
   type: number;
   status: number;
+  step: number;
 }
 
 const Missions = () => {
@@ -29,20 +30,22 @@ const Missions = () => {
     quests,
     loading,
     error,
-    fetchQuests,
     currentPage,
     setCurrentPage,
     totalPages,
+    refetchQuests
   } = useQuests();
   const { refetchPointHistory } = usePointHistory();
-  const { triggerSocialQuest, triggerDailyLogin } = useSpidexCoreContext();
+  const { triggerSocialQuest, triggerDailyLogin, startSocialQuest } =
+    useSpidexCoreContext();
   const [loadingMissionId, setLoadingMissionId] = React.useState<number | null>(
     null
   );
   const [expandedMissions, setExpandedMissions] = React.useState<number[]>([]);
 
   const [isReminderModalOpen, setIsReminderModalOpen] =
-    React.useState<boolean>(false);
+    useState<boolean>(false);
+    const [reminderModalPlatform, setReminderModalPlatform] = useState<Platform>('X');
 
   if (error) {
     return <div>Error: {error}</div>;
@@ -53,6 +56,12 @@ const Missions = () => {
   // FOLLOW_X = 3,
 
   // DAILY_LOGIN = 10,
+  const STEP = {
+    COMPLETED: 2,
+    VERIFY: 1,
+    START: 0,
+    DISABLED: -1,
+  };
   const results: MissionItem[] =
     quests.length > 0
       ? quests.map((quest, index) => {
@@ -128,6 +137,15 @@ const Missions = () => {
                 />
               );
           }
+
+          const step =
+            quest.status == 2
+              ? STEP.COMPLETED
+              : quest.status === 1 || quest.type === 10
+              ? STEP.VERIFY
+              : quest.type === 20 || quest.type === 32 || quest.type === 41
+              ? STEP.DISABLED
+              : STEP.START;
           return {
             id: quest.id,
             icon: icon,
@@ -138,23 +156,37 @@ const Missions = () => {
             type: quest.type,
             status: quest.status,
             requireUrl: quest?.requirements?.url,
+            step: step,
           };
         })
       : [];
 
   const toggleDescription = (id: number) => {
-    setExpandedMissions(prev =>
+    setExpandedMissions((prev) =>
       prev.includes(id)
-        ? prev.filter(missionId => missionId !== id)
+        ? prev.filter((missionId) => missionId !== id)
         : [...prev, id]
     );
   };
 
   const handleFinish = async (result: MissionItem) => {
-    if (!auth?.user?.xUsername && (result.type === 0 || result.type === 3)) {
-      setIsReminderModalOpen(true);
+    if (!auth?.user?.xUsername && (result.type === 0 || result.type === 3 || result.type === 1 || result.type === 2)) {
+      setIsReminderModalOpen(true); 
+      switch (result.type) {
+        case 0:
+        case 3:
+          setReminderModalPlatform('X');
+          break;
+        case 1:
+          setReminderModalPlatform('Discord');
+          break;
+        case 2:
+          setReminderModalPlatform('Telegram');
+          break;
+      }
       return;
     }
+    console.log("🚀 ~ handleFinish ~ result.id:", result.id)
     setLoadingMissionId(result.id);
     try {
       let data = null;
@@ -163,11 +195,20 @@ const Missions = () => {
         case 1:
         case 2:
         case 3:
-          data = await triggerSocialQuest(result.id);
-          window.open(result.requireUrl, '_blank');
+          if (result.step === STEP.VERIFY) {
+            data = await triggerSocialQuest(result.id);
+            await new Promise(resolve => setTimeout(resolve, 10000));
+            // window.open(result.requireUrl, "_blank");
+            toast.success(`You earned +${result.point} points!`);
+          } else {
+            data = await startSocialQuest(result.id);
+            window.open(result.requireUrl, "_blank");
+
+          }
           break;
         case 10:
           data = await triggerDailyLogin();
+          toast.success("You earned +10 points!");
           break;
         case 20:
           router.push(`/referral`);
@@ -177,21 +218,18 @@ const Missions = () => {
           return;
         case 32:
           const tokenTrade =
-            'c48cbb3d5e57ed56e276bc45f99ab39abe94e6cd7ac39fb402da47ad0014df105553444d';
+            "c48cbb3d5e57ed56e276bc45f99ab39abe94e6cd7ac39fb402da47ad0014df105553444d";
           router.push(`/token/${tokenTrade}?tab=trade`);
           return;
         default:
           return;
       }
-
-      toast.success('You have completed the mission!');
-      fetchQuests();
+      refetchQuests();
       refetchPointHistory();
       return data;
     } catch (error) {
-      console.error('🚀 ~ handleFinish ~ error:', error);
-
-      toast.error('You have failed the mission! Please try again.');
+      console.log("🚀 ~ handleFinish ~ error:", error)
+      toast.error("You have failed the mission! Please try again.");
     } finally {
       setLoadingMissionId(null);
     }
@@ -208,7 +246,7 @@ const Missions = () => {
         ) : (
           <>
             {results.length > 0
-              ? results.map(result => (
+              ? results.map((result) => (
                   <div className="bg-bg-main rounded-lg p-4" key={result.type}>
                     <div
                       className={`grid grid-cols-3 cursor-pointer`}
@@ -217,7 +255,7 @@ const Missions = () => {
                       <div className="col-span-1 flex gap-2 items-center cursor-pointer">
                         <div
                           className=""
-                          onClick={e => {
+                          onClick={(e) => {
                             e.stopPropagation();
                             toggleDescription(result.id);
                           }}
@@ -229,8 +267,8 @@ const Missions = () => {
                             height={10}
                             className={`transform transition-transform duration-200 ${
                               expandedMissions.includes(result.id)
-                                ? 'rotate-90'
-                                : ''
+                                ? "rotate-90"
+                                : ""
                             }`}
                           />
                         </div>
@@ -241,7 +279,7 @@ const Missions = () => {
                             </div>
                             <div className="text-white text-lg">
                               {result.name}
-                            </div>{' '}
+                            </div>{" "}
                           </div>
                         </div>
                       </div>
@@ -259,7 +297,7 @@ const Missions = () => {
                       </div>
                       <div className="col-span-1 text-white flex items-start justify-end">
                         <div>
-                          {result.status == 1 ? (
+                          {result.step === STEP.COMPLETED ? (
                             <div>
                               <GradientSecondaryBtn
                                 className="px-7 py-2"
@@ -268,20 +306,33 @@ const Missions = () => {
                                 Completed
                               </GradientSecondaryBtn>
                             </div>
-                          ) : result.type === 20 ||
-                            result.type === 32 ||
-                            result.type === 41 ? null : (
+                          ) : result.step === STEP.VERIFY ? (
                             <div>
                               <ButtonBlack
                                 isLoading={loadingMissionId === result.id}
                                 disabled={
                                   (loadingMissionId !== null &&
                                     loadingMissionId !== result.id) ||
-                                  result.status === 1
+                                  result.status === 2
                                 }
                                 className="md:px-12 md:py-2"
                               >
                                 Verify
+                              </ButtonBlack>
+                            </div>
+                          ) : result.step === STEP.DISABLED ? null : (
+                            <div>
+                              <ButtonBlack
+                                isLoading={loadingMissionId === result.id}  
+                                // isLoading={true}
+                                disabled={
+                                  (loadingMissionId !== null &&
+                                    loadingMissionId !== result.id) ||
+                                  result.status === 2
+                                }
+                                className="md:px-12 md:py-2"
+                              >
+                                Start
                               </ButtonBlack>
                             </div>
                           )}
@@ -292,8 +343,8 @@ const Missions = () => {
                     <div
                       className={`w-full relative overflow-hidden transition-all duration-300 ease-in-out ${
                         expandedMissions.includes(result.id)
-                          ? 'opacity-100'
-                          : 'max-h-0 opacity-0'
+                          ? "opacity-100"
+                          : "max-h-0 opacity-0"
                       }`}
                     >
                       <div className="px-5 py-2 w-full text-text-gray">
@@ -318,6 +369,7 @@ const Missions = () => {
       <ReminderModalWrapper
         isOpen={isReminderModalOpen}
         onOpenChange={() => setIsReminderModalOpen(!isReminderModalOpen)}
+        platform={reminderModalPlatform}
       />
     </div>
   );

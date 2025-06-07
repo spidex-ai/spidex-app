@@ -153,19 +153,26 @@ export const GradientSecondaryBtn = (props: any) => {
 };
 
 export const ButtonBlack = (props: any) => {
-  const { children, className, isLoading, ...rest } = props;
+  const { children, className, isLoading, disabled, ...rest } = props;
+  console.log("🚀 ~ ButtonBlack ~ disabled:", disabled, isLoading)
   return (
     <button
-      {...rest}
-      disabled={isLoading}
-      className={cn(
-        'gradient-border-main cursor-pointer text-white bg-bg-tab',
-        'hover:shadow-[0_0_10px_#009EFF] transition-shadow duration-300', // Thêm hiệu ứng blur khi hover"hover:shadow-[0_0_10px_#009EFF] transition-shadow duration-300", // Thêm hiệu ứng blur khi hover
+    {...rest}
+    disabled={disabled || isLoading}
+    className={
+      cn(
+        "gradient-border-main cursor-pointer text-white bg-bg-tab flex items-center justify-center gap-1",
+        "hover:shadow-[0_0_10px_#009EFF] transition-shadow duration-300",
+        (disabled || isLoading) && "opacity-50 cursor-not-allowed",
         className
-      )}
-    >
-      {children}
-    </button>
+      )
+    }
+  >
+    {isLoading && (
+      <div className="w-3 h-3 border-2 pb-2 border-white border-t-transparent rounded-full animate-spin mb-1" />
+    )}
+    {children}
+  </button>
   );
 };
 export { Button, buttonVariants, GradientBorderButton };
