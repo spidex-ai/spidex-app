@@ -41,16 +41,21 @@ export const usePortfolioTransaction = (address?: string) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [data, setData] = useState<PortfolioTransaction[]>([]);
+    const [totalPages, setTotalPages] = useState(0);
+    const [currentPage, setCurrentPage] = useState(0);
+    const pageSize = 5;
+
     useEffect(() => {
         fetchPortfolioTransaction()
-    },[address])
+    },[address, currentPage])
 
     const fetchPortfolioTransaction = async () => {
         setLoading(true)
         setError(null)
         try {
-            const data = await getPortfolioTransaction(address)
-            setData(data)
+            const data = await getPortfolioTransaction(address, currentPage + 1, pageSize)
+            console.log("🚀 ~ fetchPortfolioTransaction ~ data:", data)
+            setData(data.data)
         } catch (error) {
             setError(error as string)
         } finally {
@@ -61,6 +66,9 @@ export const usePortfolioTransaction = (address?: string) => {
     return {
         data,
         loading,
-        error
+        error,
+        totalPages,
+        currentPage,
+        setCurrentPage
     }
 }

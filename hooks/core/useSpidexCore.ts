@@ -373,7 +373,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
         const data = await fetchWithAuth(
           `/user-referral/me/referred-users?page=${page}&limit=${perPage}`
         );
-        return data.data;
+        return data;
       } catch (err: any) {
         setError(err.message || "An error occurred");
         return null;
@@ -393,7 +393,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
         const data = await fetchWithAuth(
           `/user-referral/me/referral-history?page=${page}&limit=${perPage}`
         );
-        return data.data;
+        return data;
       } catch (err: any) {
         setError(err.message || "An error occurred");
         return null;
@@ -413,12 +413,12 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     } catch (error) {}
   }, [fetchWithAuth, auth]);
 
-  const getUserQuests = useCallback(async () => {
+  const getUserQuests = useCallback(async (page?: number, perPage?: number) => {
     setLoading(true);
     setError(null);
     try {
-      const data = await fetchWithAuth("/user-quest?limit=10&page=1");
-      return data.data;
+      const data = await fetchWithAuth(`/user-quest?limit=${perPage}&page=${page}`);
+      return data;
     } catch (error) {
       return null;
     } finally {
@@ -426,14 +426,12 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     }
   }, [fetchWithAuth, auth]);
 
-  const getUserPointHistory = useCallback(async () => {
+  const getUserPointHistory = useCallback(async (page?: number, perPage?: number) => {
     setLoading(true);
     setError(null);
     try {
-      const data = await fetchWithAuth(
-        "/user-point/me/history?limit=10&page=1"
-      );
-      return data.data;
+      const data = await fetchWithAuth(`/user-point/me/history?limit=${perPage}&page=${page}`);
+      return data;
     } catch (error) {
       return null;
     } finally {
@@ -462,26 +460,6 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     [fetchWithAuth, auth]
   );
 
-  const getPortfolioTransaction = useCallback(
-    async (address?: string) => {
-      setLoading(true);
-      setError(null);
-      try {
-        const data = await fetchWithAuth(
-          `/portfolio/${
-            address ||
-            "addr1q9gykktajrgrmj5am8vwlhp65a72emlwn2s3e5cadkhe3vrfkfxs6yajls3ft0yn42uqlcnrq6qcn3l0lunkxy6aplgspxm6da"
-          }/transactions?page=1&count=20&order=desc`
-        );
-        return data.data;
-      } catch (error) {
-        return null;
-      } finally {
-        setLoading(false);
-      }
-    },
-    [fetchWithAuth, auth]
-  );
 
   const getTokenTradeHistory = useCallback(
     async (tokenId: string) => {
@@ -500,6 +478,18 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     },
     [fetchWithAuth, auth]
   );
+  const getPortfolioTransaction = useCallback(async (address?: string, page?: number, perPage?: number) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await fetchWithAuth(`/portfolio/${address || 'addr1q9gykktajrgrmj5am8vwlhp65a72emlwn2s3e5cadkhe3vrfkfxs6yajls3ft0yn42uqlcnrq6qcn3l0lunkxy6aplgspxm6da'}/transactions?page=1&count=20&order=desc`);
+      return data;
+    } catch (error) {
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  }, [fetchWithAuth, auth]);
 
   const getTokenTopHolders = useCallback(
     async (tokenId: string) => {

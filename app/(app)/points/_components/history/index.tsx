@@ -6,6 +6,7 @@ import Image from "next/image";
 
 import { PointHistory } from "@/hooks/point/type";
 import { formatSILK } from "@/app/utils/format";
+import Pagination from "@/app/(app)/_components/pagination";
 
 interface HistoryItem {
   task: string;
@@ -15,11 +16,14 @@ interface HistoryItem {
 }
 
 const Hisotry = () => {
-  const { pointHistory, loading, error } = usePointHistory();
-
-  if (loading) {
-    return <Skeleton className="w-full h-[100px]" />;
-  }
+  const {
+    pointHistory,
+    loading,
+    error,
+    currentPage,
+    setCurrentPage,
+    totalPages,
+  } = usePointHistory();
 
   if (error) {
     return <div>Error: {error}</div>;
@@ -58,39 +62,52 @@ const Hisotry = () => {
           </div>
         </div>
         <div>
-          {results.length > 0 ? (
-            results.map((result) => (
-              <div
-                key={result.task}
-                className={`grid grid-cols-3 text-sm ${
-                  result.isBorderBottom
-                    ? "border-b border-border-main py-6"
-                    : "pt-6"
-                }`}
-              >
-                <div className="col-span-1 flex items-center gap-2">
-                  <div>+ {formatSILK(result.point)}</div>
-                  <div>
-                    <Image
-                      src="/icons/logo-gray.svg"
-                      alt="arrow-right"
-                      width={24}
-                      height={24}
-                    />
-                  </div>
-                </div>
-                <div className="col-span-1 text-white flex items-center justify-center gap-1">
-                  <div>{result.task}</div>
-                </div>
-                <div className="col-span-1 text-white flex items-center justify-center">
-                  <div>{result.createdAt}</div>
-                </div>
-              </div>
-            ))
+          {loading ? (
+            <Skeleton className="w-full h-[100px]" />
           ) : (
-            <div className="text-center text-text-gray mt-8">No data.</div>
+            <div>
+              {results.length > 0 ? (
+                results.map((result) => (
+                  <div
+                    key={result.task}
+                    className={`grid grid-cols-3 text-sm ${
+                      result.isBorderBottom
+                        ? "border-b border-border-main py-6"
+                        : "pt-6"
+                    }`}
+                  >
+                    <div className="col-span-1 flex items-center gap-2">
+                      <div>+ {formatSILK(result.point)}</div>
+                      <div>
+                        <Image
+                          src="/icons/logo-gray.svg"
+                          alt="arrow-right"
+                          width={24}
+                          height={24}
+                        />
+                      </div>
+                    </div>
+                    <div className="col-span-1 text-white flex items-center justify-center gap-1">
+                      <div>{result.task}</div>
+                    </div>
+                    <div className="col-span-1 text-white flex items-center justify-center">
+                      <div>{result.createdAt}</div>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="text-center text-text-gray mt-8">No data.</div>
+              )}
+            </div>
           )}
         </div>
+      </div>
+      <div className="mt-6">
+        <Pagination
+          total={totalPages}
+          current={currentPage}
+          onPageChange={setCurrentPage}
+        />
       </div>
     </div>
   );

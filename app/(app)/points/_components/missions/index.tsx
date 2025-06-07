@@ -8,6 +8,7 @@ import { useSpidexCoreContext } from "@/app/_contexts/spidex-core";
 import ReminderModalWrapper from "./reminder-modal-wrapper";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import Pagination from "@/app/(app)/_components/pagination";
 
 interface MissionItem {
   id: number;
@@ -24,7 +25,15 @@ interface MissionItem {
 const Missions = () => {
   const router = useRouter();
   const { auth } = useSpidexCoreContext();
-  const { quests, loading, error, fetchQuests } = useQuests();
+  const {
+    quests,
+    loading,
+    error,
+    fetchQuests,
+    currentPage,
+    setCurrentPage,
+    totalPages,
+  } = useQuests();
   const { refetchPointHistory } = usePointHistory();
   const { triggerSocialQuest, triggerDailyLogin } = useSpidexCoreContext();
   const [loadingMissionId, setLoadingMissionId] = React.useState<number | null>(
@@ -34,10 +43,6 @@ const Missions = () => {
 
   const [isReminderModalOpen, setIsReminderModalOpen] =
     React.useState<boolean>(false);
-
-  if (loading) {
-    return <Skeleton className="w-full h-[100px]" />;
-  }
 
   if (error) {
     return <div>Error: {error}</div>;
@@ -164,14 +169,15 @@ const Missions = () => {
         case 10:
           data = await triggerDailyLogin();
           break;
-        case 20: 
+        case 20:
           router.push(`/referral`);
           return;
         case 41:
-          router.push(`/chat`); 
+          router.push(`/chat`);
           return;
         case 32:
-          const tokenTrade = 'c48cbb3d5e57ed56e276bc45f99ab39abe94e6cd7ac39fb402da47ad0014df105553444d'
+          const tokenTrade =
+            "c48cbb3d5e57ed56e276bc45f99ab39abe94e6cd7ac39fb402da47ad0014df105553444d";
           router.push(`/token/${tokenTrade}?tab=trade`);
           return;
         default:
@@ -188,7 +194,6 @@ const Missions = () => {
       toast.error("You have failed the mission! Please try again.");
     } finally {
       setLoadingMissionId(null);
- 
     }
   };
 
@@ -198,98 +203,116 @@ const Missions = () => {
         <div className="text-[28px] font-medium text-white">Missions</div>
       </div>
       <div className="flex flex-col mt-6 gap-3">
-        {results.length > 0
-          ? results.map((result) => (
-              <div className="bg-bg-main rounded-lg p-4" key={result.type}>
-                <div className={`grid grid-cols-3 cursor-pointer`}       onClick={() => handleFinish(result)}>
-                  <div
-                    className="col-span-1 flex gap-2 items-center cursor-pointer"
-                 
-                  >
-                    <div className=""  onClick={(e) => {
-                      e.stopPropagation();
-                      toggleDescription(result.id)
-                    }}>
-                      <Image
-                        src="/icons/arrow-right.svg"
-                        alt="arrow-down"
-                        width={10}
-                        height={10}
-                        className={`transform transition-transform duration-200 ${
-                          expandedMissions.includes(result.id)
-                            ? "rotate-90"
-                            : ""
-                        }`}
-                      />
+        {loading ? (
+          <Skeleton className="w-full h-[100px]" />
+        ) : (
+          <>
+            {results.length > 0
+              ? results.map((result) => (
+                  <div className="bg-bg-main rounded-lg p-4" key={result.type}>
+                    <div
+                      className={`grid grid-cols-3 cursor-pointer`}
+                      onClick={() => handleFinish(result)}
+                    >
+                      <div className="col-span-1 flex gap-2 items-center cursor-pointer">
+                        <div
+                          className=""
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            toggleDescription(result.id);
+                          }}
+                        >
+                          <Image
+                            src="/icons/arrow-right.svg"
+                            alt="arrow-down"
+                            width={10}
+                            height={10}
+                            className={`transform transition-transform duration-200 ${
+                              expandedMissions.includes(result.id)
+                                ? "rotate-90"
+                                : ""
+                            }`}
+                          />
+                        </div>
+                        <div className="w-full">
+                          <div className="flex items-center gap-2">
+                            <div className="flex items-center">
+                              {result.icon}
+                            </div>
+                            <div className="text-white text-lg">
+                              {result.name}
+                            </div>{" "}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="col-span-1 text-white text-lg flex justify-center gap-1 items-center">
+                        <div>+{result.point} </div>
+                        <div>
+                          <Image
+                            src="/icons/logo-gray.svg"
+                            alt="arrow-right"
+                            width={24}
+                            height={24}
+                          />
+                        </div>
+                        {result.type === 20 ? null : <div>/day</div>}
+                      </div>
+                      <div className="col-span-1 text-white flex items-start justify-end">
+                        <div>
+                          {result.status == 1 ? (
+                            <div>
+                              <GradientSecondaryBtn
+                                className="px-7 py-2"
+                                disabled={true}
+                              >
+                                Completed
+                              </GradientSecondaryBtn>
+                            </div>
+                          ) : result.type === 20 ||
+                            result.type === 32 ||
+                            result.type === 41 ? null : (
+                            <div>
+                              <ButtonBlack
+                                isLoading={loadingMissionId === result.id}
+                                disabled={
+                                  (loadingMissionId !== null &&
+                                    loadingMissionId !== result.id) ||
+                                  result.status === 1
+                                }
+                                className="md:px-12 md:py-2"
+                              >
+                                Verify
+                              </ButtonBlack>
+                            </div>
+                          )}
+                        </div>
+                      </div>
                     </div>
-                    <div className="w-full">
-                      <div className="flex items-center gap-2">
-                        <div className="flex items-center">{result.icon}</div>
-                        <div className="text-white text-lg">
-                          {result.name}
-                        </div>{" "}
+
+                    <div
+                      className={`w-full relative overflow-hidden transition-all duration-300 ease-in-out ${
+                        expandedMissions.includes(result.id)
+                          ? "opacity-100"
+                          : "max-h-0 opacity-0"
+                      }`}
+                    >
+                      <div className="px-5 py-2 w-full text-text-gray">
+                        {result.description}
                       </div>
                     </div>
                   </div>
-                  <div className="col-span-1 text-white text-lg flex justify-center gap-1 items-center">
-                    <div>+{result.point} </div>
-                    <div>
-                      <Image
-                        src="/icons/logo-gray.svg"
-                        alt="arrow-right"
-                        width={24}
-                        height={24}
-                      />
-                    </div>
-                    {result.type === 20 ? null : <div>/day</div>}
-                  </div>
-                  <div className="col-span-1 text-white flex items-start justify-end">
-                    <div>
-                      {result.status == 1 ? (
-                        <div>
-                          <GradientSecondaryBtn
-                            className="px-7 py-2"
-                            disabled={true}
-                          >
-                            Completed
-                          </GradientSecondaryBtn>
-                        </div>
-                      ) : result.type === 20 ||
-                        result.type === 32 ||
-                        result.type === 41 ? null : (
-                        <div>
-                          <ButtonBlack
-                          
-                            isLoading={loadingMissionId === result.id}
-                            disabled={
-                              (loadingMissionId !== null &&
-                                loadingMissionId !== result.id) ||
-                              result.status === 1
-                            }
-                            className="md:px-12 md:py-2"
-                          >
-                            Verify
-                          </ButtonBlack>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
+                ))
+              : null}
+          </>
+        )}
+      </div>
 
-                <div
-                  className={`w-full relative overflow-hidden transition-all duration-300 ease-in-out ${
-                    expandedMissions.includes(result.id)
-                      ? "opacity-100"
-                      : "max-h-0 opacity-0"
-                  }`}
-                >
-                  <div className="px-5 py-2 w-full text-text-gray">
-                    {result.description}
-                  </div>
-                </div>
-              </div>
-            ))
-          : null}
+      <div className="mt-6">
+        <Pagination
+          total={totalPages}
+          current={currentPage}
+          onPageChange={setCurrentPage}
+        />
       </div>
 
       <ReminderModalWrapper

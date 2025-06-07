@@ -17,6 +17,7 @@ import { usePortfolioTransaction } from "@/hooks/portfolio";
 import Image from "next/image";
 import type { PortfolioTransaction } from "@/hooks/portfolio/type";
 import { formatNumber } from "@/lib/utils";
+import Pagination from "@/app/(app)/_components/pagination";
 
 interface Props {
   address: string;
@@ -25,7 +26,7 @@ interface Props {
 const Transactions: React.FC<Props> = ({ address }) => {
 
 
-  const { data: transactions, loading } = usePortfolioTransaction(address);
+  const { data: transactions, loading, totalPages, currentPage, setCurrentPage } = usePortfolioTransaction(address);
 
   const onClickTxn = (hash: string) => {
     window.open(`https://cexplorer.io/tx/${hash}`, "_blank");
@@ -116,6 +117,12 @@ const Transactions: React.FC<Props> = ({ address }) => {
           <p className="">No transactions found</p>
         )}
       </Card>
+
+      <Pagination
+        total={totalPages}
+        current={currentPage}
+        onPageChange={setCurrentPage}
+      />
     </div>
   );
 };
