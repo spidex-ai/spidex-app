@@ -28,13 +28,13 @@ const ConnectedAccounts: React.FC<Props> = ({ user }) => {
     setIsClient(true);
   }, []);
 
-  // Derive base URL for social login redirects - only on client
-  const baseUrl = useMemo(() => {
+  // Get current URL dynamically
+  const getCurrentUrl = () => {
     if (typeof window !== "undefined") {
-      return window.location.href.split("/").slice(0, 3).join("/") + "/account";
+      return window.location.origin + window.location.pathname;
     }
     return "";
-  }, [isClient]);
+  };
 
   const handleConnectGoogle = async () => {
     try {
@@ -52,26 +52,22 @@ const ConnectedAccounts: React.FC<Props> = ({ user }) => {
   const handleConnectX = () => {
     if (isConnecting) return;
     setIsConnecting(true);
-    const xAuthUrl = `https://twitter.com/i/oauth2/authorize?response_type=code&client_id=THpPdER1Nm1NZ3FCbm1lbnU5OXI6MTpjaQ&redirect_uri=${baseUrl}&scope=tweet.read%20users.read&state=state&code_challenge=challenge&code_challenge_method=plain`;
+    const redirectUri = getCurrentUrl();
+    const xAuthUrl = `https://twitter.com/i/oauth2/authorize?response_type=code&client_id=THpPdER1Nm1NZ3FCbm1lbnU5OXI6MTpjaQ&redirect_uri=${encodeURIComponent(redirectUri)}&scope=tweet.read%20users.read&state=state&code_challenge=challenge&code_challenge_method=plain`;
     window.location.href = xAuthUrl;
   };
 
   // Handle X (Twitter) OAuth callback
-  const handleXCallback = async (code: string, redirectUri: string) => {
+  const handleXCallback = async (code: string) => {
     try {
       if (isConnecting) return;
-      
+
       setIsConnecting(true);
+      const redirectUri = getCurrentUrl();
       const result = await signInWithX(code, redirectUri);
-      
+
       if (result && typeof window !== "undefined") {
         console.log("X login successful");
-        // remove code from URL
-        window.history.replaceState(
-          {},
-          document.title,
-          window.location.pathname
-        );
         // Refresh the page to show updated user info
         router.refresh();
       }
@@ -85,11 +81,13 @@ const ConnectedAccounts: React.FC<Props> = ({ user }) => {
   // Handle X login callback via URL params
   useEffect(() => {
     const socialConnectCode = params.get("code");
-    if (socialConnectCode && socialConnectCode !== processedCodeRef.current) {
+    const callbackType = params.get("type");
+
+    if (socialConnectCode && socialConnectCode !== processedCodeRef.current && callbackType === "connect-x") {
       processedCodeRef.current = socialConnectCode;
-      handleXCallback(socialConnectCode, baseUrl);
+      handleXCallback(socialConnectCode);
     }
-  }, [params, baseUrl]);
+  }, [params]);
 
   return (
     <div className="flex flex-col gap-4 mt-8">

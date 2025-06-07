@@ -4,7 +4,6 @@ import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { UpdateUserPayload } from "./type";
 import { QuoteType } from "@/app/(app)/token/[address]/_components/header/select-quote";
-import { LOGIN_METHODS } from "@/app/_components/login-modal";
 export interface SignMessageData {
   signature: string;
   address: string;
@@ -86,9 +85,9 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
         ...(auth?.accessToken && {
           Authorization: `Bearer ${auth.accessToken}`,
         }),
-        ...(!options.body || !(options.body instanceof FormData) 
-        ? { "Content-Type": "application/json" }
-        : {}),
+        ...(!options.body || !(options.body instanceof FormData)
+          ? { "Content-Type": "application/json" }
+          : {}),
         ...options.headers,
       };
 
@@ -257,7 +256,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
             referralCode,
           }),
         });
-        setAuth({...data.data, walletName: "xlogin"});
+        setAuth({ ...data.data, walletName: "xlogin" });
         return data.data;
       } catch (err) {
         throw err;
@@ -276,7 +275,52 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
             referralCode,
           }),
         });
-        setAuth({...data.data, walletName: "google"});
+        setAuth({ ...data.data, walletName: "google" });
+        return data.data;
+      } catch (err) {
+        throw err;
+      }
+    },
+    [fetchWithAuth]
+  );
+
+  const connectDiscord = useCallback(
+    async (code: string, redirectUri: string, referralCode?: string) => {
+      try {
+        const data = await fetchWithAuth("/auth/connect/discord", {
+          method: "POST",
+          body: JSON.stringify({
+            code,
+            redirectUri,
+            referralCode
+          }),
+        });
+        setAuth({ ...data.data, walletName: "discord" });
+        return data.data;
+      } catch (err) {
+        throw err;
+      }
+    },
+    [fetchWithAuth]
+  );
+
+  const connectTelegram = useCallback(
+    async (id: string, first_name: string, last_name: string, username: string, photo_url: string, auth_date: number, hash: string, referralCode?: string) => {
+      try {
+        const data = await fetchWithAuth("/auth/connect/telegram", {
+          method: "POST",
+          body: JSON.stringify({
+            id,
+            first_name,
+            last_name,
+            username,
+            photo_url,
+            auth_date,
+            hash,
+            referralCode
+          }),
+        });
+        setAuth({ ...data.data, walletName: "telegram" });
         return data.data;
       } catch (err) {
         throw err;
@@ -553,7 +597,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     } finally {
       setLoading(false);
     }
-  }, [fetchWithAuth, auth]); 
+  }, [fetchWithAuth, auth]);
 
   const updateUserInfo = useCallback(async (payload: UpdateUserPayload) => {
     setLoading(true);
@@ -582,7 +626,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     } finally {
       setLoading(false);
     }
-  }, [fetchWithAuth, auth]); 
+  }, [fetchWithAuth, auth]);
 
   const getTokenOHLCV = useCallback(async (tokenId: string, interval: string, numIntervals: number, quote: QuoteType) => {
     setLoading(true);
@@ -608,7 +652,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     } finally {
       setLoading(false);
     }
-  }, [fetchWithAuth, auth]); 
+  }, [fetchWithAuth, auth]);
 
   const getAchievements = useCallback(async () => {
     setLoading(true);
@@ -634,6 +678,8 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     refreshToken,
     connectX,
     connectGoogle,
+    connectDiscord,
+    connectTelegram,
     fetchWithAuth,
     isAuthenticated,
     logout,
