@@ -1,6 +1,10 @@
-import { EsitmateSwapPayload, SubmitSwapPayload, SwapPayload } from "@/services/dexhunter/types";
+import {
+  EsitmateSwapPayload,
+  SubmitSwapPayload,
+  SwapPayload,
+} from "@/services/dexhunter/types";
 import { STORAGE_KEY } from "@raydium-io/raydium-sdk-v2";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { UpdateUserPayload } from "./type";
 import { QuoteType } from "@/app/(app)/token/[address]/_components/header/select-quote";
@@ -41,7 +45,7 @@ export interface UserSpidex {
 }
 
 export const useSpidexCore = (initialAuth: Auth | null = null) => {
-  const router = useRouter()
+  const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
   const [auth, setAuth] = useState<Auth | null>(initialAuth);
   const [error, setError] = useState<string | null>(null);
@@ -294,7 +298,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
           body: JSON.stringify({
             code,
             redirectUri,
-            referralCode
+            referralCode,
           }),
         });
         setAuth({ ...data.data, walletName: "discord" });
@@ -307,19 +311,28 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
   );
 
   const connectTelegram = useCallback(
-    async (id: string, first_name: string, last_name: string, username: string, photo_url: string, auth_date: number, hash: string, referralCode?: string) => {
+    async (
+      id: string,
+      first_name: string,
+      last_name: string,
+      username: string,
+      photo_url: string,
+      auth_date: number,
+      hash: string,
+      referralCode?: string
+    ) => {
       try {
         const data = await fetchWithAuth("/auth/connect/telegram", {
           method: "POST",
           body: JSON.stringify({
-            id,
+            id: id.toString(),
             first_name,
             last_name,
             username,
             photo_url,
             auth_date,
             hash,
-            referralCode
+            referralCode,
           }),
         });
         setAuth({ ...data.data, walletName: "telegram" });
@@ -334,7 +347,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
   const logout = useCallback(async () => {
     setAuth(null);
     localStorage.removeItem(STORAGE_KEY);
-    router.push('/chat')
+    router.push("/chat");
   }, []);
 
   const getUserRefMeInfo = useCallback(async () => {
@@ -397,10 +410,8 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     try {
       const data = await fetchWithAuth(`/user-point/me/info`);
       return data.data;
-    } catch (error) {
-
-    }
-  }, [fetchWithAuth, auth])
+    } catch (error) {}
+  }, [fetchWithAuth, auth]);
 
   const getUserQuests = useCallback(async () => {
     setLoading(true);
@@ -419,7 +430,9 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     setLoading(true);
     setError(null);
     try {
-      const data = await fetchWithAuth("/user-point/me/history?limit=10&page=1");
+      const data = await fetchWithAuth(
+        "/user-point/me/history?limit=10&page=1"
+      );
       return data.data;
     } catch (error) {
       return null;
@@ -428,147 +441,197 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     }
   }, [fetchWithAuth, auth]);
 
-  const getPortfolioToken = useCallback(async (address?: string) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const data = await fetchWithAuth(`/portfolio/${address || 'addr1q9gykktajrgrmj5am8vwlhp65a72emlwn2s3e5cadkhe3vrfkfxs6yajls3ft0yn42uqlcnrq6qcn3l0lunkxy6aplgspxm6da'}`);
-      return data.data;
-    } catch (error) {
-      return null;
-    } finally {
-      setLoading(false);
-    }
-  }, [fetchWithAuth, auth]);
+  const getPortfolioToken = useCallback(
+    async (address?: string) => {
+      setLoading(true);
+      setError(null);
+      try {
+        const data = await fetchWithAuth(
+          `/portfolio/${
+            address ||
+            "addr1q9gykktajrgrmj5am8vwlhp65a72emlwn2s3e5cadkhe3vrfkfxs6yajls3ft0yn42uqlcnrq6qcn3l0lunkxy6aplgspxm6da"
+          }`
+        );
+        return data.data;
+      } catch (error) {
+        return null;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [fetchWithAuth, auth]
+  );
 
+  const getPortfolioTransaction = useCallback(
+    async (address?: string) => {
+      setLoading(true);
+      setError(null);
+      try {
+        const data = await fetchWithAuth(
+          `/portfolio/${
+            address ||
+            "addr1q9gykktajrgrmj5am8vwlhp65a72emlwn2s3e5cadkhe3vrfkfxs6yajls3ft0yn42uqlcnrq6qcn3l0lunkxy6aplgspxm6da"
+          }/transactions?page=1&count=20&order=desc`
+        );
+        return data.data;
+      } catch (error) {
+        return null;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [fetchWithAuth, auth]
+  );
 
-  const getPortfolioTransaction = useCallback(async (address?: string) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const data = await fetchWithAuth(`/portfolio/${address || 'addr1q9gykktajrgrmj5am8vwlhp65a72emlwn2s3e5cadkhe3vrfkfxs6yajls3ft0yn42uqlcnrq6qcn3l0lunkxy6aplgspxm6da'}/transactions?page=1&count=20&order=desc`);
-      return data.data;
-    } catch (error) {
-      return null;
-    } finally {
-      setLoading(false);
-    }
-  }, [fetchWithAuth, auth]);
+  const getTokenTradeHistory = useCallback(
+    async (tokenId: string) => {
+      setLoading(true);
+      setError(null);
+      try {
+        const data = await fetchWithAuth(
+          `/tokens/${tokenId}/trades?timeFrame=30d&limit=100&page=1`
+        );
+        return data.data;
+      } catch (error) {
+        return null;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [fetchWithAuth, auth]
+  );
 
-  const getTokenTradeHistory = useCallback(async (tokenId: string) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const data = await fetchWithAuth(`/tokens/${tokenId}/trades?timeFrame=30d&limit=100&page=1`);
-      return data.data;
-    } catch (error) {
-      return null;
-    } finally {
-      setLoading(false);
-    }
-  }, [fetchWithAuth, auth]);
+  const getTokenTopHolders = useCallback(
+    async (tokenId: string) => {
+      setLoading(true);
+      setError(null);
+      try {
+        const data = await fetchWithAuth(
+          `/tokens/${tokenId}/top-holders?limit=20&page=1`
+        );
+        return data.data;
+      } catch (error) {
+        return null;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [fetchWithAuth, auth]
+  );
 
-  const getTokenTopHolders = useCallback(async (tokenId: string) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const data = await fetchWithAuth(`/tokens/${tokenId}/top-holders?limit=20&page=1`);
-      return data.data;
-    } catch (error) {
-      return null;
-    } finally {
-      setLoading(false);
-    }
-  }, [fetchWithAuth, auth]);
+  const getTokenTopTraders = useCallback(
+    async (tokenId: string) => {
+      setLoading(true);
+      setError(null);
+      try {
+        const data = await fetchWithAuth(
+          `/tokens/${tokenId}/top-traders?timeFrame=1h&limit=10&page=1`
+        );
+        return data.data;
+      } catch (error) {
+        return null;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [fetchWithAuth, auth]
+  );
 
-  const getTokenTopTraders = useCallback(async (tokenId: string) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const data = await fetchWithAuth(`/tokens/${tokenId}/top-traders?timeFrame=1h&limit=10&page=1`);
-      return data.data;
-    } catch (error) {
-      return null;
-    } finally {
-      setLoading(false);
-    }
-  }, [fetchWithAuth, auth]);
+  const getSwapPoolStats = useCallback(
+    async (inputToken: string, outputToken: string) => {
+      setLoading(true);
+      setError(null);
+      try {
+        const data = await fetchWithAuth(
+          `/swap/pool-stats/${inputToken}/${outputToken}`
+        );
+        return data.data;
+      } catch (error) {
+        return null;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [fetchWithAuth, auth]
+  );
 
-  const getSwapPoolStats = useCallback(async (inputToken: string, outputToken: string) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const data = await fetchWithAuth(`/swap/pool-stats/${inputToken}/${outputToken}`);
-      return data.data;
-    } catch (error) {
-      return null;
-    } finally {
-      setLoading(false);
-    }
-  }, [fetchWithAuth, auth]);
+  const buildSwapRequest = useCallback(
+    async (payload: SwapPayload) => {
+      setLoading(true);
+      setError(null);
+      try {
+        const data = await fetchWithAuth(`/swap/build`, {
+          method: "POST",
+          body: JSON.stringify(payload),
+        });
+        return data.data;
+      } catch (error) {
+        return null;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [fetchWithAuth, auth]
+  );
 
-  const buildSwapRequest = useCallback(async (payload: SwapPayload) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const data = await fetchWithAuth(`/swap/build`, {
-        method: "POST",
-        body: JSON.stringify(payload)
-      });
-      return data.data;
-    } catch (error) {
-      return null;
-    } finally {
-      setLoading(false);
-    }
-  }, [fetchWithAuth, auth]);
+  const estimateSwap = useCallback(
+    async (payload: EsitmateSwapPayload) => {
+      setLoading(true);
+      setError(null);
+      try {
+        const data = await fetchWithAuth(`/swap/estimate`, {
+          method: "POST",
+          body: JSON.stringify(payload),
+        });
+        return data.data;
+      } catch (error) {
+        return null;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [fetchWithAuth, auth]
+  );
 
-  const estimateSwap = useCallback(async (payload: EsitmateSwapPayload) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const data = await fetchWithAuth(`/swap/estimate`, {
-        method: "POST",
-        body: JSON.stringify(payload)
-      });
-      return data.data;
-    } catch (error) {
-      return null;
-    } finally {
-      setLoading(false);
-    }
-  }, [fetchWithAuth, auth]);
+  const submitSwapRequest = useCallback(
+    async (payload: SubmitSwapPayload) => {
+      setLoading(true);
+      setError(null);
+      try {
+        const data = await fetchWithAuth(`/swap/submit`, {
+          method: "POST",
+          body: JSON.stringify(payload),
+        });
+        return data.data;
+      } catch (error) {
+        return error;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [fetchWithAuth, auth]
+  );
 
-  const submitSwapRequest = useCallback(async (payload: SubmitSwapPayload) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const data = await fetchWithAuth(`/swap/submit`, {
-        method: "POST",
-        body: JSON.stringify(payload)
-      });
-      return data.data;
-    } catch (error) {
-      return error;
-    } finally {
-      setLoading(false);
-    }
-  }, [fetchWithAuth, auth]);
-
-  const triggerSocialQuest = useCallback(async (id: number) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const data = await fetchWithAuth(`/user-quest/trigger-social-quest/${id}`, {
-        method: "PUT",
-      });
-      return data.data;
-    } catch (error) {
-      return null;
-    } finally {
-      setLoading(false);
-    }
-  }, [fetchWithAuth, auth]);
+  const triggerSocialQuest = useCallback(
+    async (id: number) => {
+      setLoading(true);
+      setError(null);
+      try {
+        const data = await fetchWithAuth(
+          `/user-quest/trigger-social-quest/${id}`,
+          {
+            method: "PUT",
+          }
+        );
+        return data.data;
+      } catch (error) {
+        return null;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [fetchWithAuth, auth]
+  );
 
   const triggerDailyLogin = useCallback(async () => {
     setLoading(true);
@@ -585,76 +648,98 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     }
   }, [fetchWithAuth, auth]);
 
-  const uploadAvatar = useCallback(async (file: FormData) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const data = await fetchWithAuth(`/medias/image`, {
-        method: "POST",
-        body: file,
-      });
-      return data.data;
-    } catch (error) {
-      throw error;
-    } finally {
-      setLoading(false);
-    }
-  }, [fetchWithAuth, auth]);
+  const uploadAvatar = useCallback(
+    async (file: FormData) => {
+      setLoading(true);
+      setError(null);
+      try {
+        const data = await fetchWithAuth(`/medias/image`, {
+          method: "POST",
+          body: file,
+        });
+        return data.data;
+      } catch (error) {
+        throw error;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [fetchWithAuth, auth]
+  );
 
-  const updateUserInfo = useCallback(async (payload: UpdateUserPayload) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const data = await fetchWithAuth(`/user/profile`, {
-        method: "PUT",
-        body: JSON.stringify(payload)
-      });
-      return data.data;
-    } catch (error) {
-      throw error;
-    } finally {
-      setLoading(false);
-    }
-  }, [fetchWithAuth, auth]);
+  const updateUserInfo = useCallback(
+    async (payload: UpdateUserPayload) => {
+      setLoading(true);
+      setError(null);
+      try {
+        const data = await fetchWithAuth(`/user/profile`, {
+          method: "PUT",
+          body: JSON.stringify(payload),
+        });
+        return data.data;
+      } catch (error) {
+        throw error;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [fetchWithAuth, auth]
+  );
 
-  const getTokenDetailCore = useCallback(async (tokenId: string) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const data = await fetchWithAuth(`/tokens/${tokenId}`);
-      return data.data;
-    } catch (error) {
-      return null;
-    } finally {
-      setLoading(false);
-    }
-  }, [fetchWithAuth, auth]);
+  const getTokenDetailCore = useCallback(
+    async (tokenId: string) => {
+      setLoading(true);
+      setError(null);
+      try {
+        const data = await fetchWithAuth(`/tokens/${tokenId}`);
+        return data.data;
+      } catch (error) {
+        return null;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [fetchWithAuth, auth]
+  );
 
-  const getTokenOHLCV = useCallback(async (tokenId: string, interval: string, numIntervals: number, quote: QuoteType) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const data = await fetchWithAuth(`/tokens/${tokenId}/ohlcv/quote?interval=${interval}&numIntervals=${numIntervals}&quote=${quote}`);
-      return data.data;
-    } catch (error) {
-      return null;
-    } finally {
-      setLoading(false);
-    }
-  }, [fetchWithAuth, auth]);
+  const getTokenOHLCV = useCallback(
+    async (
+      tokenId: string,
+      interval: string,
+      numIntervals: number,
+      quote: QuoteType
+    ) => {
+      setLoading(true);
+      setError(null);
+      try {
+        const data = await fetchWithAuth(
+          `/tokens/${tokenId}/ohlcv/quote?interval=${interval}&numIntervals=${numIntervals}&quote=${quote}`
+        );
+        return data.data;
+      } catch (error) {
+        return null;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [fetchWithAuth, auth]
+  );
 
-  const getTokenStats = useCallback(async (tokenId: string) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const data = await fetchWithAuth(`/tokens/${tokenId}/stats`);
-      return data.data;
-    } catch (error) {
-      return null;
-    } finally {
-      setLoading(false);
-    }
-  }, [fetchWithAuth, auth]);
+  const getTokenStats = useCallback(
+    async (tokenId: string) => {
+      setLoading(true);
+      setError(null);
+      try {
+        const data = await fetchWithAuth(`/tokens/${tokenId}/stats`);
+        return data.data;
+      } catch (error) {
+        return null;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [fetchWithAuth, auth]
+  );
 
   const getAchievements = useCallback(async () => {
     setLoading(true);
@@ -667,7 +752,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     } finally {
       setLoading(false);
     }
-  }, [fetchWithAuth, auth])
+  }, [fetchWithAuth, auth]);
 
   return {
     auth,
@@ -707,7 +792,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     getTokenDetailCore,
     getTokenOHLCV,
     getTokenStats,
-    getAchievements
+    getAchievements,
   };
 };
 
