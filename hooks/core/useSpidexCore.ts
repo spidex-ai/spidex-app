@@ -322,18 +322,19 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
       referralCode?: string
     ) => {
       try {
+        const requestData = {
+          id: parseInt(id),
+          first_name: first_name,
+          last_name: last_name || undefined,
+          username: username || undefined,
+          photo_url: photo_url || undefined,
+          auth_date: auth_date,
+          hash: hash,
+          referralCode: referralCode || undefined,
+        };
         const data = await fetchWithAuth('/auth/connect/telegram', {
           method: 'POST',
-          body: JSON.stringify({
-            id: +id,
-            first_name,
-            last_name,
-            username,
-            photo_url,
-            auth_date,
-            hash,
-            referralCode,
-          }),
+          body: JSON.stringify(requestData),
         });
         setAuth({ ...data.data, walletName: 'telegram' });
         return data.data;
@@ -493,7 +494,10 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
       setError(null);
       try {
         const data = await fetchWithAuth(
-          `/portfolio/${address || 'addr1q9gykktajrgrmj5am8vwlhp65a72emlwn2s3e5cadkhe3vrfkfxs6yajls3ft0yn42uqlcnrq6qcn3l0lunkxy6aplgspxm6da'}/transactions?page=1&count=20&order=desc`
+          `/portfolio/${
+            address ||
+            'addr1q9gykktajrgrmj5am8vwlhp65a72emlwn2s3e5cadkhe3vrfkfxs6yajls3ft0yn42uqlcnrq6qcn3l0lunkxy6aplgspxm6da'
+          }/transactions?page=1&count=20&order=desc`
         );
         return data;
       } catch (error) {
