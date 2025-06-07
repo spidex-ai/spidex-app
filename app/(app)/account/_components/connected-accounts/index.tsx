@@ -23,7 +23,7 @@ const ConnectedAccounts: React.FC<Props> = ({ user }) => {
   const [isConnecting, setIsConnecting] = useState(false);
   const processedCodeRef = useRef<string | null>(null);
 
-  
+
   // Get current URL dynamically
   const getCurrentUrl = () => {
     if (typeof window !== "undefined") {
@@ -145,7 +145,7 @@ const ConnectedAccounts: React.FC<Props> = ({ user }) => {
       setIsConnecting(false);
     }
   };
-  
+
   // Handle social login callbacks via URL params
   useEffect(() => {
     const socialConnectCode = params.get("code");
@@ -199,6 +199,7 @@ const ConnectedAccounts: React.FC<Props> = ({ user }) => {
             value={user.email ?? undefined}
             isConnected={!!user.email}
             onConnect={handleConnectGoogle}
+            isSeparator={true}
           />
           <ConnectedAccountWrapper
             icon={
@@ -213,6 +214,7 @@ const ConnectedAccounts: React.FC<Props> = ({ user }) => {
             value={user.discordUsername ?? undefined}
             isConnected={!!user.discordUsername}
             onConnect={handleConnectDiscord}
+            isSeparator={true}
           />
           <ConnectedAccountWrapper
             icon={
