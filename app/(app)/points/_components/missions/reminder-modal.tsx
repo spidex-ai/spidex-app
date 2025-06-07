@@ -1,12 +1,12 @@
 'use client'
-import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
   Dialog,
   DialogContent,
   GradientButton,
 } from "@/components/ui";
-import { useSearchParams } from "next/navigation";
 import { useXLogin } from "@/hooks/social/useSocialLogin";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 
 interface ReminderModalProps {
   isOpen: boolean;
@@ -14,7 +14,6 @@ interface ReminderModalProps {
 }
 const ReminderModal = ({ isOpen, onOpenChange }: ReminderModalProps) => {
     const { signInWithX } = useXLogin()
-  const [isClient, setIsClient] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
   const params = useSearchParams()
   const processedCodeRef = useRef<string | null>(null)
@@ -52,9 +51,7 @@ const ReminderModal = ({ isOpen, onOpenChange }: ReminderModalProps) => {
       setIsConnecting(false)
     }
   }
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
+
   useEffect(() => {
     const socialConnectCode = params.get("code")
     const callbackType = params.get("type");

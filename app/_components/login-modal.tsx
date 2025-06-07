@@ -488,6 +488,7 @@ const LoginModal: React.FC = () => {
             toast.error("Telegram login failed");
           });
         } catch (error) {
+          console.error("Failed to process Telegram authentication", error);
           toast.error("Failed to process Telegram authentication");
         }
       }

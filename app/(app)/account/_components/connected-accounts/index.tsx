@@ -1,14 +1,14 @@
 "use client";
 
-import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import React, { useEffect, useRef, useState } from "react";
 
 import { TextGradient } from "@/components/ui/text";
-import Image from "next/image";
 import { UserSpidex } from "@/hooks/core/useSpidexCore";
 import { useGoogleLogin, useXLogin } from "@/hooks/social/useSocialLogin";
-import ConnectedAccountWrapper from "./connected-account-wrapper";
+import Image from "next/image";
 import toast from "react-hot-toast";
+import ConnectedAccountWrapper from "./connected-account-wrapper";
 
 interface Props {
   user: UserSpidex;
@@ -21,13 +21,8 @@ const ConnectedAccounts: React.FC<Props> = ({ user }) => {
   const router = useRouter();
   const [isConnecting, setIsConnecting] = useState(false);
   const processedCodeRef = useRef<string | null>(null);
-  const [isClient, setIsClient] = useState(false);
 
-  // Initialize client-side state
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
+  
   // Get current URL dynamically
   const getCurrentUrl = () => {
     if (typeof window !== "undefined") {
