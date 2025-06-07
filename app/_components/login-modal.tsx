@@ -8,7 +8,6 @@ import { useSearchParams } from "next/navigation";
 import React, {
   useCallback,
   useEffect,
-  useMemo,
   useRef,
   useState,
 } from "react";
@@ -19,7 +18,7 @@ import {
   DialogHeader,
   GradientButton,
 } from "@/components/ui";
-import { useGoogleLogin, useXLogin } from "@/hooks/social/useSocialLogin";
+import { useGoogleLogin, useXLogin, useDiscordLogin, useTelegramLogin } from "@/hooks/social/useSocialLogin";
 import { cn } from "@/lib/utils";
 import { initNufiDappCardanoSdk } from "@nufi/dapp-client-cardano";
 import nufiCoreSdk from "@nufi/dapp-client-core";
@@ -110,6 +109,18 @@ const SOCIAL_METHODS = [
     icon: "/icons/x-login.svg",
     description: "Login With X",
   },
+  {
+    id: "discord",
+    name: "Discord",
+    icon: "/icons/discord-white.svg",
+    description: "Login With Discord",
+  },
+  {
+    id: "telegram",
+    name: "Telegram",
+    icon: "/icons/tele-white.svg",
+    description: "Login With Telegram",
+  },
 ];
 
 const METAMASK_METHOD = {
@@ -140,26 +151,52 @@ const LoginModal: React.FC = () => {
   const [isClient, setIsClient] = useState(false);
   const [isPrivacyAccepted, setIsPrivacyAccepted] = useState(false);
 
-  // Custom hooks
   const { signMessage: signMessageSpidex, getNounce } = useSpidexCoreContext();
   const { signInWithGoogle } = useGoogleLogin();
   const { signInWithX } = useXLogin();
+  const { signInWithDiscord } = useDiscordLogin();
+  const { signInWithTelegram } = useTelegramLogin();
   const { isOpen, closeModal, hideSocialLogin } = useLoginModal();
 
   const [isReferralModalOpen, setIsReferralModalOpen] =
     useState<boolean>(false);
   const [method, setMethod] = useState<string>("");
+  const [telegramWidgetContainer, setTelegramWidgetContainer] = useState<HTMLDivElement | null>(null);
+  const [botUsername, setBotUsername] = useState<string>("");
+ 
+  const getCurrentUrl = () => {
+    if (typeof window !== "undefined") {
+      return window.location.origin + window.location.pathname;
+    }
+    return "";
+  };
 
-  // Initialize client-side state
   useEffect(() => {
     setIsClient(true);
+
+    // Capture URL parameters immediately on mount to prevent them from being lost
+    if (typeof window !== "undefined") {
+      const urlParams = new URLSearchParams(window.location.search);
+      const code = urlParams.get("code");
+      const type = urlParams.get("type");
+
+
+      if (code && !processedCodeRef.current) {
+        processedCodeRef.current = code;
+        const currentUrl = getCurrentUrl();
+        // Process the callback immediately
+        // Only call Discord API if type=connect-discord, otherwise default to X
+        if (type === "connect-discord") {
+          console.log('Processing Discord callback on mount');
+          handleDiscordCallback(code, currentUrl);
+        } else {
+          console.log('Processing X callback on mount (default)');
+          handleXCallback(code, currentUrl);
+        }
+      }
+    }
   }, []);
 
-  // useEffect(() => {
-  //   if (auth?.userId) {
-  //     router.replace('/chat')
-  //   }
-  // }, [auth?.userId])
 
   // Only initialize NuFi SDK on client side
   useEffect(() => {
@@ -174,16 +211,7 @@ const LoginModal: React.FC = () => {
     useCardano({
       limitNetwork: NetworkType.MAINNET,
     });
-  // Determine if any connection is in progress
   const anyConnectionInProgress = walletConnecting !== null || isConnecting;
-
-  // Derive base URL for social login redirects - only on client
-  const baseUrl = useMemo(() => {
-    if (typeof window !== "undefined") {
-      return window.location.href.split("/").slice(0, 3).join("/");
-    }
-    return "";
-  }, [isClient]);
 
   const onWalletConnectError = (error: Error) => {
     console.log("Wallet connection error", error);
@@ -225,14 +253,19 @@ const LoginModal: React.FC = () => {
     );
   };
   const handleCheckReferral = (method: string) => {
+    console.log('handleCheckReferral called with method:', method);
     if (!isPrivacyAccepted) {
+      console.log('Privacy policy not accepted');
       toast.error("Please accept the Privacy Policy and Terms of Use to continue");
       return;
     }
+    console.log('Setting method:', method);
     setMethod(method);
     if (params.get("ref")) {
+      console.log('Referral code found, opening referral modal');
       setIsReferralModalOpen(true);
     } else {
+      console.log('No referral code, calling handleConnect');
       handleConnect(method);
     }
   }
@@ -244,6 +277,10 @@ const LoginModal: React.FC = () => {
       handleConnectGoogle();
     } else if (method === "xlogin") {
       handleConnectX();
+    } else if (method === "discord") {
+      handleConnectDiscord();
+    } else if (method === "telegram") {
+      handleConnectTelegram();
     } else {
       handleConnectWallet(method);
     }
@@ -258,6 +295,10 @@ const LoginModal: React.FC = () => {
       handleConnectGoogle();
     } else if (method === "xlogin") {
       handleConnectX();
+    } else if (method === "discord") {
+      handleConnectDiscord();
+    } else if (method === "telegram") {
+      handleConnectTelegram();
     } else {
       handleConnectWallet(method);
     }
@@ -367,31 +408,25 @@ const LoginModal: React.FC = () => {
   const handleConnectX = () => {
     if (anyConnectionInProgress) return;
     setIsConnecting(true);
-    const xAuthUrl = `https://twitter.com/i/oauth2/authorize?response_type=code&client_id=THpPdER1Nm1NZ3FCbm1lbnU5OXI6MTpjaQ&redirect_uri=${baseUrl}&scope=tweet.read%20users.read&state=state&code_challenge=challenge&code_challenge_method=plain`;
+    const redirectUri = getCurrentUrl();
+    const xAuthUrl = `https://twitter.com/i/oauth2/authorize?response_type=code&client_id=THpPdER1Nm1NZ3FCbm1lbnU5OXI6MTpjaQ&redirect_uri=${encodeURIComponent(redirectUri)}&scope=tweet.read%20users.read&state=state&code_challenge=challenge&code_challenge_method=plain`;
     window.location.href = xAuthUrl;
   };
 
   /**
    * Handle X (Twitter) OAuth callback
    */
-  const handleXCallback = async (code: string, redirectUri: string) => {
+  const handleXCallback = async (code: string, baseRedirectUri: string) => {
     try {
-      if (isConnecting) return;
+      if (isConnecting) {
+        return;
+      }
 
       setIsConnecting(true);
       const ref = params.get("ref");
-      const result = await signInWithX(code, redirectUri, ref || "");
+      const redirectUri = baseRedirectUri;
+      await signInWithX(code, redirectUri, ref || "");
 
-      if (result && typeof window !== "undefined") {
-        console.log("X login successful");
-        // remove code from URL
-        window.history.replaceState(
-          {},
-          document.title,
-          window.location.pathname
-        );
-      }
-      // Close the modal when X login is initiated
       closeModal();
     } catch (error: any) {
       if (typeof error === "string") {
@@ -400,18 +435,227 @@ const LoginModal: React.FC = () => {
         toast.error("X login failed");
       }
     } finally {
+      console.log('Setting isConnecting to false');
       setIsConnecting(false);
     }
   };
 
-  // Handle X login callback via URL params
   useEffect(() => {
     const socialConnectCode = params.get("code");
+    const callbackType = params.get("type");
+
+    // Only process if not already processed in mount
     if (socialConnectCode && socialConnectCode !== processedCodeRef.current) {
       processedCodeRef.current = socialConnectCode;
-      handleXCallback(socialConnectCode, baseUrl);
+
+      // Use the type parameter to determine which callback handler to use
+      // Only call Discord API if type=connect-discord, otherwise default to X
+      if (callbackType === "connect-discord") {
+        console.log('Type is connect-discord, calling Discord API');
+        handleDiscordCallback(socialConnectCode, getCurrentUrl());
+      } else {
+        console.log('Type is not connect-discord, calling X API');
+        handleXCallback(socialConnectCode, getCurrentUrl());
+      }
+
     }
-  }, [params, baseUrl]);
+  }, [params]);
+
+  useEffect(() => {
+    const telegramSuccess = params.get("telegram-success");
+    const telegramError = params.get("telegram-error");
+
+    if (telegramSuccess) {
+      const successData = localStorage.getItem('telegramAuthSuccess');
+      if (successData) {
+        try {
+          const result = JSON.parse(successData);
+          localStorage.removeItem('telegramAuthSuccess');
+
+          const ref = params.get("ref");
+          signInWithTelegram(
+            result.id,
+            result.first_name,
+            result.last_name,
+            result.username,
+            result.photo_url,
+            result.auth_date,
+            result.hash,
+            ref || ""
+          ).then(() => {
+            closeModal();
+          }).catch(() => {
+            toast.error("Telegram login failed");
+          });
+        } catch (error) {
+          toast.error("Failed to process Telegram authentication");
+        }
+      }
+    }
+
+    if (telegramError) {
+      const errorMessage = telegramError || 'Telegram authentication failed';
+      toast.error(errorMessage);
+    }
+  }, [params, signInWithTelegram, closeModal]);
+
+  /**
+   * Connect with Discord
+   */
+  const handleConnectDiscord = () => {
+    if (anyConnectionInProgress) return;
+    setIsConnecting(true);
+
+    const clientId = process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID;
+    if (!clientId) {
+      toast.error("Discord client ID not configured");
+      setIsConnecting(false);
+      return;
+    }
+
+    const redirectUri = `${getCurrentUrl()}?type=connect-discord`;
+    const discordAuthUrl = `https://discord.com/api/oauth2/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=identify%20email%20guilds`;
+    window.location.href = discordAuthUrl;
+  };
+
+  /**
+   * Handle Discord OAuth callback
+   */
+  const handleDiscordCallback = async (code: string, baseRedirectUri: string) => {
+    console.log('handleDiscordCallback called with:', { code, baseRedirectUri, isConnecting });
+    try {
+      if (isConnecting) {
+        console.log('Already connecting, returning early');
+        return;
+      }
+
+      console.log('Setting isConnecting to true');
+      setIsConnecting(true);
+      const ref = params.get("ref");
+      const redirectUri = `${baseRedirectUri}?type=connect-discord`;
+      console.log('Calling signInWithDiscord with:', { code, redirectUri, ref });
+      const result = await signInWithDiscord(code, redirectUri, ref || "");
+
+      if (result && typeof window !== "undefined") {
+        console.log("Discord login successful", result);
+      }
+      // Close the modal when Discord login is successful
+      closeModal();
+    } catch (error: any) {
+      console.error('Discord login error:', error);
+      if (typeof error === "string") {
+        toast.error(error);
+      } else {
+        toast.error("Discord login failed");
+      }
+    } finally {
+      console.log('Setting isConnecting to false');
+      setIsConnecting(false);
+    }
+  };
+
+  /**
+   * Connect with Telegram
+   */
+  const handleConnectTelegram = async () => {
+    console.log('handleConnectTelegram called');
+    if (anyConnectionInProgress) {
+      console.log('Connection already in progress, returning');
+      return;
+    }
+
+    try {
+      console.log('Setting isConnecting to true for Telegram');
+      setIsConnecting(true);
+
+      // Get widget configuration from API
+      console.log('Fetching Telegram widget config from:', `${process.env.NEXT_PUBLIC_SPIDEX_CORE_API_URL}/auth/telegram/widget-config`);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_SPIDEX_CORE_API_URL}/auth/telegram/widget-config`, {
+        headers: { accept: '*/*' }
+      });
+
+      console.log('Telegram widget config response status:', response.status);
+      if (!response.ok) {
+        throw new Error(`Failed to get widget config: ${response.status} ${response.statusText}`);
+      }
+
+      const result = await response.json();
+      console.log('Telegram widget config result:', result);
+      if (!result.success || !result.data) {
+        throw new Error('Invalid widget config response');
+      }
+
+      // Store bot username and load widget
+      console.log('Setting bot username:', result.data.botUsername);
+      setBotUsername(result.data.botUsername);
+      loadTelegramWidget(result.data.botUsername);
+    } catch (err) {
+      console.error('Telegram connection error:', err);
+      const errorMessage = err instanceof Error ? err.message : 'Failed to load Telegram widget';
+      toast.error(errorMessage);
+    } finally {
+      console.log('Setting isConnecting to false for Telegram');
+      setIsConnecting(false);
+    }
+  };
+
+  /**
+   * Load Telegram Widget
+   */
+  const loadTelegramWidget = (configBotUsername: string) => {
+    console.log('loadTelegramWidget called with:', { configBotUsername, telegramWidgetContainer });
+
+    if (!configBotUsername) {
+      console.log('No bot username provided');
+      return;
+    }
+
+    if (!telegramWidgetContainer) {
+      console.log('No telegram widget container available');
+      return;
+    }
+
+    console.log('Clearing existing widget content');
+    // Clear any existing content
+    telegramWidgetContainer.innerHTML = '';
+
+    console.log('Creating Telegram widget script');
+    // Create Telegram Login Widget script
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = 'https://telegram.org/js/telegram-widget.js?22';
+    script.setAttribute('data-telegram-login', configBotUsername);
+    script.setAttribute('data-size', 'large');
+
+    // Build callback URL with optional referral code
+    const ref = params.get("ref");
+    let authUrl = `${window.location.origin}/telegram-callback`;
+    if (ref) {
+      authUrl += `?referralCode=${encodeURIComponent(ref)}`;
+    }
+    console.log('Setting Telegram auth URL:', authUrl);
+    script.setAttribute('data-auth-url', authUrl);
+
+    console.log('Appending Telegram widget script to container');
+    // Add widget to container
+    telegramWidgetContainer.appendChild(script);
+
+    console.log('Telegram widget script added successfully');
+  };
+
+  // Load Telegram widget when container and bot username are ready
+  useEffect(() => {
+    console.log('Telegram widget useEffect triggered:', { botUsername, telegramWidgetContainer });
+    if (botUsername && telegramWidgetContainer) {
+      console.log('Both botUsername and container available, loading widget');
+      loadTelegramWidget(botUsername);
+    } else {
+      console.log('Missing requirements for widget loading:', {
+        hasBotUsername: !!botUsername,
+        hasContainer: !!telegramWidgetContainer
+      });
+    }
+  }, [botUsername, telegramWidgetContainer, params]);
 
   const handleConnectMetamask = () => {
     if (typeof window === "undefined") return;
@@ -477,8 +721,6 @@ const LoginModal: React.FC = () => {
   };
   // Render social login option
   const renderSocialOption = (method: (typeof SOCIAL_METHODS)[0]) => {
-    // const handleClick =
-    //   method.id === "google" ? handleConnectGoogle : handleConnectX;
     const isDisabled = anyConnectionInProgress && walletConnecting !== null || !isPrivacyAccepted;
 
     return (
@@ -595,7 +837,7 @@ const LoginModal: React.FC = () => {
                 </div>
                 <span>Choose Wallet</span>
               </div>
-              <div className="space-y-2 max-h-[350px] sm:max-h-[550px] scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 overflow-y-auto">
+              <div className="space-y-2 max-h-[350px] scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 overflow-y-auto">
                 <div className="space-y-2 flex flex-col gap-2">
                   {WALLET_METHODS.map(renderWalletOption)}
                   {renderMetamaskConnect()}
@@ -612,6 +854,16 @@ const LoginModal: React.FC = () => {
                   <div className="flex justify-between items-center gap-3 pt-2">
                     {SOCIAL_METHODS.map(renderSocialOption)}
                   </div>
+
+                  {/* Telegram Widget Container */}
+                  {botUsername && (
+                    <div className="mt-4">
+                      <div
+                        ref={setTelegramWidgetContainer}
+                        className="flex items-center justify-center p-3 rounded-lg bg-bg-secondary min-h-[50px]"
+                      />
+                    </div>
+                  )}
                 </div>
               )}
             </div>

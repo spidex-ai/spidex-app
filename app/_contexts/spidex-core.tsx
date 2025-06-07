@@ -23,6 +23,8 @@ interface SpidexCoreContextType {
   refreshToken: () => Promise<any>;
   connectX: (code: string, redirectUrl: string, referralCode?: string) => Promise<any>;
   connectGoogle: (idToken: string, referralCode?: string) => Promise<any>;
+  connectDiscord: (code: string, redirectUri: string, referralCode?: string) => Promise<any>;
+  connectTelegram: (id: string, first_name: string, last_name: string, username: string, photo_url: string, auth_date: number, hash: string, referralCode?: string) => Promise<any>;
   fetchWithAuth: (url: string, options?: RequestInit) => Promise<any>;
   logout: () => Promise<void>;
   setLocalAuth: (auth: Auth) => void;
@@ -155,6 +157,20 @@ export const SpidexCoreProvider: React.FC<{ children: React.ReactNode }> = ({
     },
     connectGoogle: async (idToken, referralCode) => {
       const result = await spidexCore.connectGoogle(idToken, referralCode);
+      if (result) {
+        handleSetLocalAuth(result);
+      }
+      return result;
+    },
+    connectDiscord: async (code, redirectUri, referralCode) => {
+      const result = await spidexCore.connectDiscord(code, redirectUri, referralCode);
+      if (result) {
+        handleSetLocalAuth(result);
+      }
+      return result;
+    },
+    connectTelegram: async (id, first_name, last_name, username, photo_url, auth_date, hash, referralCode) => {
+      const result = await spidexCore.connectTelegram(id, first_name, last_name, username, photo_url, auth_date, hash, referralCode);
       if (result) {
         handleSetLocalAuth(result);
       }

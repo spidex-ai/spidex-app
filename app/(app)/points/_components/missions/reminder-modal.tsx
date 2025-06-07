@@ -20,34 +20,29 @@ const ReminderModal = ({ isOpen, onOpenChange }: ReminderModalProps) => {
   const processedCodeRef = useRef<string | null>(null)
 
 
-  const baseUrl = useMemo(() => {
+  const getCurrentUrl = () => {
     if (typeof window !== "undefined") {
-      return window.location.href.split("/").slice(0, 3).join("/");
+      return window.location.origin + window.location.pathname;
     }
     return "";
-  }, [isClient]);
+  };
   const handleConnectX = () => {
-
     setIsConnecting(true)
-    const xAuthUrl = `https://twitter.com/i/oauth2/authorize?response_type=code&client_id=THpPdER1Nm1NZ3FCbm1lbnU5OXI6MTpjaQ&redirect_uri=${baseUrl}&scope=tweet.read%20users.read&state=state&code_challenge=challenge&code_challenge_method=plain`
+    const redirectUri = getCurrentUrl();
+    const xAuthUrl = `https://twitter.com/i/oauth2/authorize?response_type=code&client_id=THpPdER1Nm1NZ3FCbm1lbnU5OXI6MTpjaQ&redirect_uri=${encodeURIComponent(redirectUri)}&scope=tweet.read%20users.read&state=state&code_challenge=challenge&code_challenge_method=plain`
     window.location.href = xAuthUrl
   }
-  const handleXCallback = async (code: string, redirectUri: string) => {
+  const handleXCallback = async (code: string) => {
     try {
       if (isConnecting) return
 
       setIsConnecting(true)
       const ref = params.get("ref")
+      const redirectUri = getCurrentUrl();
       const result = await signInWithX(code, redirectUri, ref || '')
 
       if (result && typeof window !== 'undefined') {
         console.log("X login successful")
-        // remove code from URL
-        window.history.replaceState(
-          {},
-          document.title,
-          window.location.pathname
-        )
       }
       // Close the modal when X login is initiated
       onOpenChange(false)
@@ -62,11 +57,13 @@ const ReminderModal = ({ isOpen, onOpenChange }: ReminderModalProps) => {
   }, []);
   useEffect(() => {
     const socialConnectCode = params.get("code")
-    if (socialConnectCode && socialConnectCode !== processedCodeRef.current) {
+    const callbackType = params.get("type");
+
+    if (socialConnectCode && socialConnectCode !== processedCodeRef.current && callbackType === "connect-x") {
       processedCodeRef.current = socialConnectCode
-      handleXCallback(socialConnectCode, baseUrl)
+      handleXCallback(socialConnectCode)
     }
-  }, [params, baseUrl])
+  }, [params])
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="!bg-bg-modal">
