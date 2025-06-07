@@ -9,6 +9,7 @@ import { useDiscordLogin, useGoogleLogin, useXLogin } from "@/hooks/social/useSo
 import Image from "next/image";
 import toast from "react-hot-toast";
 import ConnectedAccountWrapper from "./connected-account-wrapper";
+import TelegramModal from "@/app/_components/telegram-modal";
 
 interface Props {
   user: UserSpidex;
@@ -21,6 +22,7 @@ const ConnectedAccounts: React.FC<Props> = ({ user }) => {
   const params = useSearchParams();
   const router = useRouter();
   const [isConnecting, setIsConnecting] = useState(false);
+  const [isTelegramModalOpen, setIsTelegramModalOpen] = useState(false);
   const processedCodeRef = useRef<string | null>(null);
 
 
@@ -114,36 +116,9 @@ const ConnectedAccounts: React.FC<Props> = ({ user }) => {
   };
 
   // Handle Telegram login
-  const handleConnectTelegram = async () => {
+  const handleConnectTelegram = () => {
     if (isConnecting) return;
-
-    try {
-      setIsConnecting(true);
-
-      // Get widget configuration from API
-      const response = await fetch(`${process.env.NEXT_PUBLIC_SPIDEX_CORE_API_URL}/auth/telegram/widget-config`, {
-        headers: { accept: '*/*' }
-      });
-
-      if (!response.ok) {
-        throw new Error(`Failed to get widget config: ${response.status} ${response.statusText}`);
-      }
-
-      const result = await response.json();
-      if (!result.success || !result.data) {
-        throw new Error('Invalid widget config response');
-      }
-
-      // For connected accounts, we'll redirect to a Telegram auth page
-      // or show a modal with the widget
-      toast.success("Telegram connection initiated. Please complete authentication.");
-
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to connect Telegram';
-      toast.error(errorMessage);
-    } finally {
-      setIsConnecting(false);
-    }
+    setIsTelegramModalOpen(true);
   };
 
   // Handle social login callbacks via URL params
@@ -232,6 +207,20 @@ const ConnectedAccounts: React.FC<Props> = ({ user }) => {
           />
         </div>
       </div>
+
+      <TelegramModal
+        isOpen={isTelegramModalOpen}
+        onClose={() => setIsTelegramModalOpen(false)}
+        onSuccess={(result) => {
+          console.log("Telegram connection successful", result);
+          setIsTelegramModalOpen(false);
+          router.refresh();
+        }}
+        onError={(error) => {
+          console.error("Telegram connection error", error);
+          setIsTelegramModalOpen(false);
+        }}
+      />
     </div>
   );
 };
