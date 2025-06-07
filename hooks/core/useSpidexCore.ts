@@ -34,6 +34,8 @@ export interface UserSpidex {
   referralCode: string;
   telegramLink: string | null;
   discordLink: string | null;
+  discordUsername: string | null;
+  telegramUsername: string | null;
   xLink: string | null;
   createdAt: Date;
 }
