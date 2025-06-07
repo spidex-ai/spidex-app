@@ -14,6 +14,7 @@ import Image from 'next/image';
 import toast from 'react-hot-toast';
 import ConnectedAccountWrapper from './connected-account-wrapper';
 import TelegramModal from '@/app/_components/telegram-modal';
+import { useSpidexCoreContext } from '@/app/_contexts';
 
 interface Props {
   user: UserSpidex;
@@ -23,6 +24,7 @@ const ConnectedAccounts: React.FC<Props> = ({ user }) => {
   const { signInWithGoogle } = useGoogleLogin();
   const { signInWithX } = useXLogin();
   const { signInWithDiscord } = useDiscordLogin();
+  const { isProcessingOAuth, setIsProcessingOAuth } = useSpidexCoreContext();
   const params = useSearchParams();
   const router = useRouter();
   const [isConnecting, setIsConnecting] = useState(false);
@@ -54,7 +56,9 @@ const ConnectedAccounts: React.FC<Props> = ({ user }) => {
     if (isConnecting) return;
     setIsConnecting(true);
     const redirectUri = getCurrentUrl();
-    const xAuthUrl = `https://twitter.com/i/oauth2/authorize?response_type=code&client_id=THpPdER1Nm1NZ3FCbm1lbnU5OXI6MTpjaQ&redirect_uri=${encodeURIComponent(redirectUri)}&scope=tweet.read%20users.read&state=state&code_challenge=challenge&code_challenge_method=plain`;
+    const xAuthUrl = `https://twitter.com/i/oauth2/authorize?response_type=code&client_id=THpPdER1Nm1NZ3FCbm1lbnU5OXI6MTpjaQ&redirect_uri=${encodeURIComponent(
+      redirectUri
+    )}&scope=tweet.read%20users.read&state=state&code_challenge=challenge&code_challenge_method=plain`;
     window.location.href = xAuthUrl;
   };
 
@@ -76,6 +80,7 @@ const ConnectedAccounts: React.FC<Props> = ({ user }) => {
       console.log('X login error', error);
     } finally {
       setIsConnecting(false);
+      setIsProcessingOAuth(false);
     }
   };
 
@@ -92,7 +97,9 @@ const ConnectedAccounts: React.FC<Props> = ({ user }) => {
     }
 
     const redirectUri = `${getCurrentUrl()}?type=connect-discord`;
-    const discordAuthUrl = `https://discord.com/api/oauth2/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=identify%20email%20guilds`;
+    const discordAuthUrl = `https://discord.com/api/oauth2/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(
+      redirectUri
+    )}&response_type=code&scope=identify%20email%20guilds`;
     window.location.href = discordAuthUrl;
   };
 
@@ -115,6 +122,7 @@ const ConnectedAccounts: React.FC<Props> = ({ user }) => {
       toast.error('Discord connection failed');
     } finally {
       setIsConnecting(false);
+      setIsProcessingOAuth(false);
     }
   };
 
@@ -129,17 +137,26 @@ const ConnectedAccounts: React.FC<Props> = ({ user }) => {
     const socialConnectCode = params.get('code');
     const callbackType = params.get('type');
 
-    if (socialConnectCode && socialConnectCode !== processedCodeRef.current) {
+    // Only process if we have a code, haven't processed it yet, and not currently processing OAuth globally
+    if (
+      socialConnectCode &&
+      socialConnectCode !== processedCodeRef.current &&
+      !isConnecting &&
+      !isProcessingOAuth
+    ) {
       processedCodeRef.current = socialConnectCode;
+      setIsProcessingOAuth(true);
 
       // Only call Discord API if type=connect-discord, otherwise default to X
       if (callbackType === 'connect-discord') {
+        console.log('Processing Discord callback in connected accounts');
         handleDiscordCallback(socialConnectCode);
       } else {
+        console.log('Processing X callback in connected accounts');
         handleXCallback(socialConnectCode);
       }
     }
-  }, [params]);
+  }, [params, isConnecting, isProcessingOAuth]);
 
   return (
     <div className="flex flex-col gap-4 mt-8">

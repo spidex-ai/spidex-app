@@ -12,6 +12,8 @@ interface SpidexCoreContextType {
   loading: boolean;
   error: string | null;
   isAuthenticated: boolean;
+  isProcessingOAuth: boolean;
+  setIsProcessingOAuth: (processing: boolean) => void;
   getTopTokensByVolume: (
     timeframe?: string,
     page?: number,
@@ -102,6 +104,13 @@ export const SpidexCoreProvider: React.FC<{ children: React.ReactNode }> = ({
     }
     return null;
   });
+  const [isProcessingOAuth, setIsProcessingOAuth] = useState<boolean>(false);
+
+  // Add logging for OAuth processing state changes
+  useEffect(() => {
+    console.log('Global OAuth processing state changed:', isProcessingOAuth);
+  }, [isProcessingOAuth]);
+
   const spidexCore = useSpidexCore(localAuth);
 
   const handleSetLocalAuth = (auth: Auth) => {
@@ -153,6 +162,8 @@ export const SpidexCoreProvider: React.FC<{ children: React.ReactNode }> = ({
     loading: spidexCore.loading,
     error: spidexCore.error,
     isAuthenticated,
+    isProcessingOAuth,
+    setIsProcessingOAuth,
     getTopTokensByVolume: spidexCore.getTopTokensByVolume,
     getTopTokensByMcap: spidexCore.getTopTokensByMcap,
     getNounce: spidexCore.getNounce,

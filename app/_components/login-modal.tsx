@@ -154,7 +154,12 @@ const LoginModal: React.FC = () => {
   const [isClient, setIsClient] = useState(false);
   const [isPrivacyAccepted, setIsPrivacyAccepted] = useState(false);
 
-  const { signMessage: signMessageSpidex, getNounce } = useSpidexCoreContext();
+  const {
+    signMessage: signMessageSpidex,
+    getNounce,
+    isProcessingOAuth,
+    setIsProcessingOAuth,
+  } = useSpidexCoreContext();
   const { signInWithGoogle } = useGoogleLogin();
   const { signInWithX } = useXLogin();
   const { signInWithDiscord } = useDiscordLogin();
@@ -176,27 +181,6 @@ const LoginModal: React.FC = () => {
 
   useEffect(() => {
     setIsClient(true);
-
-    // Capture URL parameters immediately on mount to prevent them from being lost
-    if (typeof window !== 'undefined') {
-      const urlParams = new URLSearchParams(window.location.search);
-      const code = urlParams.get('code');
-      const type = urlParams.get('type');
-
-      if (code && !processedCodeRef.current) {
-        processedCodeRef.current = code;
-        const currentUrl = getCurrentUrl();
-        // Process the callback immediately
-        // Only call Discord API if type=connect-discord, otherwise default to X
-        if (type === 'connect-discord') {
-          console.log('Processing Discord callback on mount');
-          handleDiscordCallback(code, currentUrl);
-        } else {
-          console.log('Processing X callback on mount (default)');
-          handleXCallback(code, currentUrl);
-        }
-      }
-    }
   }, []);
 
   // Only initialize NuFi SDK on client side
@@ -417,7 +401,9 @@ const LoginModal: React.FC = () => {
     if (anyConnectionInProgress) return;
     setIsConnecting(true);
     const redirectUri = getCurrentUrl();
-    const xAuthUrl = `https://twitter.com/i/oauth2/authorize?response_type=code&client_id=THpPdER1Nm1NZ3FCbm1lbnU5OXI6MTpjaQ&redirect_uri=${encodeURIComponent(redirectUri)}&scope=tweet.read%20users.read&state=state&code_challenge=challenge&code_challenge_method=plain`;
+    const xAuthUrl = `https://twitter.com/i/oauth2/authorize?response_type=code&client_id=THpPdER1Nm1NZ3FCbm1lbnU5OXI6MTpjaQ&redirect_uri=${encodeURIComponent(
+      redirectUri
+    )}&scope=tweet.read%20users.read&state=state&code_challenge=challenge&code_challenge_method=plain`;
     window.location.href = xAuthUrl;
   };
 
@@ -445,6 +431,7 @@ const LoginModal: React.FC = () => {
     } finally {
       console.log('Setting isConnecting to false');
       setIsConnecting(false);
+      setIsProcessingOAuth(false);
     }
   };
 
@@ -452,21 +439,27 @@ const LoginModal: React.FC = () => {
     const socialConnectCode = params.get('code');
     const callbackType = params.get('type');
 
-    // Only process if not already processed in mount
-    if (socialConnectCode && socialConnectCode !== processedCodeRef.current) {
+    // Only process if we have a code, haven't processed it yet, and not currently processing OAuth globally
+    if (
+      socialConnectCode &&
+      socialConnectCode !== processedCodeRef.current &&
+      !isConnecting &&
+      !isProcessingOAuth
+    ) {
       processedCodeRef.current = socialConnectCode;
+      setIsProcessingOAuth(true);
 
       // Use the type parameter to determine which callback handler to use
       // Only call Discord API if type=connect-discord, otherwise default to X
       if (callbackType === 'connect-discord') {
-        console.log('Type is connect-discord, calling Discord API');
+        console.log('Processing Discord callback from login modal');
         handleDiscordCallback(socialConnectCode, getCurrentUrl());
       } else {
-        console.log('Type is not connect-discord, calling X API');
+        console.log('Processing X callback from login modal');
         handleXCallback(socialConnectCode, getCurrentUrl());
       }
     }
-  }, [params]);
+  }, [params, isConnecting, isProcessingOAuth]);
 
   useEffect(() => {
     const telegramSuccess = params.get('telegram-success');
@@ -524,7 +517,9 @@ const LoginModal: React.FC = () => {
     }
 
     const redirectUri = `${getCurrentUrl()}?type=connect-discord`;
-    const discordAuthUrl = `https://discord.com/api/oauth2/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=identify%20email%20guilds`;
+    const discordAuthUrl = `https://discord.com/api/oauth2/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(
+      redirectUri
+    )}&response_type=code&scope=identify%20email%20guilds`;
     window.location.href = discordAuthUrl;
   };
 
@@ -572,6 +567,7 @@ const LoginModal: React.FC = () => {
     } finally {
       console.log('Setting isConnecting to false');
       setIsConnecting(false);
+      setIsProcessingOAuth(false);
     }
   };
 
