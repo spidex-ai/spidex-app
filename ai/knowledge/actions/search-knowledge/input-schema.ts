@@ -9,3 +9,7 @@ export const SearchKnowledgeInputSchema = z.object({
 export const SearchWebKnowledgeInputSchema = z.object({
   queryPhrases: z.string().describe("The phrases to search for in the web"),
 });
+
+export const FAQKnowledgeInputSchema = z.object({
+  queryPhrases: z.string().describe("The phrases to search for in the FAQ"),
+});
