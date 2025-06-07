@@ -325,7 +325,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
         const data = await fetchWithAuth("/auth/connect/telegram", {
           method: "POST",
           body: JSON.stringify({
-            id: id.toString(),
+            id: +id,
             first_name,
             last_name,
             username,
