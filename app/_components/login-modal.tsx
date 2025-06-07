@@ -19,6 +19,7 @@ import {
   GradientButton,
 } from "@/components/ui";
 import { useGoogleLogin, useXLogin, useDiscordLogin, useTelegramLogin } from "@/hooks/social/useSocialLogin";
+import TelegramModal from "./telegram-modal";
 import { cn } from "@/lib/utils";
 import { initNufiDappCardanoSdk } from "@nufi/dapp-client-cardano";
 import nufiCoreSdk from "@nufi/dapp-client-core";
@@ -161,8 +162,7 @@ const LoginModal: React.FC = () => {
   const [isReferralModalOpen, setIsReferralModalOpen] =
     useState<boolean>(false);
   const [method, setMethod] = useState<string>("");
-  const [telegramWidgetContainer, setTelegramWidgetContainer] = useState<HTMLDivElement | null>(null);
-  const [botUsername, setBotUsername] = useState<string>("");
+  const [isTelegramModalOpen, setIsTelegramModalOpen] = useState<boolean>(false);
  
   const getCurrentUrl = () => {
     if (typeof window !== "undefined") {
@@ -558,105 +558,17 @@ const LoginModal: React.FC = () => {
   /**
    * Connect with Telegram
    */
-  const handleConnectTelegram = async () => {
-    console.log('handleConnectTelegram called');
+  const handleConnectTelegram = () => {
+    console.log('handleConnectTelegram called - opening modal');
     if (anyConnectionInProgress) {
       console.log('Connection already in progress, returning');
       return;
     }
 
-    try {
-      console.log('Setting isConnecting to true for Telegram');
-      setIsConnecting(true);
-
-      // Get widget configuration from API
-      console.log('Fetching Telegram widget config from:', `${process.env.NEXT_PUBLIC_SPIDEX_CORE_API_URL}/auth/telegram/widget-config`);
-      const response = await fetch(`${process.env.NEXT_PUBLIC_SPIDEX_CORE_API_URL}/auth/telegram/widget-config`, {
-        headers: { accept: '*/*' }
-      });
-
-      console.log('Telegram widget config response status:', response.status);
-      if (!response.ok) {
-        throw new Error(`Failed to get widget config: ${response.status} ${response.statusText}`);
-      }
-
-      const result = await response.json();
-      console.log('Telegram widget config result:', result);
-      if (!result.success || !result.data) {
-        throw new Error('Invalid widget config response');
-      }
-
-      // Store bot username and load widget
-      console.log('Setting bot username:', result.data.botUsername);
-      setBotUsername(result.data.botUsername);
-      loadTelegramWidget(result.data.botUsername);
-    } catch (err) {
-      console.error('Telegram connection error:', err);
-      const errorMessage = err instanceof Error ? err.message : 'Failed to load Telegram widget';
-      toast.error(errorMessage);
-    } finally {
-      console.log('Setting isConnecting to false for Telegram');
-      setIsConnecting(false);
-    }
+    setIsTelegramModalOpen(true);
   };
 
-  /**
-   * Load Telegram Widget
-   */
-  const loadTelegramWidget = (configBotUsername: string) => {
-    console.log('loadTelegramWidget called with:', { configBotUsername, telegramWidgetContainer });
 
-    if (!configBotUsername) {
-      console.log('No bot username provided');
-      return;
-    }
-
-    if (!telegramWidgetContainer) {
-      console.log('No telegram widget container available');
-      return;
-    }
-
-    console.log('Clearing existing widget content');
-    // Clear any existing content
-    telegramWidgetContainer.innerHTML = '';
-
-    console.log('Creating Telegram widget script');
-    // Create Telegram Login Widget script
-    const script = document.createElement('script');
-    script.async = true;
-    script.src = 'https://telegram.org/js/telegram-widget.js?22';
-    script.setAttribute('data-telegram-login', configBotUsername);
-    script.setAttribute('data-size', 'large');
-
-    // Build callback URL with optional referral code
-    const ref = params.get("ref");
-    let authUrl = `${window.location.origin}/telegram-callback`;
-    if (ref) {
-      authUrl += `?referralCode=${encodeURIComponent(ref)}`;
-    }
-    console.log('Setting Telegram auth URL:', authUrl);
-    script.setAttribute('data-auth-url', authUrl);
-
-    console.log('Appending Telegram widget script to container');
-    // Add widget to container
-    telegramWidgetContainer.appendChild(script);
-
-    console.log('Telegram widget script added successfully');
-  };
-
-  // Load Telegram widget when container and bot username are ready
-  useEffect(() => {
-    console.log('Telegram widget useEffect triggered:', { botUsername, telegramWidgetContainer });
-    if (botUsername && telegramWidgetContainer) {
-      console.log('Both botUsername and container available, loading widget');
-      loadTelegramWidget(botUsername);
-    } else {
-      console.log('Missing requirements for widget loading:', {
-        hasBotUsername: !!botUsername,
-        hasContainer: !!telegramWidgetContainer
-      });
-    }
-  }, [botUsername, telegramWidgetContainer, params]);
 
   const handleConnectMetamask = () => {
     if (typeof window === "undefined") return;
@@ -856,15 +768,7 @@ const LoginModal: React.FC = () => {
                     {SOCIAL_METHODS.map(renderSocialOption)}
                   </div>
 
-                  {/* Telegram Widget Container */}
-                  {botUsername && (
-                    <div className="mt-4">
-                      <div
-                        ref={setTelegramWidgetContainer}
-                        className="flex items-center justify-center p-3 rounded-lg bg-bg-secondary min-h-[50px]"
-                      />
-                    </div>
-                  )}
+
                 </div>
               )}
             </div>
@@ -912,6 +816,20 @@ const LoginModal: React.FC = () => {
         </DialogContent>
 
       </Dialog>
+
+      <TelegramModal
+        isOpen={isTelegramModalOpen}
+        onClose={() => setIsTelegramModalOpen(false)}
+        onSuccess={(result) => {
+          console.log("Telegram login successful", result);
+          setIsTelegramModalOpen(false);
+          closeModal();
+        }}
+        onError={(error) => {
+          console.error("Telegram login error", error);
+          setIsTelegramModalOpen(false);
+        }}
+      />
     </>
   );
 };

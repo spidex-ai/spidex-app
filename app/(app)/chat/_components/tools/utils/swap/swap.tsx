@@ -110,16 +110,13 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
 
     if (Number(inputAmount) > Number(tokenInputBalance)) return true;
     if (Number(accountBalance) < 5) return true;
+    let totalDepositADA = Number(estimatedPoints?.deposits) +
+    Number(estimatedPoints?.batcher_fee) +
+    Number(estimatedPoints?.partner_fee)
     if (inputToken?.ticker === "ADA") {
-      const totalDepositADA =
-        Number(inputAmount) +
-        Number(estimatedPoints?.deposits) +
-        Number(estimatedPoints?.batcher_fee) +
-        Number(estimatedPoints?.partner_fee);
-
-
-      if (Number(accountBalance) < totalDepositADA + 5) return true;
-    }
+      totalDepositADA += Number(inputAmount)
+    };
+    if (Number(accountBalance) < totalDepositADA + 5) return true;
     return false;
   }, [
     inputAmount,
