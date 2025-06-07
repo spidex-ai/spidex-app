@@ -54,19 +54,23 @@ export const usePointInfo = () => {
 export const useQuests = () => {
     const {getUserQuests} = useSpidexCoreContext()
 
+    const [currentPage, setCurrentPage] = useState(0); 
+    const [totalPages, setTotalPages] = useState(0); 
+    const [perPage] = useState(10);
     const [quests, setQuests] = useState<Quest[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         fetchQuests();
-    }, []);     
+    }, [currentPage]);     
 
     const fetchQuests = async () => {
         try {
             setLoading(true);
-            const data = await getUserQuests();
-            setQuests(data);
+            const data = await getUserQuests(currentPage + 1, perPage);
+            setQuests(data.data);
+            setTotalPages(Math.ceil(data.metadata.total / perPage));
         } catch (error) {
             setError(error as string);
         } finally {
@@ -74,25 +78,30 @@ export const useQuests = () => {
         }
     }
 
-    return { quests, loading, error, fetchQuests };
+    return { quests, loading, error, fetchQuests, currentPage, setCurrentPage, totalPages };
 }
 
 export const usePointHistory = () => {
     const {getUserPointHistory} = useSpidexCoreContext()
 
+    const [currentPage, setCurrentPage] = useState(0); 
+    const [totalPages, setTotalPages] = useState(0); 
+    const [perPage] = useState(10);
     const [pointHistory, setPointHistory] = useState<PointHistory[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         fetchPointHistory();
-    }, []);
+    }, [currentPage]);
 
     const fetchPointHistory = async () => {
         try {
             setLoading(true);
-            const data = await getUserPointHistory();
-            setPointHistory(data);
+            const data = await getUserPointHistory(currentPage + 1, perPage);
+            console.log("🚀 ~ fetchPointHistory ~ data:", data)
+            setPointHistory(data.data);
+            setTotalPages(Math.ceil(data.metadata.total / perPage));
         } catch (error) {
             setError(error as string);
         } finally {
@@ -104,6 +113,6 @@ export const usePointHistory = () => {
         await fetchPointHistory();
     }
 
-    return { pointHistory, loading, error, refetchPointHistory };
+    return { pointHistory, loading, error, refetchPointHistory, totalPages, currentPage, setCurrentPage };
     
 }

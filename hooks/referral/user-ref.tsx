@@ -32,22 +32,26 @@ export const useRefInfo = () => {
     return { referralInfo, loading, error };
 }
 
-export const useRefHistory = ({ page = 1, perPage = 10 }: { page?: number, perPage?: number }) => {
+export const useRefHistory = () => {
     const { getUserRefHistory } = useSpidexCoreContext();
 
+    const [currentPage, setCurrentPage] = useState(0); 
+    const [totalPages, setTotalPages] = useState(0);
+    const [perPage] = useState(10);
     const [referralHistory, setReferralHistory] = useState<RefHistoryItem[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         fetchRefHistory();
-    }, [page, perPage]); 
+    }, [currentPage]); 
 
     const fetchRefHistory = async () => {
         try {
             setLoading(true);
-            const data = await getUserRefHistory(page, perPage);
-            setReferralHistory(data);
+            const data = await getUserRefHistory(currentPage + 1, perPage);
+            setReferralHistory(data.data);
+            setTotalPages(Math.ceil(data.metadata.total / perPage));
         } catch (error) {
             setError(error as string);
         } finally {
@@ -55,12 +59,16 @@ export const useRefHistory = ({ page = 1, perPage = 10 }: { page?: number, perPa
         }
     }
 
-    return { referralHistory, loading, error }; 
+    return { referralHistory, loading, error, currentPage, setCurrentPage, totalPages }; 
 }
 
 
-export const useRefReferredUsers = ({ page = 1, perPage = 10 }: { page?: number, perPage?: number }) => {
+export const useRefReferredUsers = () => {
     const { getUserRefMeReferredUsers } = useSpidexCoreContext();
+
+    const [currentPage, setCurrentPage] = useState(0); 
+    const [totalPages, setTotalPages] = useState(0);
+    const [perPage] = useState(10);
 
     const [myRefUsers, setMyRefUsers] = useState<MyRefItem[]>([]);
     const [loading, setLoading] = useState(false);
@@ -68,13 +76,14 @@ export const useRefReferredUsers = ({ page = 1, perPage = 10 }: { page?: number,
      
     useEffect(() => {
         fetchRefReferredUsers();
-    }, [page, perPage]);
+    }, [currentPage]);
 
     const fetchRefReferredUsers = async () => {
         try { 
             setLoading(true);
-            const data = await getUserRefMeReferredUsers(page, perPage);
-            setMyRefUsers(data);
+            const data = await getUserRefMeReferredUsers(currentPage + 1, perPage);
+            setMyRefUsers(data.data);
+            setTotalPages(Math.ceil(data.metadata.total / perPage));
         } catch (error) {
             setError(error as string);
         } finally {
@@ -82,5 +91,5 @@ export const useRefReferredUsers = ({ page = 1, perPage = 10 }: { page?: number,
         } 
     }
 
-    return { myRefUsers, loading, error };
+    return { myRefUsers, loading, error, currentPage, setCurrentPage, totalPages };
 }

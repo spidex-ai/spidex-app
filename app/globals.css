@@ -421,3 +421,9 @@ p, a, input, textarea, button, body {
 #nufi-widget {
   pointer-events: all;
 }
+
+.gradient-border-pagination {
+  border: 2px solid transparent;
+  border-image: linear-gradient(90deg, #009EFF, #BBF985) 1;
+  border-radius: 6px;
+}

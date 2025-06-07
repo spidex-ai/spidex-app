@@ -32,10 +32,10 @@ interface SpidexCoreContextType {
   getUserRefMeReferredUsers: (page?: number, perPage?: number) => Promise<any>;
   getUserRefHistory: (page?: number, perPage?: number) => Promise<any>;
   getUserPointMeInfo: () => Promise<any>;
-  getUserQuests: () => Promise<any>;
-  getUserPointHistory: () => Promise<any>;
+  getUserQuests: (page?: number, perPage?: number) => Promise<any>;
+  getUserPointHistory: (page?: number, perPage?: number) => Promise<any>;
   getPortfolioToken: (address?: string) => Promise<any>;
-  getPortfolioTransaction: (address?: string) => Promise<any>;
+  getPortfolioTransaction: (address?: string, page?: number, pageSize?: number) => Promise<any>;
   getTokenTradeHistory: (tokenId: string) => Promise<any>;
   getTokenTopHolders: (tokenId: string) => Promise<any>;
   getTokenTopTraders: (tokenId: string) => Promise<any>;
