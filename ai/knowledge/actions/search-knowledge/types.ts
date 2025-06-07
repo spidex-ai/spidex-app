@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import {
+  FAQKnowledgeInputSchema,
   SearchKnowledgeInputSchema,
   SearchWebKnowledgeInputSchema,
 } from "./input-schema";
@@ -31,3 +32,14 @@ export type SearchWebKnowledgeResultBodyType = {
 
 export type SearchWebKnowledgeResultType =
   KnowledgeActionResult<SearchWebKnowledgeResultBodyType>;
+
+export type FAQKnowledgeSchemaType = typeof FAQKnowledgeInputSchema;
+
+export type FAQKnowledgeArgumentsType = z.infer<FAQKnowledgeSchemaType>;
+
+export type FAQKnowledgeResultBodyType = {
+  faqKnowledge: string;
+};
+
+export type FAQKnowledgeResultType =
+  KnowledgeActionResult<FAQKnowledgeResultBodyType>;
