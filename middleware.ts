@@ -3,31 +3,12 @@ import type { NextRequest } from 'next/server';
 import { nextBasicAuthMiddleware } from 'nextjs-basic-auth-middleware';
 
 export function middleware(request: NextRequest) {
-  // Bước 1: Áp dụng basic auth
-  const response = nextBasicAuthMiddleware(
-    {
-      users: [
-        {
-          name: process.env.AUTH_USER!,
-          password: process.env.AUTH_PASS!,
-        },
-      ],
-    },
-    request
-  );
 
-  // Nếu auth thất bại → trả về response (401)
-  if (response) {
-    return response;
-  }
-
-  // Bước 2: Cho phép text/x-component qua (React Server Components)
   const acceptHeader = request.headers.get('accept');
   if (acceptHeader && acceptHeader.includes('text/x-component')) {
     return NextResponse.next();
   }
 
-  // Bước 3: Gắn custom header
   const headers = new Headers(request.headers);
   headers.set('x-current-path', request.nextUrl.pathname);
 
