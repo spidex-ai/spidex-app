@@ -1,15 +1,15 @@
 'use client'
 
 import { useRefReferredUsers } from '@/hooks/referral/user-ref';
-import React, { useState } from 'react';
+import React from 'react';
 import RefListItem, { RefListItemProps } from '../ref-list-item';
 import { Skeleton } from '@/components/ui/skeleton';
+import Pagination from '@/app/(app)/_components/pagination';
 const MyReferrals: React.FC = () => {
 
-    const [page] = useState(1);
-    const [perPage] = useState(10);
 
-    const { myRefUsers, loading } = useRefReferredUsers({ page, perPage }); 
+
+    const { myRefUsers, loading, currentPage, setCurrentPage, totalPages } = useRefReferredUsers(); 
 
 
     const results: RefListItemProps[] = myRefUsers?.map((item, index) => {
@@ -60,7 +60,13 @@ const MyReferrals: React.FC = () => {
                 }
             </div>
 
-
+            <div className='mt-6 mb-4'>
+                <Pagination
+                    total={totalPages}
+                    current={currentPage}
+                    onPageChange={setCurrentPage}
+                />
+            </div>
         </div>
     )
 }

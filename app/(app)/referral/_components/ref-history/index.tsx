@@ -3,14 +3,14 @@
 import RefListItem, { RefListItemProps } from "../ref-list-item";
 import { Skeleton } from "@/components/ui";
 import { useRefHistory } from "@/hooks/referral/user-ref";
-import React, { useState } from "react";
+import React from "react";
 import { RefHistoryItem } from "@/hooks/referral/type";
+import Pagination from "@/app/(app)/_components/pagination";
 
 const RefHistory = () => {
-  const [page] = useState(1);
-  const [perPage] = useState(10);
 
-  const { referralHistory, loading } = useRefHistory({ page, perPage });
+
+  const { referralHistory, loading, currentPage, setCurrentPage, totalPages } = useRefHistory();
 
   const results: RefListItemProps[] = referralHistory?.map(
     (item: RefHistoryItem, index: number) => {
@@ -64,6 +64,14 @@ const RefHistory = () => {
             )}
           </div>
         )}
+      </div>
+
+      <div className='mt-6 mb-4'> 
+        <Pagination
+          total={totalPages}
+          current={currentPage}
+          onPageChange={setCurrentPage}
+        />
       </div>
     </div>
   );
