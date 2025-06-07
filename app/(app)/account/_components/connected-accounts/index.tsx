@@ -5,7 +5,7 @@ import React, { useEffect, useRef, useState } from "react";
 
 import { TextGradient } from "@/components/ui/text";
 import { UserSpidex } from "@/hooks/core/useSpidexCore";
-import { useGoogleLogin, useXLogin } from "@/hooks/social/useSocialLogin";
+import { useGoogleLogin, useXLogin, useDiscordLogin, useTelegramLogin } from "@/hooks/social/useSocialLogin";
 import Image from "next/image";
 import toast from "react-hot-toast";
 import ConnectedAccountWrapper from "./connected-account-wrapper";
@@ -17,6 +17,8 @@ interface Props {
 const ConnectedAccounts: React.FC<Props> = ({ user }) => {
   const { signInWithGoogle } = useGoogleLogin();
   const { signInWithX } = useXLogin();
+  const { signInWithDiscord } = useDiscordLogin();
+  const { signInWithTelegram } = useTelegramLogin();
   const params = useSearchParams();
   const router = useRouter();
   const [isConnecting, setIsConnecting] = useState(false);
@@ -72,15 +74,93 @@ const ConnectedAccounts: React.FC<Props> = ({ user }) => {
       setIsConnecting(false);
     }
   };
+
+  // Handle Discord login
+  const handleConnectDiscord = () => {
+    if (isConnecting) return;
+    setIsConnecting(true);
+
+    const clientId = process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID;
+    if (!clientId) {
+      toast.error("Discord client ID not configured");
+      setIsConnecting(false);
+      return;
+    }
+
+    const redirectUri = `${getCurrentUrl()}?type=connect-discord`;
+    const discordAuthUrl = `https://discord.com/api/oauth2/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=identify%20email%20guilds`;
+    window.location.href = discordAuthUrl;
+  };
+
+  // Handle Discord OAuth callback
+  const handleDiscordCallback = async (code: string) => {
+    try {
+      if (isConnecting) return;
+
+      setIsConnecting(true);
+      const redirectUri = `${getCurrentUrl()}?type=connect-discord`;
+      const result = await signInWithDiscord(code, redirectUri);
+
+      if (result && typeof window !== "undefined") {
+        console.log("Discord login successful");
+        // Refresh the page to show updated user info
+        router.refresh();
+      }
+    } catch (error: any) {
+      console.log("Discord login error", error);
+      toast.error("Discord connection failed");
+    } finally {
+      setIsConnecting(false);
+    }
+  };
+
+  // Handle Telegram login
+  const handleConnectTelegram = async () => {
+    if (isConnecting) return;
+
+    try {
+      setIsConnecting(true);
+
+      // Get widget configuration from API
+      const response = await fetch(`${process.env.NEXT_PUBLIC_SPIDEX_CORE_API_URL}/auth/telegram/widget-config`, {
+        headers: { accept: '*/*' }
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to get widget config: ${response.status} ${response.statusText}`);
+      }
+
+      const result = await response.json();
+      if (!result.success || !result.data) {
+        throw new Error('Invalid widget config response');
+      }
+
+      // For connected accounts, we'll redirect to a Telegram auth page
+      // or show a modal with the widget
+      toast.success("Telegram connection initiated. Please complete authentication.");
+
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to connect Telegram';
+      toast.error(errorMessage);
+    } finally {
+      setIsConnecting(false);
+    }
+  };
   
-  // Handle X login callback via URL params
+  // Handle social login callbacks via URL params
   useEffect(() => {
     const socialConnectCode = params.get("code");
     const callbackType = params.get("type");
 
-    if (socialConnectCode && socialConnectCode !== processedCodeRef.current && callbackType === "connect-x") {
+    if (socialConnectCode && socialConnectCode !== processedCodeRef.current) {
       processedCodeRef.current = socialConnectCode;
-      handleXCallback(socialConnectCode);
+
+      // Only call Discord API if type=connect-discord, otherwise default to X
+      if (callbackType === "connect-discord") {
+        handleDiscordCallback(socialConnectCode);
+      } else {
+        handleXCallback(socialConnectCode);
+      }
     }
   }, [params]);
 
@@ -120,6 +200,34 @@ const ConnectedAccounts: React.FC<Props> = ({ user }) => {
             value={user.email ?? undefined}
             isConnected={!!user.email}
             onConnect={handleConnectGoogle}
+          />
+          <ConnectedAccountWrapper
+            icon={
+              <Image
+                src="/icons/discord-white.svg"
+                alt="discord"
+                width={28}
+                height={28}
+              />
+            }
+            name="Discord"
+            value={user.discordUsername ?? undefined}
+            isConnected={!!user.discordUsername}
+            onConnect={handleConnectDiscord}
+          />
+          <ConnectedAccountWrapper
+            icon={
+              <Image
+                src="/icons/tele-white.svg"
+                alt="telegram"
+                width={28}
+                height={28}
+              />
+            }
+            name="Telegram"
+            value={user.telegramUsername ?? undefined}
+            isConnected={!!user.telegramUsername}
+            onConnect={handleConnectTelegram}
           />
         </div>
       </div>
