@@ -5,7 +5,7 @@ import React, { useEffect, useRef, useState } from "react";
 
 import { TextGradient } from "@/components/ui/text";
 import { UserSpidex } from "@/hooks/core/useSpidexCore";
-import { useGoogleLogin, useXLogin, useDiscordLogin, useTelegramLogin } from "@/hooks/social/useSocialLogin";
+import { useDiscordLogin, useGoogleLogin, useXLogin } from "@/hooks/social/useSocialLogin";
 import Image from "next/image";
 import toast from "react-hot-toast";
 import ConnectedAccountWrapper from "./connected-account-wrapper";
@@ -18,7 +18,6 @@ const ConnectedAccounts: React.FC<Props> = ({ user }) => {
   const { signInWithGoogle } = useGoogleLogin();
   const { signInWithX } = useXLogin();
   const { signInWithDiscord } = useDiscordLogin();
-  const { signInWithTelegram } = useTelegramLogin();
   const params = useSearchParams();
   const router = useRouter();
   const [isConnecting, setIsConnecting] = useState(false);
