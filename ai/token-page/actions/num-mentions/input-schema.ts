@@ -1,3 +1,3 @@
-import { z } from "zod";
+import { z } from 'zod';
 
-export const TokenPageNumMentionsInputSchema = z.object({}); 
+export const TokenPageNumMentionsInputSchema = z.object({});

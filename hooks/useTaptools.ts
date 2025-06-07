@@ -12,33 +12,36 @@ export const useTaptools = () => {
    * Get token prices for specified units
    * @param units - Array of token units (policy + hex name)
    */
-  const getTokenPrices = useCallback(async (units: string[]): Promise<TokenPrice | null> => {
-    setLoading(true);
-    setError(null);
+  const getTokenPrices = useCallback(
+    async (units: string[]): Promise<TokenPrice | null> => {
+      setLoading(true);
+      setError(null);
 
-    try {
-      const response = await fetch('/api/taptools/token/prices', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ units }),
-      });
+      try {
+        const response = await fetch('/api/taptools/token/prices', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ units }),
+        });
 
-      if (!response.ok) {
-        throw new Error(`API error: ${response.status}`);
+        if (!response.ok) {
+          throw new Error(`API error: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setLoading(false);
+        return data;
+      } catch (err: any) {
+        setError(err.message || 'An error occurred');
+        setLoading(false);
+        console.error('Taptools API error:', err);
+        return null;
       }
-
-      const data = await response.json();
-      setLoading(false);
-      return data;
-    } catch (err: any) {
-      setError(err.message || 'An error occurred');
-      setLoading(false);
-      console.error('Taptools API error:', err);
-      return null;
-    }
-  }, []);
+    },
+    []
+  );
 
   /**
    * Get top tokens by volume
@@ -46,27 +49,32 @@ export const useTaptools = () => {
    * @param page - Page number
    * @param perPage - Items per page
    */
-  const getTopTokensByVolume = useCallback(async (timeframe = '24h', page = 1, perPage = 10) => {
-    setLoading(true);
-    setError(null);
+  const getTopTokensByVolume = useCallback(
+    async (timeframe = '24h', page = 1, perPage = 10) => {
+      setLoading(true);
+      setError(null);
 
-    try {
-      const response = await fetch(`/api/taptools/token/top/volume?timeframe=${timeframe}&page=${page}&perPage=${perPage}`);
+      try {
+        const response = await fetch(
+          `/api/taptools/token/top/volume?timeframe=${timeframe}&page=${page}&perPage=${perPage}`
+        );
 
-      if (!response.ok) {
-        throw new Error(`API error: ${response.status}`);
+        if (!response.ok) {
+          throw new Error(`API error: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setLoading(false);
+        return data;
+      } catch (err: any) {
+        setError(err.message || 'An error occurred');
+        setLoading(false);
+        console.error('Taptools API error:', err);
+        return null;
       }
-
-      const data = await response.json();
-      setLoading(false);
-      return data;
-    } catch (err: any) {
-      setError(err.message || 'An error occurred');
-      setLoading(false);
-      console.error('Taptools API error:', err);
-      return null;
-    }
-  }, []);
+    },
+    []
+  );
 
   /**
    * Get NFT collection stats
@@ -77,7 +85,9 @@ export const useTaptools = () => {
     setError(null);
 
     try {
-      const response = await fetch(`/api/taptools/nft/collection/stats?policy=${policy}`);
+      const response = await fetch(
+        `/api/taptools/nft/collection/stats?policy=${policy}`
+      );
 
       if (!response.ok) {
         throw new Error(`API error: ${response.status}`);
@@ -101,37 +111,45 @@ export const useTaptools = () => {
    * @param numIntervals - Number of intervals to return
    * @param quote - Quote currency
    */
-  const getTokenOHLCV = useCallback(async (unit: string, interval: string, numIntervals?: number, quote = 'ADA') => {
-    setLoading(true);
-    setError(null);
+  const getTokenOHLCV = useCallback(
+    async (
+      unit: string,
+      interval: string,
+      numIntervals?: number,
+      quote = 'ADA'
+    ) => {
+      setLoading(true);
+      setError(null);
 
-    try {
-      let url = `/api/taptools/token/ohlcv?unit=${unit}&interval=${interval}`;
+      try {
+        let url = `/api/taptools/token/ohlcv?unit=${unit}&interval=${interval}`;
 
-      if (numIntervals !== undefined) {
-        url += `&numIntervals=${numIntervals}`;
+        if (numIntervals !== undefined) {
+          url += `&numIntervals=${numIntervals}`;
+        }
+
+        if (quote) {
+          url += `&quote=${quote}`;
+        }
+
+        const response = await fetch(url);
+
+        if (!response.ok) {
+          throw new Error(`API error: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setLoading(false);
+        return data;
+      } catch (err: any) {
+        setError(err.message || 'An error occurred');
+        setLoading(false);
+        console.error('Taptools API error:', err);
+        return null;
       }
-
-      if (quote) {
-        url += `&quote=${quote}`;
-      }
-
-      const response = await fetch(url);
-
-      if (!response.ok) {
-        throw new Error(`API error: ${response.status}`);
-      }
-
-      const data = await response.json();
-      setLoading(false);
-      return data;
-    } catch (err: any) {
-      setError(err.message || 'An error occurred');
-      setLoading(false);
-      console.error('Taptools API error:', err);
-      return null;
-    }
-  }, []);
+    },
+    []
+  );
 
   /**
    * Get market stats

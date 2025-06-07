@@ -1,5 +1,5 @@
-import { Skeleton } from "@/components/ui";
-import { useTradeHistory } from "@/hooks/queries/token/use-trade-history";
+import { Skeleton } from '@/components/ui';
+import { useTradeHistory } from '@/hooks/queries/token/use-trade-history';
 // import { Progress } from "@/components/ui";
 import {
   Table,
@@ -8,10 +8,10 @@ import {
   TableHead,
   TableRow,
   TableCell,
-} from "@/components/ui/table";
-import React from "react";
-import { TokenTradeHistory } from "@/hooks/queries/token/type";
-import Image from "next/image";
+} from '@/components/ui/table';
+import React from 'react';
+import { TokenTradeHistory } from '@/hooks/queries/token/type';
+import Image from 'next/image';
 interface Props {
   tokenId: string;
   ticker: string;
@@ -59,24 +59,24 @@ const HistoryItem: React.FC<HistoryItemProps> = ({ history }) => {
   const onClickTxn = () => {
     window.open(
       `${process.env.NEXT_PUBLIC_CARDANO_SCAN_URL}/transaction/${history.hash}`,
-      "_blank"
+      '_blank'
     );
   };
   const price =
     history.price < 0.0001
-      ? "~0.0001"
+      ? '~0.0001'
       : `$${history.price.toLocaleString(undefined, {
           maximumFractionDigits: 4,
         })}`;
   const totalToken =
     history.tokenAAmount < 0.0001
-      ? "~0.0001"
+      ? '~0.0001'
       : history.tokenAAmount.toLocaleString(undefined, {
           maximumFractionDigits: 2,
         });
   const totalTokenB =
     history.tokenBAmount < 0.0001
-      ? "~0.0001"
+      ? '~0.0001'
       : history.tokenBAmount.toLocaleString(undefined, {
           maximumFractionDigits: 2,
         });
@@ -85,7 +85,7 @@ const HistoryItem: React.FC<HistoryItemProps> = ({ history }) => {
       <TableCell>{new Date(history.time * 1000).toLocaleString()}</TableCell>
       <TableCell
         className={`text-center ${
-          history.action === "buy" ? "text-green-500" : "text-red-500"
+          history.action === 'buy' ? 'text-green-500' : 'text-red-500'
         }`}
       >
         {history.action}

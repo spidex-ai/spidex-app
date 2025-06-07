@@ -1,4 +1,4 @@
-'use client'
+'use client';
 // import React from 'react'
 
 // import { BorderBeam } from '@/components/ui';
@@ -7,10 +7,9 @@
 // import LoginButtonWrapper from './_components/login-button-wrapper';
 import { useRouter } from 'next/navigation';
 
-
 const Graph = () => {
-    const router = useRouter()
-    return router.push('/chat')
-}
+  const router = useRouter();
+  return router.push('/chat');
+};
 
 export default Graph;

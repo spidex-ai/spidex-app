@@ -1,4 +1,4 @@
-import { BaseResponse } from "./types";
+import { BaseResponse } from './types';
 
 export const hellomoonPost = async <T>(
   endpoint: string,
@@ -9,11 +9,11 @@ export const hellomoonPost = async <T>(
   const response = await fetch(url.toString(), {
     method: 'POST',
     headers: {
-      'accept': 'application/json',
-      'authorization': `Bearer ${process.env.HELLOMOON_API_KEY}`,
-      'content-type': 'application/json'
+      accept: 'application/json',
+      authorization: `Bearer ${process.env.HELLOMOON_API_KEY}`,
+      'content-type': 'application/json',
     },
-    body: JSON.stringify(body)
+    body: JSON.stringify(body),
   });
 
   if (!response.ok) {
@@ -23,4 +23,4 @@ export const hellomoonPost = async <T>(
   const data: BaseResponse<T> = await response.json();
 
   return data.data;
-}
+};

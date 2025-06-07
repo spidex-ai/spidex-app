@@ -1,12 +1,12 @@
 import type {
   CardanoGetSmartMoneyInflowsArgumentsType,
   CardanoGetSmartMoneyInflowsResultBodyType,
-} from "./types";
-import type { CardanoActionResult } from "../../cardano-action";
-import taptoolsService from "@/services/taptools";
-import tokenCardanoService from "@/services/token-cardano";
-import { keyBy } from "lodash";
-import s3Service from "@/services/s3";
+} from './types';
+import type { CardanoActionResult } from '../../cardano-action';
+import taptoolsService from '@/services/taptools';
+import tokenCardanoService from '@/services/token-cardano';
+import { keyBy } from 'lodash';
+import s3Service from '@/services/s3';
 
 /**
  * Gets the trending tokens from Birdeye API.
@@ -59,12 +59,12 @@ export const fetchTopVolumeToken = async (
       1,
       limit
     );
-    const tokenIds = data.map((token) => token.unit);
+    const tokenIds = data.map(token => token.unit);
     const [tokenDetails, tokenPrices] = await Promise.all([
-      tokenCardanoService.batchTokenInfo(tokenIds, ["logo"]),
+      tokenCardanoService.batchTokenInfo(tokenIds, ['logo']),
       Promise.all(
-        tokenIds.map(async (token) => {
-          const tokenPrice = await taptoolsService.getTokenQuote(token, "USD");
+        tokenIds.map(async token => {
+          const tokenPrice = await taptoolsService.getTokenQuote(token, 'USD');
           return {
             unit: token,
             price: tokenPrice.price,
@@ -73,10 +73,10 @@ export const fetchTopVolumeToken = async (
       ),
     ]);
 
-    const mapTokenWithPrices = keyBy(tokenPrices, "unit");
+    const mapTokenWithPrices = keyBy(tokenPrices, 'unit');
 
-    const mapTokenWithDetails = keyBy(tokenDetails.subjects, "subject");
-    const tokens = data.map((token) => {
+    const mapTokenWithDetails = keyBy(tokenDetails.subjects, 'subject');
+    const tokens = data.map(token => {
       const tokenDetail = mapTokenWithDetails[token.unit];
       return {
         ...token,
@@ -86,7 +86,7 @@ export const fetchTopVolumeToken = async (
     });
     return tokens;
   } catch (error) {
-    console.error("Error fetching top token mcap:", error);
+    console.error('Error fetching top token mcap:', error);
     return [];
   }
 };

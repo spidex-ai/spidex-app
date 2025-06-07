@@ -1,3 +1,3 @@
-import { z } from "zod";
+import { z } from 'zod';
 
-export const LiquidStakingYieldsInputSchema = z.object({}); 
+export const LiquidStakingYieldsInputSchema = z.object({});

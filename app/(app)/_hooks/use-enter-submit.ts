@@ -1,17 +1,20 @@
-"use client";
+'use client';
 
 interface Props {
-    onSubmit: () => void,
+  onSubmit: () => void;
 }
 
 export const useEnterSubmit = ({ onSubmit }: Props) => {
-
-    const onKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
-        if (event.key === 'Enter' && !event.shiftKey && !event.nativeEvent.isComposing) {
-            onSubmit()
-            event.preventDefault()
-        }
+  const onKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (
+      event.key === 'Enter' &&
+      !event.shiftKey &&
+      !event.nativeEvent.isComposing
+    ) {
+      onSubmit();
+      event.preventDefault();
     }
+  };
 
-    return { onKeyDown }
-}
+  return { onKeyDown };
+};

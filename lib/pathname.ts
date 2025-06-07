@@ -1,6 +1,6 @@
-import { headers } from "next/headers";
+import { headers } from 'next/headers';
 
 export const getCurrentPath = async () => {
-    const headerList = await headers();
-    return headerList.get("x-current-path");
-}
+  const headerList = await headers();
+  return headerList.get('x-current-path');
+};

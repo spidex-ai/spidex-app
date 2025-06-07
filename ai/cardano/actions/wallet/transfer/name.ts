@@ -1,1 +1,1 @@
-export const CARDANO_TRANSFER_NAME = "cardano_transfer"; 
+export const CARDANO_TRANSFER_NAME = 'cardano_transfer';

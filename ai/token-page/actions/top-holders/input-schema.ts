@@ -1,3 +1,3 @@
-import { z } from "zod";
+import { z } from 'zod';
 
-export const TokenPageTopHoldersInputSchema = z.object({}); 
+export const TokenPageTopHoldersInputSchema = z.object({});

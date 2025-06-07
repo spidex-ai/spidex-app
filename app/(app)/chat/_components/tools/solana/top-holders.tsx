@@ -1,19 +1,19 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
 // import Image from 'next/image';44444
 
-import { Button, Card } from "@/components/ui";
+import { Button, Card } from '@/components/ui';
 
 // import WalletAddress from '@/app/_components/wallet-address';
 
-import ToolCard from "../tool-card";
+import ToolCard from '../tool-card';
 
 // import { getStreamsByMint } from '@/services/streamflow';
 
-import type { ToolInvocation } from "ai";
-import type { TopHolderBodyType, TopHolderNewResultType } from "@/ai";
-import type { TokenLargestAccount } from "@/services/helius";
-import Address from "@/app/_components/address";
+import type { ToolInvocation } from 'ai';
+import type { TopHolderBodyType, TopHolderNewResultType } from '@/ai';
+import type { TokenLargestAccount } from '@/services/helius';
+import Address from '@/app/_components/address';
 
 interface Props {
   tool: ToolInvocation;
@@ -34,7 +34,7 @@ const GetTopHolders: React.FC<Props> = ({ tool, prevToolAgent }) => {
           result.body ? (
             <TopHolders body={result.body} mint={tool.args.tokenAddress} />
           ) : (
-            "No top holders found"
+            'No top holders found'
           ),
       }}
       defaultOpen={true}
@@ -80,7 +80,7 @@ const TopHolders = ({ body }: { body: TopHolderBodyType; mint: string }) => {
         </div>
       </div>
       <Button variant="outline" onClick={() => setShowAll(!showAll)}>
-        {showAll ? "Show Less" : "Show All"}
+        {showAll ? 'Show Less' : 'Show All'}
       </Button>
     </div>
   );
@@ -95,26 +95,20 @@ const TopHolder = ({
 }) => {
   return (
     <Card className="grid grid-cols-4 items-center gap-2 p-2">
-
-        <div className="col-span-1 flex items-center justify-center text-sm text-muted-foreground">
+      <div className="col-span-1 flex items-center justify-center text-sm text-muted-foreground">
         {index + 1}
-        </div>
-        <div className="col-span-1 flex items-center justify-center text-sm text-muted-foreground">
-          <Address address={topHolder.address} />
-        </div>
-        <div className="col-span-1 flex items-center justify-center text-sm text-muted-foreground">
- 
-            {topHolder.amount ? topHolder.amount.toLocaleString() : "0"}
-
-        </div>
-        <div className="col-span-1 flex items-center justify-center text-sm text-muted-foreground">
-
-            {topHolder.percentageOwned
-              ? `${topHolder.percentageOwned.toFixed(2)}%`
-              : "0"}
-
-        </div>
-
+      </div>
+      <div className="col-span-1 flex items-center justify-center text-sm text-muted-foreground">
+        <Address address={topHolder.address} />
+      </div>
+      <div className="col-span-1 flex items-center justify-center text-sm text-muted-foreground">
+        {topHolder.amount ? topHolder.amount.toLocaleString() : '0'}
+      </div>
+      <div className="col-span-1 flex items-center justify-center text-sm text-muted-foreground">
+        {topHolder.percentageOwned
+          ? `${topHolder.percentageOwned.toFixed(2)}%`
+          : '0'}
+      </div>
     </Card>
   );
 };

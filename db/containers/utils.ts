@@ -1,4 +1,4 @@
-import { getDatabase } from "@/db/database";
+import { getDatabase } from '@/db/database';
 
 import {
   ComputedProperty,
@@ -7,7 +7,7 @@ import {
   VectorEmbeddingDistanceFunction,
   VectorEmbeddingPolicy,
   VectorIndexType,
-} from "@azure/cosmos";
+} from '@azure/cosmos';
 
 export interface VectorSearchOptions<ItemType> {
   embeddingPaths?: (keyof ItemType)[];
@@ -43,7 +43,7 @@ export const getVectorEmbeddingPolicy = <ItemType>(
   embeddingPaths: (keyof ItemType)[]
 ): VectorEmbeddingPolicy => {
   return {
-    vectorEmbeddings: embeddingPaths.map((embeddingPath) => ({
+    vectorEmbeddings: embeddingPaths.map(embeddingPath => ({
       path: `/${embeddingPath as string}`,
       dimensions: 1536,
       dataType: VectorEmbeddingDataType.Float32,
@@ -56,9 +56,9 @@ export const getIndexingPolicy = <ItemType>(
   embeddingPaths: (keyof ItemType)[]
 ): IndexingPolicy => {
   return {
-    indexingMode: "consistent",
+    indexingMode: 'consistent',
     automatic: true,
-    vectorIndexes: embeddingPaths.map((embeddingPath) => ({
+    vectorIndexes: embeddingPaths.map(embeddingPath => ({
       path: `/${embeddingPath as string}`,
       type: VectorIndexType.QuantizedFlat,
     })),

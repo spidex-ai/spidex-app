@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
-import React from "react";
+import React from 'react';
 
 // import { User } from 'lucide-react';
 
-import Link from "next/link";
+import Link from 'next/link';
 
-import { usePathname } from "next/navigation";
+import { usePathname } from 'next/navigation';
 
-import { useSpidexCoreContext } from "@/app/_contexts";
-import { SidebarMenuButton, SidebarMenuItem } from "@/components/ui";
-import Image from "next/image";
-import { useCardano } from "@cardano-foundation/cardano-connect-with-wallet";
+import { useSpidexCoreContext } from '@/app/_contexts';
+import { SidebarMenuButton, SidebarMenuItem } from '@/components/ui';
+import Image from 'next/image';
+import { useCardano } from '@cardano-foundation/cardano-connect-with-wallet';
 
 const Portfolio: React.FC = () => {
   const pathname = usePathname();
@@ -19,7 +19,7 @@ const Portfolio: React.FC = () => {
   const { auth } = useSpidexCoreContext();
 
   if (!auth?.user?.walletAddress) return null;
-  const isActive = pathname?.includes("/portfolio");
+  const isActive = pathname?.includes('/portfolio');
   return (
     <Link href={`/portfolio/${stakeAddress}`}>
       <SidebarMenuItem>

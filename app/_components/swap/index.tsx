@@ -1,32 +1,32 @@
-"use client";
+'use client';
 
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { ChevronDown } from "lucide-react";
+import { ChevronDown } from 'lucide-react';
 
-import { Button, GradientButton, Separator } from "@/components/ui";
+import { Button, GradientButton, Separator } from '@/components/ui';
 
-import LogInButton from "@/app/(app)/_components/log-in-button";
+import LogInButton from '@/app/(app)/_components/log-in-button';
 
-import TokenInput from "./token-input";
+import TokenInput from './token-input';
 
-import { useTokenBalance } from "@/hooks";
+import { useTokenBalance } from '@/hooks';
 
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils';
 
-import type { QuoteResponse } from "@jup-ag/api";
+import type { QuoteResponse } from '@jup-ag/api';
 
 import {
   CardanoTokenDetail,
   EsitmateSwapPayload,
   EsitmateSwapResponse,
   SwapPayload,
-} from "@/services/dexhunter/types";
-import { useCardano } from "@cardano-foundation/cardano-connect-with-wallet";
-import { decodeHexAddress } from "@cardano-foundation/cardano-connect-with-wallet-core";
-import { useSpidexCoreContext } from "@/app/_contexts";
-import SwapPoint from "./swap-point";
-import { toast } from "react-hot-toast";
+} from '@/services/dexhunter/types';
+import { useCardano } from '@cardano-foundation/cardano-connect-with-wallet';
+import { decodeHexAddress } from '@cardano-foundation/cardano-connect-with-wallet-core';
+import { useSpidexCoreContext } from '@/app/_contexts';
+import SwapPoint from './swap-point';
+import { toast } from 'react-hot-toast';
 
 interface Props {
   initialInputToken: CardanoTokenDetail | null;
@@ -44,16 +44,16 @@ interface Props {
 }
 
 export const adaTokenDetail: CardanoTokenDetail = {
-  token_id: "ADA",
-  token_ascii: "ADA",
-  ticker: "ADA",
+  token_id: 'ADA',
+  token_ascii: 'ADA',
+  ticker: 'ADA',
   is_verified: true,
-  token_policy: "lovelace",
+  token_policy: 'lovelace',
   token_decimals: 6,
   supply: 45000000000,
-  creation_date: "",
+  creation_date: '',
   price: 1,
-  logo: "https://api.spidex.ag/public/icons/tokens/ada.svg",
+  logo: 'https://api.spidex.ag/public/icons/tokens/ada.svg',
 };
 
 const Swap: React.FC<Props> = ({
@@ -75,15 +75,16 @@ const Swap: React.FC<Props> = ({
     buildSwapRequest,
     submitSwapRequest,
   } = useSpidexCoreContext();
-  const { enabledWallet, unusedAddresses, accountBalance, stakeAddress } = useCardano();
+  const { enabledWallet, unusedAddresses, accountBalance, stakeAddress } =
+    useCardano();
 
   const [inputAmount, setInputAmount] = useState<string>(
-    initialInputAmount || ""
+    initialInputAmount || ''
   );
   const [inputToken, setInputToken] = useState<CardanoTokenDetail | null>(
     initialInputToken || adaTokenDetail
   );
-  const [outputAmount, setOutputAmount] = useState<string>("");
+  const [outputAmount, setOutputAmount] = useState<string>('');
   const [outputToken, setOutputToken] = useState<CardanoTokenDetail | null>(
     initialOutputToken || adaTokenDetail
   );
@@ -100,51 +101,55 @@ const Swap: React.FC<Props> = ({
     useState<EsitmateSwapResponse>();
 
   const { balance: inputBalance, isLoading: inputBalanceLoading } =
-    useTokenBalance(
-      stakeAddress || "",
-      inputToken?.unit || ""
-    );
+    useTokenBalance(stakeAddress || '', inputToken?.unit || '');
 
   const tokenInputBalance =
-    inputToken?.ticker === "ADA" ? accountBalance : inputBalance;
+    inputToken?.ticker === 'ADA' ? accountBalance : inputBalance;
 
   const isInsufficientBalance = useMemo(() => {
     if (Number(inputAmount) > Number(tokenInputBalance)) return true;
     if (Number(accountBalance) < 5) return true;
-    let totalDepositADA = Number(estimatedPoints?.deposits) +
-    Number(estimatedPoints?.batcher_fee) +
-    Number(estimatedPoints?.partner_fee)
-    if (inputToken?.ticker === "ADA") {
-      totalDepositADA += Number(inputAmount)
-    };
+    let totalDepositADA =
+      Number(estimatedPoints?.deposits) +
+      Number(estimatedPoints?.batcher_fee) +
+      Number(estimatedPoints?.partner_fee);
+    if (inputToken?.ticker === 'ADA') {
+      totalDepositADA += Number(inputAmount);
+    }
     if (Number(accountBalance) < totalDepositADA + 5) return true;
     return false;
-  }, [inputAmount, tokenInputBalance, accountBalance, inputToken, estimatedPoints]);
+  }, [
+    inputAmount,
+    tokenInputBalance,
+    accountBalance,
+    inputToken,
+    estimatedPoints,
+  ]);
 
   const onChangeInputOutput = () => {
     const tempInputToken = inputToken;
     const tempInputAmount = inputAmount;
     setInputToken(outputToken);
-    setInputAmount(outputAmount); 
+    setInputAmount(outputAmount);
     setOutputToken(tempInputToken);
     setOutputAmount(tempInputAmount);
   };
 
   const onSwap = async () => {
     if (!unusedAddresses?.[0].toString() || !quoteResponse) return;
-    if (typeof window === "undefined") return;
+    if (typeof window === 'undefined') return;
     setIsSwapping(true);
     try {
       const api = await (window as any).cardano[enabledWallet as any].enable();
       const utxos = await api?.getUtxos();
 
       if (!utxos || utxos.length === 0) {
-        console.error("No UTxOs available to spend.");
+        console.error('No UTxOs available to spend.');
         return;
       }
 
       const usedAddressesHex = await api.getUsedAddresses();
-      console.log("usedAddressesHex", usedAddressesHex);
+      console.log('usedAddressesHex', usedAddressesHex);
       const addresses = [];
       for (const address of usedAddressesHex) {
         const unusedAddresses = decodeHexAddress(address);
@@ -155,10 +160,10 @@ const Swap: React.FC<Props> = ({
         addresses: addresses,
         tokenIn: inputToken?.unit
           ? inputToken?.unit
-          : inputToken?.token_id || " ",
+          : inputToken?.token_id || ' ',
         tokenOut: outputToken?.unit
           ? outputToken?.unit
-          : outputToken?.token_id || " ",
+          : outputToken?.token_id || ' ',
         slippage: 5,
         amountIn: Number(inputAmount),
         txOptimization: true,
@@ -174,10 +179,10 @@ const Swap: React.FC<Props> = ({
 
       const submitTx = await api?.submitTx(submitSwap?.cbor);
       onSuccess?.(submitTx);
-      toast.success("You have swapped successfully!");
+      toast.success('You have swapped successfully!');
     } catch (error) {
-      onError?.(error instanceof Error ? error.message : "Unknown error");
-      toast.error('You have swapped failed! Please try again later!')
+      onError?.(error instanceof Error ? error.message : 'Unknown error');
+      toast.error('You have swapped failed! Please try again later!');
     } finally {
       setIsSwapping(false);
     }
@@ -202,20 +207,24 @@ const Swap: React.FC<Props> = ({
       return swapEstResponse?.total_output;
     } else {
       setIsNotPool(true);
-      return "0";
+      return '0';
     }
   };
 
   const checkPool = useCallback(async () => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      if (inputToken?.token_id === outputToken?.token_id || inputToken?.ticker === outputToken?.ticker || inputToken?.unit === outputToken?.unit) {
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      if (
+        inputToken?.token_id === outputToken?.token_id ||
+        inputToken?.ticker === outputToken?.ticker ||
+        inputToken?.unit === outputToken?.unit
+      ) {
         setIsNotPool(true);
         return;
       }
       const poolStats = await getSwapPoolStats(
-        inputToken?.unit ? inputToken?.unit : inputToken?.token_id || "",
-        outputToken?.unit ? outputToken?.unit : outputToken?.token_id || ""
+        inputToken?.unit ? inputToken?.unit : inputToken?.token_id || '',
+        outputToken?.unit ? outputToken?.unit : outputToken?.token_id || ''
       );
       if (poolStats) {
         setIsNotPool(false);
@@ -223,18 +232,18 @@ const Swap: React.FC<Props> = ({
         setIsNotPool(true);
       }
     } catch (error) {
-      console.error("error:::", error);
+      console.error('error:::', error);
       setIsNotPool(true);
     }
   }, [inputToken, outputToken]);
 
   const fetchQuoteAndUpdate = async () => {
     setIsQuoteLoading(true);
-    setOutputAmount("");
+    setOutputAmount('');
 
     const quote = await getQuoteCardano(
-      inputToken?.unit ? inputToken?.unit : inputToken?.token_id || "",
-      outputToken?.unit ? outputToken?.unit : outputToken?.token_id || "",
+      inputToken?.unit ? inputToken?.unit : inputToken?.token_id || '',
+      outputToken?.unit ? outputToken?.unit : outputToken?.token_id || '',
       Number(inputAmount)
     );
     setQuoteResponse(quote);
@@ -243,10 +252,10 @@ const Swap: React.FC<Props> = ({
   };
 
   useEffect(() => {
-    console.log("inputToken", inputToken);
-    console.log("outputToken", outputToken);
+    console.log('inputToken', inputToken);
+    console.log('outputToken', outputToken);
     if (inputToken?.ticker && outputToken?.ticker) {
-      console.log("checkPool");
+      console.log('checkPool');
       checkPool();
     }
   }, [inputToken, outputToken]);
@@ -257,27 +266,27 @@ const Swap: React.FC<Props> = ({
         fetchQuoteAndUpdate();
       } else {
         setQuoteResponse(null);
-        setOutputAmount("");
+        setOutputAmount('');
       }
     }
   }, [inputToken, outputToken, inputAmount]);
 
   return (
-    <div className={cn("flex flex-col gap-4 w-96 max-w-full", className)}>
+    <div className={cn('flex flex-col gap-4 w-96 max-w-full', className)}>
       <div className="flex flex-col gap-2 items-center w-full">
         <TokenInput
           label={inputLabel}
           amount={inputAmount}
-          onChange={(value) => {
+          onChange={value => {
             setIsNotPool(false);
             setInputAmount(value);
           }}
           token={inputToken}
-          onChangeToken={(token) => {
+          onChangeToken={token => {
             setIsNotPool(false);
             setInputToken(token);
           }}
-          address={stakeAddress || ""}
+          address={stakeAddress || ''}
         />
         <Button
           variant="ghost"
@@ -291,15 +300,15 @@ const Swap: React.FC<Props> = ({
           label={outputLabel}
           amount={outputAmount}
           token={outputToken}
-          onChangeToken={(token) => {
+          onChangeToken={token => {
             setIsNotPool(false);
             setOutputToken(token);
           }}
-          address={stakeAddress || ""}
+          address={stakeAddress || ''}
         />
       </div>
       <div className="text-sm text-red-500">
-        {isNotPool ? "No pool found" : null}
+        {isNotPool ? 'No pool found' : null}
       </div>
       <Separator />
       <div className="flex flex-col gap-2">
@@ -323,12 +332,12 @@ const Swap: React.FC<Props> = ({
             }
           >
             {isQuoteLoading
-              ? "Loading..."
+              ? 'Loading...'
               : isInsufficientBalance
-              ? "Insufficient balance"
-              : isSwapping
-              ? swappingText || "Swapping..."
-              : swapText || "Swap"}
+                ? 'Insufficient balance'
+                : isSwapping
+                  ? swappingText || 'Swapping...'
+                  : swapText || 'Swap'}
           </GradientButton>
         ) : (
           <LogInButton />
@@ -342,9 +351,9 @@ const Swap: React.FC<Props> = ({
         {estimatedPoints?.estimated_point && (
           <SwapPoint
             swapDetails={{
-              inputToken: inputToken?.ticker || "",
-              outputToken: outputToken?.ticker || "",
-              inputAmount: inputAmount || "",
+              inputToken: inputToken?.ticker || '',
+              outputToken: outputToken?.ticker || '',
+              inputAmount: inputAmount || '',
               outputAmount: estimatedPoints?.splits?.[0]?.amount_in
                 ? String(
                     (
@@ -355,8 +364,8 @@ const Swap: React.FC<Props> = ({
                       maximumFractionDigits: 4,
                     })
                   )
-                : "",
-              swapRoute: "",
+                : '',
+              swapRoute: '',
               netPrice: estimatedPoints?.net_price,
               minReceive: estimatedPoints?.total_output,
               dexFee: estimatedPoints?.partner_fee,
@@ -365,7 +374,7 @@ const Swap: React.FC<Props> = ({
               batcherFee: estimatedPoints?.batcher_fee,
             }}
             splits={estimatedPoints?.splits || []}
-            estimatedPoints={String(estimatedPoints?.estimated_point || "1")}
+            estimatedPoints={String(estimatedPoints?.estimated_point || '1')}
           />
         )}
       </div>

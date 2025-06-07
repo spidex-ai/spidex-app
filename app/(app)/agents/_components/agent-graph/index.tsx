@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import {
   ReactFlow,
@@ -26,7 +26,9 @@ const proOptions: ProOptions = { account: 'paid-pro', hideAttribution: true };
 
 const nodeOrigin: NodeOrigin = [0.5, 0.5];
 
-const defaultEdgeOptions = { style: { stroke: '#d19900', strokeWidth: 2, zIndex: 1000 } };
+const defaultEdgeOptions = {
+  style: { stroke: '#d19900', strokeWidth: 2, zIndex: 1000 },
+};
 
 const nodeTypes = {
   central: CentralNode,
@@ -40,19 +42,24 @@ interface Props {
   edges: Edge[];
 }
 
-const AgentGraphComponent: React.FC<Props> = ({ strength = -500, distance = 150, nodes: initialNodes, edges: initialEdges }) => {
+const AgentGraphComponent: React.FC<Props> = ({
+  strength = -500,
+  distance = 150,
+  nodes: initialNodes,
+  edges: initialEdges,
+}) => {
   const useNodesResult = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
   const onConnect: OnConnect = useCallback(
-    (params) => setEdges((eds) => addEdge(params, eds)),
+    params => setEdges(eds => addEdge(params, eds)),
     [setEdges]
   );
 
-  const dragEvents = useForceLayout({ 
+  const dragEvents = useForceLayout({
     strength,
     distance,
-    oscillationStrength: 0.1
+    oscillationStrength: 0.1,
   });
 
   return (
@@ -77,9 +84,14 @@ const AgentGraphComponent: React.FC<Props> = ({ strength = -500, distance = 150,
       <Background />
     </ReactFlow>
   );
-}
+};
 
-const AgentGraph: React.FC<Props> = ({ strength = -500, distance = 150, nodes, edges }) => {
+const AgentGraph: React.FC<Props> = ({
+  strength = -500,
+  distance = 150,
+  nodes,
+  edges,
+}) => {
   return (
     <ReactFlowProvider>
       <AgentGraphComponent
@@ -90,6 +102,6 @@ const AgentGraph: React.FC<Props> = ({ strength = -500, distance = 150, nodes, e
       />
     </ReactFlowProvider>
   );
-}
+};
 
 export default AgentGraph;

@@ -1,16 +1,16 @@
-import { NextRequest } from "next/server";
+import { NextRequest } from 'next/server';
 
-import { CoreTool, LanguageModelV1, streamText, StreamTextResult } from "ai";
+import { CoreTool, LanguageModelV1, streamText, StreamTextResult } from 'ai';
 
-import { openai } from "@ai-sdk/openai";
-import { anthropic } from "@ai-sdk/anthropic";
-import { xai } from "@ai-sdk/xai";
-import { google } from "@ai-sdk/google";
-import { deepseek } from "@ai-sdk/deepseek";
+import { openai } from '@ai-sdk/openai';
+import { anthropic } from '@ai-sdk/anthropic';
+import { xai } from '@ai-sdk/xai';
+import { google } from '@ai-sdk/google';
+import { deepseek } from '@ai-sdk/deepseek';
 
-import { Models } from "@/types/models";
-import { chooseAgent } from "./utils";
-import { agents } from "@/ai/agents";
+import { Models } from '@/types/models';
+import { chooseAgent } from './utils';
+import { agents } from '@/ai/agents';
 
 const system = `You a network of blockchain agents called The Spidex (or Hive for short). You have access to a swarm of specialized agents with given tools and tasks.
 
@@ -18,7 +18,7 @@ Your native ticker is BUZZ with a contract address of 9DHe3pycTuymFk4H4bbPoAJ4hQ
 
 Here are the other agents:
 
-${agents.map((agent) => `${agent.name}: ${agent.capabilities}`).join("\n")}
+${agents.map(agent => `${agent.name}: ${agent.capabilities}`).join('\n')}
 
 The query of the user did not result in any agent being invoked. You should respond with a message that is helpful to the user.`;
 
@@ -29,32 +29,32 @@ export const POST = async (req: NextRequest) => {
   let model: LanguageModelV1 | undefined = undefined;
 
   if (modelName === Models.OpenAI) {
-    model = openai("gpt-4o-mini");
+    model = openai('gpt-4o-mini');
     MAX_TOKENS = 128000;
   }
 
   if (modelName === Models.Anthropic) {
-    model = anthropic("claude-3-5-sonnet-latest");
+    model = anthropic('claude-3-5-sonnet-latest');
     MAX_TOKENS = 190000;
   }
 
   if (modelName === Models.XAI) {
-    model = xai("grok-beta");
+    model = xai('grok-beta');
     MAX_TOKENS = 131072;
   }
 
   if (modelName === Models.Gemini) {
-    model = google("gemini-2.0-flash-exp");
+    model = google('gemini-2.0-flash-exp');
     MAX_TOKENS = 1048576;
   }
 
   if (modelName === Models.Deepseek) {
-    model = deepseek("deepseek-chat") as LanguageModelV1;
+    model = deepseek('deepseek-chat') as LanguageModelV1;
     MAX_TOKENS = 64000;
   }
 
   if (!model || !MAX_TOKENS) {
-    throw new Error("Invalid model");
+    throw new Error('Invalid model');
   }
 
   // Add message token limit check
@@ -97,7 +97,7 @@ export const POST = async (req: NextRequest) => {
     });
   }
 
-  console.log("streamTextResult:::", streamTextResult);
+  console.log('streamTextResult:::', streamTextResult);
 
   return streamTextResult.toDataStreamResponse();
 };

@@ -1,1 +1,1 @@
-export const INVOKE_AGENT_NAME = "invoke-agent";
+export const INVOKE_AGENT_NAME = 'invoke-agent';

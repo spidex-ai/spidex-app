@@ -1,6 +1,6 @@
-import { orderBy } from "lodash";
-import { CoreClient } from "./client";
-import { ApiResponse, WalletBalances, WalletTransaction } from "./types";
+import { orderBy } from 'lodash';
+import { CoreClient } from './client';
+import { ApiResponse, WalletBalances, WalletTransaction } from './types';
 
 export class CoreService {
   private client: CoreClient;
@@ -13,7 +13,7 @@ export class CoreService {
     const response = await this.client.get<ApiResponse<WalletBalances>>(
       `portfolio/${walletAddress}`
     );
-    console.log("🚀 ~ CoreService ~ getBalances ~ response:", response);
+    console.log('🚀 ~ CoreService ~ getBalances ~ response:', response);
     return response.data;
   }
 
@@ -23,7 +23,7 @@ export class CoreService {
     const response = await this.client.get<ApiResponse<WalletTransaction[]>>(
       `portfolio/${walletAddress}/transactions`,
       {
-        orderBy: "desc",
+        orderBy: 'desc',
         page: 1,
         count: 50,
       }

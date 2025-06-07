@@ -1,7 +1,6 @@
-import { TWITTER_SEARCH_RECENT_NAME } from "@/ai/action-names";
+import { TWITTER_SEARCH_RECENT_NAME } from '@/ai/action-names';
 
-export const SOCIAL_AGENT_DESCRIPTION =
-`You are a social agent. You are responsible for all queries regarding the user's social activities.
+export const SOCIAL_AGENT_DESCRIPTION = `You are a social agent. You are responsible for all queries regarding the user's social activities.
 
 You have access to the following tools:
 - ${TWITTER_SEARCH_RECENT_NAME}

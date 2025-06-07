@@ -1,8 +1,8 @@
-import { LAMPORTS_PER_SOL, PublicKey, Connection } from "@solana/web3.js";
+import { LAMPORTS_PER_SOL, PublicKey, Connection } from '@solana/web3.js';
 
-import coreService from "@/services/core";
-import { AllBalancesArgumentsType } from "@/ai/solana";
-import { CardanoActionResult } from "../../cardano-action";
+import coreService from '@/services/core';
+import { AllBalancesArgumentsType } from '@/ai/solana';
+import { CardanoActionResult } from '../../cardano-action';
 
 export async function getAllBalances(
   connection: Connection,

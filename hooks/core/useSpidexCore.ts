@@ -2,12 +2,12 @@ import {
   EsitmateSwapPayload,
   SubmitSwapPayload,
   SwapPayload,
-} from "@/services/dexhunter/types";
-import { STORAGE_KEY } from "@raydium-io/raydium-sdk-v2";
-import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { UpdateUserPayload } from "./type";
-import { QuoteType } from "@/app/(app)/token/[address]/_components/header/select-quote";
+} from '@/services/dexhunter/types';
+import { STORAGE_KEY } from '@raydium-io/raydium-sdk-v2';
+import { useRouter } from 'next/navigation';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { UpdateUserPayload } from './type';
+import { QuoteType } from '@/app/(app)/token/[address]/_components/header/select-quote';
 export interface SignMessageData {
   signature: string;
   address: string;
@@ -70,7 +70,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
   }, [auth]);
 
   useEffect(() => {
-    console.log("Current auth in useSpidexCoreInternal:", auth);
+    console.log('Current auth in useSpidexCoreInternal:', auth);
     if (auth?.accessToken) {
       getMe();
     }
@@ -92,7 +92,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
           Authorization: `Bearer ${auth.accessToken}`,
         }),
         ...(!options.body || !(options.body instanceof FormData)
-          ? { "Content-Type": "application/json" }
+          ? { 'Content-Type': 'application/json' }
           : {}),
         ...options.headers,
       };
@@ -112,8 +112,8 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
           const refreshResponse = await fetch(
             `${process.env.NEXT_PUBLIC_SPIDEX_CORE_API_URL}/auth/refresh-token`,
             {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ refreshToken: auth.refreshToken }),
             }
           );
@@ -129,7 +129,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
               {
                 ...options,
                 headers: {
-                  "Content-Type": "application/json",
+                  'Content-Type': 'application/json',
                   Authorization: `Bearer ${newAuth.accessToken}`,
                   ...options.headers,
                 },
@@ -143,22 +143,22 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
             return await retryResponse.json();
           } else {
             logout();
-            throw new Error("Session expired. Please login again.");
+            throw new Error('Session expired. Please login again.');
           }
         }
 
         setLoading(false);
         const data = await response.json();
         if (response.status !== 200) {
-          throw data?.message || "An error occurred";
+          throw data?.message || 'An error occurred';
         }
 
         return data;
       } catch (err: any) {
-        setError(err.message || "An error occurred");
+        setError(err.message || 'An error occurred');
         setLoading(false);
-        console.error("Spidex API error:", err);
-        throw err || "An error occurred";
+        console.error('Spidex API error:', err);
+        throw err || 'An error occurred';
       }
     },
     [auth?.accessToken]
@@ -166,7 +166,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
 
   const getMe = useCallback(async () => {
     try {
-      const data = await fetchWithAuth("/auth/me");
+      const data = await fetchWithAuth('/auth/me');
       if (auth) {
         setAuth({ ...auth, user: data.data, avatar: data.data.avatar });
       }
@@ -178,7 +178,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
   }, [fetchWithAuth, auth]);
 
   const getTopTokensByVolume = useCallback(
-    async (timeframe = "24h", page = 1, perPage = 10) => {
+    async (timeframe = '24h', page = 1, perPage = 10) => {
       try {
         const data = await fetchWithAuth(
           `/tokens/top/volume?timeframe=${timeframe}&page=${page}&limit=${perPage}`
@@ -207,7 +207,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
 
   const getNounce = useCallback(async () => {
     try {
-      const data = await fetchWithAuth("/auth/connect-wallet/sign-message");
+      const data = await fetchWithAuth('/auth/connect-wallet/sign-message');
       return data.data;
     } catch (err) {
       return null;
@@ -217,8 +217,8 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
   const signMessage = useCallback(
     async (message: SignMessageData, walletName: string) => {
       try {
-        const data = await fetchWithAuth("/auth/connect-wallet", {
-          method: "POST",
+        const data = await fetchWithAuth('/auth/connect-wallet', {
+          method: 'POST',
           body: JSON.stringify(message),
         });
         setAuth({ ...data.data, walletName });
@@ -232,13 +232,13 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
 
   const refreshToken = useCallback(async () => {
     if (!auth) {
-      setError("No auth token found");
+      setError('No auth token found');
       return null;
     }
 
     try {
-      const data = await fetchWithAuth("/auth/refresh-token", {
-        method: "POST",
+      const data = await fetchWithAuth('/auth/refresh-token', {
+        method: 'POST',
         body: JSON.stringify({
           refreshToken: auth.refreshToken,
         }),
@@ -254,15 +254,15 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
   const connectX = useCallback(
     async (code: string, redirectUri: string, referralCode?: string) => {
       try {
-        const data = await fetchWithAuth("/auth/connect/x", {
-          method: "POST",
+        const data = await fetchWithAuth('/auth/connect/x', {
+          method: 'POST',
           body: JSON.stringify({
             code,
             redirectUri,
             referralCode,
           }),
         });
-        setAuth({ ...data.data, walletName: "xlogin" });
+        setAuth({ ...data.data, walletName: 'xlogin' });
         return data.data;
       } catch (err) {
         throw err;
@@ -274,14 +274,14 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
   const connectGoogle = useCallback(
     async (idToken: string, referralCode?: string) => {
       try {
-        const data = await fetchWithAuth("/auth/connect/google", {
-          method: "POST",
+        const data = await fetchWithAuth('/auth/connect/google', {
+          method: 'POST',
           body: JSON.stringify({
             idToken,
             referralCode,
           }),
         });
-        setAuth({ ...data.data, walletName: "google" });
+        setAuth({ ...data.data, walletName: 'google' });
         return data.data;
       } catch (err) {
         throw err;
@@ -293,15 +293,15 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
   const connectDiscord = useCallback(
     async (code: string, redirectUri: string, referralCode?: string) => {
       try {
-        const data = await fetchWithAuth("/auth/connect/discord", {
-          method: "POST",
+        const data = await fetchWithAuth('/auth/connect/discord', {
+          method: 'POST',
           body: JSON.stringify({
             code,
             redirectUri,
             referralCode,
           }),
         });
-        setAuth({ ...data.data, walletName: "discord" });
+        setAuth({ ...data.data, walletName: 'discord' });
         return data.data;
       } catch (err) {
         throw err;
@@ -322,8 +322,8 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
       referralCode?: string
     ) => {
       try {
-        const data = await fetchWithAuth("/auth/connect/telegram", {
-          method: "POST",
+        const data = await fetchWithAuth('/auth/connect/telegram', {
+          method: 'POST',
           body: JSON.stringify({
             id: +id,
             first_name,
@@ -335,7 +335,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
             referralCode,
           }),
         });
-        setAuth({ ...data.data, walletName: "telegram" });
+        setAuth({ ...data.data, walletName: 'telegram' });
         return data.data;
       } catch (err) {
         throw err;
@@ -347,17 +347,17 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
   const logout = useCallback(async () => {
     setAuth(null);
     localStorage.removeItem(STORAGE_KEY);
-    router.push("/chat");
+    router.push('/chat');
   }, []);
 
   const getUserRefMeInfo = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
-      const data = await fetchWithAuth("/user-referral/me/info");
+      const data = await fetchWithAuth('/user-referral/me/info');
       return data.data;
     } catch (err: any) {
-      setError(err.message || "An error occurred");
+      setError(err.message || 'An error occurred');
       return null;
     } finally {
       setLoading(false);
@@ -375,7 +375,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
         );
         return data;
       } catch (err: any) {
-        setError(err.message || "An error occurred");
+        setError(err.message || 'An error occurred');
         return null;
       } finally {
         setLoading(false);
@@ -395,7 +395,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
         );
         return data;
       } catch (err: any) {
-        setError(err.message || "An error occurred");
+        setError(err.message || 'An error occurred');
         return null;
       } finally {
         setLoading(false);
@@ -413,31 +413,41 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     } catch (error) {}
   }, [fetchWithAuth, auth]);
 
-  const getUserQuests = useCallback(async (page?: number, perPage?: number) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const data = await fetchWithAuth(`/user-quest?limit=${perPage}&page=${page}`);
-      return data;
-    } catch (error) {
-      return null;
-    } finally {
-      setLoading(false);
-    }
-  }, [fetchWithAuth, auth]);
+  const getUserQuests = useCallback(
+    async (page?: number, perPage?: number) => {
+      setLoading(true);
+      setError(null);
+      try {
+        const data = await fetchWithAuth(
+          `/user-quest?limit=${perPage}&page=${page}`
+        );
+        return data;
+      } catch (error) {
+        return null;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [fetchWithAuth, auth]
+  );
 
-  const getUserPointHistory = useCallback(async (page?: number, perPage?: number) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const data = await fetchWithAuth(`/user-point/me/history?limit=${perPage}&page=${page}`);
-      return data;
-    } catch (error) {
-      return null;
-    } finally {
-      setLoading(false);
-    }
-  }, [fetchWithAuth, auth]);
+  const getUserPointHistory = useCallback(
+    async (page?: number, perPage?: number) => {
+      setLoading(true);
+      setError(null);
+      try {
+        const data = await fetchWithAuth(
+          `/user-point/me/history?limit=${perPage}&page=${page}`
+        );
+        return data;
+      } catch (error) {
+        return null;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [fetchWithAuth, auth]
+  );
 
   const getPortfolioToken = useCallback(
     async (address?: string) => {
@@ -447,7 +457,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
         const data = await fetchWithAuth(
           `/portfolio/${
             address ||
-            "addr1q9gykktajrgrmj5am8vwlhp65a72emlwn2s3e5cadkhe3vrfkfxs6yajls3ft0yn42uqlcnrq6qcn3l0lunkxy6aplgspxm6da"
+            'addr1q9gykktajrgrmj5am8vwlhp65a72emlwn2s3e5cadkhe3vrfkfxs6yajls3ft0yn42uqlcnrq6qcn3l0lunkxy6aplgspxm6da'
           }`
         );
         return data.data;
@@ -459,7 +469,6 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     },
     [fetchWithAuth, auth]
   );
-
 
   const getTokenTradeHistory = useCallback(
     async (tokenId: string) => {
@@ -478,18 +487,23 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     },
     [fetchWithAuth, auth]
   );
-  const getPortfolioTransaction = useCallback(async (address?: string, page?: number, perPage?: number) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const data = await fetchWithAuth(`/portfolio/${address || 'addr1q9gykktajrgrmj5am8vwlhp65a72emlwn2s3e5cadkhe3vrfkfxs6yajls3ft0yn42uqlcnrq6qcn3l0lunkxy6aplgspxm6da'}/transactions?page=1&count=20&order=desc`);
-      return data;
-    } catch (error) {
-      return null;
-    } finally {
-      setLoading(false);
-    }
-  }, [fetchWithAuth, auth]);
+  const getPortfolioTransaction = useCallback(
+    async (address?: string, page?: number, perPage?: number) => {
+      setLoading(true);
+      setError(null);
+      try {
+        const data = await fetchWithAuth(
+          `/portfolio/${address || 'addr1q9gykktajrgrmj5am8vwlhp65a72emlwn2s3e5cadkhe3vrfkfxs6yajls3ft0yn42uqlcnrq6qcn3l0lunkxy6aplgspxm6da'}/transactions?page=1&count=20&order=desc`
+        );
+        return data;
+      } catch (error) {
+        return null;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [fetchWithAuth, auth]
+  );
 
   const getTokenTopHolders = useCallback(
     async (tokenId: string) => {
@@ -551,7 +565,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
       setError(null);
       try {
         const data = await fetchWithAuth(`/swap/build`, {
-          method: "POST",
+          method: 'POST',
           body: JSON.stringify(payload),
         });
         return data.data;
@@ -570,7 +584,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
       setError(null);
       try {
         const data = await fetchWithAuth(`/swap/estimate`, {
-          method: "POST",
+          method: 'POST',
           body: JSON.stringify(payload),
         });
         return data.data;
@@ -589,7 +603,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
       setError(null);
       try {
         const data = await fetchWithAuth(`/swap/submit`, {
-          method: "POST",
+          method: 'POST',
           body: JSON.stringify(payload),
         });
         return data.data;
@@ -610,7 +624,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
         const data = await fetchWithAuth(
           `/user-quest/trigger-social-quest/${id}`,
           {
-            method: "PUT",
+            method: 'PUT',
           }
         );
         return data.data;
@@ -628,7 +642,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     setError(null);
     try {
       const data = await fetchWithAuth(`/user-quest/check-in`, {
-        method: "PUT",
+        method: 'PUT',
       });
       return data.data;
     } catch (error) {
@@ -644,7 +658,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
       setError(null);
       try {
         const data = await fetchWithAuth(`/medias/image`, {
-          method: "POST",
+          method: 'POST',
           body: file,
         });
         return data.data;
@@ -663,7 +677,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
       setError(null);
       try {
         const data = await fetchWithAuth(`/user/profile`, {
-          method: "PUT",
+          method: 'PUT',
           body: JSON.stringify(payload),
         });
         return data.data;

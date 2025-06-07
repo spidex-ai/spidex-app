@@ -1,14 +1,14 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 import {
   FAQKnowledgeInputSchema,
   SearchKnowledgeInputSchema,
   SearchWebKnowledgeInputSchema,
-} from "./input-schema";
+} from './input-schema';
 
-import type { KnowledgeActionResult } from "../knowledge-action";
-import type { Knowledge } from "@/db/types";
-import { TavilySearchResponse } from "@tavily/core";
+import type { KnowledgeActionResult } from '../knowledge-action';
+import type { Knowledge } from '@/db/types';
+import { TavilySearchResponse } from '@tavily/core';
 
 export type SearchKnowledgeSchemaType = typeof SearchKnowledgeInputSchema;
 

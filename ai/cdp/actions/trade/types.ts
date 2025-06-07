@@ -1,8 +1,8 @@
-import { z } from "zod";
+import { z } from 'zod';
 
-import type{ Amount } from "@coinbase/coinbase-sdk";
-import type { CdpActionResult } from "../cdp-action";
-import type { TradeInputSchema } from "./input-schema";
+import type { Amount } from '@coinbase/coinbase-sdk';
+import type { CdpActionResult } from '../cdp-action';
+import type { TradeInputSchema } from './input-schema';
 
 export type TradeSchemaType = typeof TradeInputSchema;
 
@@ -13,4 +13,4 @@ export type TradeResultBodyType = {
   toAmount: Amount;
 };
 
-export type TradeActionResultType = CdpActionResult<TradeResultBodyType>; 
+export type TradeActionResultType = CdpActionResult<TradeResultBodyType>;

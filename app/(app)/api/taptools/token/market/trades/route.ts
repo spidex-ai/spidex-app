@@ -16,7 +16,12 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const data = await taptoolsService.getTokenTrades(unit, timeframe, page, perPage);
+    const data = await taptoolsService.getTokenTrades(
+      unit,
+      timeframe,
+      page,
+      perPage
+    );
     return NextResponse.json(data);
   } catch (error: any) {
     console.error('Error fetching token trades:', error);

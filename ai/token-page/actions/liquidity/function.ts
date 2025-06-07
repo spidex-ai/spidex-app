@@ -1,15 +1,15 @@
-import type { SolanaActionResult } from "../../../solana/actions/solana-action";
-import type { TokenChatData } from "@/types";
-import { getMarketsList } from "@/services/birdeye";
-import type { MarketItem } from "@/services/birdeye/types";
+import type { SolanaActionResult } from '../../../solana/actions/solana-action';
+import type { TokenChatData } from '@/types';
+import { getMarketsList } from '@/services/birdeye';
+import type { MarketItem } from '@/services/birdeye/types';
 
 import type {
   TokenPageLiquidityResultBodyType,
   TokenPageLiquidityArgumentsType,
-} from "./types";
-import taptoolsService from "@/services/taptools";
-import { TokenPool } from "@/services/taptools/types";
-import Decimal from "decimal.js";
+} from './types';
+import taptoolsService from '@/services/taptools';
+import { TokenPool } from '@/services/taptools/types';
+import Decimal from 'decimal.js';
 
 export async function getTokenPageLiquidity(
   token: TokenChatData,
@@ -19,11 +19,8 @@ export async function getTokenPageLiquidity(
     // Get all markets (pools) for the token
     const markets = await taptoolsService.getTokenPools(token.address, 1);
 
-
     const stats = await getTokenStats(token.address);
     const tokenStats = stats.data;
-
-
 
     const usdPrice = new Decimal(tokenStats.usdPrice)
       .div(tokenStats.mcap.price)
@@ -37,15 +34,14 @@ export async function getTokenPageLiquidity(
       0
     );
 
-
     // Find main pool (pool with highest total liquidity value)
-    const poolsWithLiquidity = markets.map((pool) => ({
+    const poolsWithLiquidity = markets.map(pool => ({
       ...pool,
       totalLiquidity:
         pool.tokenALocked * usdPriceToken + pool.tokenBLocked * usdPrice,
     }));
     console.log(
-      "🚀 ~ poolsWithLiquidity ~ poolsWithLiquidity:",
+      '🚀 ~ poolsWithLiquidity ~ poolsWithLiquidity:',
       poolsWithLiquidity
     );
 
@@ -53,20 +49,20 @@ export async function getTokenPageLiquidity(
     const mainPool = poolsWithLiquidity.reduce((a, b) =>
       a.totalLiquidity > b.totalLiquidity ? a : b
     );
-    console.log("🚀 ~ mainPool:", mainPool);
+    console.log('🚀 ~ mainPool:', mainPool);
 
     // Calculate liquidity concentration
     const sortedPools = [...poolsWithLiquidity].sort(
       (a, b) => b.totalLiquidity - a.totalLiquidity
     );
-    console.log("🚀 ~ sortedPools:", sortedPools);
+    console.log('🚀 ~ sortedPools:', sortedPools);
 
     const topPoolShare = (mainPool.totalLiquidity / liquidity) * 100;
     const top3PoolsShare = sortedPools
       .slice(0, 3)
       .reduce((acc, pool) => acc + (pool.totalLiquidity / liquidity) * 100, 0);
 
-    console.log("🚀 ~ top3PoolsShare:", top3PoolsShare);
+    console.log('🚀 ~ top3PoolsShare:', top3PoolsShare);
     // Calculate liquidity health score (0-100)
     const healthScore = calculateLiquidityHealthScore({
       totalLiquidity: liquidity,
@@ -132,13 +128,13 @@ function calculateLiquidityHealthScore({
 
 function getLiquidityHealthDescription(score: number): string {
   if (score >= 90)
-    return "Excellent - Deep liquidity with healthy distribution and strong trading activity";
-  if (score >= 75) return "Good - Sufficient liquidity and trading volume";
+    return 'Excellent - Deep liquidity with healthy distribution and strong trading activity';
+  if (score >= 75) return 'Good - Sufficient liquidity and trading volume';
   if (score >= 60)
-    return "Moderate - Adequate liquidity but may have concentration or volume concerns";
+    return 'Moderate - Adequate liquidity but may have concentration or volume concerns';
   if (score >= 40)
-    return "Fair - Limited liquidity or high concentration in few pools";
-  return "Poor - Shallow liquidity with concerning metrics";
+    return 'Fair - Limited liquidity or high concentration in few pools';
+  return 'Poor - Shallow liquidity with concerning metrics';
 }
 
 function formatNumber(num: number): string {
@@ -151,13 +147,13 @@ export async function getTokenStats(tokenId: string) {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_SPIDEX_CORE_API_URL}/tokens/${tokenId}/stats`,
     {
-      method: "GET",
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     }
   );
-  console.log("🚀 ~ getTokenStats ~ response:", response);
+  console.log('🚀 ~ getTokenStats ~ response:', response);
 
   if (!response.ok) {
     throw new Error(`Failed to fetch stats: ${response.statusText}`);

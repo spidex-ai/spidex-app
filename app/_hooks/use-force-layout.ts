@@ -74,16 +74,16 @@ function useForceLayout({
       return;
     }
 
-    const simulationNodes: SimNodeType[] = nodes.map((node) => ({
+    const simulationNodes: SimNodeType[] = nodes.map(node => ({
       ...node,
       x: node.position.x ?? 0,
       y: node.position.y ?? 0,
     }));
 
-    const simulationLinks: SimEdgeType[] = edges.map((edge) => ({
+    const simulationLinks: SimEdgeType[] = edges.map(edge => ({
       ...edge,
       source: edge.source,
-      target: edge.target
+      target: edge.target,
     }));
 
     const simulation = forceSimulation<SimNodeType>()
@@ -92,14 +92,14 @@ function useForceLayout({
       .force(
         'link',
         forceLink<SimNodeType, SimEdgeType>(simulationLinks)
-          .id((d) => d.id)
+          .id(d => d.id)
           .strength(0.05)
           .distance(distance)
       )
       .force('x', forceX().x(0).strength(0.01))
       .force('y', forceY().y(0).strength(0.01))
       .on('tick', () => {
-        setNodes((nodes) =>
+        setNodes(nodes =>
           nodes.map((node, i) => {
             if (simulationNodes[i]) {
               const dragging = draggingNodeRef.current?.id === node.id;
@@ -131,7 +131,7 @@ function useForceLayout({
 
     let timer: NodeJS.Timeout;
     const startTime = Date.now();
-    
+
     const addOscillation = () => {
       if (draggingNodeRef.current) {
         timer = setTimeout(addOscillation, 1000 / 60);
@@ -139,31 +139,35 @@ function useForceLayout({
       }
 
       const elapsed = (Date.now() - startTime) / 1000;
-      
-      simulationNodes.forEach((node) => {
+
+      simulationNodes.forEach(node => {
         if (draggingNodeRef.current?.id === node.id) return;
 
-        const seed = Array.from(node.id).reduce((acc, char) => acc + char.charCodeAt(0), 0) % 100;
-        
-        const vx = (
-          Math.sin(elapsed * 0.3 + seed) +
-          Math.sin(elapsed * 0.7 + seed * 2) * 0.5 +
-          Math.sin(elapsed * 1.1 + seed * 3) * 0.3
-        ) * (oscillationStrength / 1.8);
-        
-        const vy = (
-          Math.cos(elapsed * 0.4 + seed * 1.5) +
-          Math.cos(elapsed * 0.8 + seed * 2.5) * 0.5 +
-          Math.cos(elapsed * 1.2 + seed * 3.5) * 0.3
-        ) * (oscillationStrength / 1.8);
+        const seed =
+          Array.from(node.id).reduce(
+            (acc, char) => acc + char.charCodeAt(0),
+            0
+          ) % 100;
+
+        const vx =
+          (Math.sin(elapsed * 0.3 + seed) +
+            Math.sin(elapsed * 0.7 + seed * 2) * 0.5 +
+            Math.sin(elapsed * 1.1 + seed * 3) * 0.3) *
+          (oscillationStrength / 1.8);
+
+        const vy =
+          (Math.cos(elapsed * 0.4 + seed * 1.5) +
+            Math.cos(elapsed * 0.8 + seed * 2.5) * 0.5 +
+            Math.cos(elapsed * 1.2 + seed * 3.5) * 0.3) *
+          (oscillationStrength / 1.8);
 
         node.vx = vx;
         node.vy = vy;
       });
-      
+
       simulation.alpha(0.1);
       simulation.restart();
-      
+
       timer = setTimeout(addOscillation, 1000 / 60);
     };
 

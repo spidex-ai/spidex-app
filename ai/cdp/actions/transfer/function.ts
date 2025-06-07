@@ -1,10 +1,10 @@
-import { Wallet } from "@coinbase/coinbase-sdk";
+import { Wallet } from '@coinbase/coinbase-sdk';
 
-import type { TransferArgumentsType, TransferActionResultType } from "./types";
+import type { TransferArgumentsType, TransferActionResultType } from './types';
 
 export async function transfer(
   wallet: Wallet,
-  args: TransferArgumentsType,
+  args: TransferArgumentsType
 ): Promise<TransferActionResultType> {
   try {
     const transferResult = await wallet.createTransfer({
@@ -19,13 +19,13 @@ export async function transfer(
     const transaction = result.getTransaction();
 
     if (!transaction) {
-      throw new Error("Failed to get transaction");
+      throw new Error('Failed to get transaction');
     }
 
     const transactionHash = transaction.getTransactionHash();
 
     if (!transactionHash) {
-      throw new Error("Failed to get transaction hash");
+      throw new Error('Failed to get transaction hash');
     }
 
     return {
@@ -33,11 +33,11 @@ export async function transfer(
       body: {
         transactionHash,
         symbol: args.assetId,
-      }
+      },
     };
   } catch (error) {
     return {
-      message: `Error transferring the asset: ${error}`
+      message: `Error transferring the asset: ${error}`,
     };
   }
-} 
+}

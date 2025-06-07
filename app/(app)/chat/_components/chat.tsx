@@ -1,19 +1,17 @@
-"use client";
+'use client';
 
-import React from "react";
+import React from 'react';
 
-import EmptyChat from "./empty";
-import Messages from "./messages";
-import ChatInput from "./input";
+import EmptyChat from './empty';
+import Messages from './messages';
+import ChatInput from './input';
 
-import { useChat } from "../_contexts/chat";
-import Image from "next/image";
+import { useChat } from '../_contexts/chat';
+import Image from 'next/image';
 const Chat: React.FC = () => {
   const { messages } = useChat();
 
-  const cleanedMessages = messages.filter(
-    (message) => message.role !== "system"
-  );
+  const cleanedMessages = messages.filter(message => message.role !== 'system');
 
   return (
     <>
@@ -33,9 +31,12 @@ const Chat: React.FC = () => {
           </div>
         </div>
         {cleanedMessages.length === 0 && (
-          <div className="absolute top-0 right-10 cursor-pointer" onClick={() => {
-            window.open("https://spidex.ag/", "_blank");
-          }}>
+          <div
+            className="absolute top-0 right-10 cursor-pointer"
+            onClick={() => {
+              window.open('https://spidex.ag/', '_blank');
+            }}
+          >
             <Image
               src="/icons/spidex-ai-banner-ads.svg"
               alt="Spidex AI Chat"

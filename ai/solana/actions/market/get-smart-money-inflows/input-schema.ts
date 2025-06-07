@@ -1,7 +1,7 @@
-import { z } from "zod";
+import { z } from 'zod';
 
-import { Granularity } from "@/services/hellomoon/types";
+import { Granularity } from '@/services/hellomoon/types';
 
 export const GetSmartMoneyInflowsInputSchema = z.object({
-    granularity: z.nativeEnum(Granularity).default(Granularity.ONE_WEEK)
-}); 
+  granularity: z.nativeEnum(Granularity).default(Granularity.ONE_WEEK),
+});

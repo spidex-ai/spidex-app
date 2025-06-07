@@ -1,21 +1,21 @@
-"use client";
+'use client';
 
-import React from "react";
+import React from 'react';
 
-import ChatInput from "./input";
-import StarterButtons from "./starter-buttons";
+import ChatInput from './input';
+import StarterButtons from './starter-buttons';
 
-import { cn } from "@/lib/utils";
-import { LogoChat } from "@/components/ui/logo";
-import AgentButtons from "./agent-buttons";
-import { TextGradient } from "@/components/ui/text";
+import { cn } from '@/lib/utils';
+import { LogoChat } from '@/components/ui/logo';
+import AgentButtons from './agent-buttons';
+import { TextGradient } from '@/components/ui/text';
 
 const EmptyChat: React.FC = () => {
   return (
     <div
       className={cn(
         // Base
-        "flex flex-col items-center justify-center w-full h-full px-4"
+        'flex flex-col items-center justify-center w-full h-full px-4'
       )}
     >
       <div className="flex flex-col items-center justify-center w-full gap-4 md:gap-8">
@@ -24,7 +24,7 @@ const EmptyChat: React.FC = () => {
             <LogoChat className="w-20 h-20" />
             <div className="flex flex-col gap-1">
               <h1 className="font-semibold text-center text-2xl">
-                Welcome to{" "}
+                Welcome to{' '}
                 <TextGradient className="inline-block">Spidex AI</TextGradient>,
                 your personal DeFi assistant.
               </h1>

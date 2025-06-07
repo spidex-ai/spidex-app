@@ -1,7 +1,10 @@
-import { getTopTraders as getTopTradersBirdeye } from "@/services/birdeye";
+import { getTopTraders as getTopTradersBirdeye } from '@/services/birdeye';
 
-import type { GetTopTradersArgumentsType, GetTopTradersResultBodyType } from "./types";
-import type { SolanaActionResult } from "../../solana-action";
+import type {
+  GetTopTradersArgumentsType,
+  GetTopTradersResultBodyType,
+} from './types';
+import type { SolanaActionResult } from '../../solana-action';
 
 /**
  * Gets the trending tokens from Birdeye API.
@@ -20,14 +23,14 @@ export async function getTopTraders(
       message: `Found ${response.items.length} top traders. The user is shown the traders, do not list them. Ask the user what they want to do with the traders.`,
       body: {
         traders: response.items,
-      }
+      },
     };
   } catch (error) {
     return {
       message: `Error getting top traders: ${error}`,
       body: {
         traders: [],
-      }
+      },
     };
   }
 }

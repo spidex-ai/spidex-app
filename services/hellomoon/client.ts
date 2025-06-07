@@ -1,4 +1,4 @@
-import { RestClient } from "@hellomoon/api"
+import { RestClient } from '@hellomoon/api';
 
 const client = new RestClient(process.env.HELLOMOON_API_KEY!);
 

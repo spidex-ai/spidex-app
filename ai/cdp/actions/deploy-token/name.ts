@@ -1,1 +1,1 @@
-export const DEPLOY_TOKEN_NAME = "deploy_token"; 
+export const DEPLOY_TOKEN_NAME = 'deploy_token';

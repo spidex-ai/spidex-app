@@ -1,18 +1,18 @@
-"use client";
+'use client';
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 
-import { Button, CandlestickChart, Skeleton } from "@/components/ui";
+import { Button, CandlestickChart, Skeleton } from '@/components/ui';
 
-import { usePriceChartCore } from "@/hooks";
+import { usePriceChartCore } from '@/hooks';
 
-import { cn, formatNumber } from "@/lib/utils";
+import { cn, formatNumber } from '@/lib/utils';
 
-import type { UTCTimestamp } from "lightweight-charts";
-import { CandleStickInterval } from "@/services/hellomoon/types";
-import { CardanoTokenDetail } from "@/services/dexhunter/types";
-import { QuoteType } from "../../token/[address]/_components/header/select-quote";
-import toast from "react-hot-toast";
+import type { UTCTimestamp } from 'lightweight-charts';
+import { CandleStickInterval } from '@/services/hellomoon/types';
+import { CardanoTokenDetail } from '@/services/dexhunter/types';
+import { QuoteType } from '../../token/[address]/_components/header/select-quote';
+import toast from 'react-hot-toast';
 
 const WINDOWS = [
   {
@@ -29,7 +29,7 @@ const WINDOWS = [
     label: CandleStickInterval.FIFTEEN_MINUTES,
     timeframe: CandleStickInterval.FIFTEEN_MINUTES,
     numDays: 1000,
-  }, 
+  },
   {
     label: CandleStickInterval.THIRTY_MINUTES,
     timeframe: CandleStickInterval.THIRTY_MINUTES,
@@ -44,7 +44,7 @@ const WINDOWS = [
     label: CandleStickInterval.TWO_HOURS,
     timeframe: CandleStickInterval.TWO_HOURS,
     numDays: 180,
-  }, 
+  },
   {
     label: CandleStickInterval.FOUR_HOURS,
     timeframe: CandleStickInterval.FOUR_HOURS,
@@ -54,7 +54,7 @@ const WINDOWS = [
     label: CandleStickInterval.TWELVE_HOURS,
     timeframe: CandleStickInterval.TWELVE_HOURS,
     numDays: 180,
-  }, 
+  },
   {
     label: CandleStickInterval.ONE_DAY,
     timeframe: CandleStickInterval.ONE_DAY,
@@ -83,13 +83,17 @@ interface Props {
   quote: QuoteType;
 }
 
-const TokenChart: React.FC<Props> = ({ data: tokenDetail, isLoadingTokenDetail, quote }) => {
+const TokenChart: React.FC<Props> = ({
+  data: tokenDetail,
+  isLoadingTokenDetail,
+  quote,
+}) => {
   const [timeframe, setTimeframe] = useState<CandleStickInterval>(
     CandleStickInterval.FOUR_HOURS
   );
   const [numDays, setNumDays] = useState<number>(180);
   const { data, isLoading, refetchDataChart } = usePriceChartCore(
-    tokenDetail?.unit ?? "",
+    tokenDetail?.unit ?? '',
     timeframe,
     numDays,
     quote
@@ -98,19 +102,19 @@ const TokenChart: React.FC<Props> = ({ data: tokenDetail, isLoadingTokenDetail, 
   const onRefetchDataChart = async () => {
     try {
       await refetchDataChart();
-      toast.success("Data chart refreshed");
+      toast.success('Data chart refreshed');
     } catch (error) {
-      toast.error("Failed to refresh data chart");
+      toast.error('Failed to refresh data chart');
       throw error;
     }
-  }
+  };
 
   useEffect(() => {
-      const interval = setInterval(() => {
-          refetchDataChart();
-      }, 1000 * 60);
+    const interval = setInterval(() => {
+      refetchDataChart();
+    }, 1000 * 60);
 
-      return () => clearInterval(interval);
+    return () => clearInterval(interval);
   }, [tokenDetail]);
 
   const price = data?.length > 0 ? data[data.length - 1].close : 0;
@@ -128,18 +132,16 @@ const TokenChart: React.FC<Props> = ({ data: tokenDetail, isLoadingTokenDetail, 
           <>
             {data?.length > 0 ? (
               <p className="text-md md:text-lg font-bold">
-                {
-                  quote === QuoteType.USD ? (
-                    <>{`$${currentPrice}`}
-                      </>
-                  ) : (
-                    <>{`${currentPrice} ${quote}`}</>
-                  )
-                }
+                {quote === QuoteType.USD ? (
+                  <>{`$${currentPrice}`}</>
+                ) : (
+                  <>{`${currentPrice} ${quote}`}</>
+                )}
                 <span
-                  className={cn(change > 0 ? "text-green-500" : "text-red-500")}
+                  className={cn(change > 0 ? 'text-green-500' : 'text-red-500')}
                 >
-                  {" "}({change > 0 ? "+" : ""}
+                  {' '}
+                  ({change > 0 ? '+' : ''}
                   {formatNumber(change, 2)}
                   %)
                 </span>
@@ -148,7 +150,7 @@ const TokenChart: React.FC<Props> = ({ data: tokenDetail, isLoadingTokenDetail, 
           </>
         )}
         <div className="flex flex-row gap-1 items-center">
-          {WINDOWS.map((window) => (
+          {WINDOWS.map(window => (
             <Button
               key={window.label}
               onClick={() => {
@@ -157,26 +159,26 @@ const TokenChart: React.FC<Props> = ({ data: tokenDetail, isLoadingTokenDetail, 
               }}
               variant={
                 numDays === window.numDays && timeframe === window.timeframe
-                  ? "brand"
-                  : "ghost"
+                  ? 'brand'
+                  : 'ghost'
               }
               className={cn(
-                "text-sm h-fit w-fit px-1 py-0.5",
+                'text-sm h-fit w-fit px-1 py-0.5',
                 numDays === window.numDays && timeframe === window.timeframe
-                  ? "text-black dark:text-black"
-                  : "text-white dark:text-white"
+                  ? 'text-black dark:text-black'
+                  : 'text-white dark:text-white'
               )}
             >
               {window.label}
             </Button>
           ))}
-              <div 
-            className="w-4 h-4 cursor-pointer" 
+          <div
+            className="w-4 h-4 cursor-pointer"
             onClick={onRefetchDataChart}
             style={{
-              animation: 'none'
+              animation: 'none',
             }}
-            onMouseDown={(e) => {
+            onMouseDown={e => {
               const target = e.currentTarget;
               target.style.animation = 'smooth-spin 1s ease-in-out';
               setTimeout(() => {
@@ -205,7 +207,7 @@ const TokenChart: React.FC<Props> = ({ data: tokenDetail, isLoadingTokenDetail, 
           <>
             {data.length > 0 ? (
               <CandlestickChart
-                data={data.map((price) => ({
+                data={data.map(price => ({
                   time: price.time as UTCTimestamp,
                   open: price.open,
                   high: price.high,

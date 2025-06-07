@@ -1,4 +1,4 @@
-import { NextRequest } from "next/server";
+import { NextRequest } from 'next/server';
 
 import {
   CoreTool,
@@ -6,14 +6,14 @@ import {
   // LanguageModelV1,
   streamText,
   StreamTextResult,
-} from "ai";
+} from 'ai';
 
 // import { openai } from "@ai-sdk/openai";
 
-import { Models } from "@/types/models";
-import { chooseAgent } from "./utils";
-import { agents } from "@/ai/agents";
-import { createOpenRouter } from "@openrouter/ai-sdk-provider";
+import { Models } from '@/types/models';
+import { chooseAgent } from './utils';
+import { agents } from '@/ai/agents';
+import { createOpenRouter } from '@openrouter/ai-sdk-provider';
 
 const openrouter = createOpenRouter({
   apiKey: process.env.OPENROUTER_API_KEY,
@@ -23,7 +23,7 @@ const system = `You a network of blockchain agents called The Spidex (or Spidex 
 
 Here are the other agents:
 
-${agents.map((agent) => `${agent.name}: ${agent.capabilities}`).join("\n")}
+${agents.map(agent => `${agent.name}: ${agent.capabilities}`).join('\n')}
 
 The query of the user did not result in any agent being invoked. You should respond with a message that is helpful to the user.`;
 
@@ -35,7 +35,7 @@ export const POST = async (req: NextRequest) => {
 
   if (modelName === Models.OpenAI) {
     //openai/o4-mini
-    model = openrouter.languageModel("openai/gpt-4.1-mini");
+    model = openrouter.languageModel('openai/gpt-4.1-mini');
     MAX_TOKENS = 128000;
     // const selected = pickRandomOpenAiModel();
     // console.log("🔁 Selected GPT-4 model:", selected);
@@ -43,7 +43,7 @@ export const POST = async (req: NextRequest) => {
     // MAX_TOKENS = modelTokenLimits[selected];
   }
   if (!model || !MAX_TOKENS) {
-    throw new Error("Invalid model");
+    throw new Error('Invalid model');
   }
 
   // Add message token limit check

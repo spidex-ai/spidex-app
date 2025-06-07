@@ -1,5 +1,4 @@
-export const SOLANA_TRADE_PROMPT = 
-`Swap tokens using Jupiter Exchange.
+export const SOLANA_TRADE_PROMPT = `Swap tokens using Jupiter Exchange.
 
 There are four parameters to swap tokens, all of which are optional:
 
@@ -10,11 +9,9 @@ There are four parameters to swap tokens, all of which are optional:
 
 The user will be shown a swapping UI where they can edit the parameters and swap tokens
 
-If the user does not provide some or any of the parameters, leave them undefined.`; 
+If the user does not provide some or any of the parameters, leave them undefined.`;
 
-
-export const CARDANO_TRADE_PROMPT =
-`Swap tokens using Cardano's native token, ADA.
+export const CARDANO_TRADE_PROMPT = `Swap tokens using Cardano's native token, ADA.
 
 There are four parameters to swap tokens, all of which are optional:
 
@@ -25,4 +22,4 @@ There are four parameters to swap tokens, all of which are optional:
 
 The user will be shown a swapping UI where they can edit the parameters and swap tokens
 
-If the user does not provide some or any of the parameters, leave them undefined.`; 
+If the user does not provide some or any of the parameters, leave them undefined.`;

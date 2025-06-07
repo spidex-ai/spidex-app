@@ -1,10 +1,10 @@
-import { Database } from "@azure/cosmos";
+import { Database } from '@azure/cosmos';
 
-import { getCosmosClient } from "@/db/cosmos-client";
+import { getCosmosClient } from '@/db/cosmos-client';
 
 let database: Database;
 
-const DATABASE_ID = "spidex";
+const DATABASE_ID = 'spidex';
 
 export const getDatabase = async () => {
   if (!database) {

@@ -1,30 +1,30 @@
-import { useSpidexCoreContext } from "@/app/_contexts";
-import type { Chat } from "@/db/types";
-import useSWR from "swr";
+import { useSpidexCoreContext } from '@/app/_contexts';
+import type { Chat } from '@/db/types';
+import useSWR from 'swr';
 export const useUserChats = () => {
-    const { auth } = useSpidexCoreContext();
+  const { auth } = useSpidexCoreContext();
 
-    const { data, isLoading, error, mutate } = useSWR<Chat[]>(
-        "/api/chats",
-        async (route: string) => {
-            const accessToken = auth?.accessToken;
-            if (!accessToken) {
-                throw new Error("Not authenticated");
-            }
-            
-            return fetch(route, {
-                cache: "no-cache",
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`
-                }
-            }).then(res => res.json());
+  const { data, isLoading, error, mutate } = useSWR<Chat[]>(
+    '/api/chats',
+    async (route: string) => {
+      const accessToken = auth?.accessToken;
+      if (!accessToken) {
+        throw new Error('Not authenticated');
+      }
+
+      return fetch(route, {
+        cache: 'no-cache',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
         },
-    );
-
-    return {
-        chats: data ?? [],
-        isLoading,
-        error,
-        mutate
+      }).then(res => res.json());
     }
+  );
+
+  return {
+    chats: data ?? [],
+    isLoading,
+    error,
+    mutate,
+  };
 };

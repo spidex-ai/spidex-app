@@ -1,1 +1,1 @@
-export const CARDANO_TOKEN_TOP_TRADERS_PROMPT = `Gets the top traders of a token given its mint address.`; 
+export const CARDANO_TOKEN_TOP_TRADERS_PROMPT = `Gets the top traders of a token given its mint address.`;

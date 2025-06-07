@@ -1,6 +1,4 @@
-import { CARDANO_GET_TOKEN_DATA_NAME } from "../../names";
-
-
+import { CARDANO_GET_TOKEN_DATA_NAME } from '../../names';
 
 export const CARDANO_STAKE_PROMPT = `Stake ADA for yield using a liquid staking provider. 
 
@@ -14,4 +12,4 @@ If a user asks to stake and provides a name, ask them for the symbol first.
 
 If a user asks to stake without a symbol or a name, use the get-liquid-staking-yields tool to get the best liquid staking yields and ask the user to choose one.
 
-If the user does not provide an amount, leave the amount parameter empty.`; 
+If the user does not provide an amount, leave the amount parameter empty.`;

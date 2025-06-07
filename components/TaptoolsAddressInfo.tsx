@@ -1,12 +1,12 @@
-import { AddressInfo, AddressUtxo } from "@/services/taptools/types";
-import React, { useEffect, useState } from "react";
+import { AddressInfo, AddressUtxo } from '@/services/taptools/types';
+import React, { useEffect, useState } from 'react';
 
 interface AddressInfoProps {
   defaultAddress?: string;
 }
 
 const TaptoolsAddressInfo: React.FC<AddressInfoProps> = ({
-  defaultAddress = "addr1z9es6px68rlmwatqwg6qxwqf3szyz0n4lm0m2e5j38nu0062a6yhtrq8a4cxg2trrtzddev7v974nafzmx4xaegv2ngqky7khv",
+  defaultAddress = 'addr1z9es6px68rlmwatqwg6qxwqf3szyz0n4lm0m2e5j38nu0062a6yhtrq8a4cxg2trrtzddev7v974nafzmx4xaegv2ngqky7khv',
 }) => {
   const [address, setAddress] = useState<string>(defaultAddress);
   const [addressInput, setAddressInput] = useState<string>(defaultAddress);
@@ -45,8 +45,8 @@ const TaptoolsAddressInfo: React.FC<AddressInfoProps> = ({
         const utxosData = await utxosResponse.json();
         setUtxos(utxosData);
       } catch (err: any) {
-        setError(err.message || "An error occurred");
-        console.error("Address info error:", err);
+        setError(err.message || 'An error occurred');
+        console.error('Address info error:', err);
       } finally {
         setLoading(false);
       }
@@ -77,7 +77,7 @@ const TaptoolsAddressInfo: React.FC<AddressInfoProps> = ({
           <input
             type="text"
             value={addressInput}
-            onChange={(e) => setAddressInput(e.target.value)}
+            onChange={e => setAddressInput(e.target.value)}
             placeholder="Enter Cardano address"
             className="flex-grow px-4 py-2 border border-gray-300 rounded"
           />
@@ -86,7 +86,7 @@ const TaptoolsAddressInfo: React.FC<AddressInfoProps> = ({
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             disabled={loading}
           >
-            {loading ? "Loading..." : "Search"}
+            {loading ? 'Loading...' : 'Search'}
           </button>
         </div>
       </form>
@@ -113,7 +113,7 @@ const TaptoolsAddressInfo: React.FC<AddressInfoProps> = ({
               <span className="font-medium text-gray-800">
                 {addressInfo.lovelace
                   ? (Number(addressInfo.lovelace) / 1000000).toFixed(6)
-                  : "N/A"}{" "}
+                  : 'N/A'}{' '}
                 ADA
               </span>
             </div>
@@ -122,7 +122,7 @@ const TaptoolsAddressInfo: React.FC<AddressInfoProps> = ({
               <span className="font-medium text-gray-800">
                 {addressInfo.assets
                   ? Object.keys(addressInfo.assets).length
-                  : "0"}
+                  : '0'}
               </span>
             </div>
           </div>
@@ -151,7 +151,7 @@ const TaptoolsAddressInfo: React.FC<AddressInfoProps> = ({
                   {addressInfo.assets.map((assetInfo, index) => (
                     <tr
                       key={assetInfo.unit}
-                      className={index % 2 === 0 ? "bg-gray-50" : "bg-white"}
+                      className={index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}
                     >
                       <td className="py-2 px-3 text-gray-800 break-all">
                         {assetInfo.unit}
@@ -188,7 +188,7 @@ const TaptoolsAddressInfo: React.FC<AddressInfoProps> = ({
                 {utxos.slice(0, 5).map((utxo, index) => (
                   <tr
                     key={`${utxo.hash}#${utxo.index}`}
-                    className={index % 2 === 0 ? "bg-gray-50" : "bg-white"}
+                    className={index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}
                   >
                     <td className="py-2 px-3 text-gray-800 break-all">{`${utxo.hash.substring(
                       0,
@@ -200,7 +200,7 @@ const TaptoolsAddressInfo: React.FC<AddressInfoProps> = ({
                     <td className="py-2 px-3 text-right text-gray-800">
                       {utxo.lovelace
                         ? (Number(utxo.lovelace) / 1000000).toFixed(6)
-                        : "N/A"}
+                        : 'N/A'}
                     </td>
                   </tr>
                 ))}

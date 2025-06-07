@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
-import { useSearchParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
-import toast from "react-hot-toast";
+import { Dialog, DialogContent, DialogHeader } from '@/components/ui/dialog';
+import { useSearchParams } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 
 interface TelegramModalProps {
   isOpen: boolean;
@@ -18,8 +18,9 @@ const TelegramModal: React.FC<TelegramModalProps> = ({
   onError,
 }) => {
   const [loading, setLoading] = useState(false);
-  const [botUsername, setBotUsername] = useState<string>("");
-  const [telegramWidgetContainer, setTelegramWidgetContainer] = useState<HTMLDivElement | null>(null);
+  const [botUsername, setBotUsername] = useState<string>('');
+  const [telegramWidgetContainer, setTelegramWidgetContainer] =
+    useState<HTMLDivElement | null>(null);
   const params = useSearchParams();
 
   // Load Telegram widget configuration when modal opens
@@ -39,14 +40,19 @@ const TelegramModal: React.FC<TelegramModalProps> = ({
   const loadTelegramConfig = async () => {
     try {
       setLoading(true);
-      
+
       // Get widget configuration from API
-      const response = await fetch(`${process.env.NEXT_PUBLIC_SPIDEX_CORE_API_URL}/auth/telegram/widget-config`, {
-        headers: { accept: '*/*' }
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SPIDEX_CORE_API_URL}/auth/telegram/widget-config`,
+        {
+          headers: { accept: '*/*' },
+        }
+      );
 
       if (!response.ok) {
-        throw new Error(`Failed to get widget config: ${response.status} ${response.statusText}`);
+        throw new Error(
+          `Failed to get widget config: ${response.status} ${response.statusText}`
+        );
       }
 
       const result = await response.json();
@@ -56,7 +62,8 @@ const TelegramModal: React.FC<TelegramModalProps> = ({
 
       setBotUsername(result.data.botUsername);
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to load Telegram widget';
+      const errorMessage =
+        err instanceof Error ? err.message : 'Failed to load Telegram widget';
       toast.error(errorMessage);
       onError?.(errorMessage);
     } finally {
@@ -78,7 +85,7 @@ const TelegramModal: React.FC<TelegramModalProps> = ({
     script.setAttribute('data-size', 'large');
 
     // Build callback URL with optional referral code
-    const ref = params.get("ref");
+    const ref = params.get('ref');
     let authUrl = `${window.location.origin}/telegram-callback`;
     if (ref) {
       authUrl += `?referralCode=${encodeURIComponent(ref)}`;
@@ -94,7 +101,7 @@ const TelegramModal: React.FC<TelegramModalProps> = ({
     if (telegramWidgetContainer) {
       telegramWidgetContainer.innerHTML = '';
     }
-    setBotUsername("");
+    setBotUsername('');
     onClose();
   };
 
@@ -104,16 +111,19 @@ const TelegramModal: React.FC<TelegramModalProps> = ({
         <DialogHeader>
           <p className="self-start text-2xl">Connect Telegram</p>
         </DialogHeader>
-        
+
         <div className="flex flex-col gap-4">
           <p className="text-text-gray text-sm">
-            Connect your Telegram account to access exclusive features and notifications.
+            Connect your Telegram account to access exclusive features and
+            notifications.
           </p>
-          
+
           {loading ? (
             <div className="flex items-center justify-center p-8">
               <div className="h-8 w-8 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
-              <span className="ml-3 text-white">Loading Telegram widget...</span>
+              <span className="ml-3 text-white">
+                Loading Telegram widget...
+              </span>
             </div>
           ) : botUsername ? (
             <div className="flex flex-col gap-4">

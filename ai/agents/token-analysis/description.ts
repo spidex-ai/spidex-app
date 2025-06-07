@@ -1,13 +1,12 @@
 import {
-    CARDANO_GET_TOKEN_ADDRESS_NAME,
-    CARDANO_GET_TOKEN_DATA_NAME,
-    CARDANO_TOKEN_HOLDERS_NAME,
-    CARDANO_TOKEN_PRICE_CHART_NAME,
-    CARDANO_TOP_HOLDERS_NAME,
-} from "@/ai/action-names";
+  CARDANO_GET_TOKEN_ADDRESS_NAME,
+  CARDANO_GET_TOKEN_DATA_NAME,
+  CARDANO_TOKEN_HOLDERS_NAME,
+  CARDANO_TOKEN_PRICE_CHART_NAME,
+  CARDANO_TOP_HOLDERS_NAME,
+} from '@/ai/action-names';
 
-export const TOKEN_ANALYSIS_AGENT_DESCRIPTION =
-    `You are a token analysis agent. You are responsible for all queries regarding the token analysis.
+export const TOKEN_ANALYSIS_AGENT_DESCRIPTION = `You are a token analysis agent. You are responsible for all queries regarding the token analysis.
 
 You have access to the following tools:
 - ${CARDANO_GET_TOKEN_DATA_NAME}

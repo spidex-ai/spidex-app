@@ -4,12 +4,12 @@ export interface TokenPrice {
 }
 
 export interface TokenPriceChange {
-  "5m"?: number;
-  "1h"?: number;
-  "4h"?: number;
-  "24h"?: number;
-  "7d"?: number;
-  "30d"?: number;
+  '5m'?: number;
+  '1h'?: number;
+  '4h'?: number;
+  '24h'?: number;
+  '7d'?: number;
+  '30d'?: number;
 }
 
 export interface TokenMcap {
@@ -259,11 +259,11 @@ export interface NFTCollectionAsset {
 }
 
 export interface NFTCollectionHoldersDistribution {
-  "1": number;
-  "2-4": number;
-  "5-9": number;
-  "10-24": number;
-  "25+": number;
+  '1': number;
+  '2-4': number;
+  '5-9': number;
+  '10-24': number;
+  '25+': number;
 }
 
 export interface NFTCollectionHolderTop {
@@ -427,9 +427,9 @@ export interface WalletPortfolioPosition {
     fingerprint: string;
     price: number;
     adaValue: number;
-    "24h": number;
-    "7d": number;
-    "30d": number;
+    '24h': number;
+    '7d': number;
+    '30d': number;
     liquidBalance: number;
     liquidValue: number;
   }[];
@@ -439,9 +439,9 @@ export interface WalletPortfolioPosition {
     balance: number;
     adaValue: number;
     floorPrice: number;
-    "24h": number;
-    "7d": number;
-    "30d": number;
+    '24h': number;
+    '7d': number;
+    '30d': number;
     listings: number;
     liquidValue: number;
   }[];
@@ -481,7 +481,7 @@ export interface TokenStats {
   usdPrice: number;
   mcap: TokenMcap;
   holders: number;
-  "24h": TokenTradingStats;
+  '24h': TokenTradingStats;
   tokenAddress?: string;
   tokenLogo?: string;
   tokenPriceChange?: TokenPriceChange;
@@ -495,5 +495,5 @@ export interface TokenData {
   mcap: TokenMcap;
   holders: number;
   tokenDetail: any;
-  "24h": TokenTradingStats;
+  '24h': TokenTradingStats;
 }

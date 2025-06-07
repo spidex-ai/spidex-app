@@ -1,11 +1,14 @@
-import { NextResponse, NextRequest } from "next/server";
+import { NextResponse, NextRequest } from 'next/server';
 
-import { getRaydiumPoolById } from "@/services/raydium";
+import { getRaydiumPoolById } from '@/services/raydium';
 
-export const GET = async (req: NextRequest, { params }: { params: Promise<{ poolId: string }> }) => {
-    const { poolId } = await params;
+export const GET = async (
+  req: NextRequest,
+  { params }: { params: Promise<{ poolId: string }> }
+) => {
+  const { poolId } = await params;
 
-    const poolInfo = await getRaydiumPoolById(poolId);
+  const poolInfo = await getRaydiumPoolById(poolId);
 
-    return NextResponse.json(poolInfo);
-}
+  return NextResponse.json(poolInfo);
+};

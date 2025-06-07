@@ -1,7 +1,7 @@
-import { z } from "zod";
+import { z } from 'zod';
 
-import { TopHoldersInputSchema } from "./input-schema";
-import { CardanoActionResult } from "../../cardano-action";
+import { TopHoldersInputSchema } from './input-schema';
+import { CardanoActionResult } from '../../cardano-action';
 
 export type CardanoTopHoldersSchemaType = typeof TopHoldersInputSchema;
 

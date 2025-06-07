@@ -1,2 +1,2 @@
 export { default as TokenBalance } from './token-balance';
-export * from "./liquidity";
+export * from './liquidity';

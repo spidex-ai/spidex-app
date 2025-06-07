@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import Image from "next/image";
-import { GradientBorderButton } from "@/components/ui/button";
-import { TextGradient } from "@/components/ui/text";
+import React, { useState } from 'react';
+import Image from 'next/image';
+import { GradientBorderButton } from '@/components/ui/button';
+import { TextGradient } from '@/components/ui/text';
 
-import { UserSpidex } from "@/hooks/core/useSpidexCore";
-import { useSpidexCoreContext } from "@/app/_contexts";
-import Address from "@/app/_components/address";
-import toast from "react-hot-toast";
+import { UserSpidex } from '@/hooks/core/useSpidexCore';
+import { useSpidexCoreContext } from '@/app/_contexts';
+import Address from '@/app/_components/address';
+import toast from 'react-hot-toast';
 interface Props {
   user: UserSpidex;
 }
@@ -21,47 +21,47 @@ const Information: React.FC<Props> = ({ user }) => {
   const [avatar, setAvatar] = useState(user.avatar);
 
   const handleImageUpload = async () => {
-    const input = document.createElement("input");
-    input.type = "file";
-    input.accept = "image/*";
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
 
-    input.onchange = async (e) => {
+    input.onchange = async e => {
       const file = (e.target as HTMLInputElement).files?.[0];
       if (file) {
         try {
           setUploading(true);
           const maxSize = 1024 * 1024; // 1MB
           if (file.size > maxSize) {
-            toast.error("Image size must be less than 1MB!");
+            toast.error('Image size must be less than 1MB!');
             return;
           }
 
           // Tạo FormData để gửi file
           const formData = new FormData();
-          formData.append("file", file);
+          formData.append('file', file);
 
           // Gọi API để upload ảnh
           const avatar = await uploadAvatar(formData);
-          console.log("🚀 ~ input.onchange= ~ avatar:", avatar)
-          
+          console.log('🚀 ~ input.onchange= ~ avatar:', avatar);
+
           const updateUser = await updateUserInfo({
             avatar: avatar,
-            fullName: user.fullName || "",
+            fullName: user.fullName || '',
             username: user.username,
-            bio: user.bio || "",
+            bio: user.bio || '',
           });
 
           if (!updateUser) {
-            throw new Error("Upload failed");
+            throw new Error('Upload failed');
           }
 
           setAvatar(avatar);
-          toast.success("Avatar updated successfully!");
+          toast.success('Avatar updated successfully!');
         } catch (error) {
-          if (typeof error === "string") {
+          if (typeof error === 'string') {
             toast.error(error);
           } else {
-            toast.error("Error uploading avatar! Please try again.");
+            toast.error('Error uploading avatar! Please try again.');
           }
         } finally {
           setUploading(false);
@@ -85,7 +85,9 @@ const Information: React.FC<Props> = ({ user }) => {
               className="w-6 h-6"
             />
           </div>
-          <TextGradient className="text-2xl font-medium leading-none">Account</TextGradient>
+          <TextGradient className="text-2xl font-medium leading-none">
+            Account
+          </TextGradient>
         </div>
         <div
           className="flex items-center gap-2 cursor-pointer"
@@ -106,24 +108,22 @@ const Information: React.FC<Props> = ({ user }) => {
         <div className="flex justify-between">
           <div className="flex gap-3">
             <div>
-              {
-                avatar ? (
-                  <img
-                    src={avatar}
-                    alt="profile"
-                    width={40}
-                    height={40}
-                    className="rounded-full w-[40px] h-[40px] object-cover"
-                  />
-                ) : (
-                  <Image
-                    src="/icons/example-ava.svg"
-                    alt="profile"
-                    width={40}
-                    height={40}
-                  />
-                )
-              }
+              {avatar ? (
+                <img
+                  src={avatar}
+                  alt="profile"
+                  width={40}
+                  height={40}
+                  className="rounded-full w-[40px] h-[40px] object-cover"
+                />
+              ) : (
+                <Image
+                  src="/icons/example-ava.svg"
+                  alt="profile"
+                  width={40}
+                  height={40}
+                />
+              )}
             </div>
             <div>
               <div>
@@ -133,14 +133,14 @@ const Information: React.FC<Props> = ({ user }) => {
                     className="text-md font-bold"
                   />
                 ) : (
-                  "No wallet connected"
+                  'No wallet connected'
                 )}
               </div>
               <div className="text-xs text-text-gray">
-                Joined on{" "}
+                Joined on{' '}
                 {user?.createdAt
                   ? new Date(user?.createdAt).toLocaleDateString()
-                  : "N/A"}
+                  : 'N/A'}
               </div>
             </div>
           </div>
@@ -151,7 +151,7 @@ const Information: React.FC<Props> = ({ user }) => {
               onClick={handleImageUpload}
               disabled={uploading}
             >
-              {uploading ? "Uploading..." : "Change profile picture"}
+              {uploading ? 'Uploading...' : 'Change profile picture'}
             </GradientBorderButton>
           </div>
         </div>
@@ -168,7 +168,7 @@ const Information: React.FC<Props> = ({ user }) => {
           <div className="text-xs text-text-gray">Connected Wallet</div>
           {wallets?.length > 0 ? (
             <>
-              {wallets.map((wallet) => (
+              {wallets.map(wallet => (
                 <div className="text-xs mt-2" key={wallet}>
                   {wallet}
                 </div>

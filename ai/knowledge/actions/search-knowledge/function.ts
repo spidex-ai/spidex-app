@@ -1,4 +1,4 @@
-import { findRelevantKnowledge } from "@/db/services/knowledge";
+import { findRelevantKnowledge } from '@/db/services/knowledge';
 
 import type {
   FAQKnowledgeArgumentsType,
@@ -7,20 +7,20 @@ import type {
   SearchKnowledgeResultType,
   SearchWebKnowledgeArgumentsType,
   SearchWebKnowledgeResultType,
-} from "./types";
-import { embed } from "ai";
-import { openai } from "@ai-sdk/openai";
-import { tavilyClient } from "@/services/tavily";
-import { createOpenRouter, OpenRouter } from "@openrouter/ai-sdk-provider";
-import { FAQ_KNOWLEDGE_PROMPT } from "./prompt";
+} from './types';
+import { embed } from 'ai';
+import { openai } from '@ai-sdk/openai';
+import { tavilyClient } from '@/services/tavily';
+import { createOpenRouter, OpenRouter } from '@openrouter/ai-sdk-provider';
+import { FAQ_KNOWLEDGE_PROMPT } from './prompt';
 
 export const searchKnowledgeFunction = async (
   args: SearchKnowledgeArgumentsType
 ): Promise<SearchKnowledgeResultType> => {
   const knowledge = await Promise.all(
-    args.queryPhrases.map(async (phrase) => {
+    args.queryPhrases.map(async phrase => {
       const { embedding } = await embed({
-        model: openai.embedding("text-embedding-3-small"),
+        model: openai.embedding('text-embedding-3-small'),
         value: phrase,
       });
 
@@ -45,8 +45,8 @@ export const searchWebKnowledgeFunction = async (
   const result = await tavilyClient.search(args.queryPhrases, {
     maxResults: 5,
     includeAnswer: true,
-    searchDepth: "advanced",
-    topic: "general",
+    searchDepth: 'advanced',
+    topic: 'general',
   });
 
   return {
@@ -75,16 +75,16 @@ export const faqKnowledgeFunction = async (
 
   // const model = openrouter.languageModel("openai/gpt-4.1-mini");
 
-  const url = "https://openrouter.ai/api/v1/chat/completions";
+  const url = 'https://openrouter.ai/api/v1/chat/completions';
 
   const options = {
-    method: "POST",
+    method: 'POST',
     headers: {
       Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      model: "openai/gpt-4.1-mini",
+      model: 'openai/gpt-4.1-mini',
       prompt: ` Here is the user question: ${args.queryPhrases} \n\nHere is the FAQ and answers, if the user question related to these, you will use the FAQ and answers to answer the question:
       ${FAQ_KNOWLEDGE_PROMPT}`,
     }),
@@ -123,16 +123,16 @@ export const faqKnowledgeFunction = async (
       !Array.isArray(data.choices) ||
       data.choices.length === 0
     ) {
-      console.error("Invalid response structure from OpenRouter API", {
+      console.error('Invalid response structure from OpenRouter API', {
         data,
         queryPhrases: args.queryPhrases,
       });
 
       return {
-        message: "Invalid response format from FAQ service",
+        message: 'Invalid response format from FAQ service',
         body: {
           faqKnowledge:
-            "No answer found, find another question or try another tool",
+            'No answer found, find another question or try another tool',
         },
       };
     }
@@ -140,7 +140,7 @@ export const faqKnowledgeFunction = async (
     const messageContent = data.choices[0].content || data.choices[0].text;
 
     if (messageContent) {
-      console.log("🚀 ~ messageContent:", messageContent);
+      console.log('🚀 ~ messageContent:', messageContent);
       return {
         message:
           "FAQ knowledge search successful. Give an answer to the user's prompt.",
@@ -149,63 +149,63 @@ export const faqKnowledgeFunction = async (
         },
       };
     } else {
-      console.warn("No message content in OpenRouter response", {
+      console.warn('No message content in OpenRouter response', {
         choice: data.choices[0],
         queryPhrases: args.queryPhrases,
       });
 
       return {
-        message: "No answer found in FAQ knowledge base",
+        message: 'No answer found in FAQ knowledge base',
         body: {
           faqKnowledge:
-            "No relevant answer found in the FAQ knowledge base for your question. Try another question or try another tool",
+            'No relevant answer found in the FAQ knowledge base for your question. Try another question or try another tool',
         },
       };
     }
   } catch (error) {
     // Handle different types of errors
-    if (error instanceof TypeError && error.message.includes("fetch")) {
-      console.error("Network error while calling OpenRouter API", {
+    if (error instanceof TypeError && error.message.includes('fetch')) {
+      console.error('Network error while calling OpenRouter API', {
         error: error.message,
         queryPhrases: args.queryPhrases,
       });
 
       return {
-        message: "Network error occurred",
+        message: 'Network error occurred',
         body: {
           faqKnowledge:
-            "Error: Unable to connect to FAQ service. Please check your internet connection and try again.",
+            'Error: Unable to connect to FAQ service. Please check your internet connection and try again.',
         },
       };
     }
 
     if (error instanceof SyntaxError) {
-      console.error("Failed to parse JSON response from OpenRouter API", {
+      console.error('Failed to parse JSON response from OpenRouter API', {
         error: error.message,
         queryPhrases: args.queryPhrases,
       });
 
       return {
-        message: "Response parsing error",
+        message: 'Response parsing error',
         body: {
           faqKnowledge:
-            "Error: Received invalid response from FAQ service. Try another question or try another tool",
+            'Error: Received invalid response from FAQ service. Try another question or try another tool',
         },
       };
     }
 
     // Generic error handling
-    console.error("Unexpected error in faqKnowledgeFunction", {
+    console.error('Unexpected error in faqKnowledgeFunction', {
       error: error instanceof Error ? error.message : String(error),
       stack: error instanceof Error ? error.stack : undefined,
       queryPhrases: args.queryPhrases,
     });
 
     return {
-      message: "An unexpected error occurred",
+      message: 'An unexpected error occurred',
       body: {
         faqKnowledge:
-          "Error: An unexpected error occurred while processing your FAQ request. Please try again later. Try another question or try another tool",
+          'Error: An unexpected error occurred while processing your FAQ request. Please try again later. Try another question or try another tool',
       },
     };
   }

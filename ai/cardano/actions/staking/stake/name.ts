@@ -1,2 +1,1 @@
-
-export const CARDANO_STAKE_NAME = "cardano_stake"; 
+export const CARDANO_STAKE_NAME = 'cardano_stake';

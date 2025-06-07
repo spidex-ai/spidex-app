@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { Modal } from "react-responsive-modal";
-import "react-responsive-modal/styles.css";
+import { Modal } from 'react-responsive-modal';
+import 'react-responsive-modal/styles.css';
 
 interface CustomModalProps {
   open: boolean;
@@ -26,8 +26,8 @@ const CustomModal: React.FC<CustomModalProps> = ({
       closeIcon={<img src="/icons/close-modal.svg" alt="close" />}
       center
       classNames={{
-        modal: "customModal",
-        overlay: "customOverlay",
+        modal: 'customModal',
+        overlay: 'customOverlay',
       }}
       {...props}
     >

@@ -1,7 +1,15 @@
-import { CARDANO_GET_TOKEN_ADDRESS_NAME, CARDANO_LIQUID_STAKING_YIELDS_NAME, CARDANO_STAKE_NAME, CARDANO_UNSTAKE_NAME, SOLANA_GET_TOKEN_ADDRESS_NAME, SOLANA_UNSTAKE_NAME, SOLANA_STAKE_NAME, SOLANA_LIQUID_STAKING_YIELDS_NAME } from "@/ai/action-names";
+import {
+  CARDANO_GET_TOKEN_ADDRESS_NAME,
+  CARDANO_LIQUID_STAKING_YIELDS_NAME,
+  CARDANO_STAKE_NAME,
+  CARDANO_UNSTAKE_NAME,
+  SOLANA_GET_TOKEN_ADDRESS_NAME,
+  SOLANA_UNSTAKE_NAME,
+  SOLANA_STAKE_NAME,
+  SOLANA_LIQUID_STAKING_YIELDS_NAME,
+} from '@/ai/action-names';
 
-export const STAKING_AGENT_DESCRIPTION =
-`You are a staking agent. You are responsible for all queries regarding the user's staking activities.
+export const STAKING_AGENT_DESCRIPTION = `You are a staking agent. You are responsible for all queries regarding the user's staking activities.
 
 You have access to the following tools:
 - ${CARDANO_STAKE_NAME}

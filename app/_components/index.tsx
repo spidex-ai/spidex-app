@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { useCallback, useEffect } from 'react';
 
@@ -51,7 +51,7 @@ function ReactFlowPro({ strength = -500, distance = 150 }: ExampleProps = {}) {
   const dragEvents = useForceLayout({ strength, distance });
 
   const onConnect: OnConnect = useCallback(
-    (params) => setEdges((eds) => addEdge(params, eds)),
+    params => setEdges(eds => addEdge(params, eds)),
     [setEdges]
   );
 

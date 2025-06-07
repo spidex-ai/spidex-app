@@ -3,35 +3,34 @@ import { Edge, Node } from '@xyflow/react';
 import styles from '../styles.module.css';
 
 export const initialNodes: Node[] = [
-  
   // social sentiment analyzer
   {
     id: '2',
     position: { x: 0, y: 200 },
-    data: { 
-        icon: 'BotMessageSquare',
-        name: 'Sentiment Analyzer'
-     },
+    data: {
+      icon: 'BotMessageSquare',
+      name: 'Sentiment Analyzer',
+    },
     className: styles.node,
     type: 'agent',
   },
   {
     id: '2.1',
     position: { x: 200, y: 500 },
-    data: { 
-        icon: 'Twitter',
-        name: 'Twitter Scraper'
-     },
+    data: {
+      icon: 'Twitter',
+      name: 'Twitter Scraper',
+    },
     className: styles.node,
     type: 'agent',
   },
   {
     id: '2.2',
     position: { x: -200, y: 500 },
-    data: { 
-        icon: 'MessagesSquare',
-        name: 'Telegram Bot'
-     },
+    data: {
+      icon: 'MessagesSquare',
+      name: 'Telegram Bot',
+    },
     className: styles.node,
     type: 'agent',
   },
@@ -39,30 +38,30 @@ export const initialNodes: Node[] = [
   {
     id: '3',
     position: { x: -300, y: 0 },
-    data: { 
-        icon: 'ChartCandlestick',
-        name: 'Trader'
-     },
+    data: {
+      icon: 'ChartCandlestick',
+      name: 'Trader',
+    },
     className: styles.node,
     type: 'agent',
   },
   {
     id: '3.1',
     position: { x: -500, y: 200 },
-    data: { 
-        icon: 'Landmark',
-        name: 'DEX Aggretator'
-     },
+    data: {
+      icon: 'Landmark',
+      name: 'DEX Aggretator',
+    },
     className: styles.node,
     type: 'agent',
   },
   {
     id: '3.2',
     position: { x: -500, y: -200 },
-    data: { 
-        icon: 'Droplet',
-        name: 'Liquidity Manager'
-     },
+    data: {
+      icon: 'Droplet',
+      name: 'Liquidity Manager',
+    },
     className: styles.node,
     type: 'agent',
   },
@@ -70,10 +69,10 @@ export const initialNodes: Node[] = [
   {
     id: '4',
     position: { x: 300, y: 0 },
-    data: { 
-        icon: 'Tractor',
-        name: 'Yield Farmer'
-     },
+    data: {
+      icon: 'Tractor',
+      name: 'Yield Farmer',
+    },
     className: styles.node,
     type: 'agent',
   },
@@ -81,20 +80,20 @@ export const initialNodes: Node[] = [
   {
     id: '4.1',
     position: { x: 500, y: 200 },
-    data: { 
-        icon: 'Beef',
-        name: 'Staking Agent'
-     },
+    data: {
+      icon: 'Beef',
+      name: 'Staking Agent',
+    },
     className: styles.node,
     type: 'agent',
   },
   {
     id: '4.2',
     position: { x: 500, y: -200 },
-    data: { 
-        icon: 'Coins',
-        name: 'Borrow/Lend Agent'
-     },
+    data: {
+      icon: 'Coins',
+      name: 'Borrow/Lend Agent',
+    },
     className: styles.node,
     type: 'agent',
   },
@@ -102,37 +101,37 @@ export const initialNodes: Node[] = [
   {
     id: '5',
     position: { x: 0, y: -300 },
-    data: { 
-        icon: 'Vault',
-        name: 'Portfolio Manager'
-     },
+    data: {
+      icon: 'Vault',
+      name: 'Portfolio Manager',
+    },
     className: styles.node,
     type: 'agent',
   },
   {
     id: '5.1',
     position: { x: -200, y: -500 },
-    data: { 
-        icon: 'ShieldAlert',
-        name: 'Risk Analyzer'
-     },
+    data: {
+      icon: 'ShieldAlert',
+      name: 'Risk Analyzer',
+    },
     className: styles.node,
     type: 'agent',
   },
   {
     id: '5.2',
     position: { x: 200, y: -500 },
-    data: { 
-        icon: 'ChartLine',
-        name: 'Performance Reporter'
-     },
+    data: {
+      icon: 'ChartLine',
+      name: 'Performance Reporter',
+    },
     className: styles.node,
     type: 'agent',
   },
   {
     id: '1',
     position: { x: 0, y: 0 },
-    data: { },
+    data: {},
     className: styles.node,
     type: 'central',
   },

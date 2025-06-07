@@ -1,25 +1,25 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from 'next/server';
 
-import { findChatsByUser } from "@/db/services/chats";
+import { findChatsByUser } from '@/db/services/chats';
 
 export const GET = async (req: NextRequest) => {
   try {
     // Get the authorization header
-    const authHeader = req.headers.get("authorization");
-    if (!authHeader?.startsWith("Bearer ")) {
+    const authHeader = req.headers.get('authorization');
+    if (!authHeader?.startsWith('Bearer ')) {
       return NextResponse.json(
-        { error: "Missing or invalid authorization header" },
+        { error: 'Missing or invalid authorization header' },
         { status: 401 }
       );
     }
-    const token = authHeader.split(" ")[1];
+    const token = authHeader.split(' ')[1];
 
     const user = await fetch(
       `${process.env.NEXT_PUBLIC_SPIDEX_CORE_API_URL}/auth/me`,
       {
-        method: "GET",
+        method: 'GET',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
       }
@@ -27,7 +27,7 @@ export const GET = async (req: NextRequest) => {
 
     // Verify the token with Privy
     if (!user.ok) {
-      return NextResponse.json({ error: "Invalid token" }, { status: 401 });
+      return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
     }
 
     const userData = await user.json();
@@ -36,9 +36,9 @@ export const GET = async (req: NextRequest) => {
 
     return NextResponse.json(chats);
   } catch (error) {
-    console.error("Error in /api/chats:", error);
+    console.error('Error in /api/chats:', error);
     return NextResponse.json(
-      { error: "Internal server error" },
+      { error: 'Internal server error' },
       { status: 500 }
     );
   }

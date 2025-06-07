@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import React from "react";
-import ReactPaginate from "react-paginate";
+import React from 'react';
+import ReactPaginate from 'react-paginate';
 interface Props {
   total: number;
   current: number;
@@ -14,7 +14,7 @@ const Pagination: React.FC<Props> = ({ total, current, onPageChange }) => {
       pageCount={total}
       pageRangeDisplayed={2}
       marginPagesDisplayed={1}
-      onPageChange={(event) => onPageChange(event.selected)}
+      onPageChange={event => onPageChange(event.selected)}
       forcePage={current}
       renderOnZeroPageCount={() => null}
       nextLabel=">"

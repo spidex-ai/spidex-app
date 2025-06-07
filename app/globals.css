@@ -187,18 +187,28 @@
   font-style: normal;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-sans), sans-serif;
 }
 
-p, a, input, textarea, button, body {
+p,
+a,
+input,
+textarea,
+button,
+body {
   font-family: var(--font-mono), monospace;
 }
 
 @layer base {
   :root {
     --radius: 0.5rem;
-    --sidebar-background: #F5F5F5;
+    --sidebar-background: #f5f5f5;
     --sidebar-foreground: 240 5.3% 26.1%;
     --sidebar-primary: 240 5.9% 10%;
     --sidebar-primary-foreground: 0 0% 98%;
@@ -217,7 +227,7 @@ p, a, input, textarea, button, body {
     @apply text-black dark:text-white bg-white dark:bg-neutral-900;
   }
   .dark {
-    --sidebar-background: #0B1320;
+    --sidebar-background: #0b1320;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
     --sidebar-primary-foreground: 0 0% 100%;
@@ -225,21 +235,21 @@ p, a, input, textarea, button, body {
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 0, 0%, 25%;
     --sidebar-ring: 217.2 91.2% 59.8%;
-    --sidebar-active: #BBF985;
+    --sidebar-active: #bbf985;
 
-    --main-background: #010A19;
+    --main-background: #010a19;
   }
 }
 
 @layer utilities {
   /* Hide scrollbar for Chrome, Safari and Opera */
   .no-scrollbar::-webkit-scrollbar {
-        display: none;
-    }
-   /* Hide scrollbar for IE, Edge and Firefox */
+    display: none;
+  }
+  /* Hide scrollbar for IE, Edge and Firefox */
   .no-scrollbar {
-      -ms-overflow-style: none;  /* IE and Edge */
-      scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
   }
 }
 
@@ -254,15 +264,15 @@ p, a, input, textarea, button, body {
 }
 
 .gradient-border::before {
-  content: "";
+  content: '';
   position: absolute;
   inset: 0;
   padding: 1px;
-  background: linear-gradient(90deg, #BBF985,#009EFF);
+  background: linear-gradient(90deg, #bbf985, #009eff);
   border-radius: 10px;
-  -webkit-mask: 
-      linear-gradient(white 0 0) content-box, 
-      linear-gradient(white 0 0);
+  -webkit-mask:
+    linear-gradient(white 0 0) content-box,
+    linear-gradient(white 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   z-index: -1;
@@ -278,15 +288,15 @@ p, a, input, textarea, button, body {
 }
 
 .gradient-border-wrapper::before {
-  content: "";
+  content: '';
   position: absolute;
   inset: 0;
   padding: 1px;
-  background: linear-gradient(90deg, #BBF985,#009EFF);
+  background: linear-gradient(90deg, #bbf985, #009eff);
   border-radius: 8px;
-  -webkit-mask: 
-      linear-gradient(white 0 0) content-box, 
-      linear-gradient(white 0 0);
+  -webkit-mask:
+    linear-gradient(white 0 0) content-box,
+    linear-gradient(white 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   z-index: -1;
@@ -311,7 +321,6 @@ p, a, input, textarea, button, body {
   background: #9ca3af;
 }
 
-
 .gradient-border {
   position: relative;
   /* display: inline-block; */
@@ -323,15 +332,15 @@ p, a, input, textarea, button, body {
 }
 
 .gradient-border::before {
-  content: "";
+  content: '';
   position: absolute;
   inset: 0;
   padding: 1px;
-  background: linear-gradient(90deg, #BBF985,#009EFF);
+  background: linear-gradient(90deg, #bbf985, #009eff);
   border-radius: 4px;
-  -webkit-mask: 
-      linear-gradient(white 0 0) content-box, 
-      linear-gradient(white 0 0);
+  -webkit-mask:
+    linear-gradient(white 0 0) content-box,
+    linear-gradient(white 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   z-index: -1;
@@ -347,46 +356,44 @@ p, a, input, textarea, button, body {
 }
 
 .gradient-border-wrapper::before {
-  content: "";
+  content: '';
   position: absolute;
   inset: 0;
   padding: 1px;
-  background: linear-gradient(90deg, #BBF985,#009EFF);
+  background: linear-gradient(90deg, #bbf985, #009eff);
   border-radius: 8px;
-  -webkit-mask: 
-      linear-gradient(white 0 0) content-box, 
-      linear-gradient(white 0 0);
+  -webkit-mask:
+    linear-gradient(white 0 0) content-box,
+    linear-gradient(white 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   z-index: -1;
 }
-
 
 .gradient-border-main {
   position: relative;
   /* display: inline-block; */
   padding: 9px 52px !important;
   color: white;
-  background-color: #010A19;
+  background-color: #010a19;
   border-radius: 8px;
   z-index: 1;
 }
 
 .gradient-border-main::before {
-  content: "";
+  content: '';
   position: absolute;
   inset: 0;
   padding: 2px;
-  background: linear-gradient(90deg, #BBF985,#009EFF);
+  background: linear-gradient(90deg, #bbf985, #009eff);
   border-radius: 8px;
-  -webkit-mask: 
-      linear-gradient(white 0 0) content-box, 
-      linear-gradient(white 0 0);
+  -webkit-mask:
+    linear-gradient(white 0 0) content-box,
+    linear-gradient(white 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   z-index: -1;
 }
-
 
 .gradient-border-market-offer {
   position: relative;
@@ -399,22 +406,22 @@ p, a, input, textarea, button, body {
 }
 
 .gradient-border-market-offer::before {
-  content: "";
+  content: '';
   position: absolute;
   inset: 0;
   padding: 1px;
-  background: linear-gradient(90deg, #BBF985,#009EFF);
+  background: linear-gradient(90deg, #bbf985, #009eff);
   border-radius: 10px;
-  -webkit-mask: 
-      linear-gradient(white 0 0) content-box, 
-      linear-gradient(white 0 0);
+  -webkit-mask:
+    linear-gradient(white 0 0) content-box,
+    linear-gradient(white 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   z-index: -1;
 }
 
 .customModal {
-  background: #0B0B0D !important;
+  background: #0b0b0d !important;
   min-width: 550px !important;
 }
 
@@ -424,6 +431,6 @@ p, a, input, textarea, button, body {
 
 .gradient-border-pagination {
   border: 2px solid transparent;
-  border-image: linear-gradient(90deg, #009EFF, #BBF985) 1;
+  border-image: linear-gradient(90deg, #009eff, #bbf985) 1;
   border-radius: 6px;
 }

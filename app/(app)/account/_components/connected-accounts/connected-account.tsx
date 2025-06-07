@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import React from "react";
+import React from 'react';
 
-import { GradientBorderButton, Separator } from "@/components/ui";
+import { GradientBorderButton, Separator } from '@/components/ui';
 
 export interface ConnectedAccountProps {
   icon: React.ReactNode;
@@ -29,12 +29,16 @@ const ConnectedAccount: React.FC<ConnectedAccountProps> = ({
           <div className="flex flex-col">
             <p className="text-sm font-bold">{name}</p>
             <p className="text-xs text-muted-foreground">
-              {value ?? "Not Connected"}
+              {value ?? 'Not Connected'}
             </p>
           </div>
         </div>
         {!isConnected && (
-          <GradientBorderButton onClick={onConnect} disabled={isConnected} className="px-8 py-2">
+          <GradientBorderButton
+            onClick={onConnect}
+            disabled={isConnected}
+            className="px-8 py-2"
+          >
             Connect
           </GradientBorderButton>
         )}

@@ -6,7 +6,9 @@ export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams;
     const unit = searchParams.get('unit');
     const interval = searchParams.get('interval');
-    const numIntervals = searchParams.get('numIntervals') ? parseInt(searchParams.get('numIntervals') || '0') : undefined;
+    const numIntervals = searchParams.get('numIntervals')
+      ? parseInt(searchParams.get('numIntervals') || '0')
+      : undefined;
     const quote = searchParams.get('quote') || 'ADA';
 
     if (!unit || !interval) {
@@ -16,7 +18,12 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const data = await taptoolsService.getTokenOHLCV(unit, interval, numIntervals, quote);
+    const data = await taptoolsService.getTokenOHLCV(
+      unit,
+      interval,
+      numIntervals,
+      quote
+    );
     return NextResponse.json(data);
   } catch (error: any) {
     console.error('Error fetching token OHLCV data:', error);

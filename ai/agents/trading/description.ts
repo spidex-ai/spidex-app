@@ -1,7 +1,7 @@
 import {
   CARDANO_GET_TOKEN_ADDRESS_NAME,
   CARDANO_TRADE_NAME,
-} from "@/ai/action-names";
+} from '@/ai/action-names';
 
 export const TRADING_AGENT_DESCRIPTION = `You are a trading agent. You can help a user trade coins for other coins.
 

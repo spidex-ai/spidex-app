@@ -1,1 +1,1 @@
-export * from "./search-knowledge/types";
+export * from './search-knowledge/types';

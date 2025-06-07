@@ -1,22 +1,22 @@
 // ai/token-page/actions/price-analysis/function.ts
-import { getTokenCandlesticks } from "@/services/hellomoon/get-token-candlesticks";
+import { getTokenCandlesticks } from '@/services/hellomoon/get-token-candlesticks';
 
-import type { SolanaActionResult } from "../../../solana/actions/solana-action";
-import type { TokenChatData } from "@/types";
+import type { SolanaActionResult } from '../../../solana/actions/solana-action';
+import type { TokenChatData } from '@/types';
 import type {
   TokenPagePriceAnalysisArgumentsType,
   TokenPagePriceAnalysisResultBodyType,
   TrendAnalysis,
-} from "./types";
-import type { TokenOverview } from "@/services/birdeye/types/token-overview";
+} from './types';
+import type { TokenOverview } from '@/services/birdeye/types/token-overview';
 import {
   CandlestickGranularity,
   CardanoCandlestickGranularity,
   TokenPriceCandlestick,
-} from "@/services/hellomoon/types";
-import taptoolsService from "@/services/taptools";
-import { getTokenStats } from "../liquidity/function";
-import { TokenStats } from "@/services/taptools/types";
+} from '@/services/hellomoon/types';
+import taptoolsService from '@/services/taptools';
+import { getTokenStats } from '../liquidity/function';
+import { TokenStats } from '@/services/taptools/types';
 
 // Map timeframes to minutes for calculations
 const TIMEFRAME_TO_MINUTES: Record<CandlestickGranularity, number> = {
@@ -29,24 +29,24 @@ const TIMEFRAME_TO_MINUTES: Record<CandlestickGranularity, number> = {
 
 const TIMEFRAME_TO_GRANULARITY: Record<CardanoCandlestickGranularity, string> =
   {
-    [CardanoCandlestickGranularity.THREE_MIN]: "3m",
-    [CardanoCandlestickGranularity.FIVE_MIN]: "5m",
-    [CardanoCandlestickGranularity.ONE_HOUR]: "1h",
-    [CardanoCandlestickGranularity.ONE_DAY]: "1d",
-    [CardanoCandlestickGranularity.ONE_WEEK]: "1W",
+    [CardanoCandlestickGranularity.THREE_MIN]: '3m',
+    [CardanoCandlestickGranularity.FIVE_MIN]: '5m',
+    [CardanoCandlestickGranularity.ONE_HOUR]: '1h',
+    [CardanoCandlestickGranularity.ONE_DAY]: '1d',
+    [CardanoCandlestickGranularity.ONE_WEEK]: '1W',
   };
 
 const GRANULARITY_TO_NUMBER: Record<string, number> = {
-  ["3m"]: 3,
-  ["5m"]: 5,
-  ["1h"]: 60,
-  ["1d"]: 1440,
-  ["1W"]: 10080,
+  ['3m']: 3,
+  ['5m']: 5,
+  ['1h']: 60,
+  ['1d']: 1440,
+  ['1W']: 10080,
 };
 function formatNumber(num: number): string {
   return num.toLocaleString(undefined, {
-    style: "currency",
-    currency: "USD",
+    style: 'currency',
+    currency: 'USD',
     maximumFractionDigits: 5,
   });
 }
@@ -88,33 +88,33 @@ export async function analyzeTokenPrice(
   token: TokenChatData,
   args: TokenPagePriceAnalysisArgumentsType
 ): Promise<SolanaActionResult<TokenPagePriceAnalysisResultBodyType>> {
-  console.log("🚀 ~ token:", token);
-  console.log("🚀 ~ args:", args);
-  console.log("🚀 ~ token:", token.address);
+  console.log('🚀 ~ token:', token);
+  console.log('🚀 ~ args:', args);
+  console.log('🚀 ~ token:', token.address);
   try {
     const granularity = getGranularity(args.length);
-    console.log("🚀 ~ granularity:", granularity);
+    console.log('🚀 ~ granularity:', granularity);
 
     const stats = await getTokenStats(token.address);
     const tokenStats = stats.data;
-    console.log("🚀 ~ tokenStats:", tokenStats);
+    console.log('🚀 ~ tokenStats:', tokenStats);
     const timeframeMinutes = TIMEFRAME_TO_GRANULARITY[granularity];
-    console.log("🚀 ~ timeframeMinutes:", timeframeMinutes);
+    console.log('🚀 ~ timeframeMinutes:', timeframeMinutes);
 
     // Calculate the number of intervals needed based on days and timeframe
     const numIntervals = calculateNumIntervals(args.length, timeframeMinutes);
-    console.log("🚀 ~ numIntervals:", numIntervals);
+    console.log('🚀 ~ numIntervals:', numIntervals);
 
     // Fetch OHLCV data
     const pricesResponse = await taptoolsService.getTokenOHLCV(
       token.address,
       timeframeMinutes,
       numIntervals,
-      "ADA"
+      'ADA'
     );
-    console.log("🚀 ~ pricesResponse:", pricesResponse);
+    console.log('🚀 ~ pricesResponse:', pricesResponse);
     if (!pricesResponse || pricesResponse.length === 0) {
-      throw new Error("No price data available");
+      throw new Error('No price data available');
     }
 
     // Calculate current price and basic metrics
@@ -126,8 +126,8 @@ export async function analyzeTokenPrice(
       pricesResponse,
       timeframeMinutes
     );
-    console.log("🚀 ~ tokenStats.mcap.supply:", tokenStats.mcap.supply);
-    console.log("🚀 ~ tokenStats.mcap.circSupply:", tokenStats.mcap.circSupply);
+    console.log('🚀 ~ tokenStats.mcap.supply:', tokenStats.mcap.supply);
+    console.log('🚀 ~ tokenStats.mcap.circSupply:', tokenStats.mcap.circSupply);
     const marketMetrics = calculateMarketMetrics(
       currentPrice,
       tokenStats.mcap.mcap,
@@ -152,14 +152,14 @@ export async function analyzeTokenPrice(
 4. Trading Volume:
    - 24h Volume: ${formatNumber(tradingVolume.current24h)} ${token.symbol}
    - Volume Change: ${
-     tradingVolume.change24h > 0 ? "+" : ""
+     tradingVolume.change24h > 0 ? '+' : ''
    }${tradingVolume.change24h.toFixed(2)}%
    - Average Daily: ${formatNumber(tradingVolume.averageDaily)} ${token.symbol}
 
 5. Market Metrics:
    - Market Cap: $${formatNumber(marketMetrics.marketCap)}
    - Fully Diluted Value: $${formatNumber(marketMetrics.fullyDilutedValue)}
-   ${marketMetrics.rank ? `- Market Rank: #${marketMetrics.rank}` : ""}`;
+   ${marketMetrics.rank ? `- Market Rank: #${marketMetrics.rank}` : ''}`;
 
     console.log(
       message,
@@ -182,7 +182,7 @@ export async function analyzeTokenPrice(
       },
     };
   } catch (error) {
-    console.error("Price analysis error:", error);
+    console.error('Price analysis error:', error);
     return {
       message: `Error analyzing price data: ${error}`,
     };
@@ -203,10 +203,10 @@ function calculateVolatility(
     calculateStandardDeviation(returns) * 100 * Math.sqrt(periodsPerDay);
   const weekly = daily * Math.sqrt(7);
 
-  let description = "Low volatility, price is relatively stable";
-  if (daily > 10) description = "High volatility, significant price swings";
+  let description = 'Low volatility, price is relatively stable';
+  if (daily > 10) description = 'High volatility, significant price swings';
   else if (daily > 5)
-    description = "Moderate volatility, normal market conditions";
+    description = 'Moderate volatility, normal market conditions';
 
   return { daily, weekly, description };
 }
@@ -224,14 +224,14 @@ function analyzeTrend(prices: TokenPriceCandlestick[]): TrendAnalysis {
   const sma50 = calculateSMA(prices, 50);
   const current = prices[prices.length - 1].close;
 
-  let direction: "bullish" | "bearish" | "sideways" = "sideways";
+  let direction: 'bullish' | 'bearish' | 'sideways' = 'sideways';
   let strength = 5;
 
   if (current > sma20 && sma20 > sma50) {
-    direction = "bullish";
+    direction = 'bullish';
     strength = calculateTrendStrength(prices, true);
   } else if (current < sma20 && sma20 < sma50) {
-    direction = "bearish";
+    direction = 'bearish';
     strength = calculateTrendStrength(prices, false);
   }
 
@@ -240,7 +240,7 @@ function analyzeTrend(prices: TokenPriceCandlestick[]): TrendAnalysis {
 }
 
 function findSupportResistanceLevels(prices: TokenPriceCandlestick[]) {
-  const sortedPrices = prices.map((p) => p.close).sort((a, b) => a - b);
+  const sortedPrices = prices.map(p => p.close).sort((a, b) => a - b);
   const quartiles = calculateQuartiles(sortedPrices);
 
   return {
@@ -297,12 +297,12 @@ function calculateMarketMetrics(
 
 function calculateStandardDeviation(values: number[]): number {
   const mean = values.reduce((a, b) => a + b, 0) / values.length;
-  const squareDiffs = values.map((value) => Math.pow(value - mean, 2));
+  const squareDiffs = values.map(value => Math.pow(value - mean, 2));
   return Math.sqrt(squareDiffs.reduce((a, b) => a + b, 0) / values.length);
 }
 
 function calculateSMA(prices: TokenPriceCandlestick[], period: number): number {
-  const values = prices.slice(-period).map((p) => p.close);
+  const values = prices.slice(-period).map(p => p.close);
   return values.reduce((a, b) => a + b, 0) / values.length;
 }
 
@@ -326,10 +326,10 @@ function calculateTrendStrength(
 }
 
 function getTrendDescription(direction: string, strength: number): string {
-  if (direction === "sideways")
-    return "Price is moving sideways with no clear trend";
+  if (direction === 'sideways')
+    return 'Price is moving sideways with no clear trend';
   const strengthDesc =
-    strength >= 7 ? "strong" : strength >= 4 ? "moderate" : "weak";
+    strength >= 7 ? 'strong' : strength >= 4 ? 'moderate' : 'weak';
   return `${strengthDesc} ${direction} trend in place`;
 }
 

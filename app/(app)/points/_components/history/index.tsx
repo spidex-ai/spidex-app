@@ -1,12 +1,12 @@
-"use client";
-import { Skeleton } from "@/components/ui/skeleton";
-import { usePointHistory } from "@/hooks/point/use-point";
-import React from "react";
-import Image from "next/image";
+'use client';
+import { Skeleton } from '@/components/ui/skeleton';
+import { usePointHistory } from '@/hooks/point/use-point';
+import React from 'react';
+import Image from 'next/image';
 
-import { PointHistory } from "@/hooks/point/type";
-import { formatSILK } from "@/app/utils/format";
-import Pagination from "@/app/(app)/_components/pagination";
+import { PointHistory } from '@/hooks/point/type';
+import { formatSILK } from '@/app/utils/format';
+import Pagination from '@/app/(app)/_components/pagination';
 
 interface HistoryItem {
   task: string;
@@ -33,10 +33,10 @@ const Hisotry = () => {
     pointHistory.length > 0
       ? pointHistory.map((item: PointHistory, index: number) => {
           const date = new Date(item.createdAt);
-          const hours = date.getHours().toString().padStart(2, "0");
-          const minutes = date.getMinutes().toString().padStart(2, "0");
-          const day = date.getDate().toString().padStart(2, "0");
-          const month = date.toLocaleString("en-US", { month: "short" });
+          const hours = date.getHours().toString().padStart(2, '0');
+          const minutes = date.getMinutes().toString().padStart(2, '0');
+          const day = date.getDate().toString().padStart(2, '0');
+          const month = date.toLocaleString('en-US', { month: 'short' });
           const year = date.getFullYear();
           return {
             task: item.questName,
@@ -67,13 +67,13 @@ const Hisotry = () => {
           ) : (
             <div>
               {results.length > 0 ? (
-                results.map((result) => (
+                results.map(result => (
                   <div
                     key={result.task}
                     className={`grid grid-cols-3 text-sm ${
                       result.isBorderBottom
-                        ? "border-b border-border-main py-6"
-                        : "pt-6"
+                        ? 'border-b border-border-main py-6'
+                        : 'pt-6'
                     }`}
                   >
                     <div className="col-span-1 flex items-center gap-2">

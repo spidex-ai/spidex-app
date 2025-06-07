@@ -1,44 +1,50 @@
-'use client'
+'use client';
 
-import React, { createContext, useContext, useState, ReactNode } from 'react'
+import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 interface LoginModalContextType {
-  isOpen: boolean
-  openModal: (hideSocialLogin?: boolean) => void
-  closeModal: () => void
-  hideSocialLogin: boolean
+  isOpen: boolean;
+  openModal: (hideSocialLogin?: boolean) => void;
+  closeModal: () => void;
+  hideSocialLogin: boolean;
 }
 
-const LoginModalContext = createContext<LoginModalContextType | undefined>(undefined)
+const LoginModalContext = createContext<LoginModalContextType | undefined>(
+  undefined
+);
 
 export const useLoginModal = () => {
-  const context = useContext(LoginModalContext)
+  const context = useContext(LoginModalContext);
   if (!context) {
-    throw new Error('useLoginModal must be used within a LoginModalProvider')
+    throw new Error('useLoginModal must be used within a LoginModalProvider');
   }
-  return context
-}
+  return context;
+};
 
 interface LoginModalProviderProps {
-  children: ReactNode
+  children: ReactNode;
 }
 
-export const LoginModalProvider: React.FC<LoginModalProviderProps> = ({ children }) => {
-  const [isOpen, setIsOpen] = useState(false)
-  const [hideSocialLogin, setHideSocialLogin] = useState(false)
+export const LoginModalProvider: React.FC<LoginModalProviderProps> = ({
+  children,
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [hideSocialLogin, setHideSocialLogin] = useState(false);
 
   const openModal = (hideSocialLoginOptions = false) => {
-    setHideSocialLogin(hideSocialLoginOptions)
-    setIsOpen(true)
-  }
+    setHideSocialLogin(hideSocialLoginOptions);
+    setIsOpen(true);
+  };
 
   const closeModal = () => {
-    setIsOpen(false)
-  }
+    setIsOpen(false);
+  };
 
   return (
-    <LoginModalContext.Provider value={{ isOpen, openModal, closeModal, hideSocialLogin }}>
+    <LoginModalContext.Provider
+      value={{ isOpen, openModal, closeModal, hideSocialLogin }}
+    >
       {children}
     </LoginModalContext.Provider>
-  )
-} 
+  );
+};

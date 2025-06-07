@@ -1,9 +1,9 @@
-import React, { useMemo } from "react";
+import React, { useMemo } from 'react';
 
-import ReactMarkdown, { Components } from "react-markdown";
+import ReactMarkdown, { Components } from 'react-markdown';
 
-import { cn } from "@/lib/utils";
-import { CodeBlock } from "./codeblock";
+import { cn } from '@/lib/utils';
+import { CodeBlock } from './codeblock';
 
 interface Props {
   children: string;
@@ -20,10 +20,10 @@ export const Markdown: React.FC<Props> = ({
 }) => {
   const value = useMemo(() => {
     return children
-      .replaceAll("\\(", "$")
-      .replaceAll("\\)", "$")
-      .replaceAll("\\[", "$$")
-      .replaceAll("\\]", "$$");
+      .replaceAll('\\(', '$')
+      .replaceAll('\\)', '$')
+      .replaceAll('\\[', '$$')
+      .replaceAll('\\]', '$$');
   }, [children]);
 
   const memoizedContent = useMemo(
@@ -32,14 +32,14 @@ export const Markdown: React.FC<Props> = ({
         className={
           asSpan
             ? undefined
-            : "prose break-words dark:prose-invert prose-p:leading-relaxed prose-pre:p-0 flex flex-col gap-4"
+            : 'prose break-words dark:prose-invert prose-p:leading-relaxed prose-pre:p-0 flex flex-col gap-4'
         }
         components={{
           h1({ children }) {
             return (
               <h1
                 className={cn(
-                  "text-xl md:text-2xl font-bold",
+                  'text-xl md:text-2xl font-bold',
                   headingClassName
                 )}
               >
@@ -50,7 +50,7 @@ export const Markdown: React.FC<Props> = ({
           h2({ children }) {
             return (
               <h2
-                className={cn("text-lg md:text-xl font-bold", headingClassName)}
+                className={cn('text-lg md:text-xl font-bold', headingClassName)}
               >
                 {children}
               </h2>
@@ -59,7 +59,7 @@ export const Markdown: React.FC<Props> = ({
           h3({ children }) {
             return (
               <h3
-                className={cn("text-md md:text-lg font-bold", headingClassName)}
+                className={cn('text-md md:text-lg font-bold', headingClassName)}
               >
                 {children}
               </h3>
@@ -68,7 +68,7 @@ export const Markdown: React.FC<Props> = ({
           h4({ children }) {
             return (
               <h4
-                className={cn("text-sm md:text-md font-bold", headingClassName)}
+                className={cn('text-sm md:text-md font-bold', headingClassName)}
               >
                 {children}
               </h4>
@@ -77,7 +77,7 @@ export const Markdown: React.FC<Props> = ({
           h5({ children }) {
             return (
               <h5
-                className={cn("text-xs md:text-sm font-bold", headingClassName)}
+                className={cn('text-xs md:text-sm font-bold', headingClassName)}
               >
                 {children}
               </h5>
@@ -85,7 +85,7 @@ export const Markdown: React.FC<Props> = ({
           },
           h6({ children }) {
             return (
-              <h6 className={cn("text-xs font-bold", headingClassName)}>
+              <h6 className={cn('text-xs font-bold', headingClassName)}>
                 {children}
               </h6>
             );
@@ -93,8 +93,8 @@ export const Markdown: React.FC<Props> = ({
           p({ children, node }) {
             const hasBlockElements = node?.children?.some(
               (child: any) =>
-                child.type === "element" &&
-                ["div", "p", "blockquote", "form"].includes(child.tagName)
+                child.type === 'element' &&
+                ['div', 'p', 'blockquote', 'form'].includes(child.tagName)
             );
 
             if (hasBlockElements) {
@@ -119,7 +119,7 @@ export const Markdown: React.FC<Props> = ({
             );
           },
           code({ className, children }) {
-            const match = /language-(\w+)/.exec(className || "");
+            const match = /language-(\w+)/.exec(className || '');
 
             if (!match) {
               return <code className={className}>{children}</code>;
@@ -127,8 +127,8 @@ export const Markdown: React.FC<Props> = ({
 
             return (
               <CodeBlock
-                language={match[1] || "Plain Text"}
-                value={String(children).replace(/\n$/, "")}
+                language={match[1] || 'Plain Text'}
+                value={String(children).replace(/\n$/, '')}
               />
             );
           },
@@ -168,4 +168,4 @@ export const Markdown: React.FC<Props> = ({
   return memoizedContent;
 };
 
-Markdown.displayName = "Markdown";
+Markdown.displayName = 'Markdown';

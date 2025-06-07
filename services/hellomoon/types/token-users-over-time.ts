@@ -3,6 +3,6 @@ export type TokenUsersOverTime = {
   token_name: string;
   day: string;
   activeUserCount: number;
-}
+};
 
 export type TokenUsersOverTimeResponse = TokenUsersOverTime[];

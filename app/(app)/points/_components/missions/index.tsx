@@ -1,14 +1,14 @@
-"use client";
-import { Skeleton } from "@/components/ui/skeleton";
-import { usePointHistory, useQuests } from "@/hooks/point/use-point";
-import React from "react";
-import Image from "next/image";
-import { ButtonBlack, GradientSecondaryBtn } from "@/components/ui";
-import { useSpidexCoreContext } from "@/app/_contexts/spidex-core";
-import ReminderModalWrapper from "./reminder-modal-wrapper";
-import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
-import Pagination from "@/app/(app)/_components/pagination";
+'use client';
+import { Skeleton } from '@/components/ui/skeleton';
+import { usePointHistory, useQuests } from '@/hooks/point/use-point';
+import React from 'react';
+import Image from 'next/image';
+import { ButtonBlack, GradientSecondaryBtn } from '@/components/ui';
+import { useSpidexCoreContext } from '@/app/_contexts/spidex-core';
+import ReminderModalWrapper from './reminder-modal-wrapper';
+import toast from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
+import Pagination from '@/app/(app)/_components/pagination';
 
 interface MissionItem {
   id: number;
@@ -143,9 +143,9 @@ const Missions = () => {
       : [];
 
   const toggleDescription = (id: number) => {
-    setExpandedMissions((prev) =>
+    setExpandedMissions(prev =>
       prev.includes(id)
-        ? prev.filter((missionId) => missionId !== id)
+        ? prev.filter(missionId => missionId !== id)
         : [...prev, id]
     );
   };
@@ -164,7 +164,7 @@ const Missions = () => {
         case 2:
         case 3:
           data = await triggerSocialQuest(result.id);
-          window.open(result.requireUrl, "_blank");
+          window.open(result.requireUrl, '_blank');
           break;
         case 10:
           data = await triggerDailyLogin();
@@ -177,21 +177,21 @@ const Missions = () => {
           return;
         case 32:
           const tokenTrade =
-            "c48cbb3d5e57ed56e276bc45f99ab39abe94e6cd7ac39fb402da47ad0014df105553444d";
+            'c48cbb3d5e57ed56e276bc45f99ab39abe94e6cd7ac39fb402da47ad0014df105553444d';
           router.push(`/token/${tokenTrade}?tab=trade`);
           return;
         default:
           return;
       }
 
-      toast.success("You have completed the mission!");
+      toast.success('You have completed the mission!');
       fetchQuests();
       refetchPointHistory();
       return data;
     } catch (error) {
-      console.error("🚀 ~ handleFinish ~ error:", error);
+      console.error('🚀 ~ handleFinish ~ error:', error);
 
-      toast.error("You have failed the mission! Please try again.");
+      toast.error('You have failed the mission! Please try again.');
     } finally {
       setLoadingMissionId(null);
     }
@@ -208,7 +208,7 @@ const Missions = () => {
         ) : (
           <>
             {results.length > 0
-              ? results.map((result) => (
+              ? results.map(result => (
                   <div className="bg-bg-main rounded-lg p-4" key={result.type}>
                     <div
                       className={`grid grid-cols-3 cursor-pointer`}
@@ -217,7 +217,7 @@ const Missions = () => {
                       <div className="col-span-1 flex gap-2 items-center cursor-pointer">
                         <div
                           className=""
-                          onClick={(e) => {
+                          onClick={e => {
                             e.stopPropagation();
                             toggleDescription(result.id);
                           }}
@@ -229,8 +229,8 @@ const Missions = () => {
                             height={10}
                             className={`transform transition-transform duration-200 ${
                               expandedMissions.includes(result.id)
-                                ? "rotate-90"
-                                : ""
+                                ? 'rotate-90'
+                                : ''
                             }`}
                           />
                         </div>
@@ -241,7 +241,7 @@ const Missions = () => {
                             </div>
                             <div className="text-white text-lg">
                               {result.name}
-                            </div>{" "}
+                            </div>{' '}
                           </div>
                         </div>
                       </div>
@@ -292,8 +292,8 @@ const Missions = () => {
                     <div
                       className={`w-full relative overflow-hidden transition-all duration-300 ease-in-out ${
                         expandedMissions.includes(result.id)
-                          ? "opacity-100"
-                          : "max-h-0 opacity-0"
+                          ? 'opacity-100'
+                          : 'max-h-0 opacity-0'
                       }`}
                     >
                       <div className="px-5 py-2 w-full text-text-gray">

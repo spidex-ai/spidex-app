@@ -1,1 +1,1 @@
-export const TWITTER_SEARCH_RECENT_NAME = "twitter_search_recent"; 
+export const TWITTER_SEARCH_RECENT_NAME = 'twitter_search_recent';

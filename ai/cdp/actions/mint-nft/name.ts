@@ -1,1 +1,1 @@
-export const MINT_NFT_NAME = "mint_nft"; 
+export const MINT_NFT_NAME = 'mint_nft';

@@ -1,15 +1,19 @@
-"use client";
+'use client';
 
-import { useRouter, useSearchParams } from "next/navigation";
-import React, { useEffect, useRef, useState } from "react";
+import { useRouter, useSearchParams } from 'next/navigation';
+import React, { useEffect, useRef, useState } from 'react';
 
-import { TextGradient } from "@/components/ui/text";
-import { UserSpidex } from "@/hooks/core/useSpidexCore";
-import { useDiscordLogin, useGoogleLogin, useXLogin } from "@/hooks/social/useSocialLogin";
-import Image from "next/image";
-import toast from "react-hot-toast";
-import ConnectedAccountWrapper from "./connected-account-wrapper";
-import TelegramModal from "@/app/_components/telegram-modal";
+import { TextGradient } from '@/components/ui/text';
+import { UserSpidex } from '@/hooks/core/useSpidexCore';
+import {
+  useDiscordLogin,
+  useGoogleLogin,
+  useXLogin,
+} from '@/hooks/social/useSocialLogin';
+import Image from 'next/image';
+import toast from 'react-hot-toast';
+import ConnectedAccountWrapper from './connected-account-wrapper';
+import TelegramModal from '@/app/_components/telegram-modal';
 
 interface Props {
   user: UserSpidex;
@@ -25,23 +29,22 @@ const ConnectedAccounts: React.FC<Props> = ({ user }) => {
   const [isTelegramModalOpen, setIsTelegramModalOpen] = useState(false);
   const processedCodeRef = useRef<string | null>(null);
 
-
   // Get current URL dynamically
   const getCurrentUrl = () => {
-    if (typeof window !== "undefined") {
+    if (typeof window !== 'undefined') {
       return window.location.origin + window.location.pathname;
     }
-    return "";
+    return '';
   };
 
   const handleConnectGoogle = async () => {
     try {
       await signInWithGoogle();
     } catch (error) {
-      if (typeof error === "string") {
+      if (typeof error === 'string') {
         toast.error(error);
       } else {
-        toast.error("Google login failed");
+        toast.error('Google login failed');
       }
     } finally {
     }
@@ -64,13 +67,13 @@ const ConnectedAccounts: React.FC<Props> = ({ user }) => {
       const redirectUri = getCurrentUrl();
       const result = await signInWithX(code, redirectUri);
 
-      if (result && typeof window !== "undefined") {
-        console.log("X login successful");
+      if (result && typeof window !== 'undefined') {
+        console.log('X login successful');
         // Refresh the page to show updated user info
         router.refresh();
       }
     } catch (error: any) {
-      console.log("X login error", error);
+      console.log('X login error', error);
     } finally {
       setIsConnecting(false);
     }
@@ -83,7 +86,7 @@ const ConnectedAccounts: React.FC<Props> = ({ user }) => {
 
     const clientId = process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID;
     if (!clientId) {
-      toast.error("Discord client ID not configured");
+      toast.error('Discord client ID not configured');
       setIsConnecting(false);
       return;
     }
@@ -102,14 +105,14 @@ const ConnectedAccounts: React.FC<Props> = ({ user }) => {
       const redirectUri = `${getCurrentUrl()}?type=connect-discord`;
       const result = await signInWithDiscord(code, redirectUri);
 
-      if (result && typeof window !== "undefined") {
-        console.log("Discord login successful");
+      if (result && typeof window !== 'undefined') {
+        console.log('Discord login successful');
         // Refresh the page to show updated user info
         router.refresh();
       }
     } catch (error: any) {
-      console.log("Discord login error", error);
-      toast.error("Discord connection failed");
+      console.log('Discord login error', error);
+      toast.error('Discord connection failed');
     } finally {
       setIsConnecting(false);
     }
@@ -123,14 +126,14 @@ const ConnectedAccounts: React.FC<Props> = ({ user }) => {
 
   // Handle social login callbacks via URL params
   useEffect(() => {
-    const socialConnectCode = params.get("code");
-    const callbackType = params.get("type");
+    const socialConnectCode = params.get('code');
+    const callbackType = params.get('type');
 
     if (socialConnectCode && socialConnectCode !== processedCodeRef.current) {
       processedCodeRef.current = socialConnectCode;
 
       // Only call Discord API if type=connect-discord, otherwise default to X
-      if (callbackType === "connect-discord") {
+      if (callbackType === 'connect-discord') {
         handleDiscordCallback(socialConnectCode);
       } else {
         handleXCallback(socialConnectCode);
@@ -211,13 +214,13 @@ const ConnectedAccounts: React.FC<Props> = ({ user }) => {
       <TelegramModal
         isOpen={isTelegramModalOpen}
         onClose={() => setIsTelegramModalOpen(false)}
-        onSuccess={(result) => {
-          console.log("Telegram connection successful", result);
+        onSuccess={result => {
+          console.log('Telegram connection successful', result);
           setIsTelegramModalOpen(false);
           router.refresh();
         }}
-        onError={(error) => {
-          console.error("Telegram connection error", error);
+        onError={error => {
+          console.error('Telegram connection error', error);
           setIsTelegramModalOpen(false);
         }}
       />

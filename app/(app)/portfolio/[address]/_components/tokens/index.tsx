@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import React from "react";
+import React from 'react';
 
 // import Decimal from 'decimal.js';
-import Image from "next/image";
+import Image from 'next/image';
 import {
   Table,
   TableHeader,
@@ -15,20 +15,18 @@ import {
   Skeleton,
   GradientButton,
   GradientBorderButton,
-} from "@/components/ui";
+} from '@/components/ui';
 
-import { useSwapModal } from "../../_contexts/use-swap-modal";
+import { useSwapModal } from '../../_contexts/use-swap-modal';
 // import { usePortfolio } from '@/hooks';
-import { usePortfolioToken } from "@/hooks/portfolio";
-import { formatNumber } from "@/lib/utils";
+import { usePortfolioToken } from '@/hooks/portfolio';
+import { formatNumber } from '@/lib/utils';
 
 interface Props {
   address: string;
 }
 
 const Tokens: React.FC<Props> = ({ address }) => {
-
-
   const { data: portfolio, loading } = usePortfolioToken(address);
 
   const { openSell, openBuy } = useSwapModal();
@@ -74,14 +72,14 @@ const Tokens: React.FC<Props> = ({ address }) => {
               <TableBody className="max-h-96 overflow-y-auto">
                 {portfolio.amount
                   .filter(
-                    (token) =>
+                    token =>
                       Number(token.quantity) > 0 &&
                       token.logo &&
                       token.name &&
                       token.price &&
                       token.usdPrice
                   )
-                  .map((token) => (
+                  .map(token => (
                     <TableRow key={token.unit}>
                       <TableCell>
                         <div className="font-medium flex gap-2 items-center">
@@ -108,7 +106,10 @@ const Tokens: React.FC<Props> = ({ address }) => {
                         >
                           Sell
                         </GradientBorderButton>
-                        <GradientButton className="py-2 md:py-2" onClick={() => openBuy(token.unit)}>
+                        <GradientButton
+                          className="py-2 md:py-2"
+                          onClick={() => openBuy(token.unit)}
+                        >
                           Buy
                         </GradientButton>
                       </TableCell>

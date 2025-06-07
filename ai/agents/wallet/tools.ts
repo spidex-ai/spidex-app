@@ -1,4 +1,4 @@
-import { Connection } from "@solana/web3.js";
+import { Connection } from '@solana/web3.js';
 
 import {
   SolanaAllBalancesAction,
@@ -6,7 +6,7 @@ import {
   SolanaGetTokenAddressAction,
   SolanaGetWalletAddressAction,
   SolanaTransferAction,
-} from "@/ai/solana/actions";
+} from '@/ai/solana/actions';
 
 import {
   CARDANO_ALL_BALANCES_NAME,
@@ -17,13 +17,13 @@ import {
   SOLANA_GET_TOKEN_ADDRESS_NAME,
   SOLANA_GET_WALLET_ADDRESS_NAME,
   SOLANA_TRANSFER_NAME,
-} from "@/ai/action-names";
-import { solanaTool } from "@/ai/solana";
+} from '@/ai/action-names';
+import { solanaTool } from '@/ai/solana';
 import {
   CardanoAllBalancesAction,
   CardanoBalanceAction,
   cardanoTool,
-} from "@/ai/cardano";
+} from '@/ai/cardano';
 
 export const WALLET_TOOLS = {
   [`wallet-${CARDANO_GET_WALLET_ADDRESS_NAME}`]: cardanoTool(

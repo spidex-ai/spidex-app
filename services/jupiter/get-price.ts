@@ -1,4 +1,4 @@
-import { FetchPriceResponse } from "solana-agent-kit";
+import { FetchPriceResponse } from 'solana-agent-kit';
 
 /**
  * Get the USDC price for a token using Jupiter's price API
@@ -8,7 +8,7 @@ import { FetchPriceResponse } from "solana-agent-kit";
 export async function getPrices(tokenIds: string[]) {
   try {
     const response = await fetch(
-      `https://api.jup.ag/price/v2?ids=${tokenIds.join(",")}`
+      `https://api.jup.ag/price/v2?ids=${tokenIds.join(',')}`
     );
 
     if (!response.ok) {
@@ -18,17 +18,18 @@ export async function getPrices(tokenIds: string[]) {
     const data = await response.json();
 
     if (!data.data) {
-      return Object.fromEntries(tokenIds.map((tokenId) => [tokenId, { price: 0 }]));
+      return Object.fromEntries(
+        tokenIds.map(tokenId => [tokenId, { price: 0 }])
+      );
     }
 
     return data.data;
-
   } catch (error) {
-    return Object.fromEntries(tokenIds.map((tokenId) => [tokenId, { price: 0 }]));
+    return Object.fromEntries(tokenIds.map(tokenId => [tokenId, { price: 0 }]));
   }
 }
 
 export const getPrice = async (tokenId: string) => {
-    const prices = await getPrices([tokenId]);
-    return prices[tokenId].price;
-}
+  const prices = await getPrices([tokenId]);
+  return prices[tokenId].price;
+};

@@ -1,5 +1,5 @@
-import { Wallet } from "@coinbase/coinbase-sdk";
-import { MintNftArgumentsType, MintNftActionResultType } from "./types";
+import { Wallet } from '@coinbase/coinbase-sdk';
+import { MintNftArgumentsType, MintNftActionResultType } from './types';
 
 export async function mintNft(
   wallet: Wallet,
@@ -7,13 +7,13 @@ export async function mintNft(
 ): Promise<MintNftActionResultType> {
   const mintArgs = {
     to: args.destination,
-    quantity: "1",
+    quantity: '1',
   };
 
   try {
     const mintInvocation = await wallet.invokeContract({
       contractAddress: args.contractAddress,
-      method: "mint",
+      method: 'mint',
       args: mintArgs,
     });
 
@@ -22,18 +22,18 @@ export async function mintNft(
     const transactionHash = transaction.getTransactionHash();
 
     if (!transactionHash) {
-      throw new Error("Failed to get transaction hash");
+      throw new Error('Failed to get transaction hash');
     }
 
     return {
       message: `Minted NFT from contract ${args.contractAddress} to address ${args.destination} on network ${wallet.getNetworkId()}.\nTransaction hash for the mint: ${transactionHash}\nTransaction link for the mint: ${result.getTransaction().getTransactionLink()}`,
       body: {
-        transactionHash
-      }
+        transactionHash,
+      },
     };
   } catch (error) {
     return {
-      message: `Error minting NFT: ${error}`
+      message: `Error minting NFT: ${error}`,
     };
   }
-} 
+}

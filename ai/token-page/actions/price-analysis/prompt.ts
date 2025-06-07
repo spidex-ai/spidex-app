@@ -5,7 +5,7 @@ export const SOLANA_TOKEN_PAGE_PRICE_ANALYSIS_PROMPT = `Analyze the token's pric
 4. Trading volume metrics
 5. Market capitalization and related metrics
 
-You can specify the timeframe and analysis period length to customize the analysis.`; 
+You can specify the timeframe and analysis period length to customize the analysis.`;
 
 export const CARDANO_TOKEN_PAGE_PRICE_ANALYSIS_PROMPT = `Analyze the token's price performance, market metrics, and trading patterns. This includes:
 1. Current price and recent price movements
@@ -14,4 +14,4 @@ export const CARDANO_TOKEN_PAGE_PRICE_ANALYSIS_PROMPT = `Analyze the token's pri
 4. Trading volume metrics
 5. Market capitalization and related metrics
 
-You can specify the timeframe and analysis period length to customize the analysis.`; 
+You can specify the timeframe and analysis period length to customize the analysis.`;

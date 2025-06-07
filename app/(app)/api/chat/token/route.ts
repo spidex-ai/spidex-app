@@ -1,23 +1,23 @@
-import { NextRequest } from "next/server";
+import { NextRequest } from 'next/server';
 
-import { LanguageModelV1, streamText } from "ai";
+import { LanguageModelV1, streamText } from 'ai';
 
 // import { openai } from "@ai-sdk/openai";
-import { anthropic } from "@ai-sdk/anthropic";
-import { xai } from "@ai-sdk/xai";
-import { google } from "@ai-sdk/google";
-import { deepseek } from "@ai-sdk/deepseek";
+import { anthropic } from '@ai-sdk/anthropic';
+import { xai } from '@ai-sdk/xai';
+import { google } from '@ai-sdk/google';
+import { deepseek } from '@ai-sdk/deepseek';
 
-import { Models } from "@/types/models";
+import { Models } from '@/types/models';
 import {
   CardanoTokenPageLiquidityAction,
   CardanoTokenPagePriceAnalysisAction,
   CardanoTokenPageTopHoldersAction,
   tokenPageTools,
-} from "@/ai";
+} from '@/ai';
 
-import type { TokenChatData } from "@/types";
-import { createOpenRouter } from "@openrouter/ai-sdk-provider";
+import type { TokenChatData } from '@/types';
+import { createOpenRouter } from '@openrouter/ai-sdk-provider';
 
 const openrouter = createOpenRouter({
   apiKey: process.env.OPENROUTER_API_KEY,
@@ -36,9 +36,9 @@ export const POST = async (req: NextRequest) => {
   let MAX_TOKENS: number | undefined = undefined;
   let model: LanguageModelV1 | any | undefined = undefined;
 
-  console.log("===================>modelName", system(token));
+  console.log('===================>modelName', system(token));
   if (modelName === Models.OpenAI) {
-    model = openrouter.languageModel("openai/gpt-4.1-mini");
+    model = openrouter.languageModel('openai/gpt-4.1-mini');
     MAX_TOKENS = 128000;
     // const selected = pickRandomOpenAiModel();
     // console.log("🔁 Selected GPT-4 model:", selected);
@@ -47,27 +47,27 @@ export const POST = async (req: NextRequest) => {
   }
 
   if (modelName === Models.Anthropic) {
-    model = anthropic("claude-3-5-sonnet-latest");
+    model = anthropic('claude-3-5-sonnet-latest');
     MAX_TOKENS = 190000;
   }
 
   if (modelName === Models.XAI) {
-    model = xai("grok-beta");
+    model = xai('grok-beta');
     MAX_TOKENS = 131072;
   }
 
   if (modelName === Models.Gemini) {
-    model = google("gemini-2.0-flash-exp");
+    model = google('gemini-2.0-flash-exp');
     MAX_TOKENS = 1048576;
   }
 
   if (modelName === Models.Deepseek) {
-    model = deepseek("deepseek-chat") as LanguageModelV1;
+    model = deepseek('deepseek-chat') as LanguageModelV1;
     MAX_TOKENS = 64000;
   }
 
   if (!model || !MAX_TOKENS) {
-    throw new Error("Invalid model");
+    throw new Error('Invalid model');
   }
 
   // Add message token limit check

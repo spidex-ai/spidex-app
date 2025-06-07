@@ -1,18 +1,15 @@
-"use client";
+'use client';
 
-import React from 'react'
+import React from 'react';
 
 import RaydiumStandardPortfolio from './raydium-standard';
 
 interface Props {
-    address: string
+  address: string;
 }
 
 const LiquidityPools: React.FC<Props> = ({ address }) => {
+  return <RaydiumStandardPortfolio address={address} />;
+};
 
-    return (
-        <RaydiumStandardPortfolio address={address} />
-    )
-}
-
-export default LiquidityPools
+export default LiquidityPools;

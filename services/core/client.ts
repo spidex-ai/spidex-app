@@ -1,16 +1,16 @@
-import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
+import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 
 export class CoreClient {
   private client: AxiosInstance;
   constructor() {
     console.log(
-      "NEXT_PUBLIC_SPIDEX_CORE_API_URL:::",
+      'NEXT_PUBLIC_SPIDEX_CORE_API_URL:::',
       process.env.NEXT_PUBLIC_SPIDEX_CORE_API_URL
     );
     this.client = axios.create({
       baseURL: process.env.NEXT_PUBLIC_SPIDEX_CORE_API_URL,
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     });
   }
@@ -61,17 +61,17 @@ export class CoreClient {
     if (error.response) {
       // The request was made and the server responded with a status code
       // that falls out of the range of 2xx
-      console.error("Core API error:", {
+      console.error('Core API error:', {
         status: error.response.status,
         data: error.response.data,
         url: error.config?.url,
       });
     } else if (error.request) {
       // The request was made but no response was received
-      console.error("Core API request error:", error.request);
+      console.error('Core API request error:', error.request);
     } else {
       // Something happened in setting up the request that triggered an Error
-      console.error("Core API error:", error.message);
+      console.error('Core API error:', error.message);
     }
   }
 }

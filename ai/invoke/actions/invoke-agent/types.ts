@@ -1,15 +1,16 @@
-import { z } from "zod";
+import { z } from 'zod';
 
-import { InvokeAgentInputSchema } from "./input-schema";
+import { InvokeAgentInputSchema } from './input-schema';
 
-import type { InvokeActionResult } from "../invoke-action";
+import type { InvokeActionResult } from '../invoke-action';
 
 export type InvokeAgentSchemaType = ReturnType<typeof InvokeAgentInputSchema>;
 
 export type InvokeAgentArgumentsType = z.infer<InvokeAgentSchemaType>;
 
 export type InvokeAgentResultBodyType = {
-    message: string;
-}; 
+  message: string;
+};
 
-export type InvokeAgentResultType = InvokeActionResult<InvokeAgentResultBodyType>;
+export type InvokeAgentResultType =
+  InvokeActionResult<InvokeAgentResultBodyType>;

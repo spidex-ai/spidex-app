@@ -1,5 +1,5 @@
-"use client";
-import React from "react";
+'use client';
+import React from 'react';
 import {
   Dialog,
   DialogContent,
@@ -7,8 +7,7 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui";
-
+} from '@/components/ui';
 
 interface SharePostModalProps {
   isOpen: boolean;
@@ -21,7 +20,6 @@ const SharePostModal = ({
   refCode,
 }: SharePostModalProps) => {
   const handleShareToX = () => {
-
     const baseUrl = 'https://twitter.com/intent/tweet';
     const params = new URLSearchParams();
 
@@ -41,7 +39,7 @@ Claim yours 👉 ${process.env.NEXT_PUBLIC_SPIDEX_APP_URL}/chat?ref=${refCode}
     window.open(url, '_blank');
 
     onOpenChange(false);
-  }
+  };
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="!bg-bg-modal">
@@ -50,12 +48,13 @@ Claim yours 👉 ${process.env.NEXT_PUBLIC_SPIDEX_APP_URL}/chat?ref=${refCode}
         </div>
         <div className="mt-5 text-sm flex flex-col gap-2 border border-border-main p-4 rounded-lg">
           <div>
-            Just got 10 SILK score on{" "}
+            Just got 10 SILK score on{' '}
             <span className="text-white font-semibold">@Spidex_ag</span> 🕸
           </div>
           <div>
-            {`Invite your friends & earn`} <span className="text-white font-semibold">10%</span> {`more of what they gain!`} <br />{" "}
-            {`What're you waiting for?`}
+            {`Invite your friends & earn`}{' '}
+            <span className="text-white font-semibold">10%</span>{' '}
+            {`more of what they gain!`} <br /> {`What're you waiting for?`}
           </div>
           <div className="flex gap-2 items-center">
             <div className="shrink-0">Claim yours 👉 </div>
@@ -66,7 +65,7 @@ Claim yours 👉 ${process.env.NEXT_PUBLIC_SPIDEX_APP_URL}/chat?ref=${refCode}
                 </div>
               </TooltipTrigger>
               <TooltipContent>
-              {`${process.env.NEXT_PUBLIC_SPIDEX_APP_URL}/chat?ref=${refCode}`}
+                {`${process.env.NEXT_PUBLIC_SPIDEX_APP_URL}/chat?ref=${refCode}`}
               </TooltipContent>
             </Tooltip>
           </div>

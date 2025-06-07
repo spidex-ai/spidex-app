@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   Select,
@@ -6,11 +6,11 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui";
+} from '@/components/ui';
 
 export enum QuoteType {
-  USD = "USD",
-  ADA = "ADA",
+  USD = 'USD',
+  ADA = 'ADA',
 }
 
 interface SelectQuoteProps {
@@ -29,14 +29,14 @@ const SelectQuote = ({
   return (
     <Select
       value={quote}
-      onValueChange={(value) => onQuoteChange(value as QuoteType)}
+      onValueChange={value => onQuoteChange(value as QuoteType)}
       disabled={disabled}
     >
       <SelectTrigger className="w-fit h-8 text-xs border-0 bg-bg-main hover:bg-neutral-200/50 dark:hover:bg-bg-main shadow-none gap-2">
         <SelectValue placeholder={`${token}/${quote}`} />
       </SelectTrigger>
       <SelectContent className="bg-bg-tab">
-        {Object.values(QuoteType).map((quoteValue) => (
+        {Object.values(QuoteType).map(quoteValue => (
           <SelectItem
             key={quoteValue}
             value={quoteValue}

@@ -1,6 +1,6 @@
-'use client'
+'use client';
 
-import React from 'react'
+import React from 'react';
 
 import { Card } from '@/components/ui';
 
@@ -13,19 +13,18 @@ import { Card } from '@/components/ui';
 import type { UnstakeArgumentsType } from '@/ai';
 
 interface Props {
-    toolCallId: string,
-    args: UnstakeArgumentsType,
+  toolCallId: string;
+  args: UnstakeArgumentsType;
 }
 
 const UnstakeCallBody: React.FC<Props> = ({ toolCallId, args }) => {
-    console.log(args, toolCallId);
+  console.log(args, toolCallId);
 
-    // const { addToolResult } = useChat();
+  // const { addToolResult } = useChat();
 
-    
-    return (
-        <Card className="p-4 max-w-full">
-            {/* {
+  return (
+    <Card className="p-4 max-w-full">
+      {/* {
                 inputTokenLoading || outputTokenLoading ? (
                     <Skeleton className="h-48 w-96 max-w-full" />
                 ) : (
@@ -60,8 +59,8 @@ const UnstakeCallBody: React.FC<Props> = ({ toolCallId, args }) => {
                     />
                 )
             } */}
-        </Card>
-    )
-}
+    </Card>
+  );
+};
 
 export default UnstakeCallBody;

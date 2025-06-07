@@ -1,19 +1,19 @@
-import React from "react";
+import React from 'react';
 
-import { Card } from "@/components/ui";
+import { Card } from '@/components/ui';
 
-import ToolCard from "../tool-card";
+import ToolCard from '../tool-card';
 
-import type { ToolInvocation } from "ai";
+import type { ToolInvocation } from 'ai';
 import type {
   CardanoGetTrendingTokensResultBodyType,
   CardanoGetTrendingTokensResultType,
-} from "@/ai";
+} from '@/ai';
 
-import SaveToken from "@/app/(app)/_components/save-token";
-import Link from "next/link";
-import { TopTokenMcap } from "@/services/taptools/types";
-import { getLogoUrl } from "@/app/utils/logo";
+import SaveToken from '@/app/(app)/_components/save-token';
+import Link from 'next/link';
+import { TopTokenMcap } from '@/services/taptools/types';
+import { getLogoUrl } from '@/app/utils/logo';
 
 interface Props {
   tool: ToolInvocation;
@@ -34,7 +34,7 @@ const GetTrendingTokens: React.FC<Props> = ({ tool, prevToolAgent }) => {
           result.body ? (
             <TrendingTokens body={result.body} />
           ) : (
-            "No trending tokens found"
+            'No trending tokens found'
           ),
       }}
       defaultOpen={true}
@@ -49,7 +49,7 @@ const TrendingTokens = ({
 }: {
   body: CardanoGetTrendingTokensResultBodyType;
 }) => {
-  console.log("body:::::: ", body);
+  console.log('body:::::: ', body);
   // return <div>this is trending tokens</div>
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
@@ -79,9 +79,11 @@ const TokenCard = ({ token }: { token: TopTokenMcap }) => {
               </p>
               <p className="text-xs text-muted-foreground">
                 $
-                {token.price < 0.0001 ? "~0.0001" : token.price.toLocaleString(undefined, {
-                  maximumFractionDigits: 5,
-                })}
+                {token.price < 0.0001
+                  ? '~0.0001'
+                  : token.price.toLocaleString(undefined, {
+                      maximumFractionDigits: 5,
+                    })}
               </p>
             </div>
           </div>
@@ -89,9 +91,12 @@ const TokenCard = ({ token }: { token: TopTokenMcap }) => {
         </div>
         <div className="flex flex-col">
           <p className="text-xs text-muted-foreground">
-            Market Cap: ${token?.mcap < 0.0001 ? "~0.0001" : token?.mcap.toLocaleString(undefined, {
-              maximumFractionDigits: 2,
-            })}
+            Market Cap: $
+            {token?.mcap < 0.0001
+              ? '~0.0001'
+              : token?.mcap.toLocaleString(undefined, {
+                  maximumFractionDigits: 2,
+                })}
           </p>
         </div>
       </Card>

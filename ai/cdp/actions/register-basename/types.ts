@@ -1,7 +1,7 @@
-import { z } from "zod";
+import { z } from 'zod';
 
-import type { CdpActionResult } from "../cdp-action";
-import type { RegisterBasenameInputSchema } from "./input-schema";
+import type { CdpActionResult } from '../cdp-action';
+import type { RegisterBasenameInputSchema } from './input-schema';
 
 export type RegisterBasenameSchemaType = typeof RegisterBasenameInputSchema;
 
@@ -12,4 +12,5 @@ export type RegisterBasenameResultBodyType = {
   transactionHash: string;
 };
 
-export type RegisterBasenameActionResultType = CdpActionResult<RegisterBasenameResultBodyType>; 
+export type RegisterBasenameActionResultType =
+  CdpActionResult<RegisterBasenameResultBodyType>;

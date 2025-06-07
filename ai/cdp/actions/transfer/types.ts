@@ -1,7 +1,7 @@
-import { z } from "zod";
+import { z } from 'zod';
 
-import type { CdpActionResult } from "../cdp-action";
-import type { TransferInput } from "./input-schema";
+import type { CdpActionResult } from '../cdp-action';
+import type { TransferInput } from './input-schema';
 
 export type TransferSchemaType = typeof TransferInput;
 
@@ -12,4 +12,4 @@ export type TransferResultBodyType = {
   symbol: string;
 };
 
-export type TransferActionResultType = CdpActionResult<TransferResultBodyType>; 
+export type TransferActionResultType = CdpActionResult<TransferResultBodyType>;

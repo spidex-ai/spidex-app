@@ -1,22 +1,22 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from 'next/server';
 
-import { firecrawl } from "@/services/firecrawl";
+import { firecrawl } from '@/services/firecrawl';
 
 import {
   // CrawlStatusResponse,
   // ErrorResponse,
   FirecrawlDocument,
-} from "@mendable/firecrawl-js";
-import { embed, generateText } from "ai";
-import { openai } from "@ai-sdk/openai";
-import { addKnowledge } from "@/db/services/knowledge";
-import { KnowledgeInput } from "@/db/types";
+} from '@mendable/firecrawl-js';
+import { embed, generateText } from 'ai';
+import { openai } from '@ai-sdk/openai';
+import { addKnowledge } from '@/db/services/knowledge';
+import { KnowledgeInput } from '@/db/types';
 
 export const POST = async (req: NextRequest) => {
   const { url, name, includePaths, excludePaths, authCode } = await req.json();
 
   if (authCode !== process.env.CRAWL_AUTH_CODE) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
   const crawlResponse = await firecrawl.asyncCrawlUrl(url, {
@@ -30,7 +30,7 @@ export const POST = async (req: NextRequest) => {
     return NextResponse.json({ error: crawlResponse.error }, { status: 500 });
   }
 
-  let status = "scraping";
+  let status = 'scraping';
   let docs: FirecrawlDocument<undefined>[] = [];
   do {
     // statusResponse: {
@@ -47,7 +47,7 @@ export const POST = async (req: NextRequest) => {
       crawlResponse.id
     );
     console.log(
-      "🚀 ~ POST ~ statusResponse:",
+      '🚀 ~ POST ~ statusResponse:',
       statusResponse.success,
       statusResponse.total,
       statusResponse.completed,
@@ -60,27 +60,27 @@ export const POST = async (req: NextRequest) => {
       );
     }
     status = statusResponse.status;
-    if (statusResponse.status === "completed") {
+    if (statusResponse.status === 'completed') {
       docs = statusResponse.data;
     }
-    await new Promise((resolve) => setTimeout(resolve, 10000));
-  } while (status === "scraping");
+    await new Promise(resolve => setTimeout(resolve, 10000));
+  } while (status === 'scraping');
 
   if (docs.length === 0) {
-    return NextResponse.json({ error: "No documents found" }, { status: 404 });
+    return NextResponse.json({ error: 'No documents found' }, { status: 404 });
   }
 
   const knowledge = await Promise.all(
-    docs.map(async (doc) => {
+    docs.map(async doc => {
       if (!doc.markdown) {
         return;
       }
       const { text: summary } = await generateText({
-        model: openai("gpt-4o-mini"),
+        model: openai('gpt-4o-mini'),
         prompt: `Summarize the following documentation page in 1 sentence: ${doc.markdown}. This will be used to search for relevant knowledge. Do not include any other information.`,
       });
       const { embedding: summaryEmbedding } = await embed({
-        model: openai.embedding("text-embedding-3-small"),
+        model: openai.embedding('text-embedding-3-small'),
         value: summary,
       });
       const knowledgeInputs: KnowledgeInput[] = [

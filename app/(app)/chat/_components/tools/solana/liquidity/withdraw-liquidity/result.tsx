@@ -1,20 +1,17 @@
-'use client'
+'use client';
 
-import React from 'react'
+import React from 'react';
 
-import TransactionHash from '@/app/_components/transaction-hash'
+import TransactionHash from '@/app/_components/transaction-hash';
 
-import type { SolanaWithdrawLiquidityResultBodyType } from '@/ai'
+import type { SolanaWithdrawLiquidityResultBodyType } from '@/ai';
 
 interface Props {
-    body: SolanaWithdrawLiquidityResultBodyType
+  body: SolanaWithdrawLiquidityResultBodyType;
 }
 
 const WithdrawLiquidityResult: React.FC<Props> = ({ body }) => {
-    
-    return (
-        <TransactionHash hash={body.transaction} />
-    )
-}
+  return <TransactionHash hash={body.transaction} />;
+};
 
 export default WithdrawLiquidityResult;

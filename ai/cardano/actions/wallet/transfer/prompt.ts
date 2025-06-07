@@ -5,5 +5,4 @@ Required parameters:
 - amount: The amount to transfer (e.g., 1 or 0.01)
 
 Optional parameters:
-- mint: The token's mint address (e.g., "4e7c2d6a9f98c5dcf92b4f9ae8c3a708e4f2de1c52acfaedcf4e3a7d494441"). If not provided, transfers ADA.`; 
-
+- mint: The token's mint address (e.g., "4e7c2d6a9f98c5dcf92b4f9ae8c3a708e4f2de1c52acfaedcf4e3a7d494441"). If not provided, transfers ADA.`;

@@ -1,11 +1,12 @@
-import { TwitterSearchRecentAction } from "./search-recent";
+import { TwitterSearchRecentAction } from './search-recent';
 
-import type { TwitterAction, TwitterActionSchemaAny } from "./twitter-action";
+import type { TwitterAction, TwitterActionSchemaAny } from './twitter-action';
 
-export function getAllTwitterActions(): TwitterAction<TwitterActionSchemaAny, any>[] {
-  return [
-    new TwitterSearchRecentAction()
-  ];
+export function getAllTwitterActions(): TwitterAction<
+  TwitterActionSchemaAny,
+  any
+>[] {
+  return [new TwitterSearchRecentAction()];
 }
 
 export const TWITTER_ACTIONS = getAllTwitterActions();

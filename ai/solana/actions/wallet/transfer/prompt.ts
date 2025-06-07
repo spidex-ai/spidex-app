@@ -5,4 +5,4 @@ Required parameters:
 - amount: The amount to transfer (e.g., 1 or 0.01)
 
 Optional parameters:
-- mint: The token's mint address (e.g., "So11111111111111111111111111111111111111112"). If not provided, transfers SOL.`; 
+- mint: The token's mint address (e.g., "So11111111111111111111111111111111111111112"). If not provided, transfers SOL.`;

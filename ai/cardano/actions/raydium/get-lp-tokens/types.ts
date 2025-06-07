@@ -1,16 +1,18 @@
-import { z } from "zod";
+import { z } from 'zod';
 
-import { GetLpTokensInputSchema } from "./input-schema";
+import { GetLpTokensInputSchema } from './input-schema';
 
-import type { CardanoActionResult } from "../../cardano-action";
-import type { LpToken } from "@/services/raydium/types";
+import type { CardanoActionResult } from '../../cardano-action';
+import type { LpToken } from '@/services/raydium/types';
 
 export type CardanoGetLpTokensSchemaType = typeof GetLpTokensInputSchema;
 
-export type CardanoGetLpTokensArgumentsType = z.infer<CardanoGetLpTokensSchemaType>;
+export type CardanoGetLpTokensArgumentsType =
+  z.infer<CardanoGetLpTokensSchemaType>;
 
 export type CardanoGetLpTokensResultBodyType = {
-    lpTokens: LpToken[];
-}; 
+  lpTokens: LpToken[];
+};
 
-export type CardanoGetLpTokensResultType = CardanoActionResult<CardanoGetLpTokensResultBodyType>;
+export type CardanoGetLpTokensResultType =
+  CardanoActionResult<CardanoGetLpTokensResultBodyType>;

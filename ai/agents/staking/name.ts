@@ -1,1 +1,1 @@
-export const STAKING_AGENT_NAME = "Staking Agent";
+export const STAKING_AGENT_NAME = 'Staking Agent';

@@ -1,95 +1,108 @@
-'use client'
+'use client';
 
-import { useSpidexCore } from "../core/useSpidexCore";
+import { useSpidexCore } from '../core/useSpidexCore';
 
-import { useEffect, useState } from "react";
-import { MyRefItem, ReferralInfo, RefHistoryItem } from "./type";
-import { useSpidexCoreContext } from "@/app/_contexts/spidex-core";
+import { useEffect, useState } from 'react';
+import { MyRefItem, ReferralInfo, RefHistoryItem } from './type';
+import { useSpidexCoreContext } from '@/app/_contexts/spidex-core';
 
 export const useRefInfo = () => {
-    const { getUserRefMeInfo } = useSpidexCoreContext();
+  const { getUserRefMeInfo } = useSpidexCoreContext();
 
-    const [referralInfo, setReferralInfo] = useState<ReferralInfo | null>(null);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
-    
-    useEffect(() => {
-      fetchRefInfo()
-    }, []);
+  const [referralInfo, setReferralInfo] = useState<ReferralInfo | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-    const fetchRefInfo = async () => {
-        try {
-            setLoading(true);
-            const data = await getUserRefMeInfo();
-            setReferralInfo(data);
-        } catch (error) {
-            setError(error as string);
-        } finally {
-            setLoading(false);
-        }
+  useEffect(() => {
+    fetchRefInfo();
+  }, []);
+
+  const fetchRefInfo = async () => {
+    try {
+      setLoading(true);
+      const data = await getUserRefMeInfo();
+      setReferralInfo(data);
+    } catch (error) {
+      setError(error as string);
+    } finally {
+      setLoading(false);
     }
+  };
 
-    return { referralInfo, loading, error };
-}
+  return { referralInfo, loading, error };
+};
 
 export const useRefHistory = () => {
-    const { getUserRefHistory } = useSpidexCoreContext();
+  const { getUserRefHistory } = useSpidexCoreContext();
 
-    const [currentPage, setCurrentPage] = useState(0); 
-    const [totalPages, setTotalPages] = useState(0);
-    const [perPage] = useState(10);
-    const [referralHistory, setReferralHistory] = useState<RefHistoryItem[]>([]);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [perPage] = useState(10);
+  const [referralHistory, setReferralHistory] = useState<RefHistoryItem[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
-        fetchRefHistory();
-    }, [currentPage]); 
+  useEffect(() => {
+    fetchRefHistory();
+  }, [currentPage]);
 
-    const fetchRefHistory = async () => {
-        try {
-            setLoading(true);
-            const data = await getUserRefHistory(currentPage + 1, perPage);
-            setReferralHistory(data.data);
-            setTotalPages(Math.ceil(data.metadata.total / perPage));
-        } catch (error) {
-            setError(error as string);
-        } finally {
-            setLoading(false);
-        }
+  const fetchRefHistory = async () => {
+    try {
+      setLoading(true);
+      const data = await getUserRefHistory(currentPage + 1, perPage);
+      setReferralHistory(data.data);
+      setTotalPages(Math.ceil(data.metadata.total / perPage));
+    } catch (error) {
+      setError(error as string);
+    } finally {
+      setLoading(false);
     }
+  };
 
-    return { referralHistory, loading, error, currentPage, setCurrentPage, totalPages }; 
-}
-
+  return {
+    referralHistory,
+    loading,
+    error,
+    currentPage,
+    setCurrentPage,
+    totalPages,
+  };
+};
 
 export const useRefReferredUsers = () => {
-    const { getUserRefMeReferredUsers } = useSpidexCoreContext();
+  const { getUserRefMeReferredUsers } = useSpidexCoreContext();
 
-    const [currentPage, setCurrentPage] = useState(0); 
-    const [totalPages, setTotalPages] = useState(0);
-    const [perPage] = useState(10);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [perPage] = useState(10);
 
-    const [myRefUsers, setMyRefUsers] = useState<MyRefItem[]>([]);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
-     
-    useEffect(() => {
-        fetchRefReferredUsers();
-    }, [currentPage]);
+  const [myRefUsers, setMyRefUsers] = useState<MyRefItem[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-    const fetchRefReferredUsers = async () => {
-        try { 
-            setLoading(true);
-            const data = await getUserRefMeReferredUsers(currentPage + 1, perPage);
-            setMyRefUsers(data.data);
-            setTotalPages(Math.ceil(data.metadata.total / perPage));
-        } catch (error) {
-            setError(error as string);
-        } finally {
-            setLoading(false);
-        } 
+  useEffect(() => {
+    fetchRefReferredUsers();
+  }, [currentPage]);
+
+  const fetchRefReferredUsers = async () => {
+    try {
+      setLoading(true);
+      const data = await getUserRefMeReferredUsers(currentPage + 1, perPage);
+      setMyRefUsers(data.data);
+      setTotalPages(Math.ceil(data.metadata.total / perPage));
+    } catch (error) {
+      setError(error as string);
+    } finally {
+      setLoading(false);
     }
+  };
 
-    return { myRefUsers, loading, error, currentPage, setCurrentPage, totalPages };
-}
+  return {
+    myRefUsers,
+    loading,
+    error,
+    currentPage,
+    setCurrentPage,
+    totalPages,
+  };
+};

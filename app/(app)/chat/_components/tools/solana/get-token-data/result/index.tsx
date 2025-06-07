@@ -1,6 +1,6 @@
-'use client'
+'use client';
 
-import React from 'react'
+import React from 'react';
 
 import GetTokenDataResultHeading from './heading';
 import Stats from './stats';
@@ -9,25 +9,21 @@ import TwentyFourHrStats from './24hr-stats';
 import type { GetTokenDataResultBodyType } from '@/ai';
 
 interface Props {
-    body: GetTokenDataResultBodyType | any
+  body: GetTokenDataResultBodyType | any;
 }
 
 const GetTokenDataResult: React.FC<Props> = ({ body }) => {
-    const { token } = body;
+  const { token } = body;
 
-    return (
-        <div className="flex flex-col gap-2 w-full">
-            <GetTokenDataResultHeading token={token} />
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                <Stats
-                    token={token}
-                />
-                <TwentyFourHrStats
-                    token={token}
-                />
-            </div>
-        </div>
-    )
-}
+  return (
+    <div className="flex flex-col gap-2 w-full">
+      <GetTokenDataResultHeading token={token} />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+        <Stats token={token} />
+        <TwentyFourHrStats token={token} />
+      </div>
+    </div>
+  );
+};
 
 export default GetTokenDataResult;

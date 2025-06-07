@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import React from "react";
+import React from 'react';
 
-import { Card } from "@/components/ui";
+import { Card } from '@/components/ui';
 // import Address from "@/app/_components/address";
 
 interface Props {
@@ -33,23 +33,19 @@ export const ListTransaction: React.FC<ListTransactionProps> = (
         </div>
       </div>
       {props.data.map((prop, index) => (
-       <div key={index}>
-         <Transaction {...prop} />
-       </div>
+        <div key={index}>
+          <Transaction {...prop} />
+        </div>
       ))}
     </div>
   );
 };
-const Transaction: React.FC<Props> = ({
-  txHash,
-  blockHeight,
-  blockTime,
-}) => {
+const Transaction: React.FC<Props> = ({ txHash, blockHeight, blockTime }) => {
   const cardanoScanUrl = process.env.NEXT_PUBLIC_CARDANO_SCAN_URL;
   const onClick = () => {
-    console.log("cardanoScanUrl:::", cardanoScanUrl);
+    console.log('cardanoScanUrl:::', cardanoScanUrl);
 
-    window.open(`${cardanoScanUrl}/transaction/${txHash}`, "_blank");
+    window.open(`${cardanoScanUrl}/transaction/${txHash}`, '_blank');
   };
   return (
     <Card

@@ -1,14 +1,14 @@
-import { LAMPORTS_PER_SOL, PublicKey, Connection } from "@solana/web3.js";
+import { LAMPORTS_PER_SOL, PublicKey, Connection } from '@solana/web3.js';
 
-import { getTokenAccountsByOwner } from "@/services/helius";
+import { getTokenAccountsByOwner } from '@/services/helius';
 
-import type { SolanaActionResult } from "../../solana-action";
+import type { SolanaActionResult } from '../../solana-action';
 import type {
   AllBalancesArgumentsType,
   AllBalancesResultBodyType,
-} from "./types";
-import { getToken } from "@/db/services";
-import coreService from "@/services/core";
+} from './types';
+import { getToken } from '@/db/services';
+import coreService from '@/services/core';
 
 export async function getAllBalances(
   connection: Connection,
@@ -16,7 +16,6 @@ export async function getAllBalances(
 ): Promise<SolanaActionResult<any>> {
   try {
     const balance = await coreService.getBalances(args.walletAddress);
-
 
     // for (const token of balance.amount) {
     //   delete token.logo;

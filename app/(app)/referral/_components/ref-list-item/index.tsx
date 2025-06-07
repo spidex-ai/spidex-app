@@ -1,6 +1,6 @@
-import React from "react";
-import { GradientButton } from "@/components/ui";
-import { formatSILK } from "@/app/utils/format";
+import React from 'react';
+import { GradientButton } from '@/components/ui';
+import { formatSILK } from '@/app/utils/format';
 export interface RefListItemProps {
   index: number;
   key: number;
@@ -20,7 +20,7 @@ const RefListItem: React.FC<RefListItemProps> = ({
 }: RefListItemProps) => {
   const pointNumber = formatSILK(point);
   return (
-    <div className={`${index % 2 === 0 ? "bg-bg-main" : ""}`}>
+    <div className={`${index % 2 === 0 ? 'bg-bg-main' : ''}`}>
       <div className={`grid grid-cols-3 py-6`}>
         <div className="flex items-center justify-center gap-2">
           <div>

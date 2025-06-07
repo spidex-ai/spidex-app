@@ -1,28 +1,28 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import Image from "next/image";
-import { useRefInfo } from "@/hooks/referral/user-ref";
+import React, { useState } from 'react';
+import Image from 'next/image';
+import { useRefInfo } from '@/hooks/referral/user-ref';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { useSpidexCoreContext } from "@/app/_contexts/spidex-core";
-import { formatSILK } from "@/app/utils/format";
-import SharePostModalWrapper from "./share-post-modal-wrapper";
-import toast from "react-hot-toast";
+} from '@/components/ui/tooltip';
+import { useSpidexCoreContext } from '@/app/_contexts/spidex-core';
+import { formatSILK } from '@/app/utils/format';
+import SharePostModalWrapper from './share-post-modal-wrapper';
+import toast from 'react-hot-toast';
 
 const AgentClub: React.FC = () => {
   const { referralInfo, loading, error } = useRefInfo();
   const { uploadAvatar, updateUserInfo } = useSpidexCoreContext();
   const { auth } = useSpidexCoreContext();
-  console.log("🚀 ~ auth:", auth)
+  console.log('🚀 ~ auth:', auth);
   const [copied, setCopied] = useState(false);
   const [postModalOpen, setPostModalOpen] = useState(false);
   const [avatar, setAvatar] = useState(
-    auth?.user?.avatar ? auth?.user?.avatar : "/icons/spider.svg"
+    auth?.user?.avatar ? auth?.user?.avatar : '/icons/spider.svg'
   );
 
   const [uploading, setUploading] = useState(false);
@@ -52,40 +52,37 @@ const AgentClub: React.FC = () => {
     if (!file) return;
 
     try {
-    
       setUploading(true);
 
-      const maxSize = 1024 * 1024; 
+      const maxSize = 1024 * 1024;
       if (file.size > maxSize) {
-        toast.error("Image size must be less than 1MB!");
+        toast.error('Image size must be less than 1MB!');
         return;
       }
 
-
       const formData = new FormData();
-      formData.append("file", file);
-
+      formData.append('file', file);
 
       const avatar = await uploadAvatar(formData);
-      
+
       const updateUser = await updateUserInfo({
         avatar: avatar,
-        fullName: auth?.user?.fullName || "",
-        username: auth?.user?.username || "",
-        bio: auth?.user?.bio || "",
+        fullName: auth?.user?.fullName || '',
+        username: auth?.user?.username || '',
+        bio: auth?.user?.bio || '',
       });
 
       if (!updateUser) {
-        throw new Error("Upload failed");
+        throw new Error('Upload failed');
       }
 
       setAvatar(avatar);
-      toast.success("Avatar updated successfully");
+      toast.success('Avatar updated successfully');
     } catch (error) {
-      if (typeof error === "string") {
+      if (typeof error === 'string') {
         toast.error(error);
       } else {
-        toast.error("Error uploading avatar! Please try again.");
+        toast.error('Error uploading avatar! Please try again.');
       }
     } finally {
       setUploading(false);
@@ -110,17 +107,19 @@ const AgentClub: React.FC = () => {
                 alt="agent-club"
                 className="rounded-full w-[120px] h-[120px] object-cover"
                 style={{
-                  width: "120px",
-                  height: "120px",
-                  minWidth: "120px",
-                  minHeight: "120px",
+                  width: '120px',
+                  height: '120px',
+                  minWidth: '120px',
+                  minHeight: '120px',
                 }}
               />
-              <div className={`
+              <div
+                className={`
                 absolute inset-0 bg-black/50 rounded-full flex items-center justify-center text-white text-sm opacity-0  transition-opacity duration-100
-                ${uploading ? "opacity-100" : "group-hover:opacity-100"}
-                `}>
-                {uploading ? "Uploading..." : "Change avatar"}
+                ${uploading ? 'opacity-100' : 'group-hover:opacity-100'}
+                `}
+              >
+                {uploading ? 'Uploading...' : 'Change avatar'}
               </div>
             </div>
           </label>
@@ -167,7 +166,7 @@ const AgentClub: React.FC = () => {
                     <TooltipTrigger asChild>
                       <Image
                         src={`/icons/${
-                          copied ? "tick-blue.svg" : "copy-gray.svg"
+                          copied ? 'tick-blue.svg' : 'copy-gray.svg'
                         }`}
                         alt="copy"
                         width={24}
@@ -175,7 +174,7 @@ const AgentClub: React.FC = () => {
                       />
                     </TooltipTrigger>
                     <TooltipContent>
-                      <p>{copied ? "Copied" : "Copy to clipboard"}</p>
+                      <p>{copied ? 'Copied' : 'Copy to clipboard'}</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -203,8 +202,8 @@ const AgentClub: React.FC = () => {
       </div>
       <SharePostModalWrapper
         isOpen={postModalOpen}
-        onOpenChange={(value) => setPostModalOpen(value)}
-        refCode={referralInfo?.referralCode || ""}
+        onOpenChange={value => setPostModalOpen(value)}
+        refCode={referralInfo?.referralCode || ''}
       />
     </div>
   );

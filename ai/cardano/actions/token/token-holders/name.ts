@@ -1,1 +1,1 @@
-export const CARDANO_TOKEN_HOLDERS_NAME = "token_holders"; 
+export const CARDANO_TOKEN_HOLDERS_NAME = 'token_holders';

@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import useSWR from "swr";
-import { CandleStickInterval } from "./../../../services/hellomoon/types/candlestick";
+import useSWR from 'swr';
+import { CandleStickInterval } from './../../../services/hellomoon/types/candlestick';
 import {
   TokenPriceCandlestick,
   CandlestickGranularity,
-} from "@/services/hellomoon/types";
-import { useTaptools } from "@/hooks/useTaptools";
-import { useEffect, useState } from "react";
-import { useSpidexCoreContext } from "@/app/_contexts";
-import { QuoteType } from "@/app/(app)/token/[address]/_components/header/select-quote";
+} from '@/services/hellomoon/types';
+import { useTaptools } from '@/hooks/useTaptools';
+import { useEffect, useState } from 'react';
+import { useSpidexCoreContext } from '@/app/_contexts';
+import { QuoteType } from '@/app/(app)/token/[address]/_components/header/select-quote';
 
 export const usePriceChart = (
   mint: string,
@@ -20,12 +20,12 @@ export const usePriceChart = (
     `/api/token/${mint}/prices/${timeframe}/${numDays}`,
     async () =>
       fetch(`/api/token/${mint}/prices`, {
-        method: "POST",
+        method: 'POST',
         body: JSON.stringify({
           timeframe,
           numDays,
         }),
-      }).then((res) => res.json()),
+      }).then(res => res.json()),
     {
       refreshInterval: 5000,
     }
@@ -60,16 +60,13 @@ export const usePriceChartTaptools = (
     try {
       const data = await getTokenOHLCV(unit, interval, numIntervals);
       setData(data);
-    } catch (error) {
-      
-    }
-  }
+    } catch (error) {}
+  };
 
   const fetchDataChart = async () => {
     try {
-    
-        setIsLoading(true);
-      
+      setIsLoading(true);
+
       const data = await getTokenOHLCV(unit, interval, numIntervals);
       setData(data);
     } catch (error) {
@@ -81,8 +78,6 @@ export const usePriceChartTaptools = (
     }
   };
 
-
-
   return {
     data,
     isLoading,
@@ -90,9 +85,7 @@ export const usePriceChartTaptools = (
     fetchDataChart,
     refetchDataChart,
   };
-
 };
-
 
 export const usePriceChartCore = (
   unit: string,
@@ -104,14 +97,14 @@ export const usePriceChartCore = (
 
   const [data, setData] = useState<TokenPriceCandlestick[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null); 
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-   if (unit) {
-    fetchDataChart();
-   }
+    if (unit) {
+      fetchDataChart();
+    }
   }, [unit, interval, numIntervals, quote]);
-  
+
   const fetchDataChart = async () => {
     try {
       setIsLoading(true);
@@ -125,7 +118,7 @@ export const usePriceChartCore = (
     } finally {
       setIsLoading(false);
     }
-  }
+  };
 
   const refetchDataChart = async () => {
     try {
@@ -136,6 +129,6 @@ export const usePriceChartCore = (
     } catch (error) {
       throw error;
     }
-  }
+  };
   return { data, isLoading, error, fetchDataChart, refetchDataChart };
-}
+};

@@ -1,8 +1,8 @@
-import { getSmartMoneyInflows as getSmartMoneyInflowsService } from "@/services/hellomoon";
+import { getSmartMoneyInflows as getSmartMoneyInflowsService } from '@/services/hellomoon';
 
-import type { GetSmartMoneyInflowsArgumentsType } from "./types";
-import type { SolanaActionResult } from "../../solana-action";
-import { getPrices } from "@/services/birdeye";
+import type { GetSmartMoneyInflowsArgumentsType } from './types';
+import type { SolanaActionResult } from '../../solana-action';
+import { getPrices } from '@/services/birdeye';
 
 /**
  * Gets the trending tokens from Birdeye API.
@@ -15,17 +15,12 @@ export async function getSmartMoneyInflows(
   args: GetSmartMoneyInflowsArgumentsType
 ): Promise<SolanaActionResult<any>> {
   try {
-
     const response = await getSmartMoneyInflowsService(args.granularity, 10);
 
-    const prices = await getPrices(response.map((token) => token.mint));
-
-
+    const prices = await getPrices(response.map(token => token.mint));
 
     return {
-      body: {
-
-      },
+      body: {},
       message: `Found ${response.length} smart money inflows. The user is shown the inflows, do not list them. Ask the user what they want to do next.`,
     };
   } catch (error) {
@@ -33,7 +28,7 @@ export async function getSmartMoneyInflows(
       message: `Error getting trending tokens: ${error}`,
       body: {
         tokens: [],
-      }
+      },
     };
   }
 }

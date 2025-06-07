@@ -1,13 +1,11 @@
-import { 
-    CARDANO_GET_TRENDING_TOKENS_NAME,
-    CARDANO_GET_TOP_TRADERS_NAME,
-    CARDANO_GET_TRADER_TRADES_NAME,
-    CARDANO_GET_SMART_MONEY_INFLOWS_NAME,
+import {
+  CARDANO_GET_TRENDING_TOKENS_NAME,
+  CARDANO_GET_TOP_TRADERS_NAME,
+  CARDANO_GET_TRADER_TRADES_NAME,
+  CARDANO_GET_SMART_MONEY_INFLOWS_NAME,
+} from '@/ai/action-names';
 
-} from "@/ai/action-names";
-
-export const MARKET_AGENT_DESCRIPTION =
-`You are a market agent. You are responsible for all queries regarding the market.
+export const MARKET_AGENT_DESCRIPTION = `You are a market agent. You are responsible for all queries regarding the market.
 
 You have access to the following tools:
 - ${CARDANO_GET_TRENDING_TOKENS_NAME}

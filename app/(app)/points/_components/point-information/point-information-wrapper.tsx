@@ -1,24 +1,23 @@
-"use client";
-import React, { useState } from "react";
-import Image from "next/image";
+'use client';
+import React, { useState } from 'react';
+import Image from 'next/image';
 
-import { usePointInfo } from "@/hooks/point/use-point";
-import { Skeleton } from "@/components/ui/skeleton";
-import { TextGradient } from "@/components/ui/text";
-import { Tooltip, TooltipProvider } from "@/components/ui/tooltip";
-import { TooltipTrigger } from "@/components/ui/tooltip";
-import { TooltipContent } from "@/components/ui/tooltip";
-import { TooltipArrow } from "@radix-ui/react-tooltip";
-import { formatSILK } from "@/app/utils/format";
-import { useRouter } from "next/navigation";
-import { useCardano } from "@cardano-foundation/cardano-connect-with-wallet";
-import { formatNumber } from "@/lib/utils";
+import { usePointInfo } from '@/hooks/point/use-point';
+import { Skeleton } from '@/components/ui/skeleton';
+import { TextGradient } from '@/components/ui/text';
+import { Tooltip, TooltipProvider } from '@/components/ui/tooltip';
+import { TooltipTrigger } from '@/components/ui/tooltip';
+import { TooltipContent } from '@/components/ui/tooltip';
+import { TooltipArrow } from '@radix-ui/react-tooltip';
+import { formatSILK } from '@/app/utils/format';
+import { useRouter } from 'next/navigation';
+import { useCardano } from '@cardano-foundation/cardano-connect-with-wallet';
+import { formatNumber } from '@/lib/utils';
 const PointInformationWrapper = () => {
   const { pointInfo, loading, error, achievements } = usePointInfo();
   const [copied, setCopied] = useState(false);
   const { stakeAddress } = useCardano();
   const router = useRouter();
-
 
   if (loading) {
     return <Skeleton className="w-full h-[100px]" />;
@@ -62,11 +61,11 @@ const PointInformationWrapper = () => {
     }, 2000);
   };
 
-  const handleClickTx =() => {
+  const handleClickTx = () => {
     if (stakeAddress) {
       router.push(`/portfolio/${stakeAddress}`);
     }
-  }
+  };
 
   return (
     <div>
@@ -98,8 +97,8 @@ const PointInformationWrapper = () => {
               className="text-text-gray text-xs cursor-pointer"
               onClick={() => {
                 window.open(
-                  "https://spidex-ai.gitbook.io/spidex-ai-docs/silk-score-system/silk-score-system",
-                  "_blank"
+                  'https://spidex-ai.gitbook.io/spidex-ai-docs/silk-score-system/silk-score-system',
+                  '_blank'
                 );
               }}
             >
@@ -111,9 +110,7 @@ const PointInformationWrapper = () => {
         <div className="col-span-1 bg-bg-secondary rounded-lg p-4 border border-border-main transition-all duration-300 hover:shadow-[0_0_15px_rgba(0,255,255,0.3)]">
           <div className="flex items-center justify-between">
             <div className="text-white text-[28px] font-medium">
-              {formatNumber(
-                Number(pointInfo?.referralInfo?.referralUserCount)
-              )}
+              {formatNumber(Number(pointInfo?.referralInfo?.referralUserCount))}
             </div>
             <div>
               <Image src="/icons/gift.svg" alt="gift" width={40} height={40} />
@@ -123,15 +120,15 @@ const PointInformationWrapper = () => {
           <div className="text-white text-lg">Referrals</div>
           <div className="flex items-center justify-between gap-4 bg-bg-main rounded-lg py-1 px-2 mt-1">
             <div className="text-sm">
-              <span className="text-text-gray text-xs">Invite link:</span>{" "}
+              <span className="text-text-gray text-xs">Invite link:</span>{' '}
               <span className="text-white text-xs">
-                {" "}
+                {' '}
                 {pointInfo?.referralInfo?.referralCode
                   ? `${pointInfo?.referralInfo?.referralCode.slice(
                       0,
                       6
                     )}...${pointInfo?.referralInfo?.referralCode.slice(-4)}`
-                  : ""}
+                  : ''}
               </span>
             </div>
             <div onClick={handleCopy} className="cursor-pointer">
@@ -140,7 +137,7 @@ const PointInformationWrapper = () => {
                   <TooltipTrigger asChild>
                     <Image
                       src={`/icons/${
-                        copied ? "tick-blue.svg" : "copy-gray.svg"
+                        copied ? 'tick-blue.svg' : 'copy-gray.svg'
                       }`}
                       alt="copy"
                       width={15}
@@ -148,7 +145,7 @@ const PointInformationWrapper = () => {
                     />
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>{copied ? "Copied" : "Copy to clipboard"}</p>
+                    <p>{copied ? 'Copied' : 'Copy to clipboard'}</p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
@@ -254,7 +251,7 @@ const PointInformationWrapper = () => {
           <TooltipProvider>
             <Tooltip delayDuration={0}>
               <TooltipTrigger>
-                {" "}
+                {' '}
                 <Image
                   src="/icons/warning-blink.svg"
                   alt="warning-blink"
@@ -263,7 +260,7 @@ const PointInformationWrapper = () => {
                 />
               </TooltipTrigger>
               <TooltipContent side="right" align="center" arrowPadding={1}>
-                {" "}
+                {' '}
                 <div className="text-xs">$100 volume trading = 1 SILK</div>
                 <TooltipArrow className="TooltipArrow" />
               </TooltipContent>

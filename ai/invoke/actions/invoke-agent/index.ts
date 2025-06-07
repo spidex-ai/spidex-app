@@ -1,13 +1,15 @@
-import { INVOKE_AGENT_NAME } from "./name";
-import { INVOKE_AGENT_PROMPT } from "./prompt";
-import { InvokeAgentInputSchema } from "./input-schema";
-import { InvokeAgentResultBodyType, InvokeAgentSchemaType } from "./types";
-import { invokeAgentFunction } from "./function";
+import { INVOKE_AGENT_NAME } from './name';
+import { INVOKE_AGENT_PROMPT } from './prompt';
+import { InvokeAgentInputSchema } from './input-schema';
+import { InvokeAgentResultBodyType, InvokeAgentSchemaType } from './types';
+import { invokeAgentFunction } from './function';
 
-import { InvokeAction } from "../invoke-action";
-import { Agent } from "@/ai/agent";
+import { InvokeAction } from '../invoke-action';
+import { Agent } from '@/ai/agent';
 
-export class InvokeAgentAction implements InvokeAction<InvokeAgentSchemaType, InvokeAgentResultBodyType> {
+export class InvokeAgentAction
+  implements InvokeAction<InvokeAgentSchemaType, InvokeAgentResultBodyType>
+{
   public name = INVOKE_AGENT_NAME;
   public description: string;
   public argsSchema: InvokeAgentSchemaType;
@@ -17,4 +19,4 @@ export class InvokeAgentAction implements InvokeAction<InvokeAgentSchemaType, In
     this.argsSchema = InvokeAgentInputSchema(agents);
     this.description = INVOKE_AGENT_PROMPT(agents);
   }
-} 
+}

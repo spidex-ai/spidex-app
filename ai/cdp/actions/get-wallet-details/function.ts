@@ -1,7 +1,10 @@
-import type { Wallet } from "@coinbase/coinbase-sdk";
+import type { Wallet } from '@coinbase/coinbase-sdk';
 
-import type { CdpActionResult } from "@/ai";
-import type { GetWalletDetailsArgumentsType, GetWalletDetailsResultBodyType } from "./types";
+import type { CdpActionResult } from '@/ai';
+import type {
+  GetWalletDetailsArgumentsType,
+  GetWalletDetailsResultBodyType,
+} from './types';
 
 /**
  * Gets a wallet's details.
@@ -12,19 +15,19 @@ import type { GetWalletDetailsArgumentsType, GetWalletDetailsResultBodyType } fr
  */
 export async function getWalletDetails(
   wallet: Wallet,
-  _: GetWalletDetailsArgumentsType,
+  _: GetWalletDetailsArgumentsType
 ): Promise<CdpActionResult<GetWalletDetailsResultBodyType>> {
   try {
     const defaultAddress = await wallet.getDefaultAddress();
     return {
       message: `Wallet: ${wallet.getId()} on network: ${wallet.getNetworkId()} with default address: ${defaultAddress.getId()}`,
       body: {
-        address: defaultAddress.getId()
-      }
+        address: defaultAddress.getId(),
+      },
     };
   } catch (error) {
     return {
       message: `Error getting wallet details: ${error}`,
     };
   }
-} 
+}

@@ -14,12 +14,17 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const data = await taptoolsService.getNFTCollectionStatsExtended(policy, timeframe);
+    const data = await taptoolsService.getNFTCollectionStatsExtended(
+      policy,
+      timeframe
+    );
     return NextResponse.json(data);
   } catch (error: any) {
     console.error('Error fetching NFT collection extended stats:', error);
     return NextResponse.json(
-      { error: error.message || 'Failed to fetch NFT collection extended stats' },
+      {
+        error: error.message || 'Failed to fetch NFT collection extended stats',
+      },
       { status: 500 }
     );
   }

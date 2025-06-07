@@ -1,8 +1,8 @@
-import { z } from "zod";
+import { z } from 'zod';
 
-import { AllBalancesInputSchema } from "./input-schema";
-import type { CardanoActionResult } from "../../cardano-action";
-import { WalletBalances } from "@/services/core/types";
+import { AllBalancesInputSchema } from './input-schema';
+import type { CardanoActionResult } from '../../cardano-action';
+import { WalletBalances } from '@/services/core/types';
 
 export type CardanoAllBalancesSchemaType = typeof AllBalancesInputSchema;
 

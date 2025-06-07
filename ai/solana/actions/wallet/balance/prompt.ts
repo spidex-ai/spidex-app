@@ -2,4 +2,4 @@ export const SOLANA_BALANCE_PROMPT = `Get the balance of a Solana wallet for a g
 
 If no tokenAddress is provided, the balance will be in SOL.
 
-If the user provides a symbol, first use the tokenData tool to get the tokenAddress.`; 
+If the user provides a symbol, first use the tokenData tool to get the tokenAddress.`;

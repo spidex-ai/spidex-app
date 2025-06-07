@@ -2,29 +2,29 @@ import {
   FAQ_KNOWLEDGE_NAME,
   SEARCH_KNOWLEDGE_NAME,
   SEARCH_WEB_KNOWLEDGE_NAME,
-} from "./name";
+} from './name';
 import {
   FAQ_KNOWLEDGE_PROMPT,
   SEARCH_KNOWLEDGE_PROMPT,
   SEARCH_WEB_KNOWLEDGE_PROMPT,
-} from "./prompt";
+} from './prompt';
 import {
   FAQKnowledgeInputSchema,
   SearchKnowledgeInputSchema,
   SearchWebKnowledgeInputSchema,
-} from "./input-schema";
+} from './input-schema';
 import {
   SearchKnowledgeResultBodyType,
   SearchWebKnowledgeResultBodyType,
   FAQKnowledgeResultBodyType,
-} from "./types";
+} from './types';
 import {
   faqKnowledgeFunction,
   searchKnowledgeFunction,
   searchWebKnowledgeFunction,
-} from "./function";
+} from './function';
 
-import { KnowledgeAction } from "../knowledge-action";
+import { KnowledgeAction } from '../knowledge-action';
 
 export class SearchKnowledgeAction
   implements

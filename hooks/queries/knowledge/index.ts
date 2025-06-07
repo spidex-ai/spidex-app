@@ -1,1 +1,1 @@
-export * from "./use-knowledge-by-url";
+export * from './use-knowledge-by-url';

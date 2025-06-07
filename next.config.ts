@@ -1,17 +1,17 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   /* config options here */
   experimental: {
-    serverComponentsExternalPackages: ["twitter-api-v2"]
+    serverComponentsExternalPackages: ['twitter-api-v2'],
   },
   images: {
     remotePatterns: [
       {
-        hostname: "**",
+        hostname: '**',
       },
     ],
-    domains: ["cdn.spidex.ag"],
+    domains: ['cdn.spidex.ag'],
   },
 };
 

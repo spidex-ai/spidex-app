@@ -1,17 +1,21 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type BaseActionSchemaAny = z.ZodObject<any, any, any, any>;
 
 export type BaseActionResult<TBody> = {
-    message: string;
-    body?: TBody;
-}
+  message: string;
+  body?: TBody;
+};
 
 /**
  * Represents the base structure for all Actions.
  */
-export interface BaseAction<TActionSchema extends BaseActionSchemaAny, TBody, TClient = void> {
+export interface BaseAction<
+  TActionSchema extends BaseActionSchemaAny,
+  TBody,
+  TClient = void,
+> {
   /**
    * The name of the action
    */
@@ -31,8 +35,12 @@ export interface BaseAction<TActionSchema extends BaseActionSchemaAny, TBody, TC
    * The function to execute for this action
    */
   func?:
-    | ((client: TClient, args: z.infer<TActionSchema>) => Promise<BaseActionResult<TBody>>)
-    | ((args: z.infer<TActionSchema>) => Promise<BaseActionResult<TBody>>)
-} 
+    | ((
+        client: TClient,
+        args: z.infer<TActionSchema>
+      ) => Promise<BaseActionResult<TBody>>)
+    | ((args: z.infer<TActionSchema>) => Promise<BaseActionResult<TBody>>);
+}
 
-export interface BaseActionAny extends BaseAction<BaseActionSchemaAny, any, any> {}
+export interface BaseActionAny
+  extends BaseAction<BaseActionSchemaAny, any, any> {}

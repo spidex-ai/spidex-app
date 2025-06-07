@@ -1,8 +1,8 @@
-import { z } from "zod";
+import { z } from 'zod';
 
-import { AllBalancesInputSchema } from "./input-schema";
-import type { SolanaActionResult } from "../../solana-action";
-import { WalletBalances } from "@/services/core/types";
+import { AllBalancesInputSchema } from './input-schema';
+import type { SolanaActionResult } from '../../solana-action';
+import { WalletBalances } from '@/services/core/types';
 
 export type AllBalancesSchemaType = typeof AllBalancesInputSchema;
 

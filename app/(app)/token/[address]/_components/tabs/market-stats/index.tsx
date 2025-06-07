@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import React from "react";
+import React from 'react';
 
-import { Skeleton } from "@/components/ui";
+import { Skeleton } from '@/components/ui';
 
 // import TimeStats from "./time-stats";
 
-import { useTokenStats } from "@/hooks";
-import { formatNumber } from "@/lib/utils";
+import { useTokenStats } from '@/hooks';
+import { formatNumber } from '@/lib/utils';
 
 interface Props {
   tokenId: string | undefined;
@@ -21,7 +21,11 @@ const MarketStats: React.FC<Props> = ({ tokenId, isLoadingTokenDetail }) => {
   if (isLoading || isLoadingTokenDetail) {
     return <Skeleton className="h-[100px] w-full" />;
   }
-  const usdPrice = tokenStats?.usdPrice ? tokenStats?.usdPrice < 0.0001 ? "~0.0001" : `$${formatNumber(tokenStats?.usdPrice, 4)}` : "--";
+  const usdPrice = tokenStats?.usdPrice
+    ? tokenStats?.usdPrice < 0.0001
+      ? '~0.0001'
+      : `$${formatNumber(tokenStats?.usdPrice, 4)}`
+    : '--';
 
   return (
     <div className="grid grid-cols-6 gap-2">
@@ -29,18 +33,22 @@ const MarketStats: React.FC<Props> = ({ tokenId, isLoadingTokenDetail }) => {
         <div className="flex flex-col gap-2">
           <div className="bg-bg-tab p-2 flex flex-1 justify-center">
             <div className="min-h-[80px] flex flex-col justify-center items-center gap-3">
-              <div className="text-xs font-semibold text-text-gray">Price USD</div>
-                <div className="text-xs text-white">{usdPrice}</div>
+              <div className="text-xs font-semibold text-text-gray">
+                Price USD
+              </div>
+              <div className="text-xs text-white">{usdPrice}</div>
             </div>
           </div>
 
           <div className="bg-bg-tab p-2 flex flex-1 justify-center">
             <div className="min-h-[80px] flex flex-col justify-center items-center gap-3">
-              <div className="text-xs font-semibold text-text-gray">Liquidity</div>
+              <div className="text-xs font-semibold text-text-gray">
+                Liquidity
+              </div>
               <div className="text-xs text-white">
                 {tokenStats?.liquidity
                   ? `$${formatNumber(tokenStats?.liquidity, 0)}`
-                  : "--"}
+                  : '--'}
               </div>
             </div>
           </div>
@@ -62,14 +70,18 @@ const MarketStats: React.FC<Props> = ({ tokenId, isLoadingTokenDetail }) => {
           <StatItem
             label="Market Cap"
             value={
-              tokenStats?.mcap.mcap ? `$${formatNumber(tokenStats?.mcap.mcap, 0)}` : "--"
+              tokenStats?.mcap.mcap
+                ? `$${formatNumber(tokenStats?.mcap.mcap, 0)}`
+                : '--'
             }
           />
 
           <StatItem
             label="FDV"
             value={
-              tokenStats?.mcap?.fdv ? `$${formatNumber(tokenStats?.mcap.fdv, 0)}` : "--"
+              tokenStats?.mcap?.fdv
+                ? `$${formatNumber(tokenStats?.mcap.fdv, 0)}`
+                : '--'
             }
           />
           {/* <StatItem
@@ -81,9 +93,7 @@ const MarketStats: React.FC<Props> = ({ tokenId, isLoadingTokenDetail }) => {
           <StatItem
             label="Holders"
             value={
-              tokenStats?.holders
-                ? formatNumber(tokenStats?.holders)
-                : "--"
+              tokenStats?.holders ? formatNumber(tokenStats?.holders) : '--'
             }
           />
           {/* <StatItem
@@ -97,7 +107,7 @@ const MarketStats: React.FC<Props> = ({ tokenId, isLoadingTokenDetail }) => {
             value={
               tokenStats?.mcap.circSupply
                 ? formatNumber(tokenStats?.mcap.circSupply)
-                : "--"
+                : '--'
             }
           />
           <StatItem
@@ -105,7 +115,7 @@ const MarketStats: React.FC<Props> = ({ tokenId, isLoadingTokenDetail }) => {
             value={
               tokenStats?.mcap.totalSupply
                 ? formatNumber(tokenStats?.mcap.totalSupply)
-                : "--"
+                : '--'
             }
           />
           {/* <StatItem
@@ -127,10 +137,7 @@ interface StatItemProps {
   prefix?: string;
 }
 
-const StatItem: React.FC<StatItemProps> = ({
-  label,
-  value,
-}) => {
+const StatItem: React.FC<StatItemProps> = ({ label, value }) => {
   return (
     <div className="col-span-1">
       <div className="min-h-[88px] flex flex-col gap-3 justify-center items-center rounded-md p-2 bg-bg-secondary">

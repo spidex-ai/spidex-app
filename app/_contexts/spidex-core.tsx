@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import React, { createContext, useContext, useEffect, useState } from "react";
-import { Auth, useSpidexCore } from "@/hooks/core/useSpidexCore";
-import { SubmitSwapPayload, SwapPayload } from "@/services/dexhunter/types";
-import { EsitmateSwapPayload } from "@/services/dexhunter/types";
-import { UpdateUserPayload } from "@/hooks/core/type";
-import { QuoteType } from "../(app)/token/[address]/_components/header/select-quote";
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import { Auth, useSpidexCore } from '@/hooks/core/useSpidexCore';
+import { SubmitSwapPayload, SwapPayload } from '@/services/dexhunter/types';
+import { EsitmateSwapPayload } from '@/services/dexhunter/types';
+import { UpdateUserPayload } from '@/hooks/core/type';
+import { QuoteType } from '../(app)/token/[address]/_components/header/select-quote';
 
 interface SpidexCoreContextType {
   auth: Auth | null;
@@ -21,10 +21,27 @@ interface SpidexCoreContextType {
   getNounce: () => Promise<any>;
   signMessage: (message: any, walletName: string) => Promise<any>;
   refreshToken: () => Promise<any>;
-  connectX: (code: string, redirectUrl: string, referralCode?: string) => Promise<any>;
+  connectX: (
+    code: string,
+    redirectUrl: string,
+    referralCode?: string
+  ) => Promise<any>;
   connectGoogle: (idToken: string, referralCode?: string) => Promise<any>;
-  connectDiscord: (code: string, redirectUri: string, referralCode?: string) => Promise<any>;
-  connectTelegram: (id: string, first_name: string, last_name: string, username: string, photo_url: string, auth_date: number, hash: string, referralCode?: string) => Promise<any>;
+  connectDiscord: (
+    code: string,
+    redirectUri: string,
+    referralCode?: string
+  ) => Promise<any>;
+  connectTelegram: (
+    id: string,
+    first_name: string,
+    last_name: string,
+    username: string,
+    photo_url: string,
+    auth_date: number,
+    hash: string,
+    referralCode?: string
+  ) => Promise<any>;
   fetchWithAuth: (url: string, options?: RequestInit) => Promise<any>;
   logout: () => Promise<void>;
   setLocalAuth: (auth: Auth) => void;
@@ -35,7 +52,11 @@ interface SpidexCoreContextType {
   getUserQuests: (page?: number, perPage?: number) => Promise<any>;
   getUserPointHistory: (page?: number, perPage?: number) => Promise<any>;
   getPortfolioToken: (address?: string) => Promise<any>;
-  getPortfolioTransaction: (address?: string, page?: number, pageSize?: number) => Promise<any>;
+  getPortfolioTransaction: (
+    address?: string,
+    page?: number,
+    pageSize?: number
+  ) => Promise<any>;
   getTokenTradeHistory: (tokenId: string) => Promise<any>;
   getTokenTopHolders: (tokenId: string) => Promise<any>;
   getTokenTopTraders: (tokenId: string) => Promise<any>;
@@ -48,12 +69,17 @@ interface SpidexCoreContextType {
   uploadAvatar: (file: FormData) => Promise<any>;
   updateUserInfo: (payload: UpdateUserPayload) => Promise<any>;
   getTokenDetailCore: (tokenId: string) => Promise<any>;
-  getTokenOHLCV: (tokenId: string, interval: string, numIntervals: number, quote: QuoteType) => Promise<any>;
+  getTokenOHLCV: (
+    tokenId: string,
+    interval: string,
+    numIntervals: number,
+    quote: QuoteType
+  ) => Promise<any>;
   getTokenStats: (tokenId: string) => Promise<any>;
   getAchievements: () => Promise<any>;
 }
 
-export const STORAGE_KEY = "spidex_auth";
+export const STORAGE_KEY = 'spidex_auth';
 
 const SpidexCoreContext = createContext<SpidexCoreContextType | undefined>(
   undefined
@@ -63,14 +89,14 @@ export const SpidexCoreProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [localAuth, setLocalAuth] = useState<Auth | null>(() => {
-    if (typeof window !== "undefined") {
+    if (typeof window !== 'undefined') {
       try {
         const savedAuth = localStorage.getItem(STORAGE_KEY);
         if (savedAuth) {
           return JSON.parse(savedAuth);
         }
       } catch (error) {
-        console.error("Failed to parse saved auth data", error);
+        console.error('Failed to parse saved auth data', error);
         localStorage.removeItem(STORAGE_KEY);
       }
     }
@@ -78,16 +104,15 @@ export const SpidexCoreProvider: React.FC<{ children: React.ReactNode }> = ({
   });
   const spidexCore = useSpidexCore(localAuth);
 
-
   const handleSetLocalAuth = (auth: Auth) => {
-    if (typeof window !== "undefined") {
+    if (typeof window !== 'undefined') {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(auth));
       setLocalAuth(auth);
     }
   };
 
   const handleLogout = async () => {
-    if (typeof window !== "undefined") {
+    if (typeof window !== 'undefined') {
       localStorage.removeItem(STORAGE_KEY);
       setLocalAuth(null);
     }
@@ -95,7 +120,7 @@ export const SpidexCoreProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
+    if (typeof window !== 'undefined') {
       try {
         const savedAuth = localStorage.getItem(STORAGE_KEY);
         if (savedAuth) {
@@ -103,7 +128,7 @@ export const SpidexCoreProvider: React.FC<{ children: React.ReactNode }> = ({
           setLocalAuth(parsedAuth);
         }
       } catch (error) {
-        console.error("Failed to parse saved auth data", error);
+        console.error('Failed to parse saved auth data', error);
         localStorage.removeItem(STORAGE_KEY);
       }
     }
@@ -111,21 +136,18 @@ export const SpidexCoreProvider: React.FC<{ children: React.ReactNode }> = ({
 
   // When spidexCore.auth changes, update localStorage
   useEffect(() => {
-    if (typeof window !== "undefined" && spidexCore.auth) {
+    if (typeof window !== 'undefined' && spidexCore.auth) {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(spidexCore.auth));
       setLocalAuth(spidexCore.auth);
     }
   }, [spidexCore.auth]);
 
-  
   const currentAuth = localAuth || spidexCore.auth;
 
   const isAuthenticated = Boolean(
     currentAuth?.accessToken && currentAuth?.userId
   );
 
-
-  
   const contextValue: SpidexCoreContextType = {
     auth: currentAuth,
     loading: spidexCore.loading,
@@ -163,14 +185,36 @@ export const SpidexCoreProvider: React.FC<{ children: React.ReactNode }> = ({
       return result;
     },
     connectDiscord: async (code, redirectUri, referralCode) => {
-      const result = await spidexCore.connectDiscord(code, redirectUri, referralCode);
+      const result = await spidexCore.connectDiscord(
+        code,
+        redirectUri,
+        referralCode
+      );
       if (result) {
         handleSetLocalAuth(result);
       }
       return result;
     },
-    connectTelegram: async (id, first_name, last_name, username, photo_url, auth_date, hash, referralCode) => {
-      const result = await spidexCore.connectTelegram(id, first_name, last_name, username, photo_url, auth_date, hash, referralCode);
+    connectTelegram: async (
+      id,
+      first_name,
+      last_name,
+      username,
+      photo_url,
+      auth_date,
+      hash,
+      referralCode
+    ) => {
+      const result = await spidexCore.connectTelegram(
+        id,
+        first_name,
+        last_name,
+        username,
+        photo_url,
+        auth_date,
+        hash,
+        referralCode
+      );
       if (result) {
         handleSetLocalAuth(result);
       }
@@ -201,7 +245,7 @@ export const SpidexCoreProvider: React.FC<{ children: React.ReactNode }> = ({
     getTokenDetailCore: spidexCore.getTokenDetailCore,
     getTokenOHLCV: spidexCore.getTokenOHLCV,
     getTokenStats: spidexCore.getTokenStats,
-    getAchievements: spidexCore.getAchievements
+    getAchievements: spidexCore.getAchievements,
   };
 
   return (
@@ -215,7 +259,7 @@ export const useSpidexCoreContext = () => {
   const context = useContext(SpidexCoreContext);
   if (context === undefined) {
     throw new Error(
-      "useSpidexCoreContext must be used within a SpidexCoreProvider"
+      'useSpidexCoreContext must be used within a SpidexCoreProvider'
     );
   }
   return context;

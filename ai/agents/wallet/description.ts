@@ -7,7 +7,7 @@ import {
   SOLANA_GET_TOKEN_ADDRESS_NAME,
   SOLANA_GET_WALLET_ADDRESS_NAME,
   SOLANA_TRANSFER_NAME,
-} from "@/ai/action-names";
+} from '@/ai/action-names';
 
 export const WALLET_AGENT_DESCRIPTION = `You are a wallet agent. You are responsible for all queries regarding the user's wallet balance, wallet address, and transaction history.
 

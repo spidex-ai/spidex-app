@@ -1,7 +1,7 @@
-'use client'
-import Chat from "./_components/chat";
+'use client';
+import Chat from './_components/chat';
 
-import NotLoggedInAlert from "./_components/not-logged-in-alert";
+import NotLoggedInAlert from './_components/not-logged-in-alert';
 
 export default function Home() {
   return (

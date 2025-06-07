@@ -1,9 +1,12 @@
-import { Wallet } from "@coinbase/coinbase-sdk";
-import { RequestFaucetFundsArgumentsType, RequestFaucetFundsActionResultType } from "./types";
+import { Wallet } from '@coinbase/coinbase-sdk';
+import {
+  RequestFaucetFundsArgumentsType,
+  RequestFaucetFundsActionResultType,
+} from './types';
 
 export async function requestFaucetFunds(
   wallet: Wallet,
-  args: RequestFaucetFundsArgumentsType,
+  args: RequestFaucetFundsArgumentsType
 ): Promise<RequestFaucetFundsActionResultType> {
   try {
     // Request funds from the faucet
@@ -13,14 +16,14 @@ export async function requestFaucetFunds(
     const result = await faucetTx.wait();
 
     return {
-      message: `Received ${args.assetId || "ETH"} from the faucet. Transaction: ${result.getTransactionLink()}`,
+      message: `Received ${args.assetId || 'ETH'} from the faucet. Transaction: ${result.getTransactionLink()}`,
       body: {
-        transactionLink: result.getTransactionLink()
-      }
+        transactionLink: result.getTransactionLink(),
+      },
     };
   } catch (error) {
     return {
       message: `Error requesting faucet funds: ${error}`,
     };
   }
-} 
+}

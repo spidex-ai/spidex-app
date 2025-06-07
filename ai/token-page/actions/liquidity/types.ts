@@ -1,8 +1,8 @@
-import { z } from "zod";
+import { z } from 'zod';
 
-import { TokenPageLiquidityInputSchema } from "./input-schema";
-import { SolanaActionResult } from "../../../solana/actions/solana-action";
-import { MarketSource } from "@/services/birdeye/types/markets";
+import { TokenPageLiquidityInputSchema } from './input-schema';
+import { SolanaActionResult } from '../../../solana/actions/solana-action';
+import { MarketSource } from '@/services/birdeye/types/markets';
 
 export type TokenPageLiquiditySchemaType = typeof TokenPageLiquidityInputSchema;
 

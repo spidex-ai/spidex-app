@@ -2,7 +2,7 @@ import {
   SEARCH_KNOWLEDGE_NAME,
   SEARCH_WEB_KNOWLEDGE_NAME,
   FAQ_KNOWLEDGE_NAME,
-} from "@/ai/action-names";
+} from '@/ai/action-names';
 
 export const KNOWLEDGE_AGENT_DESCRIPTION = `You are a knowledge agent that has a vector database of information about the Cardano blockchain and Minswap Protocol.
 

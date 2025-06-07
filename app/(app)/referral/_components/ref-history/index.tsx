@@ -1,16 +1,15 @@
-"use client";
+'use client';
 
-import RefListItem, { RefListItemProps } from "../ref-list-item";
-import { Skeleton } from "@/components/ui";
-import { useRefHistory } from "@/hooks/referral/user-ref";
-import React from "react";
-import { RefHistoryItem } from "@/hooks/referral/type";
-import Pagination from "@/app/(app)/_components/pagination";
+import RefListItem, { RefListItemProps } from '../ref-list-item';
+import { Skeleton } from '@/components/ui';
+import { useRefHistory } from '@/hooks/referral/user-ref';
+import React from 'react';
+import { RefHistoryItem } from '@/hooks/referral/type';
+import Pagination from '@/app/(app)/_components/pagination';
 
 const RefHistory = () => {
-
-
-  const { referralHistory, loading, currentPage, setCurrentPage, totalPages } = useRefHistory();
+  const { referralHistory, loading, currentPage, setCurrentPage, totalPages } =
+    useRefHistory();
 
   const results: RefListItemProps[] = referralHistory?.map(
     (item: RefHistoryItem, index: number) => {
@@ -52,7 +51,7 @@ const RefHistory = () => {
         ) : (
           <div>
             {results?.length > 0 ? (
-              results.map((item) => (
+              results.map(item => (
                 <div key={item.key}>
                   <RefListItem {...item} />
                 </div>
@@ -66,7 +65,7 @@ const RefHistory = () => {
         )}
       </div>
 
-      <div className='mt-6 mb-4'> 
+      <div className="mt-6 mb-4">
         <Pagination
           total={totalPages}
           current={currentPage}

@@ -1,2 +1,1 @@
-
-export const CARDANO_ALL_BALANCES_NAME = "cardano_all_balances"; 
+export const CARDANO_ALL_BALANCES_NAME = 'cardano_all_balances';

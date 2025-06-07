@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 export const useScrollAnchor = (scrollToBottomOnMount = true) => {
   const messagesRef = useRef<HTMLDivElement>(null);
@@ -29,7 +29,7 @@ export const useScrollAnchor = (scrollToBottomOnMount = true) => {
         setIsAtBottom(scrollHeight - scrollTop <= clientHeight + 1);
       };
 
-      current.addEventListener("scroll", handleScroll, { passive: true });
+      current.addEventListener('scroll', handleScroll, { passive: true });
 
       // Add initial scroll to bottom if scrollToBottomOnMount is true
       if (scrollToBottomOnMount) {
@@ -37,7 +37,7 @@ export const useScrollAnchor = (scrollToBottomOnMount = true) => {
       }
 
       return () => {
-        current.removeEventListener("scroll", handleScroll);
+        current.removeEventListener('scroll', handleScroll);
       };
     }
   }, [scrollToBottomOnMount, scrollToBottom]);

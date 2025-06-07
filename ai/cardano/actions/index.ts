@@ -1,12 +1,29 @@
-import { CardanoTradeAction } from "./trade";
-import { CardanoGetTrendingTokensAction } from "./market";
-import {  CardanoBalanceAction, CardanoTransferAction, CardanoGetWalletAddressAction, CardanoAllBalancesAction } from "./wallet";
-import {  CardanoStakeAction, CardanoUnstakeAction, CardanoLiquidStakingYieldsAction } from "./staking";
-import { CardanoGetTokenAddressAction, CardanoGetTokenDataAction, CardanoTopHoldersAction, CardanoTokenHoldersAction } from "./token";
+import { CardanoTradeAction } from './trade';
+import { CardanoGetTrendingTokensAction } from './market';
+import {
+  CardanoBalanceAction,
+  CardanoTransferAction,
+  CardanoGetWalletAddressAction,
+  CardanoAllBalancesAction,
+} from './wallet';
+import {
+  CardanoStakeAction,
+  CardanoUnstakeAction,
+  CardanoLiquidStakingYieldsAction,
+} from './staking';
+import {
+  CardanoGetTokenAddressAction,
+  CardanoGetTokenDataAction,
+  CardanoTopHoldersAction,
+  CardanoTokenHoldersAction,
+} from './token';
 
-import type { CardanoAction, CardanoActionSchemaAny } from "./cardano-action";
+import type { CardanoAction, CardanoActionSchemaAny } from './cardano-action';
 
-export const getAllCardanoActions = (): CardanoAction<CardanoActionSchemaAny, any>[] => {
+export const getAllCardanoActions = (): CardanoAction<
+  CardanoActionSchemaAny,
+  any
+>[] => {
   return [
     new CardanoBalanceAction(),
     new CardanoTransferAction(),
@@ -20,10 +37,9 @@ export const getAllCardanoActions = (): CardanoAction<CardanoActionSchemaAny, an
     new CardanoLiquidStakingYieldsAction(),
     new CardanoGetTokenAddressAction(),
     new CardanoTokenHoldersAction(),
-    new CardanoTopHoldersAction()
- 
+    new CardanoTopHoldersAction(),
   ];
-}
+};
 
 export const CARDANO_ACTIONS = getAllCardanoActions();
 

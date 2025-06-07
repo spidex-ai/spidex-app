@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import React from "react";
+import React from 'react';
 
-import { Progress, Skeleton } from "@/components/ui";
+import { Progress, Skeleton } from '@/components/ui';
 import {
   Table,
   TableHeader,
@@ -10,11 +10,11 @@ import {
   TableHead,
   TableRow,
   TableCell,
-} from "@/components/ui/table";
-import { useTopHolders } from "@/hooks/queries/token/use-top-holders";
+} from '@/components/ui/table';
+import { useTopHolders } from '@/hooks/queries/token/use-top-holders';
 
-import { TokenTopHolders } from "@/hooks/queries/token/type";
-import Address from "@/app/_components/address";
+import { TokenTopHolders } from '@/hooks/queries/token/type';
+import Address from '@/app/_components/address';
 
 interface Props {
   tokenId: string;

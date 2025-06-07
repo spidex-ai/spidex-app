@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 import {
   AnimatedShinyText,
@@ -6,14 +6,14 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
   Icon,
-} from "@/components/ui";
+} from '@/components/ui';
 
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils';
 
-import type { ToolInvocation } from "ai";
-import type { BaseActionResult } from "@/ai";
-import { getAgentName } from "./tool-to-agent";
-import Image from "next/image";
+import type { ToolInvocation } from 'ai';
+import type { BaseActionResult } from '@/ai';
+import { getAgentName } from './tool-to-agent';
+import Image from 'next/image';
 import {
   KNOWLEDGE_AGENT_NAME,
   MARKET_AGENT_NAME,
@@ -23,8 +23,8 @@ import {
   TRADING_AGENT_NAME,
   SOCIAL_AGENT_NAME,
   LIQUIDITY_AGENT_NAME,
-} from "@/ai/agents/names";
-import { ChevronDown } from "lucide-react";
+} from '@/ai/agents/names';
+import { ChevronDown } from 'lucide-react';
 
 interface Props<ActionResultBodyType, ActionArgsType> {
   tool: ToolInvocation;
@@ -129,23 +129,23 @@ const ToolCard = <ActionResultBodyType, ActionArgsType>({
   prevToolAgent,
 }: Props<ActionResultBodyType, ActionArgsType>) => {
   const agentName = getAgentName(tool);
-  console.log("🚀 ~ ToolCard ~ agentName:", agentName);
+  console.log('🚀 ~ ToolCard ~ agentName:', agentName);
 
   const agentIcon = getAgentIcon(agentName);
-  console.log("🚀 ~ ToolCard ~ agentIcon:", agentIcon);
+  console.log('🚀 ~ ToolCard ~ agentIcon:', agentIcon);
 
-  console.log("🚀 ~ ToolCard ~ tool:", tool);
-  console.log("🚀 ~ ToolCard ~ result:", result);
+  console.log('🚀 ~ ToolCard ~ tool:', tool);
+  console.log('🚀 ~ ToolCard ~ result:', result);
 
   return (
-    <div className={cn("flex flex-col gap-2 w-fit", className)}>
+    <div className={cn('flex flex-col gap-2 w-fit', className)}>
       <div
         className={cn(
-          "flex items-center gap-2",
-          prevToolAgent === agentName && "hidden"
+          'flex items-center gap-2',
+          prevToolAgent === agentName && 'hidden'
         )}
       >
-        {tool.state === "result" ? (
+        {tool.state === 'result' ? (
           tool.result.body ? (
             <>{agentIcon}</>
           ) : (
@@ -157,9 +157,9 @@ const ToolCard = <ActionResultBodyType, ActionArgsType>({
         <p className="text-sm md:text-lg font-bold">{agentName}</p>
       </div>
       <div>
-        {tool.state === "partial-call" ? (
+        {tool.state === 'partial-call' ? (
           <AnimatedShinyText className="text-sm">a</AnimatedShinyText>
-        ) : tool.state === "call" ? (
+        ) : tool.state === 'call' ? (
           call?.body ? (
             <div className="flex flex-col gap-2">
               <p className="text-sm text-neutral-600 dark:text-neutral-400 font-medium">

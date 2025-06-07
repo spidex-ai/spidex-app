@@ -17,9 +17,13 @@ const AgentNode = ({ data }: AgentNodeProps) => {
         <Icon name={data.icon} className="w-10 h-10" />
         <span className="text-sm font-semibold text-center">{data.name}</span>
       </div>
-      <Handle type="target" position={Position.Left} className="w-3 h-3 bg-teal-500" />
+      <Handle
+        type="target"
+        position={Position.Left}
+        className="w-3 h-3 bg-teal-500"
+      />
     </div>
   );
 };
 
-export default AgentNode; 
+export default AgentNode;

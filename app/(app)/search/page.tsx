@@ -1,4 +1,4 @@
-import { TokenSearch } from "@/app/components/token-search";
+import { TokenSearch } from '@/app/components/token-search';
 
 export default function SearchPage() {
   return (

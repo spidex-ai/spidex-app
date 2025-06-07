@@ -1,12 +1,12 @@
-import "server-only";
+import 'server-only';
 
-import { add, del, find, get, update } from "./base";
+import { add, del, find, get, update } from './base';
 
-import { getKnowledgeContainer } from "../containers";
+import { getKnowledgeContainer } from '../containers';
 
-import { Knowledge, KnowledgeInput } from "../types";
+import { Knowledge, KnowledgeInput } from '../types';
 
-import { PatchOperationType } from "@azure/cosmos";
+import { PatchOperationType } from '@azure/cosmos';
 
 // CREATE
 
@@ -39,8 +39,8 @@ export const addKnowledge = async (
  * @returns {Promise<Knowledge | null>} The retrieved knowledge entry or null if not found.
  */
 export const getKnowledge = async (
-  id: Knowledge["id"],
-  baseUrl: Knowledge["baseUrl"]
+  id: Knowledge['id'],
+  baseUrl: Knowledge['baseUrl']
 ): Promise<Knowledge | null> => {
   return get(await getKnowledgeContainer(), id, baseUrl);
 };
@@ -54,12 +54,12 @@ export const getKnowledge = async (
  * @returns {Promise<Knowledge[]>} An array of knowledge entries matching the criteria.
  */
 export const findKnowledgeByBaseUrl = async (
-  baseUrl: Knowledge["baseUrl"]
+  baseUrl: Knowledge['baseUrl']
 ): Promise<Knowledge[]> => {
   return find(
     await getKnowledgeContainer(),
     `SELECT * FROM c WHERE c.baseUrl = @baseUrl`,
-    [{ name: "@baseUrl", value: baseUrl }]
+    [{ name: '@baseUrl', value: baseUrl }]
   );
 };
 
@@ -81,7 +81,7 @@ export const findRelevantKnowledge = async (
         FROM c 
         WHERE VectorDistance(c.summaryEmbedding, @query) > 0.65
         ORDER BY VectorDistance(c.summaryEmbedding, @query)`,
-    [{ name: "@query", value: query }]
+    [{ name: '@query', value: query }]
   );
 };
 
@@ -97,7 +97,7 @@ export const findKnowledgeByUrl = async (url: string): Promise<Knowledge[]> => {
   return find(
     await getKnowledgeContainer(),
     `SELECT * FROM c WHERE c.url = @url`,
-    [{ name: "@url", value: url }]
+    [{ name: '@url', value: url }]
   );
 };
 
@@ -115,16 +115,16 @@ export const findKnowledgeByUrl = async (url: string): Promise<Knowledge[]> => {
  * @returns {Promise<boolean>} True if the update was successful, false otherwise.
  */
 export const updateKnowledgeContent = async (
-  id: Knowledge["id"],
-  baseUrl: Knowledge["baseUrl"],
+  id: Knowledge['id'],
+  baseUrl: Knowledge['baseUrl'],
   markdown: string,
   markdownEmbedding: number[]
 ): Promise<boolean> => {
   return update(await getKnowledgeContainer(), id, baseUrl, [
-    { op: PatchOperationType.set, path: "/markdown", value: markdown },
+    { op: PatchOperationType.set, path: '/markdown', value: markdown },
     {
       op: PatchOperationType.set,
-      path: "/markdownEmbedding",
+      path: '/markdownEmbedding',
       value: markdownEmbedding,
     },
   ]);
@@ -142,8 +142,8 @@ export const updateKnowledgeContent = async (
  * @returns {Promise<boolean>} True if the deletion was successful, false otherwise.
  */
 export const deleteKnowledge = async (
-  id: Knowledge["id"],
-  baseUrl: Knowledge["baseUrl"]
+  id: Knowledge['id'],
+  baseUrl: Knowledge['baseUrl']
 ): Promise<boolean> => {
   return del(await getKnowledgeContainer(), id, baseUrl);
 };

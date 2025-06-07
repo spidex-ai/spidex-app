@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Image from "next/image";
-import { TextGradient } from "@/components/ui/text";
-import { Split } from "@/services/dexhunter/types";
+import { useState } from 'react';
+import Image from 'next/image';
+import { TextGradient } from '@/components/ui/text';
+import { Split } from '@/services/dexhunter/types';
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { dexLogoMap } from "@/app/utils/logo";
-import { dexNameMap } from "@/app/utils/dexes";
+} from '@/components/ui/tooltip';
+import { TooltipProvider } from '@/components/ui/tooltip';
+import { dexLogoMap } from '@/app/utils/logo';
+import { dexNameMap } from '@/app/utils/dexes';
 
 interface Props {
   swapDetails: {
@@ -61,10 +61,10 @@ export default function SwapPoint({
           maximumFractionDigits: 4,
         })
       )
-    : "";
+    : '';
 
   const totalDepositADA =
-    inputToken === "ADA"
+    inputToken === 'ADA'
       ? Number(inputAmount) +
         Number(dexDeposits) +
         Number(batcherFee) +
@@ -118,7 +118,7 @@ export default function SwapPoint({
                             />
                           </TooltipTrigger>
                           <TooltipContent>
-                            The trade is only routed multi-dex when output is{" "}
+                            The trade is only routed multi-dex when output is{' '}
                             <br />
                             better than the extra dex fees.
                           </TooltipContent>
@@ -161,7 +161,7 @@ export default function SwapPoint({
                             />
                           </TooltipTrigger>
                           <TooltipContent>
-                            The net price is the average price you get for your{" "}
+                            The net price is the average price you get for your{' '}
                             <br />
                             tokens after the fees.
                           </TooltipContent>
@@ -190,7 +190,7 @@ export default function SwapPoint({
                             />
                           </TooltipTrigger>
                           <TooltipContent>
-                            The minimum amount of tokens you should receive{" "}
+                            The minimum amount of tokens you should receive{' '}
                             <br />
                             after the swap completes
                           </TooltipContent>
@@ -286,7 +286,7 @@ export default function SwapPoint({
                   </div>
                 }
                 value={`${
-                  swapDetails?.inputToken === "ADA"
+                  swapDetails?.inputToken === 'ADA'
                     ? `${totalDepositADA.toLocaleString(undefined, {
                         maximumFractionDigits: 2,
                       })} ADA`
@@ -359,7 +359,7 @@ export default function SwapPoint({
                     <div className="col-span-1">
                       <div className="flex items-center gap-1">
                         <img
-                          src={dexLogoMap[split.dex] || "/icons/logo-gray.svg"}
+                          src={dexLogoMap[split.dex] || '/icons/logo-gray.svg'}
                           alt="logo-gray"
                           width={20}
                           height={20}
@@ -505,7 +505,7 @@ export default function SwapPoint({
 
 const SwapDetailItem = ({
   label,
-  value = "1",
+  value = '1',
 }: {
   label: string | React.ReactNode;
   value: string | React.ReactNode;

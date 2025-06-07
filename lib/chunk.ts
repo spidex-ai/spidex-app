@@ -5,7 +5,11 @@
  * @param overlap The number of characters to overlap between chunks
  * @returns Array of text chunks
  */
-export function chunk(text: string, chunkSize: number = 1000, overlap: number = 200): string[] {
+export function chunk(
+  text: string,
+  chunkSize: number = 1000,
+  overlap: number = 200
+): string[] {
   // Handle empty or invalid input
   if (!text || chunkSize <= 0 || overlap >= chunkSize) {
     return [];
@@ -28,7 +32,7 @@ export function chunk(text: string, chunkSize: number = 1000, overlap: number = 
         lastChunkEndContent = currentChunk.slice(-overlap);
         currentChunk = lastChunkEndContent;
       }
-      
+
       // If single sentence is longer than chunk size, force split
       if (sentence.length > chunkSize) {
         const words = sentence.split(' ');
@@ -43,7 +47,8 @@ export function chunk(text: string, chunkSize: number = 1000, overlap: number = 
           }
         }
       } else {
-        currentChunk = lastChunkEndContent + (lastChunkEndContent ? ' ' : '') + sentence;
+        currentChunk =
+          lastChunkEndContent + (lastChunkEndContent ? ' ' : '') + sentence;
       }
     } else {
       currentChunk += (currentChunk ? ' ' : '') + sentence;

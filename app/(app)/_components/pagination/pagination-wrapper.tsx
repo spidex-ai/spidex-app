@@ -1,20 +1,24 @@
-"use client";
+'use client';
 
-import React from "react";
-import ReactPaginate from "react-paginate";
+import React from 'react';
+import ReactPaginate from 'react-paginate';
 interface Props {
   total: number;
   current: number;
   onPageChange: (page: number) => void;
 }
 
-const PaginationWrapper: React.FC<Props> = ({ total, current, onPageChange }) => {
+const PaginationWrapper: React.FC<Props> = ({
+  total,
+  current,
+  onPageChange,
+}) => {
   return (
     <ReactPaginate
       pageCount={total}
       pageRangeDisplayed={2}
       marginPagesDisplayed={1}
-      onPageChange={(event) => onPageChange(event.selected)}
+      onPageChange={event => onPageChange(event.selected)}
       forcePage={current}
       renderOnZeroPageCount={() => null}
       nextLabel=">"

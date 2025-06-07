@@ -1,9 +1,8 @@
-'use client'
+'use client';
 
-import { useSpidexCore } from "@/hooks/core/useSpidexCore";
-import { TopToken } from "@/services/taptools/types";
-import { useEffect, useState } from "react";
-
+import { useSpidexCore } from '@/hooks/core/useSpidexCore';
+import { TopToken } from '@/services/taptools/types';
+import { useEffect, useState } from 'react';
 
 export const useTokenTrending = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -13,16 +12,16 @@ export const useTokenTrending = () => {
 
   useEffect(() => {
     fetchTopTokenTreding({
-      timeframe: "24h",
+      timeframe: '24h',
       page: 1,
-      perPage: 15
+      perPage: 15,
     });
   }, []);
 
   const fetchTopTokenTreding = async ({
-    timeframe = "24h",
+    timeframe = '24h',
     page = 1,
-    perPage = 12
+    perPage = 12,
   }: {
     timeframe?: string;
     page?: number;
@@ -35,7 +34,7 @@ export const useTokenTrending = () => {
         setData(data);
       } else {
         setData([]);
-        setError("No data found");
+        setError('No data found');
       }
     } catch (error) {
       setError(error as string);
@@ -47,17 +46,15 @@ export const useTokenTrending = () => {
   return {
     isLoading,
     error,
-    data
+    data,
   };
 };
-
 
 export const useTokenTopMcap = (page: number, perPage: number) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [data, setData] = useState<TopToken[]>([]);
   const { getTopTokensByMcap } = useSpidexCore();
-
 
   useEffect(() => {
     fetchTopTokenMcap();
@@ -66,25 +63,24 @@ export const useTokenTopMcap = (page: number, perPage: number) => {
   const fetchTopTokenMcap = async () => {
     setIsLoading(true);
     try {
-      const data = await getTopTokensByMcap(page, perPage)
-    
+      const data = await getTopTokensByMcap(page, perPage);
+
       if (data.length > 0) {
         setData(data);
       } else {
         setData([]);
-        setError("No data found");
+        setError('No data found');
       }
     } catch (error) {
       setError(error as string);
     } finally {
       setIsLoading(false);
     }
-  }
+  };
 
   return {
     isLoading,
     error,
-    data
-  }
-}
-
+    data,
+  };
+};

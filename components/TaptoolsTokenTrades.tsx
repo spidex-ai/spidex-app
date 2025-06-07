@@ -1,5 +1,5 @@
-import { TokenTrade } from "@/services/taptools/types";
-import React, { useEffect, useState } from "react";
+import { TokenTrade } from '@/services/taptools/types';
+import React, { useEffect, useState } from 'react';
 
 interface TokenTradesProps {
   defaultUnit?: string;
@@ -7,8 +7,8 @@ interface TokenTradesProps {
 }
 
 const TaptoolsTokenTrades: React.FC<TokenTradesProps> = ({
-  defaultUnit = "8fef2d34078659493ce161a6c7fba4b56afefa8535296a5743f6958741414441",
-  defaultTimeframe = "24h",
+  defaultUnit = '8fef2d34078659493ce161a6c7fba4b56afefa8535296a5743f6958741414441',
+  defaultTimeframe = '24h',
 }) => {
   const [unit, setUnit] = useState<string>(defaultUnit);
   const [unitInput, setUnitInput] = useState<string>(defaultUnit);
@@ -39,8 +39,8 @@ const TaptoolsTokenTrades: React.FC<TokenTradesProps> = ({
         setTrades(data || []);
         setTotalPages(data.totalPages || 1);
       } catch (err: any) {
-        setError(err.message || "An error occurred");
-        console.error("Token trades error:", err);
+        setError(err.message || 'An error occurred');
+        console.error('Token trades error:', err);
       } finally {
         setLoading(false);
       }
@@ -89,7 +89,7 @@ const TaptoolsTokenTrades: React.FC<TokenTradesProps> = ({
           <input
             type="text"
             value={unitInput}
-            onChange={(e) => setUnitInput(e.target.value)}
+            onChange={e => setUnitInput(e.target.value)}
             placeholder="Enter token unit (policy ID + hex name)"
             className="flex-grow px-4 py-2 border border-gray-300 rounded"
           />
@@ -98,7 +98,7 @@ const TaptoolsTokenTrades: React.FC<TokenTradesProps> = ({
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             disabled={loading}
           >
-            {loading ? "Loading..." : "Search"}
+            {loading ? 'Loading...' : 'Search'}
           </button>
         </div>
       </form>
@@ -106,14 +106,14 @@ const TaptoolsTokenTrades: React.FC<TokenTradesProps> = ({
       {/* Timeframe Selector */}
       <div className="mb-6">
         <div className="flex space-x-2">
-          {["24h", "7d", "30d", "all"].map((tf) => (
+          {['24h', '7d', '30d', 'all'].map(tf => (
             <button
               key={tf}
               onClick={() => handleTimeframeChange(tf)}
               className={`px-4 py-2 rounded ${
                 timeframe === tf
-                  ? "bg-blue-500 text-white"
-                  : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                  ? 'bg-blue-500 text-white'
+                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
               }`}
             >
               {tf}
@@ -151,7 +151,7 @@ const TaptoolsTokenTrades: React.FC<TokenTradesProps> = ({
                 {trades.map((trade, index) => (
                   <tr
                     key={index}
-                    className={index % 2 === 0 ? "bg-gray-50" : "bg-white"}
+                    className={index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}
                   >
                     <td className="py-2 px-3 text-gray-800">
                       {new Date(trade.time * 1000).toLocaleString()}
@@ -159,9 +159,9 @@ const TaptoolsTokenTrades: React.FC<TokenTradesProps> = ({
                     <td className="py-2 px-3 text-gray-800">
                       <span
                         className={
-                          trade.action === "buy"
-                            ? "text-green-600"
-                            : "text-red-600"
+                          trade.action === 'buy'
+                            ? 'text-green-600'
+                            : 'text-red-600'
                         }
                       >
                         {trade.action.toUpperCase()}
@@ -194,8 +194,8 @@ const TaptoolsTokenTrades: React.FC<TokenTradesProps> = ({
             disabled={page === 1}
             className={`px-4 py-2 rounded ${
               page === 1
-                ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-                : "bg-blue-500 text-white hover:bg-blue-700"
+                ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                : 'bg-blue-500 text-white hover:bg-blue-700'
             }`}
           >
             Previous
@@ -208,8 +208,8 @@ const TaptoolsTokenTrades: React.FC<TokenTradesProps> = ({
             disabled={page === totalPages}
             className={`px-4 py-2 rounded ${
               page === totalPages
-                ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-                : "bg-blue-500 text-white hover:bg-blue-700"
+                ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                : 'bg-blue-500 text-white hover:bg-blue-700'
             }`}
           >
             Next

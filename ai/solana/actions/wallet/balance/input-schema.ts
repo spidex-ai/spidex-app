@@ -1,10 +1,10 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const BalanceInputSchema = z.object({
   walletAddress: z
     .string()
-    .describe("The wallet address to check transaction for"),
+    .describe('The wallet address to check transaction for'),
   tokenAddress: z
     .string()
-    .describe("The token address to check transaction for"),
+    .describe('The token address to check transaction for'),
 });

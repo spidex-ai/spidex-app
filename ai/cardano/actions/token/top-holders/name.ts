@@ -1,1 +1,1 @@
-export const CARDANO_TOP_HOLDERS_NAME = "cardano_top_holders"; 
+export const CARDANO_TOP_HOLDERS_NAME = 'cardano_top_holders';

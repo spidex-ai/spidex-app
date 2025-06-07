@@ -1,16 +1,16 @@
-import { getTopTokenHolders } from "@/services/hellomoon";
-import { getStreamsByMint } from "@/services/streamflow";
+import { getTopTokenHolders } from '@/services/hellomoon';
+import { getStreamsByMint } from '@/services/streamflow';
 
-import { knownAddresses } from "@/lib/known-addresses";
+import { knownAddresses } from '@/lib/known-addresses';
 
 import type {
   TokenPageTopHoldersResultBodyType,
   TokenPageTopHoldersArgumentsType,
-} from "./types";
-import type { SolanaActionResult } from "../../../solana/actions/solana-action";
-import type { TokenChatData } from "@/types";
-import { AddressType, KnownAddress } from "@/types/known-address";
-import taptoolsService from "@/services/taptools";
+} from './types';
+import type { SolanaActionResult } from '../../../solana/actions/solana-action';
+import type { TokenChatData } from '@/types';
+import { AddressType, KnownAddress } from '@/types/known-address';
+import taptoolsService from '@/services/taptools';
 
 interface TopHolder {
   address: string;
@@ -31,12 +31,12 @@ export async function getTokenPageTopHolders(
       fetch(
         `${process.env.NEXT_PUBLIC_SPIDEX_CORE_API_URL}/tokens/${token.address}/top-holders?limit=20&page=1`,
         {
-          method: "GET",
+          method: 'GET',
         }
       ),
       taptoolsService.getTokenDebtLoans(
         token.address,
-        "collateral,debt",
+        'collateral,debt',
         undefined,
         undefined,
         1,
@@ -46,7 +46,7 @@ export async function getTokenPageTopHolders(
     ]);
 
     const responseData = await topHoldersResponse.json();
-    console.log("API Response:", responseData);
+    console.log('API Response:', responseData);
 
     // Ensure we have an array of holders
     const topHolders: TopHolder[] = Array.isArray(responseData)
@@ -55,7 +55,7 @@ export async function getTokenPageTopHolders(
 
     if (!Array.isArray(topHolders)) {
       throw new Error(
-        "Invalid response format: top holders data is not an array"
+        'Invalid response format: top holders data is not an array'
       );
     }
 
@@ -66,7 +66,7 @@ export async function getTokenPageTopHolders(
         (acc: number, curr: TopHolder) => acc + curr.ownershipPercentage,
         0
       );
-    console.log("🚀 ~ top10Holders:", top10Holders);
+    console.log('🚀 ~ top10Holders:', top10Holders);
     const top20Holders = topHolders
       .slice(0, 20)
       .reduce(
@@ -115,17 +115,17 @@ export async function getTokenPageTopHolders(
     // Generate distribution assessment
     const concentrationLevel =
       top10HoldersPercent > 0.5
-        ? "Highly Concentrated"
+        ? 'Highly Concentrated'
         : top10HoldersPercent > 0.3
-        ? "Moderately Concentrated"
-        : "Well Distributed";
+          ? 'Moderately Concentrated'
+          : 'Well Distributed';
 
     const exchangePresence =
       totalDebtPercent > 0.2
-        ? "Significant"
+        ? 'Significant'
         : totalCollateralPercent > 0.1
-        ? "Moderate"
-        : "Limited";
+          ? 'Moderate'
+          : 'Limited';
 
     return {
       message: `Analysis of token distribution patterns:
@@ -174,7 +174,7 @@ Discuss only the notable metrics unless asked for further details.`,
       },
     };
   } catch (error) {
-    console.error("Error in getTokenPageTopHolders:", error);
+    console.error('Error in getTokenPageTopHolders:', error);
     return {
       message: `Error getting top holders: ${error}`,
     };

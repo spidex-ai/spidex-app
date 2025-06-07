@@ -1,7 +1,7 @@
 import {
   FAQ_KNOWLEDGE_NAME,
   SEARCH_WEB_KNOWLEDGE_NAME,
-} from "@/ai/action-names";
+} from '@/ai/action-names';
 
 export const KNOWLEDGE_AGENT_CAPABILITIES = `
 You have access to the following FAQ. If the user asks a question related to these, you will use the ${FAQ_KNOWLEDGE_NAME} tool to answer the question : 

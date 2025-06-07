@@ -1,4 +1,4 @@
-import { BaseResponse } from "./types";
+import { BaseResponse } from './types';
 
 export const queryBirdeye = async <T>(
   endpoint: string,
@@ -16,9 +16,9 @@ export const queryBirdeye = async <T>(
   const response = await fetch(url.toString(), {
     headers: {
       'X-API-KEY': process.env.BIRDEYE_API_KEY || '',
-      'accept': 'application/json',
-      'x-chain': 'solana'
-    }
+      accept: 'application/json',
+      'x-chain': 'solana',
+    },
   });
 
   if (!response.ok) {
@@ -32,4 +32,4 @@ export const queryBirdeye = async <T>(
   }
 
   return data.data;
-}
+};

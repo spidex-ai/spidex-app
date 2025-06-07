@@ -1,1 +1,1 @@
-export const CARDANO_TRADE_NAME = "cardano_trade";
+export const CARDANO_TRADE_NAME = 'cardano_trade';

@@ -1,4 +1,4 @@
-import { TaptoolsClient } from "./client";
+import { TaptoolsClient } from './client';
 import {
   TokenPrice,
   TokenPriceChange,
@@ -50,7 +50,7 @@ import {
   WalletValueTrended,
   AddressInfo,
   AddressUtxo,
-} from "./types";
+} from './types';
 
 export class TaptoolsService {
   private client: TaptoolsClient;
@@ -67,7 +67,7 @@ export class TaptoolsService {
    * @returns Promise with token prices
    */
   async getTokenPrices(units: string[]): Promise<TokenPrice> {
-    return this.client.post<TokenPrice>("token/prices", units);
+    return this.client.post<TokenPrice>('token/prices', units);
   }
 
   /**
@@ -76,7 +76,7 @@ export class TaptoolsService {
    * @returns Promise with token price changes
    */
   async getTokenPriceChanges(unit: string): Promise<TokenPriceChange> {
-    return this.client.get<TokenPriceChange>("token/prices/chg", { unit });
+    return this.client.get<TokenPriceChange>('token/prices/chg', { unit });
   }
 
   /**
@@ -85,7 +85,7 @@ export class TaptoolsService {
    * @returns Promise with token market cap information
    */
   async getTokenMcap(unit: string): Promise<TokenMcap> {
-    return this.client.get<TokenMcap>("token/mcap", { unit });
+    return this.client.get<TokenMcap>('token/mcap', { unit });
   }
 
   /**
@@ -95,7 +95,7 @@ export class TaptoolsService {
    * @returns Promise with token quote information
    */
   async getTokenQuote(unit: string, quote: string): Promise<TokenQuote> {
-    return this.client.get<TokenQuote>("token/quote", { unit, quote });
+    return this.client.get<TokenQuote>('token/quote', { unit, quote });
   }
 
   /**
@@ -103,7 +103,7 @@ export class TaptoolsService {
    * @returns Promise with available quote currencies
    */
   async getAvailableQuotes(): Promise<string[]> {
-    return this.client.get<string[]>("token/quote/available");
+    return this.client.get<string[]>('token/quote/available');
   }
 
   /**
@@ -112,7 +112,7 @@ export class TaptoolsService {
    * @returns Promise with token holders count
    */
   async getTokenHolders(unit: string): Promise<TokenHolders> {
-    return this.client.get<TokenHolders>("token/holders", { unit });
+    return this.client.get<TokenHolders>('token/holders', { unit });
   }
 
   /**
@@ -127,7 +127,7 @@ export class TaptoolsService {
     page = 1,
     perPage = 10
   ): Promise<TokenHolder[]> {
-    return this.client.get<TokenHolder[]>("token/holders/top", {
+    return this.client.get<TokenHolder[]>('token/holders/top', {
       unit,
       page,
       perPage,
@@ -140,7 +140,7 @@ export class TaptoolsService {
    * @returns Promise with token pools
    */
   async getTokenPools(unit: string, adaOnly?: number): Promise<TokenPool[]> {
-    return this.client.get<TokenPool[]>("token/pools", { unit, adaOnly });
+    return this.client.get<TokenPool[]>('token/pools', { unit, adaOnly });
   }
 
   /**
@@ -155,9 +155,9 @@ export class TaptoolsService {
     unit: string,
     interval: string,
     numIntervals?: number,
-    quote = "ADA"
+    quote = 'ADA'
   ): Promise<TokenOHLCV[]> {
-    return this.client.get<TokenOHLCV[]>("token/ohlcv", {
+    return this.client.get<TokenOHLCV[]>('token/ohlcv', {
       unit,
       interval,
       numIntervals,
@@ -175,11 +175,11 @@ export class TaptoolsService {
    */
   async getTokenTrades(
     unit: string,
-    timeframe = "24h",
+    timeframe = '24h',
     page = 1,
     perPage = 100
   ): Promise<TokenTrade[]> {
-    return this.client.get<TokenTrade[]>("token/trades", {
+    return this.client.get<TokenTrade[]>('token/trades', {
       unit,
       timeframe,
       page,
@@ -195,9 +195,9 @@ export class TaptoolsService {
    */
   async getTokenTradingStats(
     unit: string,
-    timeframe = "24h"
+    timeframe = '24h'
   ): Promise<TokenTradingStats> {
-    return this.client.get<TokenTradingStats>("token/trading/stats", {
+    return this.client.get<TokenTradingStats>('token/trading/stats', {
       unit,
       timeframe,
     });
@@ -209,7 +209,7 @@ export class TaptoolsService {
    * @returns Promise with token links
    */
   async getTokenLinks(unit: string): Promise<TokenLinks> {
-    return this.client.get<TokenLinks>("token/links", { unit });
+    return this.client.get<TokenLinks>('token/links', { unit });
   }
 
   /**
@@ -220,11 +220,11 @@ export class TaptoolsService {
    * @returns Promise with top tokens by volume
    */
   async getTopTokensByVolume(
-    timeframe = "24h",
+    timeframe = '24h',
     page = 1,
     perPage = 10
   ): Promise<TopToken[]> {
-    return this.client.get<TopToken[]>("token/top/volume", {
+    return this.client.get<TopToken[]>('token/top/volume', {
       timeframe,
       page,
       perPage,
@@ -238,8 +238,8 @@ export class TaptoolsService {
    * @returns Promise with top tokens by market cap
    */
   async getTopTokensByMcap(page = 1, perPage = 10): Promise<TopTokenMcap[]> {
-    return this.client.get<TopTokenMcap[]>("token/top/mcap", {
-      type: "mcap",
+    return this.client.get<TopTokenMcap[]>('token/top/mcap', {
+      type: 'mcap',
       page,
       perPage,
     });
@@ -255,7 +255,7 @@ export class TaptoolsService {
     page = 1,
     perPage = 10
   ): Promise<TopTokenLiquidity[]> {
-    return this.client.get<TopTokenLiquidity[]>("token/top/liquidity", {
+    return this.client.get<TopTokenLiquidity[]>('token/top/liquidity', {
       page,
       perPage,
     });
@@ -269,7 +269,7 @@ export class TaptoolsService {
    * @returns Promise with NFT collection information
    */
   async getNFTCollectionInfo(policy: string): Promise<NFTCollectionInfo> {
-    return this.client.get<NFTCollectionInfo>("nft/collection/info", {
+    return this.client.get<NFTCollectionInfo>('nft/collection/info', {
       policy,
     });
   }
@@ -280,7 +280,7 @@ export class TaptoolsService {
    * @returns Promise with NFT collection stats
    */
   async getNFTCollectionStats(policy: string): Promise<NFTCollectionStats> {
-    return this.client.get<NFTCollectionStats>("nft/collection/stats", {
+    return this.client.get<NFTCollectionStats>('nft/collection/stats', {
       policy,
     });
   }
@@ -293,10 +293,10 @@ export class TaptoolsService {
    */
   async getNFTCollectionStatsExtended(
     policy: string,
-    timeframe = "24h"
+    timeframe = '24h'
   ): Promise<NFTCollectionStatsExtended> {
     return this.client.get<NFTCollectionStatsExtended>(
-      "nft/collection/stats/extended",
+      'nft/collection/stats/extended',
       { policy, timeframe }
     );
   }
@@ -308,7 +308,7 @@ export class TaptoolsService {
    * @returns Promise with NFT asset stats
    */
   async getNFTAssetStats(policy: string, name: string): Promise<NFTAssetStats> {
-    return this.client.get<NFTAssetStats>("nft/asset/stats", { policy, name });
+    return this.client.get<NFTAssetStats>('nft/asset/stats', { policy, name });
   }
 
   /**
@@ -323,7 +323,7 @@ export class TaptoolsService {
     name: string,
     prices = 1
   ): Promise<NFTAssetTraits> {
-    return this.client.get<NFTAssetTraits>("nft/asset/traits", {
+    return this.client.get<NFTAssetTraits>('nft/asset/traits', {
       policy,
       name,
       prices,
@@ -338,10 +338,10 @@ export class TaptoolsService {
    */
   async getNFTCollectionTradesStats(
     policy: string,
-    timeframe = "24h"
+    timeframe = '24h'
   ): Promise<NFTCollectionTradesStats> {
     return this.client.get<NFTCollectionTradesStats>(
-      "nft/collection/trades/stats",
+      'nft/collection/trades/stats',
       { policy, timeframe }
     );
   }
@@ -354,7 +354,7 @@ export class TaptoolsService {
   async getNFTCollectionListings(
     policy: string
   ): Promise<NFTCollectionListings> {
-    return this.client.get<NFTCollectionListings>("nft/collection/listings", {
+    return this.client.get<NFTCollectionListings>('nft/collection/listings', {
       policy,
     });
   }
@@ -371,9 +371,9 @@ export class TaptoolsService {
     policy: string,
     interval: string,
     numIntervals?: number,
-    quote = "ADA"
+    quote = 'ADA'
   ): Promise<NFTCollectionOHLCV[]> {
-    return this.client.get<NFTCollectionOHLCV[]>("nft/collection/ohlcv", {
+    return this.client.get<NFTCollectionOHLCV[]>('nft/collection/ohlcv', {
       policy,
       interval,
       numIntervals,
@@ -391,11 +391,11 @@ export class TaptoolsService {
    */
   async getNFTCollectionTrades(
     policy: string,
-    timeframe = "30d",
+    timeframe = '30d',
     page = 1,
     perPage = 100
   ): Promise<NFTCollectionTrade[]> {
-    return this.client.get<NFTCollectionTrade[]>("nft/collection/trades", {
+    return this.client.get<NFTCollectionTrade[]>('nft/collection/trades', {
       policy,
       timeframe,
       page,
@@ -408,8 +408,8 @@ export class TaptoolsService {
    * @param timeframe - Time frame (e.g., 24h, 7d, 30d)
    * @returns Promise with NFT market stats
    */
-  async getNFTMarketStats(timeframe = "24h"): Promise<NFTMarketStats> {
-    return this.client.get<NFTMarketStats>("nft/market/stats", { timeframe });
+  async getNFTMarketStats(timeframe = '24h'): Promise<NFTMarketStats> {
+    return this.client.get<NFTMarketStats>('nft/market/stats', { timeframe });
   }
 
   /**
@@ -418,10 +418,10 @@ export class TaptoolsService {
    * @returns Promise with NFT market extended stats
    */
   async getNFTMarketStatsExtended(
-    timeframe = "24h"
+    timeframe = '24h'
   ): Promise<NFTMarketStatsExtended> {
     return this.client.get<NFTMarketStatsExtended>(
-      "nft/market/stats/extended",
+      'nft/market/stats/extended',
       { timeframe }
     );
   }
@@ -438,7 +438,7 @@ export class TaptoolsService {
     policy: string,
     name: string
   ): Promise<NFTAssetSale[]> {
-    return this.client.get<NFTAssetSale[]>("nft/asset/sales", { policy, name });
+    return this.client.get<NFTAssetSale[]>('nft/asset/sales', { policy, name });
   }
 
   /**
@@ -453,14 +453,14 @@ export class TaptoolsService {
    */
   async getNFTCollectionAssets(
     policy: string,
-    sortBy = "price",
-    order = "asc",
+    sortBy = 'price',
+    order = 'asc',
     search?: string,
     onSale = 0,
     page = 1,
     perPage = 100
   ): Promise<NFTCollectionAsset[]> {
-    return this.client.get<NFTCollectionAsset[]>("nft/collection/assets", {
+    return this.client.get<NFTCollectionAsset[]>('nft/collection/assets', {
       policy,
       sortBy,
       order,
@@ -479,7 +479,7 @@ export class TaptoolsService {
     policy: string
   ): Promise<NFTCollectionHoldersDistribution> {
     return this.client.get<NFTCollectionHoldersDistribution>(
-      "nft/collection/holders/distribution",
+      'nft/collection/holders/distribution',
       { policy }
     );
   }
@@ -498,7 +498,7 @@ export class TaptoolsService {
     excludeExchanges = 1
   ): Promise<NFTCollectionHolderTop[]> {
     return this.client.get<NFTCollectionHolderTop[]>(
-      "nft/collection/holders/top",
+      'nft/collection/holders/top',
       {
         policy,
         page,
@@ -515,10 +515,10 @@ export class TaptoolsService {
    */
   async getNFTCollectionTrendedHolders(
     policy: string,
-    timeframe = "30d"
+    timeframe = '30d'
   ): Promise<NFTCollectionHolderTrended[]> {
     return this.client.get<NFTCollectionHolderTrended[]>(
-      "nft/collection/holders/trended",
+      'nft/collection/holders/trended',
       {
         policy,
         timeframe,
@@ -536,7 +536,7 @@ export class TaptoolsService {
     items = 500
   ): Promise<NFTCollectionListingDepth[]> {
     return this.client.get<NFTCollectionListingDepth[]>(
-      "nft/collection/listings/depth",
+      'nft/collection/listings/depth',
       {
         policy,
         items,
@@ -554,13 +554,13 @@ export class TaptoolsService {
    */
   async getNFTCollectionIndividualListings(
     policy: string,
-    sortBy = "price",
-    order = "asc",
+    sortBy = 'price',
+    order = 'asc',
     page = 1,
     perPage = 100
   ): Promise<NFTCollectionListingIndividual[]> {
     return this.client.get<NFTCollectionListingIndividual[]>(
-      "nft/collection/listings/individual",
+      'nft/collection/listings/individual',
       {
         policy,
         sortBy,
@@ -583,7 +583,7 @@ export class TaptoolsService {
     numIntervals?: number
   ): Promise<NFTCollectionListingTrended[]> {
     return this.client.get<NFTCollectionListingTrended[]>(
-      "nft/collection/listings/trended",
+      'nft/collection/listings/trended',
       {
         policy,
         interval,
@@ -604,7 +604,7 @@ export class TaptoolsService {
     numIntervals?: number
   ): Promise<NFTCollectionVolumeTrended[]> {
     return this.client.get<NFTCollectionVolumeTrended[]>(
-      "nft/collection/volume/trended",
+      'nft/collection/volume/trended',
       {
         policy,
         interval,
@@ -619,7 +619,7 @@ export class TaptoolsService {
    */
   async getNFTCollectionRarity(policy: string): Promise<NFTCollectionRarity> {
     return this.client.get<NFTCollectionRarity>(
-      "nft/collection/traits/rarity",
+      'nft/collection/traits/rarity',
       { policy }
     );
   }
@@ -634,7 +634,7 @@ export class TaptoolsService {
     name: string
   ): Promise<NFTCollectionRarityRank> {
     return this.client.get<NFTCollectionRarityRank>(
-      "nft/collection/traits/rarity/rank",
+      'nft/collection/traits/rarity/rank',
       { policy, name }
     );
   }
@@ -649,7 +649,7 @@ export class TaptoolsService {
     name?: string
   ): Promise<NFTCollectionTraitPrice> {
     return this.client.get<NFTCollectionTraitPrice>(
-      "nft/collection/traits/price",
+      'nft/collection/traits/price',
       { policy, name }
     );
   }
@@ -659,10 +659,10 @@ export class TaptoolsService {
    * @param timeframe - Time frame
    */
   async getNFTMarketVolumeTrended(
-    timeframe = "30d"
+    timeframe = '30d'
   ): Promise<NFTMarketVolumeTrended[]> {
     return this.client.get<NFTMarketVolumeTrended[]>(
-      "nft/market/volume/trended",
+      'nft/market/volume/trended',
       { timeframe }
     );
   }
@@ -674,11 +674,11 @@ export class TaptoolsService {
    * @param lastDay - Filter to last day only
    */
   async getNFTMarketplaceStats(
-    timeframe = "7d",
+    timeframe = '7d',
     marketplace?: string,
     lastDay = 0
   ): Promise<NFTMarketplaceStats[]> {
-    return this.client.get<NFTMarketplaceStats[]>("nft/marketplace/stats", {
+    return this.client.get<NFTMarketplaceStats[]>('nft/marketplace/stats', {
       timeframe,
       marketplace,
       lastDay,
@@ -694,7 +694,7 @@ export class TaptoolsService {
     ranking: string,
     items = 25
   ): Promise<NFTTopTimeframe[]> {
-    return this.client.get<NFTTopTimeframe[]>("nft/top/timeframe", {
+    return this.client.get<NFTTopTimeframe[]>('nft/top/timeframe', {
       ranking,
       items,
     });
@@ -707,11 +707,11 @@ export class TaptoolsService {
    * @param perPage - Items per page
    */
   async getNFTTopVolume(
-    timeframe = "24h",
+    timeframe = '24h',
     page = 1,
     perPage = 10
   ): Promise<NFTTopVolume[]> {
-    return this.client.get<NFTTopVolume[]>("nft/top/volume", {
+    return this.client.get<NFTTopVolume[]>('nft/top/volume', {
       timeframe,
       page,
       perPage,
@@ -725,11 +725,11 @@ export class TaptoolsService {
    * @param perPage - Items per page
    */
   async getNFTTopVolumeExtended(
-    timeframe = "24h",
+    timeframe = '24h',
     page = 1,
     perPage = 10
   ): Promise<NFTTopVolumeExtended[]> {
-    return this.client.get<NFTTopVolumeExtended[]>("nft/top/volume/extended", {
+    return this.client.get<NFTTopVolumeExtended[]>('nft/top/volume/extended', {
       timeframe,
       page,
       perPage,
@@ -749,13 +749,13 @@ export class TaptoolsService {
    */
   async getTokenDebtLoans(
     unit: string,
-    include = "collateral,debt",
-    sortBy = "time",
-    order = "desc",
+    include = 'collateral,debt',
+    sortBy = 'time',
+    order = 'desc',
     page = 1,
     perPage = 100
   ): Promise<TokenDebtLoan[]> {
-    return this.client.get<TokenDebtLoan[]>("token/debt/loans", {
+    return this.client.get<TokenDebtLoan[]>('token/debt/loans', {
       unit,
       include,
       sortBy,
@@ -776,13 +776,13 @@ export class TaptoolsService {
    */
   async getTokenDebtOffers(
     unit: string,
-    include = "collateral,debt",
-    sortBy = "time",
-    order = "desc",
+    include = 'collateral,debt',
+    sortBy = 'time',
+    order = 'desc',
     page = 1,
     perPage = 100
   ): Promise<TokenDebtOffer[]> {
-    return this.client.get<TokenDebtOffer[]>("token/debt/offers", {
+    return this.client.get<TokenDebtOffer[]>('token/debt/offers', {
       unit,
       include,
       sortBy,
@@ -810,16 +810,16 @@ export class TaptoolsService {
     unit: string,
     interval: string,
     items?: number,
-    indicator = "ma",
+    indicator = 'ma',
     length?: number,
     smoothingFactor?: number,
     fastLength?: number,
     slowLength?: number,
     signalLength?: number,
     stdMult?: number,
-    quote = "ADA"
+    quote = 'ADA'
   ): Promise<TokenIndicator[]> {
-    return this.client.get<TokenIndicator[]>("token/indicators", {
+    return this.client.get<TokenIndicator[]>('token/indicators', {
       unit,
       interval,
       items,
@@ -844,7 +844,7 @@ export class TaptoolsService {
     address: string
   ): Promise<WalletPortfolioPosition> {
     return this.client.get<WalletPortfolioPosition>(
-      "wallet/portfolio/positions",
+      'wallet/portfolio/positions',
       { address }
     );
   }
@@ -862,7 +862,7 @@ export class TaptoolsService {
     page = 1,
     perPage = 100
   ): Promise<WalletTradeToken[]> {
-    return this.client.get<WalletTradeToken[]>("wallet/trades/tokens", {
+    return this.client.get<WalletTradeToken[]>('wallet/trades/tokens', {
       address,
       unit,
       page,
@@ -878,10 +878,10 @@ export class TaptoolsService {
    */
   async getWalletValueTrended(
     address: string,
-    timeframe = "30d",
-    quote = "ADA"
+    timeframe = '30d',
+    quote = 'ADA'
   ): Promise<WalletValueTrended[]> {
-    return this.client.get<WalletValueTrended[]>("wallet/value/trended", {
+    return this.client.get<WalletValueTrended[]>('wallet/value/trended', {
       address,
       timeframe,
       quote,
@@ -896,7 +896,7 @@ export class TaptoolsService {
    * @returns Promise with asset supply
    */
   async getAssetSupply(unit: string): Promise<{ supply: number }> {
-    return this.client.get<{ supply: number }>("assets/supply", { unit });
+    return this.client.get<{ supply: number }>('assets/supply', { unit });
   }
 
   /**
@@ -905,7 +905,7 @@ export class TaptoolsService {
    * @returns Promise with address information
    */
   async getAddressInfo(address: string): Promise<AddressInfo> {
-    return this.client.get<AddressInfo>("address/info", { address });
+    return this.client.get<AddressInfo>('address/info', { address });
   }
 
   /**
@@ -920,7 +920,7 @@ export class TaptoolsService {
     page = 1,
     perPage = 100
   ): Promise<AddressUtxo[]> {
-    return this.client.get<AddressUtxo[]>("address/utxos", {
+    return this.client.get<AddressUtxo[]>('address/utxos', {
       address,
       page,
       perPage,
@@ -935,10 +935,10 @@ export class TaptoolsService {
    * @returns Promise with market stats
    */
   async getMarketStats(
-    quote = "ADA"
+    quote = 'ADA'
   ): Promise<{ activeAddresses: number; dexVolume: number }> {
     return this.client.get<{ activeAddresses: number; dexVolume: number }>(
-      "market/stats",
+      'market/stats',
       { quote }
     );
   }

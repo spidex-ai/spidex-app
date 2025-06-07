@@ -1,8 +1,12 @@
-import { Wallet, WalletData, Coinbase } from "@coinbase/coinbase-sdk";
+import { Wallet, WalletData, Coinbase } from '@coinbase/coinbase-sdk';
 
-import { z } from "zod";
+import { z } from 'zod';
 
-import { CdpAction, CdpActionResult, CdpActionSchemaAny } from "./actions/cdp-action";
+import {
+  CdpAction,
+  CdpActionResult,
+  CdpActionSchemaAny,
+} from './actions/cdp-action';
 
 /**
  * Configuration options for the CDP Agentkit
@@ -39,21 +43,22 @@ export class CdpAgentkit {
    */
   public constructor(config: CdpAgentkitOptions = {}) {
     const cdpApiKeyName = config.cdpApiKeyName || process.env.CDP_API_KEY_NAME;
-    const cdpApiKeyPrivateKey = config.cdpApiKeyPrivateKey || process.env.CDP_API_KEY_PRIVATE_KEY;
+    const cdpApiKeyPrivateKey =
+      config.cdpApiKeyPrivateKey || process.env.CDP_API_KEY_PRIVATE_KEY;
     const source = config.source;
 
     if (!cdpApiKeyName) {
-      throw new Error("CDP_API_KEY_NAME is required but not provided");
+      throw new Error('CDP_API_KEY_NAME is required but not provided');
     }
     if (!cdpApiKeyPrivateKey) {
-      throw new Error("CDP_API_KEY_PRIVATE_KEY is required but not provided");
+      throw new Error('CDP_API_KEY_PRIVATE_KEY is required but not provided');
     }
 
     // Configure CDP SDK
     Coinbase.configure({
       apiKeyName: cdpApiKeyName,
-      privateKey: cdpApiKeyPrivateKey.replace(/\\n/g, "\n"),
-      source: source || "agentkit-core",
+      privateKey: cdpApiKeyPrivateKey.replace(/\\n/g, '\n'),
+      source: source || 'agentkit-core',
     });
   }
 
@@ -65,11 +70,14 @@ export class CdpAgentkit {
    * @throws Error if required environment variables are missing or wallet initialization fails
    */
   public static async configureWithWallet(
-    config: ConfigureCdpAgentkitWithWalletOptions = {},
+    config: ConfigureCdpAgentkitWithWalletOptions = {}
   ): Promise<CdpAgentkit> {
     const agentkit = new CdpAgentkit(config);
 
-    const networkId = config.networkId || process.env.NETWORK_ID || Coinbase.networks.BaseSepolia;
+    const networkId =
+      config.networkId ||
+      process.env.NETWORK_ID ||
+      Coinbase.networks.BaseSepolia;
 
     try {
       if (config.cdpWalletData) {
@@ -95,7 +103,7 @@ export class CdpAgentkit {
    */
   async run<TActionSchema extends CdpActionSchemaAny, TResultBody>(
     action: CdpAction<TActionSchema, TResultBody>,
-    args: TActionSchema,
+    args: TActionSchema
   ): Promise<CdpActionResult<TResultBody>> {
     if (!action.func) {
       throw new Error(`Action ${action.name} does not have a function defined`);
@@ -110,7 +118,11 @@ export class CdpAgentkit {
       return await action.func(this.wallet!, args);
     }
 
-    return await (action.func as (args: z.infer<TActionSchema>) => Promise<CdpActionResult<TResultBody>>)(args);
+    return await (
+      action.func as (
+        args: z.infer<TActionSchema>
+      ) => Promise<CdpActionResult<TResultBody>>
+    )(args);
   }
 
   /**
@@ -120,7 +132,9 @@ export class CdpAgentkit {
    */
   async exportWallet(): Promise<string> {
     if (!this.wallet) {
-      throw Error("Unable to export wallet. Agentkit is not configured with a wallet.");
+      throw Error(
+        'Unable to export wallet. Agentkit is not configured with a wallet.'
+      );
     }
 
     const walletData = this.wallet.export();

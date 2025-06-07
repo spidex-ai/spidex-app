@@ -1,1 +1,2 @@
-export const GET_WALLET_DETAILS_PROMPT = "This tool will get details about the MPC Wallet."; 
+export const GET_WALLET_DETAILS_PROMPT =
+  'This tool will get details about the MPC Wallet.';

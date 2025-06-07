@@ -1,10 +1,10 @@
 export enum Granularity {
-  ONE_HOUR = "1h",
-  FOUR_HOUR = "4h",
-  HALF_DAY = "12h",
-  ONE_DAY = "24h",
-  ONE_WEEK = "7d",
-  ONE_MONTH = "30d"
+  ONE_HOUR = '1h',
+  FOUR_HOUR = '4h',
+  HALF_DAY = '12h',
+  ONE_DAY = '24h',
+  ONE_WEEK = '7d',
+  ONE_MONTH = '30d',
 }
 
 export type SmartMoneyTokenInflow = {

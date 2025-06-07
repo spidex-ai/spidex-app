@@ -1,16 +1,15 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from 'next/server';
 
 import {
   addChat,
   getChat,
   updateChatMessages,
   deleteChat,
-} from "@/db/services";
+} from '@/db/services';
 
-import { generateText } from "ai";
-import { Message } from "ai";
-import { openai } from "@ai-sdk/openai";
-
+import { generateText } from 'ai';
+import { Message } from 'ai';
+import { openai } from '@ai-sdk/openai';
 
 export const GET = async (
   req: NextRequest,
@@ -20,19 +19,19 @@ export const GET = async (
 
   try {
     // Get the authorization header
-    const authHeader = req.headers.get("authorization");
-    if (!authHeader?.startsWith("Bearer ")) {
+    const authHeader = req.headers.get('authorization');
+    if (!authHeader?.startsWith('Bearer ')) {
       return NextResponse.json(null, { status: 401 });
     }
 
-    const token = authHeader.split(" ")[1];
+    const token = authHeader.split(' ')[1];
 
     const user = await fetch(
       `${process.env.NEXT_PUBLIC_SPIDEX_CORE_API_URL}/auth/me`,
       {
-        method: "GET",
+        method: 'GET',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
       }
@@ -40,14 +39,14 @@ export const GET = async (
 
     // Verify the token with Privy
     if (!user.ok) {
-      return NextResponse.json({ error: "Invalid token" }, { status: 401 });
+      return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
     }
 
     const userData = await user.json();
 
     return NextResponse.json(await getChat(chatId, userData.data.id));
   } catch (error) {
-    console.error("Error in /api/chats/[chatId]:", error);
+    console.error('Error in /api/chats/[chatId]:', error);
     return NextResponse.json(null, { status: 500 });
   }
 };
@@ -57,25 +56,25 @@ export const POST = async (
   { params }: { params: Promise<{ chatId: string }> }
 ) => {
   const { chatId } = await params;
-  console.log("🚀 ~ chatId:", chatId);
+  console.log('🚀 ~ chatId:', chatId);
 
   const { messages } = await req.json();
 
-  console.log("🚀 ~ messages:", JSON.stringify(messages));
+  console.log('🚀 ~ messages:', JSON.stringify(messages));
   try {
     // Get the authorization header
-    const authHeader = req.headers.get("authorization");
-    if (!authHeader?.startsWith("Bearer ")) {
+    const authHeader = req.headers.get('authorization');
+    if (!authHeader?.startsWith('Bearer ')) {
       return NextResponse.json(false, { status: 401 });
     }
-    const token = authHeader.split(" ")[1];
+    const token = authHeader.split(' ')[1];
 
     const user = await fetch(
       `${process.env.NEXT_PUBLIC_SPIDEX_CORE_API_URL}/auth/me`,
       {
-        method: "GET",
+        method: 'GET',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
       }
@@ -83,11 +82,11 @@ export const POST = async (
 
     // Verify the token with Privy
     if (!user.ok) {
-      return NextResponse.json({ error: "Invalid token" }, { status: 401 });
+      return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
     }
 
     const userData = await user.json();
-    console.log("🚀 ~ userData:", userData);
+    console.log('🚀 ~ userData:', userData);
 
     const chat = await getChat(chatId, userData.data.id);
 
@@ -96,9 +95,9 @@ export const POST = async (
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_SPIDEX_CORE_API_URL}/user-quest/trigger-agent-quest`,
           {
-            method: "PUT",
+            method: 'PUT',
             headers: {
-              "Content-Type": "application/json",
+              'Content-Type': 'application/json',
               Authorization: `Bearer ${token}`,
             },
           }
@@ -161,7 +160,7 @@ export const POST = async (
       );
     }
   } catch (error) {
-    console.error("Error in /api/chats/[chatId]:", error);
+    console.error('Error in /api/chats/[chatId]:', error);
     return NextResponse.json(false, { status: 500 });
   }
 };
@@ -173,22 +172,22 @@ export const DELETE = async (
   const { chatId } = await params;
 
   try {
-    const authHeader = req.headers.get("authorization");
-    if (!authHeader?.startsWith("Bearer ")) {
+    const authHeader = req.headers.get('authorization');
+    if (!authHeader?.startsWith('Bearer ')) {
       return NextResponse.json(
-        { error: "Missing or invalid authorization header" },
+        { error: 'Missing or invalid authorization header' },
         { status: 401 }
       );
     }
 
-    const token = authHeader.split(" ")[1];
+    const token = authHeader.split(' ')[1];
 
     const user = await fetch(
       `${process.env.NEXT_PUBLIC_SPIDEX_CORE_API_URL}/auth/me`,
       {
-        method: "GET",
+        method: 'GET',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
       }
@@ -196,7 +195,7 @@ export const DELETE = async (
 
     // Verify the token with Privy
     if (!user.ok) {
-      return NextResponse.json({ error: "Invalid token" }, { status: 401 });
+      return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
     }
 
     const userData = await user.json();
@@ -207,28 +206,28 @@ export const DELETE = async (
       return NextResponse.json({ success: true });
     } else {
       return NextResponse.json(
-        { error: "Failed to delete chat" },
+        { error: 'Failed to delete chat' },
         { status: 500 }
       );
     }
   } catch (error) {
-    console.error("Error in DELETE /api/chats/[chatId]:", error);
+    console.error('Error in DELETE /api/chats/[chatId]:', error);
     return NextResponse.json(
-      { error: "Internal server error" },
+      { error: 'Internal server error' },
       { status: 500 }
     );
   }
 };
 
-const generateTagline = async (messages: Omit<Message, "id">[]) => {
+const generateTagline = async (messages: Omit<Message, 'id'>[]) => {
   const { text } = await generateText({
-    model: openai("gpt-4o-mini"),
+    model: openai('gpt-4o-mini'),
     messages: [
       messages[0],
       {
-        role: "user",
+        role: 'user',
         content:
-          "Generate a 3-5 word description of the chat. Do not include any quotation marks or other punctuation.",
+          'Generate a 3-5 word description of the chat. Do not include any quotation marks or other punctuation.',
       },
     ],
   });

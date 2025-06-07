@@ -1,14 +1,14 @@
-import { LAMPORTS_PER_SOL, PublicKey, Connection } from "@solana/web3.js";
+import { LAMPORTS_PER_SOL, PublicKey, Connection } from '@solana/web3.js';
 
-import { getAssociatedTokenAddressSync } from "@solana/spl-token";
+import { getAssociatedTokenAddressSync } from '@solana/spl-token';
 
 import type {
   CardanoBalanceArgumentsType,
   CardanoBalanceResultBodyType,
-} from "./types";
-import type { CardanoActionResult } from "../../cardano-action";
-import { getToken } from "@/db/services";
-import coreService from "@/services/core";
+} from './types';
+import type { CardanoActionResult } from '../../cardano-action';
+import { getToken } from '@/db/services';
+import coreService from '@/services/core';
 
 export async function getBalance(
   connection: Connection,

@@ -1,6 +1,6 @@
-'use client'
+'use client';
 
-import React, { useState} from 'react'
+import React, { useState } from 'react';
 
 import { ChevronDown, Loader2, Trash2 } from 'lucide-react';
 
@@ -8,18 +8,18 @@ import Link from 'next/link';
 
 import { usePathname } from 'next/navigation';
 
-import { 
-    SidebarMenuItem, 
-    SidebarMenuButton,
-    Skeleton,
-    Icon,
-    Collapsible,
-    CollapsibleContent,
-    CollapsibleTrigger,
-    SidebarMenuSub,
-    SidebarMenuSubItem,
-    SidebarMenuSubButton,
-    useSidebar,
+import {
+  SidebarMenuItem,
+  SidebarMenuButton,
+  Skeleton,
+  Icon,
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+  SidebarMenuSub,
+  SidebarMenuSubItem,
+  SidebarMenuSubButton,
+  useSidebar,
 } from '@/components/ui';
 
 import { useUserChats } from '@/hooks';
@@ -32,155 +32,156 @@ import Image from 'next/image';
 import { useSpidexCoreContext } from '@/app/_contexts';
 
 const ChatsGroup: React.FC = () => {
+  const pathname = usePathname();
 
-    const pathname = usePathname();
+  const { isMobile, setOpenMobile } = useSidebar();
 
-    const { isMobile, setOpenMobile } = useSidebar();
+  const { auth } = useSpidexCoreContext();
 
-    const { auth } = useSpidexCoreContext();
+  const { chats, isLoading, mutate } = useUserChats();
 
-    const { chats, isLoading, mutate } = useUserChats();
+  const { setChat, chatId, resetChat } = useChat();
 
-    const { setChat, chatId, resetChat } = useChat();
+  const [isOpen, setIsOpen] = useState(false);
 
-    const [isOpen, setIsOpen] = useState(false);
+  const [deletingChatId, setDeletingChatId] = useState<string | null>(null);
 
-    const [deletingChatId, setDeletingChatId] = useState<string | null>(null);
+  const handleDelete = async (deletedChatId: string, e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
 
-    const handleDelete = async (deletedChatId: string, e: React.MouseEvent) => {
-        e.preventDefault();
-        e.stopPropagation();
-        
-        if (!auth?.user || deletingChatId) return;
+    if (!auth?.user || deletingChatId) return;
 
-        setDeletingChatId(deletedChatId);
-        
-        try {
-            const response = await fetch(`/api/chats/${deletedChatId}`, {
-                method: 'DELETE',
-                headers: {
-                    Authorization: `Bearer ${auth.accessToken}`,
-                },
-            });
-            
-            if (response.ok) {
-                mutate(chats.filter((chat) => chat.id !== deletedChatId));
-                
-                if (deletedChatId === chatId) {
-                    resetChat();
-                    if (isMobile) {
-                        setOpenMobile(false);
-                    }
-                }
-            }
-        } catch (error) {
-            console.error('Error deleting chat:', error);
-        } finally {
-            setDeletingChatId(null);
+    setDeletingChatId(deletedChatId);
+
+    try {
+      const response = await fetch(`/api/chats/${deletedChatId}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${auth.accessToken}`,
+        },
+      });
+
+      if (response.ok) {
+        mutate(chats.filter(chat => chat.id !== deletedChatId));
+
+        if (deletedChatId === chatId) {
+          resetChat();
+          if (isMobile) {
+            setOpenMobile(false);
+          }
         }
-    };
+      }
+    } catch (error) {
+      console.error('Error deleting chat:', error);
+    } finally {
+      setDeletingChatId(null);
+    }
+  };
 
-    const isActive = pathname.includes('/chat');
+  const isActive = pathname.includes('/chat');
 
-    return (
-        <Collapsible className="group/collapsible" open={isOpen} onOpenChange={setIsOpen}>
-            <SidebarMenuItem>
-                <Link href='/chat'>
-                    <CollapsibleTrigger 
-                        asChild
+  return (
+    <Collapsible
+      className="group/collapsible"
+      open={isOpen}
+      onOpenChange={setIsOpen}
+    >
+      <SidebarMenuItem>
+        <Link href="/chat">
+          <CollapsibleTrigger asChild>
+            <SidebarMenuButton
+              className="justify-between w-full"
+              isActive={isActive}
+            >
+              <div className="flex items-center justify-between w-full">
+                <div className="flex items-center gap-2">
+                  {isActive ? (
+                    <Image
+                      src="/icons/chat-blink.svg"
+                      alt="Chats"
+                      width={20}
+                      height={20}
+                      className="h-4 w-4"
+                    />
+                  ) : (
+                    <Image
+                      src="/icons/chat.svg"
+                      alt="Chats"
+                      width={20}
+                      height={20}
+                      className="h-4 w-4"
+                    />
+                  )}
+                  <h1 className="text-sm font-semibold">Chats</h1>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div
+                    onClick={() => {
+                      resetChat();
+                      if (isMobile) {
+                        setOpenMobile(false);
+                      }
+                    }}
+                    className="h-fit w-fit p-1 hover:bg-neutral-200 dark:hover:bg-neutral-600 rounded-md"
+                  >
+                    <Icon name="Plus" />
+                  </div>
+                  <ChevronDown className="h-[14px] w-[14px] transition-transform group-data-[state=open]/collapsible:rotate-180 text-neutral-500 dark:text-neutral-500" />
+                </div>
+              </div>
+            </SidebarMenuButton>
+          </CollapsibleTrigger>
+        </Link>
+        <CollapsibleContent>
+          <SidebarMenuSub className="flex-1 overflow-hidden relative flex flex-col">
+            {isLoading ? (
+              <Skeleton className="h-10 w-full" />
+            ) : chats.length > 0 ? (
+              chats.map(chat => (
+                <SidebarMenuSubItem key={chat.id} className="group/chat">
+                  <SidebarMenuSubButton
+                    asChild
+                    isActive={chat.id === chatId}
+                    onClick={() => setChat(chat.id)}
+                  >
+                    <Link
+                      href={`/chat`}
+                      className="flex items-center justify-between w-full"
                     >
-                        <SidebarMenuButton 
-                            className="justify-between w-full"
-                            isActive={isActive}
-                        >
-                            <div className="flex items-center justify-between w-full">
-                                <div className="flex items-center gap-2">
-                                    {
-                                        isActive ? (
-                                            <Image src="/icons/chat-blink.svg" alt="Chats" width={20} height={20} className='h-4 w-4'/>
-                                        ) : (
-                                            <Image src="/icons/chat.svg" alt="Chats" width={20} height={20} className='h-4 w-4'/>
-                                        )
-                                    }
-                                    <h1 className="text-sm font-semibold">Chats</h1>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <div 
-                                        onClick={() => {
-                                            resetChat();
-                                            if (isMobile) {
-                                                setOpenMobile(false);
-                                            }
-                                        }}
-                                        className="h-fit w-fit p-1 hover:bg-neutral-200 dark:hover:bg-neutral-600 rounded-md"
-                                    >
-                                        <Icon name='Plus' />
-                                    </div>
-                                    <ChevronDown 
-                                        className="h-[14px] w-[14px] transition-transform group-data-[state=open]/collapsible:rotate-180 text-neutral-500 dark:text-neutral-500" 
-                                    />
-                                </div>
-                            </div>
-                        </SidebarMenuButton>
-                    </CollapsibleTrigger>
-                </Link>
-                <CollapsibleContent>
-                    <SidebarMenuSub className="flex-1 overflow-hidden relative flex flex-col">
-                        {
-                            isLoading ? (
-                                <Skeleton className="h-10 w-full" />
-                            ) : (
-                                chats.length > 0 ? (
-                                    chats.map((chat) => (
-                                        <SidebarMenuSubItem
-                                            key={chat.id}
-                                            className="group/chat"
-                                        >
-                                            <SidebarMenuSubButton 
-                                                asChild 
-                                                isActive={chat.id === chatId}
-                                                onClick={() => setChat(chat.id)}
-                                            >
-                                                <Link 
-                                                    href={`/chat`} 
-                                                    className="flex items-center justify-between w-full"
-                                                >
-                                                    <span className='truncate'>{chat.tagline}</span>
-                                                    <div
-                                                        onClick={(e) => handleDelete(chat.id, e)}
-                                                        className={cn(
-                                                            "size-6 shrink-0 dark:hover:bg-neutral-700 hover:bg-neutral-200 rounded-md transition-all duration-300 flex items-center justify-center opacity-0 group-hover/chat:opacity-100",
-                                                            deletingChatId === chat.id && "opacity-50 pointer-events-none"
-                                                        )}
-                                                    >
-                                                        {deletingChatId === chat.id ? (
-                                                            <Loader2 className="size-4 animate-spin" />
-                                                        ) : (
-                                                            <Trash2 className="size-4 text-red-600" />
-                                                        )}
-                                                    </div>
-                                                </Link>
-                                            </SidebarMenuSubButton>
-                                        </SidebarMenuSubItem>
-                                    ))
-                                ) : (
-                                    auth?.user ? (
-                                        <p className='text-sm text-neutral-500 dark:text-neutral-400 pl-2'>
-                                            No chats found
-                                        </p>
-                                    ) : (
-                                        <p className='text-sm text-neutral-500 dark:text-neutral-400 pl-2'>
-                                            Sign in to view your chats
-                                        </p>
-                                    )
-                                )
-                            )
-                        }
-                    </SidebarMenuSub>
-                </CollapsibleContent>
-            </SidebarMenuItem>
-        </Collapsible>
-    )
-}
+                      <span className="truncate">{chat.tagline}</span>
+                      <div
+                        onClick={e => handleDelete(chat.id, e)}
+                        className={cn(
+                          'size-6 shrink-0 dark:hover:bg-neutral-700 hover:bg-neutral-200 rounded-md transition-all duration-300 flex items-center justify-center opacity-0 group-hover/chat:opacity-100',
+                          deletingChatId === chat.id &&
+                            'opacity-50 pointer-events-none'
+                        )}
+                      >
+                        {deletingChatId === chat.id ? (
+                          <Loader2 className="size-4 animate-spin" />
+                        ) : (
+                          <Trash2 className="size-4 text-red-600" />
+                        )}
+                      </div>
+                    </Link>
+                  </SidebarMenuSubButton>
+                </SidebarMenuSubItem>
+              ))
+            ) : auth?.user ? (
+              <p className="text-sm text-neutral-500 dark:text-neutral-400 pl-2">
+                No chats found
+              </p>
+            ) : (
+              <p className="text-sm text-neutral-500 dark:text-neutral-400 pl-2">
+                Sign in to view your chats
+              </p>
+            )}
+          </SidebarMenuSub>
+        </CollapsibleContent>
+      </SidebarMenuItem>
+    </Collapsible>
+  );
+};
 
 export default ChatsGroup;

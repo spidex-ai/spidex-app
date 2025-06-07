@@ -1,14 +1,16 @@
-import { z } from "zod";
+import { z } from 'zod';
 
-import { BubbleMapsArgumentsSchema } from "./input-schema";
-import { CardanoActionResult } from "../../cardano-action";
+import { BubbleMapsArgumentsSchema } from './input-schema';
+import { CardanoActionResult } from '../../cardano-action';
 
 export type CardanoBubbleMapsSchemaType = typeof BubbleMapsArgumentsSchema;
 
-export type CardanoBubbleMapsArgumentsType = z.infer<CardanoBubbleMapsSchemaType>;
+export type CardanoBubbleMapsArgumentsType =
+  z.infer<CardanoBubbleMapsSchemaType>;
 
 export type CardanoBubbleMapsResultBodyType = {
-    success: boolean;
-}; 
+  success: boolean;
+};
 
-export type CardanoBubbleMapsResultType = CardanoActionResult<CardanoBubbleMapsResultBodyType>;
+export type CardanoBubbleMapsResultType =
+  CardanoActionResult<CardanoBubbleMapsResultBodyType>;

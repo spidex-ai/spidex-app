@@ -1,10 +1,10 @@
-import React from "react";
+import React from 'react';
 
-import ToolCard from "../tool-card";
+import ToolCard from '../tool-card';
 
-import type { NewCardanoAllBalancesResultType } from "@/ai";
-import type { ToolInvocation } from "ai";
-import { TokenBalance } from "../utils";
+import type { NewCardanoAllBalancesResultType } from '@/ai';
+import type { ToolInvocation } from 'ai';
+import { TokenBalance } from '../utils';
 
 interface Props {
   tool: ToolInvocation;
@@ -22,7 +22,7 @@ const AllBalances: React.FC<Props> = ({ tool, prevToolAgent }) => {
         body: (result: NewCardanoAllBalancesResultType) =>
           result.body ? (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
-              {result.body.balances.amount.map((balance) => (
+              {result.body.balances.amount.map(balance => (
                 <TokenBalance
                   key={balance.unit}
                   token={balance.ticker}
@@ -33,7 +33,7 @@ const AllBalances: React.FC<Props> = ({ tool, prevToolAgent }) => {
               ))}
             </div>
           ) : (
-            "No balance found"
+            'No balance found'
           ),
       }}
       prevToolAgent={prevToolAgent}

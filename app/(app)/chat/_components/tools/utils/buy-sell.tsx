@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import React from "react";
+import React from 'react';
 
 interface Props {
   buy: number;
@@ -15,13 +15,13 @@ const BuySell: React.FC<Props> = ({ buy, sell, prefix, suffix, address }) => {
     <div className="flex flex-col w-full gap-1">
       <div className="flex justify-between text-xs">
         <span className="text-red-500">
-          {address && address === "lovelace"
-            ? "N/A"
+          {address && address === 'lovelace'
+            ? 'N/A'
             : `${((sell / (buy + sell)) * 100).toFixed(2)}%`}
         </span>
         <span className="text-green-500">
-          {address && address === "lovelace"
-            ? "N/A"
+          {address && address === 'lovelace'
+            ? 'N/A'
             : `${((buy / (buy + sell)) * 100).toFixed(2)}%`}
         </span>
       </div>
@@ -41,8 +41,8 @@ const BuySell: React.FC<Props> = ({ buy, sell, prefix, suffix, address }) => {
       </div>
       <div className="flex justify-between text-xs">
         <span className="text-red-500">
-          {address && address === "lovelace" ? (
-            "N/A"
+          {address && address === 'lovelace' ? (
+            'N/A'
           ) : (
             <>
               {prefix}
@@ -52,8 +52,8 @@ const BuySell: React.FC<Props> = ({ buy, sell, prefix, suffix, address }) => {
           )}
         </span>
         <span className="text-green-500">
-          {address && address === "lovelace" ? (
-            "N/A"
+          {address && address === 'lovelace' ? (
+            'N/A'
           ) : (
             <>
               {prefix}

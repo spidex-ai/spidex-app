@@ -1,12 +1,11 @@
-import {
-    SearchClient,
-    AzureKeyCredential
-} from '@azure/search-documents';
+import { SearchClient, AzureKeyCredential } from '@azure/search-documents';
 
-const credential = new AzureKeyCredential(process.env.AZURE_SEARCH_KEY as string);
+const credential = new AzureKeyCredential(
+  process.env.AZURE_SEARCH_KEY as string
+);
 
 export const tokensSearchClient = new SearchClient(
-    process.env.AZURE_SEARCH_URL as string,
-    'tokens',
-    credential
-)
+  process.env.AZURE_SEARCH_URL as string,
+  'tokens',
+  credential
+);

@@ -1,7 +1,7 @@
-import { z } from "zod";
+import { z } from 'zod';
 
-import { TokenPriceChartInputSchema } from "./input-schema";
-import type { SolanaActionResult } from "../../solana-action";
+import { TokenPriceChartInputSchema } from './input-schema';
+import type { SolanaActionResult } from '../../solana-action';
 
 export type TokenPriceChartSchemaType = typeof TokenPriceChartInputSchema;
 
