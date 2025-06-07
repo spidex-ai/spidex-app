@@ -78,7 +78,14 @@ export const useQuests = () => {
         }
     }
 
-    return { quests, loading, error, fetchQuests, currentPage, setCurrentPage, totalPages };
+    const refetchQuests = async () => {
+        setCurrentPage(0); 
+        const data = await getUserQuests(1, perPage);
+        setQuests(data.data);
+        setTotalPages(Math.ceil(data.metadata.total / perPage));
+    }
+
+    return { quests, loading, error, fetchQuests, currentPage, setCurrentPage, totalPages, refetchQuests };
 }
 
 export const usePointHistory = () => {
@@ -110,6 +117,8 @@ export const usePointHistory = () => {
     }
 
     const refetchPointHistory = async () => {
+        setCurrentPage(0); 
+        await new Promise(resolve => setTimeout(resolve, 1000));
         await fetchPointHistory();
     }
 

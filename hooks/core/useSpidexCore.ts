@@ -623,6 +623,24 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     [fetchWithAuth, auth]
   );
 
+  const startSocialQuest = useCallback(async (id: number) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await fetchWithAuth(`/user-quest/start-social-quest/${id}`, {
+        method: "PUT", 
+        body: JSON.stringify({
+          questId: id,
+        }),
+      });
+      return data.data;
+    } catch (error) {
+      return null;
+    } finally { 
+      setLoading(false);
+    }
+  }, [fetchWithAuth, auth]);
+
   const triggerDailyLogin = useCallback(async () => {
     setLoading(true);
     setError(null);
@@ -776,6 +794,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     estimateSwap,
     submitSwapRequest,
     triggerSocialQuest,
+    startSocialQuest,
     triggerDailyLogin,
     uploadAvatar,
     updateUserInfo,
