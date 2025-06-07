@@ -170,22 +170,24 @@ const Missions = () => {
   };
 
   const handleFinish = async (result: MissionItem) => {
-    if (!auth?.user?.xUsername && (result.type === 0 || result.type === 3 || result.type === 1 || result.type === 2)) {
+    if (!auth?.user?.xUsername && (result.type === 0 || result.type === 3 )) {
       setIsReminderModalOpen(true); 
-      switch (result.type) {
-        case 0:
-        case 3:
-          setReminderModalPlatform('X');
-          break;
-        case 1:
-          setReminderModalPlatform('Discord');
-          break;
-        case 2:
-          setReminderModalPlatform('Telegram');
-          break;
-      }
+      setReminderModalPlatform('X');
       return;
     }
+
+    if (!auth?.user?.discordUsername && result.type === 1) {
+      setIsReminderModalOpen(true); 
+      setReminderModalPlatform('Discord');
+      return;
+    } 
+
+    if (!auth?.user?.telegramUsername && result.type === 2) {
+      setIsReminderModalOpen(true); 
+      setReminderModalPlatform('Telegram');
+      return;
+    }
+    
     console.log("🚀 ~ handleFinish ~ result.id:", result.id)
     setLoadingMissionId(result.id);
     try {
