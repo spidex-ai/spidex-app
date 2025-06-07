@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
 import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
 import { useSearchParams } from "next/navigation";
+import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 interface TelegramModalProps {
@@ -15,7 +15,6 @@ interface TelegramModalProps {
 const TelegramModal: React.FC<TelegramModalProps> = ({
   isOpen,
   onClose,
-  onSuccess,
   onError,
 }) => {
   const [loading, setLoading] = useState(false);
