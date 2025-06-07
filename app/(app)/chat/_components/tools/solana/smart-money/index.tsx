@@ -74,7 +74,7 @@ const TokenCard = ({ token }: { token: TopTokenVolume }) => {
             ) : null}
             <div className="flex flex-col">
               <p className="text-sm font-bold">
-                {token.name} ({token.ticker})
+                {token.name} {token.ticker ? `(${token.ticker})` : null}
               </p>
               <p className="text-xs text-muted-foreground">
                 $

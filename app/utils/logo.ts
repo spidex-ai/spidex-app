@@ -1,5 +1,5 @@
 export const getLogoUrl = (logo: string) => {
-  if (!logo) return '';
+  if (!logo) return '/icons/unknown.svg';
   if (logo.startsWith('https://')) return logo;
   if (logo.startsWith('ipfs://'))
     return `https://ipfs.io/ipfs/${logo.slice(7)}`;
