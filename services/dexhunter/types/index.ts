@@ -8,7 +8,7 @@ export interface SearchTokenInfo {
   supply: number;
   creation_date: string;
   price: number;
-  logo?: string;
+  logo?: string | null;
   unit?: string;
   name?: string;
 }

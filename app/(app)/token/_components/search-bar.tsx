@@ -110,16 +110,16 @@ const SearchBar: React.FC<Props> = ({ isTitle = true }) => {
                           variant="ghost"
                           className="w-full justify-start gap-4 px-2 py-1 h-fit"
                         >
-                          {token?.logo && (
+                          
                             <img
-                              src={getLogoUrl(token.logo)}
+                              src={getLogoUrl(token.logo || '')}
                               alt={token.token_ascii}
                               className="rounded-full size-8"
                             />
-                          )}
+                          
                           <div className="flex flex-col items-start">
                             <span className="font-bold text-sm">
-                              {token.token_ascii} ({token.ticker})
+                              {token.token_ascii} {token.ticker ? `(${token.ticker})` : null}
                             </span>
                             {/* <p className="text-xs text-muted-foreground">
                                                             ${token.price.toLocaleString(undefined, { maximumFractionDigits: 5 })} <span className={token.price_change_24h_percent > 0 ? 'text-green-500' : 'text-red-500'}>({token.price_change_24h_percent > 0 ? '+' : ''}{token.price_change_24h_percent.toLocaleString(undefined, { maximumFractionDigits: 2 })}%)</span>
