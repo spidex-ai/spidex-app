@@ -12,6 +12,8 @@ import { CardanoTokenDetail } from '@/services/dexhunter/types';
 import SearchBar from '../../../_components/search-bar';
 import { QuoteType } from './select-quote';
 import SelectQuote from './select-quote';
+import { Slide } from 'react-slideshow-image';
+import 'react-slideshow-image/dist/styles.css';
 interface Props {
   data: CardanoTokenDetail | null;
   isLoading: boolean;
@@ -19,6 +21,52 @@ interface Props {
   quote: QuoteType;
   onQuoteChange: (quote: QuoteType) => void;
 }
+
+const slideImages = [
+  {
+    url: '/icons/snek-banner.svg',
+    link: 'https://www.snek.com/'
+  },
+  {
+    url: '/icons/farmroll-banner.svg',
+    link: 'https://farmroll.io/'
+  },
+  {
+    url: '/icons/minswap-banner.svg',
+    link: 'https://minswap.org/'
+  },
+  {
+    url: '/icons/strike-banner.svg',
+    link: 'https://www.strikefinance.org/'
+  },
+  {
+    url: '/icons/bodega-banner.svg',
+    link: 'https://www.bodegamarket.xyz/'
+  },
+  {
+    url: '/icons/moneta-banner.svg',
+    link: 'https://moneta.global/'
+  },
+]
+
+const slideProperties = {
+  duration: 3000,          
+  autoplay: true,         
+  transitionDuration: 500,
+  arrows: true,           
+  infinite: true,         
+  easing: 'ease',    
+  prevArrow: (
+    <button className="text-xl text-white px-2 py-2 bg-black/20 hover:bg-black/50 h-full">
+      ◀
+    </button>
+  ),
+  nextArrow: (
+    <button className="text-xl text-white px-2 py-2 bg-black/20 hover:bg-black/50 h-full">
+      ▶
+    </button>
+  ),      
+};
 
 const Header: React.FC<Props> = ({
   data,
@@ -60,14 +108,13 @@ const Header: React.FC<Props> = ({
         </div>
       </div>
       <div className="col-span-4">
-        <div
-          className="cursor-pointer flex justify-end w-full"
-          onClick={() => {
-            window.open('https://farmroll.io', '_blank');
-          }}
-        >
-          <img src="/icons/banner-chat-ads.svg" alt="info" className="w-full" />
-        </div>
+      <Slide {...slideProperties}>
+        {slideImages.map((image, index) => (
+          <div key={index} className="each-slide cursor-pointer" onClick={() => window.open(image.link, '_blank')}>
+            <img src={image.url} className='w-full rounded-md'/>
+          </div>
+        ))}
+      </Slide>
       </div>
     </div>
   );
