@@ -26,6 +26,17 @@ const TelegramModal: React.FC<TelegramModalProps> = ({
   // Load Telegram widget configuration when modal opens
   useEffect(() => {
     if (isOpen && !botUsername) {
+      // Save current URL to localStorage for redirect after authentication
+      if (typeof window !== 'undefined') {
+        const currentUrl = window.location.href;
+        const returnUrlData = {
+          url: currentUrl,
+          timestamp: Date.now()
+        };
+        localStorage.setItem('telegramAuthReturnUrl', JSON.stringify(returnUrlData));
+        console.log('Saved return URL for Telegram auth:', currentUrl);
+      }
+
       loadTelegramConfig();
     }
   }, [isOpen, botUsername]);
@@ -102,6 +113,13 @@ const TelegramModal: React.FC<TelegramModalProps> = ({
       telegramWidgetContainer.innerHTML = '';
     }
     setBotUsername('');
+
+    // Clean up saved return URL if user closes modal without authenticating
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('telegramAuthReturnUrl');
+      console.log('Cleaned up saved return URL on modal close');
+    }
+
     onClose();
   };
 

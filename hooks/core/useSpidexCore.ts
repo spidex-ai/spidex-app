@@ -12,6 +12,8 @@ export interface SignMessageData {
   signature: string;
   address: string;
   publicKey: string;
+  stakedAddress: string;
+  referralCode: string;
   role: string;
 }
 
@@ -262,7 +264,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
             referralCode,
           }),
         });
-        setAuth({ ...data.data, walletName: 'xlogin' });
+        setAuth({ ...data.data });
         return data.data;
       } catch (err) {
         throw err;
@@ -281,7 +283,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
             referralCode,
           }),
         });
-        setAuth({ ...data.data, walletName: 'google' });
+        setAuth({ ...data.data });
         return data.data;
       } catch (err) {
         throw err;
@@ -301,7 +303,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
             referralCode,
           }),
         });
-        setAuth({ ...data.data, walletName: 'discord' });
+        setAuth({ ...data.data});
         return data.data;
       } catch (err) {
         throw err;
@@ -336,7 +338,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
           method: 'POST',
           body: JSON.stringify(requestData),
         });
-        setAuth({ ...data.data, walletName: 'telegram' });
+        setAuth({ ...data.data });
         return data.data;
       } catch (err) {
         throw err;
