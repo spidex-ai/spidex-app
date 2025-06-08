@@ -29,6 +29,7 @@ const ConnectedAccounts: React.FC<Props> = ({ user }) => {
   const router = useRouter();
   const [isConnecting, setIsConnecting] = useState(false);
   const [isTelegramModalOpen, setIsTelegramModalOpen] = useState(false);
+  const [isProcessingCallback, setIsProcessingCallback] = useState(false);
   const processedCodeRef = useRef<string | null>(null);
 
   // Get current URL dynamically
@@ -105,10 +106,23 @@ const ConnectedAccounts: React.FC<Props> = ({ user }) => {
 
   // Handle Discord OAuth callback
   const handleDiscordCallback = async (code: string) => {
-    try {
-      if (isConnecting) return;
+    console.log('handleDiscordCallback called with:', {
+      code,
+      isConnecting,
+      isProcessingCallback,
+    });
 
+    try {
+      // Multiple guards to prevent double execution
+      if (isConnecting || isProcessingCallback) {
+        console.log('Already processing callback, returning early');
+        return;
+      }
+
+      console.log('Setting processing flags to true');
       setIsConnecting(true);
+      setIsProcessingCallback(true);
+
       const redirectUri = `${getCurrentUrl()}?type=connect-discord`;
       const result = await signInWithDiscord(code, redirectUri);
 
@@ -121,7 +135,9 @@ const ConnectedAccounts: React.FC<Props> = ({ user }) => {
       console.log('Discord login error', error);
       toast.error('Discord connection failed');
     } finally {
+      console.log('Setting processing flags to false');
       setIsConnecting(false);
+      setIsProcessingCallback(false);
       setIsProcessingOAuth(false);
     }
   };
@@ -137,13 +153,24 @@ const ConnectedAccounts: React.FC<Props> = ({ user }) => {
     const socialConnectCode = params.get('code');
     const callbackType = params.get('type');
 
+    console.log('Connected Accounts useEffect - checking conditions:', {
+      socialConnectCode,
+      callbackType,
+      processedCode: processedCodeRef.current,
+      isConnecting,
+      isProcessingOAuth,
+      isProcessingCallback
+    });
+
     // Only process if we have a code, haven't processed it yet, and not currently processing OAuth globally
     if (
       socialConnectCode &&
       socialConnectCode !== processedCodeRef.current &&
       !isConnecting &&
-      !isProcessingOAuth
+      !isProcessingOAuth &&
+      !isProcessingCallback
     ) {
+      console.log('Connected Accounts: Taking control of OAuth processing (priority on account page)');
       processedCodeRef.current = socialConnectCode;
       setIsProcessingOAuth(true);
 
@@ -155,8 +182,10 @@ const ConnectedAccounts: React.FC<Props> = ({ user }) => {
         console.log('Processing X callback in connected accounts');
         handleXCallback(socialConnectCode);
       }
+    } else {
+      console.log('Connected Accounts: Skipping OAuth processing - conditions not met');
     }
-  }, [params, isConnecting, isProcessingOAuth]);
+  }, [params, isConnecting, isProcessingOAuth, isProcessingCallback]);
 
   return (
     <div className="flex flex-col gap-4 mt-8">

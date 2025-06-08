@@ -36,8 +36,41 @@ export default function TelegramCallback() {
         JSON.stringify(telegramAuthData)
       );
 
-      // Redirect back to the main app with success parameter
-      const redirectUrl = new URL(window.location.origin);
+      // Get the saved return URL from localStorage, fallback to origin
+      let redirectUrl: URL;
+      const savedReturnUrlData = localStorage.getItem('telegramAuthReturnUrl');
+
+      if (savedReturnUrlData) {
+        try {
+          const returnData = JSON.parse(savedReturnUrlData);
+          const savedUrl = returnData.url;
+          const savedTimestamp = returnData.timestamp;
+
+          // Check if the saved URL is not too old (max 1 hour)
+          const maxAge = 60 * 60 * 1000; // 1 hour in milliseconds
+          const isExpired = Date.now() - savedTimestamp > maxAge;
+
+          if (isExpired) {
+            console.warn('Saved return URL expired, falling back to origin');
+            redirectUrl = new URL(window.location.origin);
+          } else {
+            redirectUrl = new URL(savedUrl);
+            console.log('Using saved return URL for Telegram auth:', savedUrl);
+          }
+
+          // Clean up the saved URL
+          localStorage.removeItem('telegramAuthReturnUrl');
+        } catch (error) {
+          console.warn('Invalid saved return URL data, falling back to origin:', error);
+          redirectUrl = new URL(window.location.origin);
+          localStorage.removeItem('telegramAuthReturnUrl');
+        }
+      } else {
+        console.log('No saved return URL found, using origin');
+        redirectUrl = new URL(window.location.origin);
+      }
+
+      // Add success parameter and referral code
       redirectUrl.searchParams.set('telegram-success', 'true');
       if (referralCode) {
         redirectUrl.searchParams.set('ref', referralCode);
@@ -45,8 +78,41 @@ export default function TelegramCallback() {
 
       window.location.href = redirectUrl.toString();
     } else {
-      // Redirect back with error
-      const redirectUrl = new URL(window.location.origin);
+      // Get the saved return URL for error case too
+      let redirectUrl: URL;
+      const savedReturnUrlData = localStorage.getItem('telegramAuthReturnUrl');
+
+      if (savedReturnUrlData) {
+        try {
+          const returnData = JSON.parse(savedReturnUrlData);
+          const savedUrl = returnData.url;
+          const savedTimestamp = returnData.timestamp;
+
+          // Check if the saved URL is not too old (max 1 hour)
+          const maxAge = 60 * 60 * 1000; // 1 hour in milliseconds
+          const isExpired = Date.now() - savedTimestamp > maxAge;
+
+          if (isExpired) {
+            console.warn('Saved return URL expired for error case, falling back to origin');
+            redirectUrl = new URL(window.location.origin);
+          } else {
+            redirectUrl = new URL(savedUrl);
+            console.log('Using saved return URL for Telegram auth error:', savedUrl);
+          }
+
+          // Clean up the saved URL
+          localStorage.removeItem('telegramAuthReturnUrl');
+        } catch (error) {
+          console.warn('Invalid saved return URL data for error, falling back to origin:', error);
+          redirectUrl = new URL(window.location.origin);
+          localStorage.removeItem('telegramAuthReturnUrl');
+        }
+      } else {
+        console.log('No saved return URL found for error, using origin');
+        redirectUrl = new URL(window.location.origin);
+      }
+
+      // Add error parameter
       redirectUrl.searchParams.set(
         'telegram-error',
         'Invalid authentication data'

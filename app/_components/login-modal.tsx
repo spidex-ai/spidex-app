@@ -153,6 +153,7 @@ const LoginModal: React.FC = () => {
   const params = useSearchParams();
   const [isClient, setIsClient] = useState(false);
   const [isPrivacyAccepted, setIsPrivacyAccepted] = useState(false);
+  const [isProcessingCallback, setIsProcessingCallback] = useState(false);
 
   const {
     signMessage: signMessageSpidex,
@@ -296,16 +297,21 @@ const LoginModal: React.FC = () => {
   const handleSignMessage = async (walletName: string) => {
     try {
       let address = null;
+      let stakedAddress = null;
       const api = await (window as any).cardano[walletName as any].enable();
       await api?.getUtxos();
       const unusedAddressesHex = await api.getUnusedAddresses();
       const usedAddresses = await api.getUsedAddresses();
+      const stakedAddresses = await api.getRewardAddresses();
       if (usedAddresses && usedAddresses.length > 0) {
         address = decodeHexAddress(usedAddresses[0]);
       } else if (unusedAddressesHex && unusedAddressesHex.length > 0) {
         address = decodeHexAddress(unusedAddressesHex[0]);
       }
-      if (!address) {
+      if (stakedAddresses && stakedAddresses.length > 0) {
+        stakedAddress = decodeHexAddress(stakedAddresses[0]);
+      }
+      if (!address || !stakedAddress) {
         toast.error('No address found');
         return;
       }
@@ -318,6 +324,7 @@ const LoginModal: React.FC = () => {
         async (signature: string, key: string | undefined) => {
           await handleSignMessageSpidex(
             address,
+            stakedAddress,
             signature,
             key,
             ref,
@@ -345,6 +352,7 @@ const LoginModal: React.FC = () => {
 
   const handleSignMessageSpidex = async (
     address: string,
+    stakedAddress: string,
     signature: string,
     key: string | undefined,
     ref: string | null,
@@ -358,6 +366,7 @@ const LoginModal: React.FC = () => {
           publicKey: key || '',
           role: 'user',
           referralCode: ref || '',
+          stakedAddress,
         },
         walletName || ''
       );
@@ -435,17 +444,89 @@ const LoginModal: React.FC = () => {
     }
   };
 
+  /**
+   * Handle Discord OAuth callback
+   */
+  const handleDiscordCallback = useCallback(async (
+    code: string,
+    baseRedirectUri: string
+  ) => {
+    console.log('handleDiscordCallback called with:', {
+      code,
+      baseRedirectUri,
+      isConnecting,
+      isProcessingCallback,
+    });
+
+    try {
+      // Multiple guards to prevent double execution
+      if (isConnecting || isProcessingCallback) {
+        console.log('Already processing callback, returning early');
+        return;
+      }
+
+      console.log('Setting processing flags to true');
+      setIsConnecting(true);
+      setIsProcessingCallback(true);
+
+      const ref = params.get('ref');
+      const redirectUri = `${baseRedirectUri}?type=connect-discord`;
+      console.log('Calling signInWithDiscord with:', {
+        code,
+        redirectUri,
+        ref,
+      });
+      const result = await signInWithDiscord(code, redirectUri, ref || '');
+
+      if (result && typeof window !== 'undefined') {
+        console.log('Discord login successful', result);
+      }
+      // Close the modal when Discord login is successful
+      closeModal();
+    } catch (error: any) {
+      console.error('Discord login error:', error);
+      if (typeof error === 'string') {
+        toast.error(error);
+      } else {
+        toast.error('Discord login failed');
+      }
+    } finally {
+      console.log('Setting processing flags to false');
+      setIsConnecting(false);
+      setIsProcessingCallback(false);
+      setIsProcessingOAuth(false);
+    }
+  }, [isConnecting, isProcessingCallback, params, signInWithDiscord, closeModal]);
+
   useEffect(() => {
     const socialConnectCode = params.get('code');
     const callbackType = params.get('type');
+    const currentPath = typeof window !== 'undefined' ? window.location.pathname : '';
 
-    // Only process if we have a code, haven't processed it yet, and not currently processing OAuth globally
+    console.log('Login Modal useEffect - checking conditions:', {
+      socialConnectCode,
+      callbackType,
+      currentPath,
+      processedCode: processedCodeRef.current,
+      isConnecting,
+      isProcessingOAuth,
+      isProcessingCallback
+    });
+
+    // Don't process OAuth callbacks if we're on the account page - let Connected Accounts component handle it
+    const isOnAccountPage = currentPath.includes('/account');
+
+    // Only process if we have a code, haven't processed it yet, not currently processing OAuth globally,
+    // and we're NOT on the account page (where Connected Accounts component should handle it)
     if (
       socialConnectCode &&
       socialConnectCode !== processedCodeRef.current &&
       !isConnecting &&
-      !isProcessingOAuth
+      !isProcessingOAuth &&
+      !isProcessingCallback &&
+      !isOnAccountPage
     ) {
+      console.log('Login Modal: Taking control of OAuth processing');
       processedCodeRef.current = socialConnectCode;
       setIsProcessingOAuth(true);
 
@@ -458,8 +539,10 @@ const LoginModal: React.FC = () => {
         console.log('Processing X callback from login modal');
         handleXCallback(socialConnectCode, getCurrentUrl());
       }
+    } else {
+      console.log('Login Modal: Skipping OAuth processing - conditions not met or on account page');
     }
-  }, [params, isConnecting, isProcessingOAuth]);
+  }, [params, isConnecting, isProcessingOAuth, isProcessingCallback]);
 
   useEffect(() => {
     const telegramSuccess = params.get('telegram-success');
@@ -523,53 +606,7 @@ const LoginModal: React.FC = () => {
     window.location.href = discordAuthUrl;
   };
 
-  /**
-   * Handle Discord OAuth callback
-   */
-  const handleDiscordCallback = async (
-    code: string,
-    baseRedirectUri: string
-  ) => {
-    console.log('handleDiscordCallback called with:', {
-      code,
-      baseRedirectUri,
-      isConnecting,
-    });
-    try {
-      if (isConnecting) {
-        console.log('Already connecting, returning early');
-        return;
-      }
 
-      console.log('Setting isConnecting to true');
-      setIsConnecting(true);
-      const ref = params.get('ref');
-      const redirectUri = `${baseRedirectUri}?type=connect-discord`;
-      console.log('Calling signInWithDiscord with:', {
-        code,
-        redirectUri,
-        ref,
-      });
-      const result = await signInWithDiscord(code, redirectUri, ref || '');
-
-      if (result && typeof window !== 'undefined') {
-        console.log('Discord login successful', result);
-      }
-      // Close the modal when Discord login is successful
-      closeModal();
-    } catch (error: any) {
-      console.error('Discord login error:', error);
-      if (typeof error === 'string') {
-        toast.error(error);
-      } else {
-        toast.error('Discord login failed');
-      }
-    } finally {
-      console.log('Setting isConnecting to false');
-      setIsConnecting(false);
-      setIsProcessingOAuth(false);
-    }
-  };
 
   /**
    * Connect with Telegram

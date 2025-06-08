@@ -22,6 +22,7 @@ const ReminderModal = ({ isOpen, onOpenChange, platform }: ReminderModalProps) =
   const { signInWithTelegram } = useTelegramLogin();
   const [isTelegramModalOpen, setIsTelegramModalOpen] = useState<boolean>(false);
   const [isConnecting, setIsConnecting] = useState(false);
+  const [isProcessingCallback, setIsProcessingCallback] = useState(false);
   const params = useSearchParams()
   const processedCodeRef = useRef<string | null>(null)
 
@@ -87,15 +88,24 @@ const ReminderModal = ({ isOpen, onOpenChange, platform }: ReminderModalProps) =
   };
 
   const handleDiscordCallback = async (code: string, baseRedirectUri: string) => {
-    console.log('handleDiscordCallback called with:', { code, baseRedirectUri, isConnecting });
+    console.log('handleDiscordCallback called with:', {
+      code,
+      baseRedirectUri,
+      isConnecting,
+      isProcessingCallback
+    });
+
     try {
-      if (isConnecting) {
-        console.log('Already connecting, returning early');
+      // Multiple guards to prevent double execution
+      if (isConnecting || isProcessingCallback) {
+        console.log('Already processing callback, returning early');
         return;
       }
 
-      console.log('Setting isConnecting to true');
+      console.log('Setting processing flags to true');
       setIsConnecting(true);
+      setIsProcessingCallback(true);
+
       const ref = params.get("ref");
       const redirectUri = `${baseRedirectUri}?type=connect-discord`;
       console.log('Calling signInWithDiscord with:', { code, redirectUri, ref });
@@ -104,7 +114,7 @@ const ReminderModal = ({ isOpen, onOpenChange, platform }: ReminderModalProps) =
       if (result && typeof window !== "undefined") {
         console.log("Discord login successful", result);
       }
-          // Close the modal when X login is initiated
+      // Close the modal when Discord login is successful
       onOpenChange(false)
     } catch (error: any) {
       console.error('Discord login error:', error);
@@ -114,8 +124,9 @@ const ReminderModal = ({ isOpen, onOpenChange, platform }: ReminderModalProps) =
         toast.error("Discord login failed");
       }
     } finally {
-      console.log('Setting isConnecting to false');
+      console.log('Setting processing flags to false');
       setIsConnecting(false);
+      setIsProcessingCallback(false);
     }
   };
 
@@ -133,8 +144,13 @@ const ReminderModal = ({ isOpen, onOpenChange, platform }: ReminderModalProps) =
     const socialConnectCode = params.get("code");
     const callbackType = params.get("type");
 
-    // Only process if not already processed in mount
-    if (socialConnectCode && socialConnectCode !== processedCodeRef.current) {
+    // Only process if not already processed and not currently processing
+    if (
+      socialConnectCode &&
+      socialConnectCode !== processedCodeRef.current &&
+      !isConnecting &&
+      !isProcessingCallback
+    ) {
       processedCodeRef.current = socialConnectCode;
 
       // Use the type parameter to determine which callback handler to use
@@ -146,9 +162,8 @@ const ReminderModal = ({ isOpen, onOpenChange, platform }: ReminderModalProps) =
         console.log('Type is not connect-discord, calling X API');
         handleXCallback(socialConnectCode, getCurrentUrl());
       }
-
     }
-  }, [params])
+  }, [params, isConnecting, isProcessingCallback])
 
   useEffect(() => {
     const telegramSuccess = params.get("telegram-success");
