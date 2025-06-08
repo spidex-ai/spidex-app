@@ -44,6 +44,7 @@ export interface UserSpidex {
   telegramUsername: string | null;
   xLink: string | null;
   createdAt: Date;
+  stakeAddress: string; 
 }
 
 export const useSpidexCore = (initialAuth: Auth | null = null) => {
