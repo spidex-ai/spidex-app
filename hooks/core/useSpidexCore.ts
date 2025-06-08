@@ -12,7 +12,7 @@ export interface SignMessageData {
   signature: string;
   address: string;
   publicKey: string;
-  stakedAddress: string;
+  stakeAddress: string;
   referralCode: string;
   role: string;
 }
