@@ -10,6 +10,7 @@ import { useEffect, useRef, useState } from "react";
 import { Platform } from "./reminder-modal-wrapper";
 import toast from "react-hot-toast";
 import TelegramModal from "@/app/_components/telegram-modal";
+import { useSpidexCoreContext } from "@/app/_contexts";
 
 interface ReminderModalProps {
   isOpen: boolean;
@@ -20,6 +21,7 @@ const ReminderModal = ({ isOpen, onOpenChange, platform }: ReminderModalProps) =
   const { signInWithX } = useXLogin();
   const { signInWithDiscord } = useDiscordLogin();
   const { signInWithTelegram } = useTelegramLogin();
+  const { isProcessingOAuth, setIsProcessingOAuth } = useSpidexCoreContext();
   const [isTelegramModalOpen, setIsTelegramModalOpen] = useState<boolean>(false);
   const [isConnecting, setIsConnecting] = useState(false);
   const [isProcessingCallback, setIsProcessingCallback] = useState(false);
@@ -34,32 +36,52 @@ const ReminderModal = ({ isOpen, onOpenChange, platform }: ReminderModalProps) =
     return "";
   };
   const handleConnectX = () => {
+    if (isConnecting || isProcessingCallback) {
+      console.log('X connection already in progress, returning');
+      return;
+    }
+
     setIsConnecting(true)
     const redirectUri = getCurrentUrl();
     const xAuthUrl = `https://twitter.com/i/oauth2/authorize?response_type=code&client_id=THpPdER1Nm1NZ3FCbm1lbnU5OXI6MTpjaQ&redirect_uri=${encodeURIComponent(redirectUri)}&scope=tweet.read%20users.read&state=state&code_challenge=challenge&code_challenge_method=plain`
     window.location.href = xAuthUrl
   }
   const handleXCallback = async (code: string, baseRedirectUri: string) => {
+    console.log('handleXCallback called with:', {
+      code,
+      baseRedirectUri,
+      isConnecting,
+      isProcessingCallback
+    });
+
     try {
-      if (isConnecting) {
+      // Multiple guards to prevent double execution
+      if (isConnecting || isProcessingCallback) {
+        console.log('Already processing X callback, returning early');
         return;
       }
 
+      console.log('Setting processing flags to true for X callback');
       setIsConnecting(true);
+      setIsProcessingCallback(true);
+
       const ref = params.get("ref");
       const redirectUri = baseRedirectUri;
       await signInWithX(code, redirectUri, ref || "");
 
       onOpenChange(false)
     } catch (error: any) {
+      console.error('X login error:', error);
       if (typeof error === "string") {
         toast.error(error);
       } else {
         toast.error("X login failed");
       }
     } finally {
-      console.log('Setting isConnecting to false');
+      console.log('Setting processing flags to false for X callback');
       setIsConnecting(false);
+      setIsProcessingCallback(false);
+      setIsProcessingOAuth(false);
     }
   };
   const handleConnectUser = () => {
@@ -127,6 +149,7 @@ const ReminderModal = ({ isOpen, onOpenChange, platform }: ReminderModalProps) =
       console.log('Setting processing flags to false');
       setIsConnecting(false);
       setIsProcessingCallback(false);
+      setIsProcessingOAuth(false);
     }
   };
 
@@ -144,14 +167,26 @@ const ReminderModal = ({ isOpen, onOpenChange, platform }: ReminderModalProps) =
     const socialConnectCode = params.get("code");
     const callbackType = params.get("type");
 
-    // Only process if not already processed and not currently processing
+    console.log('Reminder Modal useEffect - checking conditions:', {
+      socialConnectCode,
+      callbackType,
+      processedCode: processedCodeRef.current,
+      isConnecting,
+      isProcessingOAuth,
+      isProcessingCallback
+    });
+
+    // Only process if not already processed and not currently processing OAuth globally
     if (
       socialConnectCode &&
       socialConnectCode !== processedCodeRef.current &&
       !isConnecting &&
+      !isProcessingOAuth &&
       !isProcessingCallback
     ) {
+      console.log('Reminder Modal: Taking control of OAuth processing (priority on points page)');
       processedCodeRef.current = socialConnectCode;
+      setIsProcessingOAuth(true);
 
       // Use the type parameter to determine which callback handler to use
       // Only call Discord API if type=connect-discord, otherwise default to X
@@ -162,8 +197,10 @@ const ReminderModal = ({ isOpen, onOpenChange, platform }: ReminderModalProps) =
         console.log('Type is not connect-discord, calling X API');
         handleXCallback(socialConnectCode, getCurrentUrl());
       }
+    } else {
+      console.log('Reminder Modal: Skipping OAuth processing - conditions not met');
     }
-  }, [params, isConnecting, isProcessingCallback])
+  }, [params, isConnecting, isProcessingOAuth, isProcessingCallback])
 
   useEffect(() => {
     const telegramSuccess = params.get("telegram-success");
