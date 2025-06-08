@@ -1,6 +1,6 @@
 "use client";
 import { Skeleton } from "@/components/ui/skeleton";
-import { usePointHistory, useQuests } from "@/hooks/point/use-point";
+import { useQuests } from "@/hooks/point/use-point";
 import React, { useState } from "react";
 import Image from "next/image";
 import { ButtonBlack, GradientSecondaryBtn } from "@/components/ui";
@@ -23,7 +23,11 @@ interface MissionItem {
   step: number;
 }
 
-const Missions = () => {
+interface Props {
+  onMissionComplete: () => void;
+}
+
+const Missions = ({ onMissionComplete }: Props) => {
   const router = useRouter();
   const { auth } = useSpidexCoreContext();
   const {
@@ -35,7 +39,7 @@ const Missions = () => {
     totalPages,
     refetchQuests
   } = useQuests();
-  const { refetchPointHistory } = usePointHistory();
+
   const { triggerSocialQuest, triggerDailyLogin, startSocialQuest } =
     useSpidexCoreContext();
   const [loadingMissionId, setLoadingMissionId] = React.useState<number | null>(
@@ -227,7 +231,7 @@ const Missions = () => {
           return;
       }
       refetchQuests();
-      refetchPointHistory();
+      onMissionComplete();
       return data;
     } catch (error) {
       console.log("🚀 ~ handleFinish ~ error:", error)
@@ -295,7 +299,7 @@ const Missions = () => {
                             height={24}
                           />
                         </div>
-                        {result.type === 20 ? null : <div>/day</div>}
+                        {(result.type === 20 || result.type === 0 || result.type === 3 || result.type === 1 || result.type === 2)  ? null : <div>/day</div>}
                       </div>
                       <div className="col-span-1 text-white flex items-start justify-end">
                         <div>

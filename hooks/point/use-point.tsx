@@ -47,7 +47,18 @@ export const usePointInfo = () => {
 
     }
 
-    return { pointInfo, loading, error, achievements };
+    const refetchPointInfo = async () => {
+        const data = await getUserPointMeInfo();
+        setPointInfo(data);
+        const dataAchievements = await getAchievements();
+        if (dataAchievements.length > 0) {
+            setAchievements(dataAchievements);
+        } else {
+            setAchievements([]);
+        }
+    }
+
+    return { pointInfo, loading, error, achievements, refetchPointInfo };
 
 }
 
@@ -118,8 +129,10 @@ export const usePointHistory = () => {
 
     const refetchPointHistory = async () => {
         setCurrentPage(0); 
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        await fetchPointHistory();
+        const data = await getUserPointHistory(1, perPage);
+        console.log("🚀 ~ refetchPointHistory ~ data:", data)
+        setPointHistory(data.data);
+        setTotalPages(Math.ceil(data.metadata.total / perPage));
     }
 
     return { pointHistory, loading, error, refetchPointHistory, totalPages, currentPage, setCurrentPage };

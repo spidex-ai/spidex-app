@@ -13,8 +13,13 @@ import { formatSILK } from '@/app/utils/format';
 import { useRouter } from 'next/navigation';
 import { useCardano } from '@cardano-foundation/cardano-connect-with-wallet';
 import { formatNumber } from '@/lib/utils';
-const PointInformationWrapper = () => {
-  const { pointInfo, loading, error, achievements } = usePointInfo();
+
+interface Props {
+  pointInfoHook: ReturnType<typeof usePointInfo>;
+}
+
+const PointInformationWrapper = ({ pointInfoHook }: Props) => {
+  const { pointInfo, loading, error, achievements } = pointInfoHook;
   const [copied, setCopied] = useState(false);
   const { stakeAddress } = useCardano();
   const router = useRouter();

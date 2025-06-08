@@ -6,8 +6,17 @@ import React from 'react';
 import History from './_components/history';
 import Missions from './_components/missions';
 import PointInformation from './_components/point-information';
+import { usePointHistory, usePointInfo } from '@/hooks/point/use-point';
 
 const PointsPage: React.FC = () => {
+  const pointHistoryHook = usePointHistory(); 
+  const pointInfoHook = usePointInfo();
+    // Function để handle khi mission complete
+    const handleMissionComplete = async () => {
+      await pointHistoryHook.refetchPointHistory();
+      await pointInfoHook.refetchPointInfo();
+    };
+
   return (
     <ProtectedClient>
       <div className="flex flex-col gap-8 max-w-7xl mx-auto w-full h-full max-h-full overflow-y-auto px-1 pr-4">
@@ -24,10 +33,10 @@ const PointsPage: React.FC = () => {
           </TextGradient>
         </div>
 
-        <PointInformation />
+        <PointInformation pointInfoHook={pointInfoHook} />
 
-        <Missions />
-        <History />
+        <Missions  onMissionComplete={handleMissionComplete} />
+        <History pointHistoryHook={pointHistoryHook} />
       </div>
     </ProtectedClient>
   );

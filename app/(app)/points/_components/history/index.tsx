@@ -15,7 +15,11 @@ interface HistoryItem {
   createdAt: string;
 }
 
-const Hisotry = () => {
+interface Props {
+  pointHistoryHook: ReturnType<typeof usePointHistory>;
+}
+
+const Hisotry = ({ pointHistoryHook }: Props) => {
   const {
     pointHistory,
     loading,
@@ -23,7 +27,8 @@ const Hisotry = () => {
     currentPage,
     setCurrentPage,
     totalPages,
-  } = usePointHistory();
+  } = pointHistoryHook;
+    console.log("🚀 ~ Hisotry ~ pointHistory:", pointHistory)
 
   if (error) {
     return <div>Error: {error}</div>;
