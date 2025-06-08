@@ -352,7 +352,7 @@ const LoginModal: React.FC = () => {
 
   const handleSignMessageSpidex = async (
     address: string,
-    stakedAddress: string,
+    stakeAddress: string,
     signature: string,
     key: string | undefined,
     ref: string | null,
@@ -366,7 +366,7 @@ const LoginModal: React.FC = () => {
           publicKey: key || '',
           role: 'user',
           referralCode: ref || '',
-          stakedAddress,
+          stakeAddress,
         },
         walletName || ''
       );
