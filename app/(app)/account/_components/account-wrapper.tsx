@@ -12,7 +12,7 @@ const Account: React.FC = () => {
 
   return (
     <>
-      <div className="flex flex-col min-w-[42rem] mx-auto gap-4">
+      <div className="flex flex-col min-w-[42rem] mx-auto gap-4 overflow-y-auto">
         {auth?.user && <Information user={auth.user} />}
         {auth?.user && <ConnectedAccounts user={auth.user} />}
       </div>

@@ -167,15 +167,7 @@ const ReminderModal = ({ isOpen, onOpenChange, platform }: ReminderModalProps) =
     const socialConnectCode = params.get("code");
     const callbackType = params.get("type");
 
-    console.log('Reminder Modal useEffect - checking conditions:', {
-      socialConnectCode,
-      callbackType,
-      processedCode: processedCodeRef.current,
-      isConnecting,
-      isProcessingOAuth,
-      isProcessingCallback
-    });
-
+  
     // Only process if not already processed and not currently processing OAuth globally
     if (
       socialConnectCode &&
