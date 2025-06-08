@@ -513,18 +513,20 @@ const LoginModal: React.FC = () => {
       isProcessingCallback
     });
 
-    // Don't process OAuth callbacks if we're on the account page - let Connected Accounts component handle it
+    // Don't process OAuth callbacks if we're on pages with their own OAuth handlers
     const isOnAccountPage = currentPath.includes('/account');
+    const isOnPointsPage = currentPath.includes('/points');
+    const shouldDeferToOtherComponent = isOnAccountPage || isOnPointsPage;
 
     // Only process if we have a code, haven't processed it yet, not currently processing OAuth globally,
-    // and we're NOT on the account page (where Connected Accounts component should handle it)
+    // and we're NOT on pages that have their own OAuth handling components
     if (
       socialConnectCode &&
       socialConnectCode !== processedCodeRef.current &&
       !isConnecting &&
       !isProcessingOAuth &&
       !isProcessingCallback &&
-      !isOnAccountPage
+      !shouldDeferToOtherComponent
     ) {
       console.log('Login Modal: Taking control of OAuth processing');
       processedCodeRef.current = socialConnectCode;
@@ -540,7 +542,7 @@ const LoginModal: React.FC = () => {
         handleXCallback(socialConnectCode, getCurrentUrl());
       }
     } else {
-      console.log('Login Modal: Skipping OAuth processing - conditions not met or on account page');
+      console.log('Login Modal: Skipping OAuth processing - conditions not met or on page with dedicated OAuth handler');
     }
   }, [params, isConnecting, isProcessingOAuth, isProcessingCallback]);
 
