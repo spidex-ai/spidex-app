@@ -33,7 +33,7 @@ const TopHolders: React.FC<Props> = ({ tokenId }) => {
       <div className="overflow-auto h-full">
         <Table>
           <TableHeader className="sticky top-0 bg-background z-10">
-            <TableRow className="bg-bg-tab">
+            <TableRow className="bg-bg-tab hover:!bg-bg-tab">
               <TableHead className="w-16 pl-4">Address</TableHead>
               <TableHead className="text-center w-1/3">% Ownership</TableHead>
               <TableHead className="text-center">Token Balance</TableHead>
