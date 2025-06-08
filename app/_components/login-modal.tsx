@@ -297,21 +297,21 @@ const LoginModal: React.FC = () => {
   const handleSignMessage = async (walletName: string) => {
     try {
       let address = null;
-      let stakedAddress = null;
+      let stakeAddress = null;
       const api = await (window as any).cardano[walletName as any].enable();
       await api?.getUtxos();
       const unusedAddressesHex = await api.getUnusedAddresses();
       const usedAddresses = await api.getUsedAddresses();
-      const stakedAddresses = await api.getRewardAddresses();
+      const stakeAddresses = await api.getRewardAddresses();
       if (usedAddresses && usedAddresses.length > 0) {
         address = decodeHexAddress(usedAddresses[0]);
       } else if (unusedAddressesHex && unusedAddressesHex.length > 0) {
         address = decodeHexAddress(unusedAddressesHex[0]);
       }
-      if (stakedAddresses && stakedAddresses.length > 0) {
-        stakedAddress = decodeHexAddress(stakedAddresses[0]);
+      if (stakeAddresses && stakeAddresses.length > 0) {
+        stakeAddress = decodeHexAddress(stakeAddresses[0]);
       }
-      if (!address || !stakedAddress) {
+      if (!address || !stakeAddress) {
         toast.error('No address found');
         return;
       }
@@ -324,7 +324,7 @@ const LoginModal: React.FC = () => {
         async (signature: string, key: string | undefined) => {
           await handleSignMessageSpidex(
             address,
-            stakedAddress,
+            stakeAddress,
             signature,
             key,
             ref,

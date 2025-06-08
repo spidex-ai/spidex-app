@@ -3,11 +3,11 @@ import {
   SubmitSwapPayload,
   SwapPayload,
 } from '@/services/dexhunter/types';
-import { STORAGE_KEY } from '@raydium-io/raydium-sdk-v2';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { UpdateUserPayload } from './type';
 import { QuoteType } from '@/app/(app)/token/[address]/_components/header/select-quote';
+import { STORAGE_KEY } from '@/app/_contexts';
 export interface SignMessageData {
   signature: string;
   address: string;
@@ -270,7 +270,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
         throw err;
       }
     },
-    [fetchWithAuth]
+    [fetchWithAuth, auth]
   );
 
   const connectGoogle = useCallback(
@@ -289,7 +289,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
         throw err;
       }
     },
-    [fetchWithAuth]
+    [fetchWithAuth, auth]
   );
 
   const connectDiscord = useCallback(
@@ -309,7 +309,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
         throw err;
       }
     },
-    [fetchWithAuth]
+    [fetchWithAuth, auth]
   );
 
   const connectTelegram = useCallback(
@@ -344,14 +344,14 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
         throw err;
       }
     },
-    [fetchWithAuth]
+    [fetchWithAuth, auth]
   );
 
-  const logout = useCallback(async () => {
+  const logout = async () => {
     setAuth(null);
     localStorage.removeItem(STORAGE_KEY);
     router.push('/chat');
-  }, []);
+  }
 
   const getUserRefMeInfo = useCallback(async () => {
     setLoading(true);
