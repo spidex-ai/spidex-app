@@ -245,6 +245,9 @@ importers:
       react-responsive-modal:
         specifier: ^6.4.2
         version: 6.4.2(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      react-slideshow-image:
+        specifier: ^4.3.2
+        version: 4.3.2(react@19.0.0)
       react-syntax-highlighter:
         specifier: ^15.6.1
         version: 15.6.1(react@19.0.0)
@@ -3871,6 +3874,9 @@ packages:
   '@tsconfig/node16@1.0.4':
     resolution: {integrity: sha512-vxhUy4J8lyeyinH7Azl1pdd43GJhZH/tP2weN8TntQblOY+A0XbT8DJk1/oCPuOOyg/Ja757rG0CgHcWC8OfMA==}
 
+  '@tweenjs/tween.js@18.6.4':
+    resolution: {integrity: sha512-lB9lMjuqjtuJrx7/kOkqQBtllspPIN+96OvTCeJ2j5FEzinoAXTdAMFnDAQT1KVPRlnYfBrqxtqP66vDM40xxQ==}
+
   '@types/big.js@6.2.2':
     resolution: {integrity: sha512-e2cOW9YlVzFY2iScnGBBkplKsrn2CsObHQ2Hiw4V1sSyiGbgWL8IyqE3zFi1Pt5o1pdAtYkDAIsF3KKUPjdzaA==}
 
@@ -7323,8 +7329,8 @@ packages:
       react-dom:
         optional: true
 
-  mrcolor@https://github.com/rook2pawn/mrcolor/archive/master.tar.gz:
-    resolution: {tarball: https://github.com/rook2pawn/mrcolor/archive/master.tar.gz}
+  mrcolor@https://codeload.github.com/rook2pawn/mrcolor/tar.gz/refs/heads/master:
+    resolution: {tarball: https://codeload.github.com/rook2pawn/mrcolor/tar.gz/refs/heads/master}
     version: 0.0.1
 
   ms@2.0.0:
@@ -8101,6 +8107,11 @@ packages:
       react: ^16.8.0 || ^17 || ^18
       react-dom: ^16.8.0 || ^17 || ^18
 
+  react-slideshow-image@4.3.2:
+    resolution: {integrity: sha512-cALXr6RvP7er5QYWcX1ctBvG2x4jvZsgSPMPWUzQG47ZeKZjmXNmN9h8y4tScsWk/7TV23uAFQIESN8kxTaBHQ==}
+    peerDependencies:
+      react: '>=15'
+
   react-smooth@4.0.4:
     resolution: {integrity: sha512-gnGKTpYwqL0Iii09gHobNolvX4Kiq4PKx6eWBCYYix+8cdw+cGo3do906l1NBPKkSWx1DghC1dlWG9L2uGd61Q==}
     peerDependencies:
@@ -8255,6 +8266,9 @@ packages:
 
   requires-port@1.0.0:
     resolution: {integrity: sha512-KigOCHcocU3XODJxsu8i/j8T9tzT4adHiecwORRQ0ZZFcp7ahwXuRU1m+yuO90C5ZUyGeGfocHDI14M3L3yDAQ==}
+
+  resize-observer-polyfill@1.5.1:
+    resolution: {integrity: sha512-LwZrotdHOo12nQuZlHEmtuXdqGoOD0OhaxopaNFxWzInpEgaLWoVuAMbTzixuosCx2nEG58ngzW3vxdWoxIgdg==}
 
   resolve-alpn@1.2.1:
     resolution: {integrity: sha512-0a1F4l73/ZFZOakJnQ3FvkJ2+gSTQWz/r2KE5OdDY0TxPm5h4GkqkWWfM47T7HsbnOtcJVEF4epCVy6u7Q3K+g==}
@@ -15206,6 +15220,8 @@ snapshots:
 
   '@tsconfig/node16@1.0.4': {}
 
+  '@tweenjs/tween.js@18.6.4': {}
+
   '@types/big.js@6.2.2': {}
 
   '@types/bn.js@5.1.6':
@@ -16616,7 +16632,7 @@ snapshots:
     dependencies:
       hashish: 0.0.4
       hat: 0.0.3
-      mrcolor: https://github.com/rook2pawn/mrcolor/archive/master.tar.gz
+      mrcolor: https://codeload.github.com/rook2pawn/mrcolor/tar.gz/refs/heads/master
 
   chokidar@3.6.0:
     dependencies:
@@ -19487,7 +19503,7 @@ snapshots:
       react: 19.0.0
       react-dom: 19.0.0(react@19.0.0)
 
-  mrcolor@https://github.com/rook2pawn/mrcolor/archive/master.tar.gz:
+  mrcolor@https://codeload.github.com/rook2pawn/mrcolor/tar.gz/refs/heads/master:
     dependencies:
       color-convert: 0.2.1
 
@@ -20343,6 +20359,12 @@ snapshots:
       react: 19.0.0
       react-dom: 19.0.0(react@19.0.0)
 
+  react-slideshow-image@4.3.2(react@19.0.0):
+    dependencies:
+      '@tweenjs/tween.js': 18.6.4
+      react: 19.0.0
+      resize-observer-polyfill: 1.5.1
+
   react-smooth@4.0.4(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
     dependencies:
       fast-equals: 5.0.1
@@ -20553,6 +20575,8 @@ snapshots:
   require-main-filename@2.0.0: {}
 
   requires-port@1.0.0: {}
+
+  resize-observer-polyfill@1.5.1: {}
 
   resolve-alpn@1.2.1: {}
 

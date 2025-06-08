@@ -194,55 +194,76 @@ const PointInformationWrapper = ({ pointInfoHook }: Props) => {
           <div className="text-white text-[28px] font-medium">OG Level</div>
           <div className="grid grid-cols-3 gap-2 mt-12">
             <div className="col-span-1">
-              {level >= 1 ? (
-                <Image
-                  src="/icons/first-level.svg"
-                  alt="og-level"
-                  width={50}
-                  height={50}
-                />
-              ) : (
-                <Image
-                  src="/icons/first-level-blur.svg"
-                  alt="og-level"
-                  width={50}
-                  height={50}
-                />
-              )}
+              <TooltipProvider>
+                <Tooltip delayDuration={0}>
+                  <TooltipTrigger asChild>
+                    {level >= 1 ? (
+                      <Image
+                        src="/icons/first-level.svg"
+                        alt="og-level"
+                        width={50}
+                        height={50}
+                      />
+                    ) : (
+                      <Image
+                        src="/icons/first-level-blur.svg"
+                        alt="og-level"
+                        width={50}
+                        height={50}
+                      />
+                    )}
+                  </TooltipTrigger>
+                  <TooltipContent>Level 1: 1000 SILK Points</TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             </div>
             <div className="col-span-1">
-              {level >= 2 ? (
-                <Image
-                  src="/icons/second-level.svg"
-                  alt="og-level"
-                  width={50}
-                  height={50}
-                />
-              ) : (
-                <Image
-                  src="/icons/second-level-blur.svg"
-                  alt="og-level"
-                  width={50}
-                  height={50}
-                />
-              )}
+              <TooltipProvider>
+                <Tooltip delayDuration={0}>
+                  <TooltipTrigger asChild>
+                    {level >= 2 ? (
+                      <Image
+                        src="/icons/second-level.svg"
+                        alt="og-level"
+                        width={50}
+                        height={50}
+                      />
+                    ) : (
+                      <Image
+                        src="/icons/second-level-blur.svg"
+                        alt="og-level"
+                        width={50}
+                        height={50}
+                      />
+                    )}
+                  </TooltipTrigger>
+                  <TooltipContent>Level 2: 5000 SILK Points</TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             </div>
             <div className="col-span-1">
-              {level >= 3 ? (
-                <Image
-                  src="/icons/third-level.svg"
-                  alt="og-level"
-                  width={50}
-                  height={50}
-                />
-              ) : (
-                <Image
-                  src="/icons/third-level-blur.svg"
-                  alt="og-level"
-                  width={50}
-                  height={50}
-                />
-              )}
+              <TooltipProvider>
+                <Tooltip delayDuration={0}>
+                  <TooltipTrigger asChild>
+                    {level >= 3 ? (
+                      <Image
+                        src="/icons/third-level.svg"
+                        alt="og-level"
+                        width={50}
+                        height={50}
+                      />
+                    ) : (
+                      <Image
+                        src="/icons/third-level-blur.svg"
+                        alt="og-level"
+                        width={50}
+                        height={50}
+                      />
+                    )}
+                  </TooltipTrigger>
+                  <TooltipContent>Level 3: 10000 SILK Points</TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             </div>
           </div>
         </div>
