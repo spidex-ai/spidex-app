@@ -29,7 +29,7 @@ const TradeHistory: React.FC<Props> = ({ tokenId, ticker }) => {
       <div className="overflow-auto h-full">
         <Table>
           <TableHeader className="sticky top-0 bg-background z-10">
-            <TableRow className="bg-bg-tab">
+            <TableRow className="bg-bg-tab hover:!bg-bg-tab">
               <TableHead className="pl-4">Date</TableHead>
               <TableHead className="text-center">Type</TableHead>
               <TableHead className="text-center">Price</TableHead>

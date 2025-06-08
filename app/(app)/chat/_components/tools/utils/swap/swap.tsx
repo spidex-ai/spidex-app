@@ -73,8 +73,10 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
     buildSwapRequest,
     submitSwapRequest,
   } = useSpidexCoreContext();
-  const { enabledWallet, unusedAddresses, accountBalance, stakeAddress } =
+  const { enabledWallet, unusedAddresses, accountBalance } =
     useCardano();
+  
+  const {auth} = useSpidexCoreContext()
 
   const [inputAmount, setInputAmount] = useState<string>(
     initialInputAmount || ''
@@ -101,7 +103,7 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
     useState<EsitmateSwapResponse>();
 
   const { balance: inputBalance, isLoading: inputBalanceLoading } =
-    useTokenBalance(stakeAddress || '', inputToken?.unit || '');
+    useTokenBalance(auth?.user?.stakeAddress || '', inputToken?.unit || '');
 
   const tokenInputBalance =
     inputToken?.ticker === 'ADA' ? accountBalance : inputBalance;
@@ -297,7 +299,7 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
             setIsNotPool(false);
             setInputToken(token);
           }}
-          address={stakeAddress || ''}
+          address={auth?.user?.stakeAddress || ''}
         />
         <Button
           variant="ghost"
@@ -315,7 +317,7 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
             setIsNotPool(false);
             setOutputToken(token);
           }}
-          address={stakeAddress || ''}
+          address={auth?.user?.stakeAddress || ''}
         />
       </div>
       <div className="text-sm text-red-500">
@@ -323,7 +325,7 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
       </div>
       <Separator />
       <div className="flex flex-col gap-2">
-        {stakeAddress ? (
+        {auth?.user?.stakeAddress ? (
           <GradientButton
             variant="brand"
             className="w-full"

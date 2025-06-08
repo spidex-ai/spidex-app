@@ -75,6 +75,7 @@ const Header: React.FC<Props> = ({
   quote,
   onQuoteChange,
 }) => {
+  console.log("🚀 ~ data:", data)
   if (isLoading) {
     return <Skeleton className="h-6 w-full" />;
   }
@@ -95,7 +96,7 @@ const Header: React.FC<Props> = ({
               {/* <h1 className="text-lg font-bold">({`${data?.ticker}/USD`})</h1> */}
               <SelectQuote
                 quote={quote}
-                token={data?.ticker ?? ''}
+                token={data?.ticker ? data?.ticker : data?.name ? data?.name : ''}
                 onQuoteChange={onQuoteChange}
               />
               <Address address={data?.unit ?? ''} />

@@ -137,14 +137,18 @@ const TokenChart: React.FC<Props> = ({
                 ) : (
                   <>{`${currentPrice} ${quote}`}</>
                 )}
-                <span
-                  className={cn(change > 0 ? 'text-green-500' : 'text-red-500')}
-                >
-                  {' '}
-                  ({change > 0 ? '+' : ''}
-                  {formatNumber(change, 2)}
-                  %)
-                </span>
+                {price && open && (
+                  <span
+                    className={cn(
+                      change > 0 ? 'text-green-500' : 'text-red-500'
+                    )}
+                  >
+                    {' '}
+                    ({change > 0 ? '+' : ''}
+                    {formatNumber(change, 2)}
+                    %)
+                  </span>
+                )}
               </p>
             ) : null}
           </>
