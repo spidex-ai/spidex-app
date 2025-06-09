@@ -8,6 +8,7 @@ import { UserSpidex } from '@/hooks/core/useSpidexCore';
 import {
   useDiscordLogin,
   useGoogleLogin,
+  useTelegramLogin,
   useXLogin,
 } from '@/hooks/social/useSocialLogin';
 import Image from 'next/image';
@@ -30,6 +31,7 @@ const ConnectedAccounts: React.FC<Props> = ({ user }) => {
   const [isConnecting, setIsConnecting] = useState(false);
   const [isTelegramModalOpen, setIsTelegramModalOpen] = useState(false);
   const [isProcessingCallback, setIsProcessingCallback] = useState(false);
+  const { signInWithTelegram } = useTelegramLogin();
   const processedCodeRef = useRef<string | null>(null);
 
   // Get current URL dynamically
@@ -73,6 +75,16 @@ const ConnectedAccounts: React.FC<Props> = ({ user }) => {
       const result = await signInWithX(code, redirectUri);
 
       if (result && typeof window !== 'undefined') {
+        console.log('X login successful');
+
+        // Clean up URL by removing OAuth query parameters
+        const url = new URL(window.location.href);
+        url.searchParams.delete('code');
+        url.searchParams.delete('type');
+        url.searchParams.delete('state');
+        window.history.replaceState({}, '', url.toString());
+        console.log('Cleaned up X OAuth parameters from URL');
+
         // Refresh the page to show updated user info
         router.refresh();
       }
@@ -132,6 +144,15 @@ const ConnectedAccounts: React.FC<Props> = ({ user }) => {
 
       if (result && typeof window !== 'undefined') {
         console.log('Discord login successful');
+
+        // Clean up URL by removing OAuth query parameters
+        const url = new URL(window.location.href);
+        url.searchParams.delete('code');
+        url.searchParams.delete('type');
+        url.searchParams.delete('state');
+        window.history.replaceState({}, '', url.toString());
+        console.log('Cleaned up Discord OAuth parameters from URL');
+
         // Refresh the page to show updated user info
         router.refresh();
       }
@@ -193,6 +214,63 @@ const ConnectedAccounts: React.FC<Props> = ({ user }) => {
       console.log('Connected Accounts: Skipping OAuth processing - conditions not met');
     }
   }, [params, isConnecting, isProcessingOAuth, isProcessingCallback]);
+
+  useEffect(() => {
+    const telegramSuccess = params.get("telegram-success");
+    const telegramError = params.get("telegram-error");
+
+    if (telegramSuccess) {
+      const successData = localStorage.getItem('telegramAuthSuccess');
+      if (successData) {
+        try {
+          const result = JSON.parse(successData);
+          localStorage.removeItem('telegramAuthSuccess');
+
+          const ref = params.get("ref");
+          signInWithTelegram(
+            result.id,
+            result.first_name,
+            result.last_name,
+            result.username,
+            result.photo_url,
+            result.auth_date,
+            result.hash,
+            ref || ""
+          ).then(() => {
+            // Clean up URL by removing Telegram query parameters
+            if (typeof window !== 'undefined') {
+              const url = new URL(window.location.href);
+              url.searchParams.delete('telegram-success');
+              url.searchParams.delete('telegram-error');
+              url.searchParams.delete('ref');
+              window.history.replaceState({}, '', url.toString());
+              console.log('Cleaned up Telegram OAuth parameters from URL');
+            }
+          }).catch(() => {
+            toast.error("Telegram login failed");
+          });
+        } catch (error) {
+          console.error("Failed to process Telegram authentication", error);
+          toast.error("Failed to process Telegram authentication");
+        }
+      }
+    }
+
+    if (telegramError) {
+      const errorMessage = telegramError || 'Telegram authentication failed';
+      toast.error(errorMessage);
+
+      // Clean up URL by removing Telegram error parameters
+      if (typeof window !== 'undefined') {
+        const url = new URL(window.location.href);
+        url.searchParams.delete('telegram-success');
+        url.searchParams.delete('telegram-error');
+        url.searchParams.delete('ref');
+        window.history.replaceState({}, '', url.toString());
+        console.log('Cleaned up Telegram error parameters from URL');
+      }
+    }
+  }, [params, signInWithTelegram]);
 
   return (
     <div className="flex flex-col gap-4 mt-8">
@@ -268,7 +346,6 @@ const ConnectedAccounts: React.FC<Props> = ({ user }) => {
         isOpen={isTelegramModalOpen}
         onClose={() => setIsTelegramModalOpen(false)}
         onSuccess={result => {
-          console.log('Telegram connection successful', result);
           setIsTelegramModalOpen(false);
           router.refresh();
         }}

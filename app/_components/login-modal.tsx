@@ -430,6 +430,16 @@ const LoginModal: React.FC = () => {
       const redirectUri = baseRedirectUri;
       await signInWithX(code, redirectUri, ref || '');
 
+      // Clean up URL by removing OAuth query parameters
+      if (typeof window !== 'undefined') {
+        const url = new URL(window.location.href);
+        url.searchParams.delete('code');
+        url.searchParams.delete('type');
+        url.searchParams.delete('state');
+        window.history.replaceState({}, '', url.toString());
+        console.log('Cleaned up X OAuth parameters from URL');
+      }
+
       closeModal();
     } catch (error: any) {
       if (typeof error === 'string') {
@@ -480,6 +490,14 @@ const LoginModal: React.FC = () => {
 
       if (result && typeof window !== 'undefined') {
         console.log('Discord login successful', result);
+
+        // Clean up URL by removing OAuth query parameters
+        const url = new URL(window.location.href);
+        url.searchParams.delete('code');
+        url.searchParams.delete('type');
+        url.searchParams.delete('state');
+        window.history.replaceState({}, '', url.toString());
+        console.log('Cleaned up OAuth parameters from URL');
       }
       // Close the modal when Discord login is successful
       closeModal();
@@ -569,6 +587,15 @@ const LoginModal: React.FC = () => {
             ref || ''
           )
             .then(() => {
+              // Clean up URL by removing Telegram query parameters
+              if (typeof window !== 'undefined') {
+                const url = new URL(window.location.href);
+                url.searchParams.delete('telegram-success');
+                url.searchParams.delete('telegram-error');
+                url.searchParams.delete('ref');
+                window.history.replaceState({}, '', url.toString());
+                console.log('Cleaned up Telegram OAuth parameters from URL');
+              }
               closeModal();
             })
             .catch(() => {
@@ -584,6 +611,16 @@ const LoginModal: React.FC = () => {
     if (telegramError) {
       const errorMessage = telegramError || 'Telegram authentication failed';
       toast.error(errorMessage);
+
+      // Clean up URL by removing Telegram error parameters
+      if (typeof window !== 'undefined') {
+        const url = new URL(window.location.href);
+        url.searchParams.delete('telegram-success');
+        url.searchParams.delete('telegram-error');
+        url.searchParams.delete('ref');
+        window.history.replaceState({}, '', url.toString());
+        console.log('Cleaned up Telegram error parameters from URL');
+      }
     }
   }, [params, signInWithTelegram, closeModal]);
 

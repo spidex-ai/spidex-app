@@ -69,6 +69,16 @@ const ReminderModal = ({ isOpen, onOpenChange, platform }: ReminderModalProps) =
       const redirectUri = baseRedirectUri;
       await signInWithX(code, redirectUri, ref || "");
 
+      // Clean up URL by removing OAuth query parameters
+      if (typeof window !== 'undefined') {
+        const url = new URL(window.location.href);
+        url.searchParams.delete('code');
+        url.searchParams.delete('type');
+        url.searchParams.delete('state');
+        window.history.replaceState({}, '', url.toString());
+        console.log('Cleaned up X OAuth parameters from URL');
+      }
+
       onOpenChange(false)
     } catch (error: any) {
       console.error('X login error:', error);
@@ -135,6 +145,14 @@ const ReminderModal = ({ isOpen, onOpenChange, platform }: ReminderModalProps) =
 
       if (result && typeof window !== "undefined") {
         console.log("Discord login successful", result);
+
+        // Clean up URL by removing OAuth query parameters
+        const url = new URL(window.location.href);
+        url.searchParams.delete('code');
+        url.searchParams.delete('type');
+        url.searchParams.delete('state');
+        window.history.replaceState({}, '', url.toString());
+        console.log('Cleaned up Discord OAuth parameters from URL');
       }
       // Close the modal when Discord login is successful
       onOpenChange(false)
@@ -215,6 +233,15 @@ const ReminderModal = ({ isOpen, onOpenChange, platform }: ReminderModalProps) =
             result.hash,
             ref || ""
           ).then(() => {
+            // Clean up URL by removing Telegram query parameters
+            if (typeof window !== 'undefined') {
+              const url = new URL(window.location.href);
+              url.searchParams.delete('telegram-success');
+              url.searchParams.delete('telegram-error');
+              url.searchParams.delete('ref');
+              window.history.replaceState({}, '', url.toString());
+              console.log('Cleaned up Telegram OAuth parameters from URL');
+            }
             onOpenChange(false);
           }).catch(() => {
             toast.error("Telegram login failed");
@@ -229,6 +256,16 @@ const ReminderModal = ({ isOpen, onOpenChange, platform }: ReminderModalProps) =
     if (telegramError) {
       const errorMessage = telegramError || 'Telegram authentication failed';
       toast.error(errorMessage);
+
+      // Clean up URL by removing Telegram error parameters
+      if (typeof window !== 'undefined') {
+        const url = new URL(window.location.href);
+        url.searchParams.delete('telegram-success');
+        url.searchParams.delete('telegram-error');
+        url.searchParams.delete('ref');
+        window.history.replaceState({}, '', url.toString());
+        console.log('Cleaned up Telegram error parameters from URL');
+      }
     }
   }, [params, signInWithTelegram, onOpenChange]);
 
