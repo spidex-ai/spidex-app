@@ -215,10 +215,12 @@ const Swap: React.FC<Props> = ({
   const checkPool = useCallback(async () => {
     try {
       await new Promise(resolve => setTimeout(resolve, 1000));
+      console.log('inputToken', inputToken);
+      console.log('outputToken', outputToken);
       if (
-        inputToken?.token_id === outputToken?.token_id ||
-        inputToken?.ticker === outputToken?.ticker ||
-        inputToken?.unit === outputToken?.unit
+        (inputToken?.token_id === outputToken?.token_id && inputToken?.token_id != null && outputToken?.token_id != null) ||
+        (inputToken?.ticker === outputToken?.ticker && inputToken?.ticker != null && outputToken?.ticker != null) ||
+        (inputToken?.unit === outputToken?.unit && inputToken?.unit != null && outputToken?.unit != null)
       ) {
         setIsNotPool(true);
         return;
@@ -256,7 +258,6 @@ const Swap: React.FC<Props> = ({
     console.log('inputToken', inputToken);
     console.log('outputToken', outputToken);
     if (inputToken?.ticker && outputToken?.ticker) {
-      console.log('checkPool');
       checkPool();
     }
   }, [inputToken, outputToken]);

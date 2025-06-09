@@ -17,7 +17,7 @@ import toast from 'react-hot-toast';
 const AgentClub: React.FC = () => {
   const { referralInfo, loading, error } = useRefInfo();
   const { uploadAvatar, updateUserInfo } = useSpidexCoreContext();
-  const { auth } = useSpidexCoreContext();
+  const { auth, getMe } = useSpidexCoreContext();
   console.log('🚀 ~ auth:', auth);
   const [copied, setCopied] = useState(false);
   const [postModalOpen, setPostModalOpen] = useState(false);
@@ -77,6 +77,7 @@ const AgentClub: React.FC = () => {
       }
 
       setAvatar(avatar);
+      getMe();
       toast.success('Avatar updated successfully');
     } catch (error) {
       if (typeof error === 'string') {

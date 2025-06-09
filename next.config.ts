@@ -13,6 +13,9 @@ const nextConfig: NextConfig = {
     ],
     domains: ['cdn.spidex.ag'],
   },
+  compiler: {
+    removeConsole: process.env.NEXT_PUBLIC_ENVIRONMENT === 'production',
+  },
 };
 
 export default nextConfig;
