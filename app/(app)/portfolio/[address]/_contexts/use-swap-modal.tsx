@@ -51,7 +51,12 @@ export const SwapModalProvider: React.FC<{ children: ReactNode }> = ({
     );
     if (!token) return;
     setInputToken(token);
-    setOutputToken(null);
+    if (tokenAddress === 'lovelace') {
+      const token = await getTokenDetailCore('c48cbb3d5e57ed56e276bc45f99ab39abe94e6cd7ac39fb402da47ad0014df105553444d'); //usdm
+      setOutputToken(token);
+    } else {
+      setOutputToken(null);
+    }
     setIsOpen(true);
   };
 
@@ -60,8 +65,14 @@ export const SwapModalProvider: React.FC<{ children: ReactNode }> = ({
       tokenAddress === 'lovelace' ? 'ADA' : tokenAddress
     );
     if (!token) return;
-    setInputToken(null);
     setOutputToken(token);
+    if (tokenAddress === 'lovelace') {
+      const token = await getTokenDetailCore('c48cbb3d5e57ed56e276bc45f99ab39abe94e6cd7ac39fb402da47ad0014df105553444d'); //usdm
+      setInputToken(token);
+    } else {
+      setInputToken(null);
+    }
+ 
     setIsOpen(true);
   };
 
