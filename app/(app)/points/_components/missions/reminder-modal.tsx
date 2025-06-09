@@ -102,6 +102,7 @@ const ReminderModal = ({ isOpen, onOpenChange, platform }: ReminderModalProps) =
     } else if (platform === 'Discord') {
       handleConnectDiscord()
     }
+    onOpenChange(false)
   }
 
   const handleConnectDiscord = () => {

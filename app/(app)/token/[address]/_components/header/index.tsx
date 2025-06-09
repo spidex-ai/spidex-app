@@ -25,47 +25,50 @@ interface Props {
 const slideImages = [
   {
     url: '/icons/snek-banner.svg',
-    link: 'https://www.snek.com/'
+    link: 'https://www.snek.com/',
   },
   {
     url: '/icons/farmroll-banner.svg',
-    link: 'https://farmroll.io/'
+    link: 'https://farmroll.io/',
   },
   {
     url: '/icons/minswap-banner.svg',
-    link: 'https://minswap.org/'
+    link: 'https://minswap.org/',
   },
   {
     url: '/icons/strike-banner.svg',
-    link: 'https://www.strikefinance.org/'
+    link: 'https://www.strikefinance.org/',
   },
   {
     url: '/icons/bodega-banner.svg',
-    link: 'https://www.bodegamarket.xyz/'
+    link: 'https://www.bodegamarket.xyz/',
   },
   {
     url: '/icons/moneta-banner.svg',
-    link: 'https://moneta.global/'
+    link: 'https://moneta.global/',
   },
-]
+  {
+    url: '/icons/dexhunter-banner.svg',
+    link: 'https://app.dexhunter.io/',
+  },
+  {
+    url: '/icons/taptool-banner.svg',
+    link: 'https://www.taptools.io/',
+  },
+];
 
+const arrowClass =
+  'absolute top-1/2 -translate-y-1/2 z-10 bg-black/20 hover:bg-black/50 text-white p-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 h-full';
+// text-xl text-white px-2 py-2
 const slideProperties = {
-  duration: 3000,          
-  autoplay: true,         
+  duration: 3000,
+  autoplay: true,
   transitionDuration: 500,
-  arrows: true,           
-  infinite: true,         
-  easing: 'ease',    
-  prevArrow: (
-    <button className="text-xl text-white px-2 py-2 bg-black/20 hover:bg-black/50 h-full">
-      ◀
-    </button>
-  ),
-  nextArrow: (
-    <button className="text-xl text-white px-2 py-2 bg-black/20 hover:bg-black/50 h-full">
-      ▶
-    </button>
-  ),      
+  arrows: true,
+  infinite: true,
+  easing: 'ease',
+  prevArrow: <button className={`${arrowClass} left-4`}>◀</button>,
+  nextArrow: <button className={`${arrowClass} right-4`}>▶</button>,
 };
 
 const Header: React.FC<Props> = ({
@@ -75,7 +78,7 @@ const Header: React.FC<Props> = ({
   quote,
   onQuoteChange,
 }) => {
-  console.log("🚀 ~ data:", data)
+  console.log('🚀 ~ data:', data);
   if (isLoading) {
     return <Skeleton className="h-6 w-full" />;
   }
@@ -96,7 +99,9 @@ const Header: React.FC<Props> = ({
               {/* <h1 className="text-lg font-bold">({`${data?.ticker}/USD`})</h1> */}
               <SelectQuote
                 quote={quote}
-                token={data?.ticker ? data?.ticker : data?.name ? data?.name : ''}
+                token={
+                  data?.ticker ? data?.ticker : data?.name ? data?.name : ''
+                }
                 onQuoteChange={onQuoteChange}
               />
               <Address address={data?.unit ?? ''} />
@@ -108,14 +113,18 @@ const Header: React.FC<Props> = ({
           </div>
         </div>
       </div>
-      <div className="col-span-4">
-      <Slide {...slideProperties}>
-        {slideImages.map((image, index) => (
-          <div key={index} className="each-slide cursor-pointer" onClick={() => window.open(image.link, '_blank')}>
-            <img src={image.url} className='w-full rounded-md'/>
-          </div>
-        ))}
-      </Slide>
+      <div className="col-span-4 relative group">
+        <Slide {...slideProperties}>
+          {slideImages.map((image, index) => (
+            <div
+              key={index}
+              className="each-slide cursor-pointer rounded-xl"
+              onClick={() => window.open(image.link, '_blank')}
+            >
+              <img src={image.url} alt={`${index+1}`} className="w-full rounded-xl" />
+            </div>
+          ))}
+        </Slide>
       </div>
     </div>
   );
