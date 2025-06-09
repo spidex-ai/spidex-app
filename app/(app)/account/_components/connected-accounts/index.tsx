@@ -345,7 +345,7 @@ const ConnectedAccounts: React.FC<Props> = ({ user }) => {
       <TelegramModal
         isOpen={isTelegramModalOpen}
         onClose={() => setIsTelegramModalOpen(false)}
-        onSuccess={result => {
+        onSuccess={() => {
           setIsTelegramModalOpen(false);
           router.refresh();
         }}
