@@ -73,12 +73,16 @@ const ConnectedAccounts: React.FC<Props> = ({ user }) => {
       const result = await signInWithX(code, redirectUri);
 
       if (result && typeof window !== 'undefined') {
-        console.log('X login successful');
         // Refresh the page to show updated user info
         router.refresh();
       }
     } catch (error: any) {
       console.log('X login error', error);
+      if (typeof error === 'string') {
+        toast.error(error);
+      } else {
+        toast.error('X connection failed');
+      }
     } finally {
       setIsConnecting(false);
       setIsProcessingOAuth(false);
@@ -132,8 +136,11 @@ const ConnectedAccounts: React.FC<Props> = ({ user }) => {
         router.refresh();
       }
     } catch (error: any) {
-      console.log('Discord login error', error);
-      toast.error('Discord connection failed');
+      if (typeof error === 'string') {
+        toast.error(error);
+      } else {
+        toast.error('Discord connection failed');
+      }
     } finally {
       console.log('Setting processing flags to false');
       setIsConnecting(false);

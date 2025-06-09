@@ -139,7 +139,6 @@ const ReminderModal = ({ isOpen, onOpenChange, platform }: ReminderModalProps) =
       // Close the modal when Discord login is successful
       onOpenChange(false)
     } catch (error: any) {
-      console.error('Discord login error:', error);
       if (typeof error === "string") {
         toast.error(error);
       } else {
