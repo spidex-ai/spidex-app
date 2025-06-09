@@ -5,24 +5,21 @@ import React from 'react';
 import RefListItem, { RefListItemProps } from '../ref-list-item';
 import { Skeleton } from '@/components/ui/skeleton';
 import Pagination from '@/app/(app)/_components/pagination';
+import { formatDate } from '@/app/utils/format';
+
 const MyReferrals: React.FC = () => {
   const { myRefUsers, loading, currentPage, setCurrentPage, totalPages } =
     useRefReferredUsers();
 
   const results: RefListItemProps[] = myRefUsers?.map((item, index) => {
     const date = new Date(item.createdAt);
-    const hours = date.getHours().toString().padStart(2, '0');
-    const minutes = date.getMinutes().toString().padStart(2, '0');
-    const day = date.getDate().toString().padStart(2, '0');
-    const month = date.toLocaleString('en-US', { month: 'short' });
-    const year = date.getFullYear();
     return {
       index: index,
       key: index,
       avatar: item.avatar,
       username: item.username,
       point: item.totalReferralPointEarned,
-      date: `${hours}:${minutes} ${day}-${month}-${year}`,
+      date: formatDate(date),
     };
   });
 

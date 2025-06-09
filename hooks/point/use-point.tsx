@@ -104,7 +104,7 @@ export const usePointHistory = () => {
 
     const [currentPage, setCurrentPage] = useState(0); 
     const [totalPages, setTotalPages] = useState(0); 
-    const [perPage] = useState(10);
+    const [perPage] = useState(8);
     const [pointHistory, setPointHistory] = useState<PointHistory[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);

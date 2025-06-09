@@ -6,7 +6,7 @@ import { useRefHistory } from '@/hooks/referral/user-ref';
 import React from 'react';
 import { RefHistoryItem } from '@/hooks/referral/type';
 import Pagination from '@/app/(app)/_components/pagination';
-
+import { formatDate } from '@/app/utils/format';
 const RefHistory = () => {
   const { referralHistory, loading, currentPage, setCurrentPage, totalPages } =
     useRefHistory();
@@ -14,18 +14,13 @@ const RefHistory = () => {
   const results: RefListItemProps[] = referralHistory?.map(
     (item: RefHistoryItem, index: number) => {
       const date = new Date(item.createdAt);
-      const hours = date.getHours().toString().padStart(2, '0');
-      const minutes = date.getMinutes().toString().padStart(2, '0');
-      const day = date.getDate().toString().padStart(2, '0');
-      const month = date.toLocaleString('en-US', { month: 'short' });
-      const year = date.getFullYear();
       return {
         index: index,
         key: index,
         avatar: item.avatar,
         username: item.username,
         point: item.point,
-        date: `${hours}:${minutes} ${day}-${month}-${year}`,
+        date: formatDate(date),
       };
     }
   );

@@ -174,6 +174,8 @@ const Missions = ({ onMissionComplete }: Props) => {
   };
 
   const handleFinish = async (result: MissionItem) => {
+    console.log('auth', auth);
+    
     if (!auth?.user?.xId && (result.type === 0 || result.type === 3 )) {
       setIsReminderModalOpen(true); 
       setReminderModalPlatform('X');

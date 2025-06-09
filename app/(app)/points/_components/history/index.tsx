@@ -5,7 +5,7 @@ import React from 'react';
 import Image from 'next/image';
 
 import { PointHistory } from '@/hooks/point/type';
-import { formatSILK } from '@/app/utils/format';
+import { formatDate, formatSILK } from '@/app/utils/format';
 import Pagination from '@/app/(app)/_components/pagination';
 
 interface HistoryItem {
@@ -28,7 +28,6 @@ const Hisotry = ({ pointHistoryHook }: Props) => {
     setCurrentPage,
     totalPages,
   } = pointHistoryHook;
-    console.log("🚀 ~ Hisotry ~ pointHistory:", pointHistory)
 
   if (error) {
     return <div>Error: {error}</div>;
@@ -38,15 +37,10 @@ const Hisotry = ({ pointHistoryHook }: Props) => {
     pointHistory.length > 0
       ? pointHistory.map((item: PointHistory, index: number) => {
           const date = new Date(item.createdAt);
-          const hours = date.getHours().toString().padStart(2, '0');
-          const minutes = date.getMinutes().toString().padStart(2, '0');
-          const day = date.getDate().toString().padStart(2, '0');
-          const month = date.toLocaleString('en-US', { month: 'short' });
-          const year = date.getFullYear();
           return {
             task: item.questName,
             point: item.amount,
-            createdAt: `${hours}:${minutes} ${day}-${month}-${year}`,
+            createdAt: formatDate(date),
             isBorderBottom: index !== pointHistory.length - 1,
           };
         })

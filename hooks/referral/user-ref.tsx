@@ -37,7 +37,7 @@ export const useRefHistory = () => {
 
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
-  const [perPage] = useState(10);
+  const [perPage] = useState(5);
   const [referralHistory, setReferralHistory] = useState<RefHistoryItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -74,7 +74,7 @@ export const useRefReferredUsers = () => {
 
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
-  const [perPage] = useState(10);
+  const [perPage] = useState(5);
 
   const [myRefUsers, setMyRefUsers] = useState<MyRefItem[]>([]);
   const [loading, setLoading] = useState(false);
