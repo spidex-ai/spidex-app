@@ -238,8 +238,12 @@ const ConnectedAccounts: React.FC<Props> = ({ user }) => {
               window.history.replaceState({}, '', url);
               console.log('Cleaned up Telegram OAuth parameters from URL');
             }
-          }).catch(() => {
-            toast.error("Telegram login failed");
+          }).catch((error) => {
+            if (typeof error === "string") {
+              toast.error(error);
+            } else {
+              toast.error("Telegram login failed");
+            }
           });
         } catch (error) {
           console.error("Failed to process Telegram authentication", error);
