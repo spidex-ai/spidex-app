@@ -72,22 +72,8 @@ const ConnectedAccounts: React.FC<Props> = ({ user }) => {
 
       setIsConnecting(true);
       const redirectUri = getCurrentUrl();
-      const result = await signInWithX(code, redirectUri);
+      await signInWithX(code, redirectUri);
 
-      if (result && typeof window !== 'undefined') {
-        console.log('X login successful');
-
-        // Clean up URL by removing OAuth query parameters
-        const url = new URL(window.location.href);
-        url.searchParams.delete('code');
-        url.searchParams.delete('type');
-        url.searchParams.delete('state');
-        window.history.replaceState({}, '', url.toString());
-        console.log('Cleaned up X OAuth parameters from URL');
-
-        // Refresh the page to show updated user info
-        router.refresh();
-      }
     } catch (error: any) {
       console.log('X login error', error);
       if (typeof error === 'string') {
@@ -96,6 +82,17 @@ const ConnectedAccounts: React.FC<Props> = ({ user }) => {
         toast.error('X connection failed');
       }
     } finally {
+      if (typeof window !== 'undefined') {
+        console.log('X login successful');
+
+        const url = new URL(window.location.href).pathname;
+
+        window.history.replaceState({}, '', url);
+        console.log('Cleaned up X OAuth parameters from URL');
+
+        // Refresh the page to show updated user info
+        router.refresh();
+      }
       setIsConnecting(false);
       setIsProcessingOAuth(false);
     }
@@ -140,22 +137,8 @@ const ConnectedAccounts: React.FC<Props> = ({ user }) => {
       setIsProcessingCallback(true);
 
       const redirectUri = `${getCurrentUrl()}?type=connect-discord`;
-      const result = await signInWithDiscord(code, redirectUri);
+      await signInWithDiscord(code, redirectUri);
 
-      if (result && typeof window !== 'undefined') {
-        console.log('Discord login successful');
-
-        // Clean up URL by removing OAuth query parameters
-        const url = new URL(window.location.href);
-        url.searchParams.delete('code');
-        url.searchParams.delete('type');
-        url.searchParams.delete('state');
-        window.history.replaceState({}, '', url.toString());
-        console.log('Cleaned up Discord OAuth parameters from URL');
-
-        // Refresh the page to show updated user info
-        router.refresh();
-      }
     } catch (error: any) {
       if (typeof error === 'string') {
         toast.error(error);
@@ -163,6 +146,17 @@ const ConnectedAccounts: React.FC<Props> = ({ user }) => {
         toast.error('Discord connection failed');
       }
     } finally {
+      if (typeof window !== 'undefined') {
+        console.log('Discord login successful');
+
+        const url = new URL(window.location.href).pathname;
+
+        window.history.replaceState({}, '', url);
+        console.log('Cleaned up Discord OAuth parameters from URL');
+
+        // Refresh the page to show updated user info
+        router.refresh();
+      }
       console.log('Setting processing flags to false');
       setIsConnecting(false);
       setIsProcessingCallback(false);
@@ -239,11 +233,9 @@ const ConnectedAccounts: React.FC<Props> = ({ user }) => {
           ).then(() => {
             // Clean up URL by removing Telegram query parameters
             if (typeof window !== 'undefined') {
-              const url = new URL(window.location.href);
-              url.searchParams.delete('telegram-success');
-              url.searchParams.delete('telegram-error');
-              url.searchParams.delete('ref');
-              window.history.replaceState({}, '', url.toString());
+              const url = new URL(window.location.href).pathname;
+
+              window.history.replaceState({}, '', url);
               console.log('Cleaned up Telegram OAuth parameters from URL');
             }
           }).catch(() => {
@@ -262,11 +254,9 @@ const ConnectedAccounts: React.FC<Props> = ({ user }) => {
 
       // Clean up URL by removing Telegram error parameters
       if (typeof window !== 'undefined') {
-        const url = new URL(window.location.href);
-        url.searchParams.delete('telegram-success');
-        url.searchParams.delete('telegram-error');
-        url.searchParams.delete('ref');
-        window.history.replaceState({}, '', url.toString());
+        const url = new URL(window.location.href).pathname;
+
+        window.history.replaceState({}, '', url);
         console.log('Cleaned up Telegram error parameters from URL');
       }
     }

@@ -1,4 +1,6 @@
 'use client'
+import TelegramModal from "@/app/_components/telegram-modal";
+import { useSpidexCoreContext } from "@/app/_contexts";
 import {
   Dialog,
   DialogContent,
@@ -7,10 +9,8 @@ import {
 import { useDiscordLogin, useTelegramLogin, useXLogin } from "@/hooks/social/useSocialLogin";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { Platform } from "./reminder-modal-wrapper";
 import toast from "react-hot-toast";
-import TelegramModal from "@/app/_components/telegram-modal";
-import { useSpidexCoreContext } from "@/app/_contexts";
+import { Platform } from "./reminder-modal-wrapper";
 
 interface ReminderModalProps {
   isOpen: boolean;
@@ -27,7 +27,6 @@ const ReminderModal = ({ isOpen, onOpenChange, platform }: ReminderModalProps) =
   const [isProcessingCallback, setIsProcessingCallback] = useState(false);
   const params = useSearchParams()
   const processedCodeRef = useRef<string | null>(null)
-
 
   const getCurrentUrl = () => {
     if (typeof window !== "undefined") {
@@ -69,16 +68,6 @@ const ReminderModal = ({ isOpen, onOpenChange, platform }: ReminderModalProps) =
       const redirectUri = baseRedirectUri;
       await signInWithX(code, redirectUri, ref || "");
 
-      // Clean up URL by removing OAuth query parameters
-      if (typeof window !== 'undefined') {
-        const url = new URL(window.location.href);
-        url.searchParams.delete('code');
-        url.searchParams.delete('type');
-        url.searchParams.delete('state');
-        window.history.replaceState({}, '', url.toString());
-        console.log('Cleaned up X OAuth parameters from URL');
-      }
-
       onOpenChange(false)
     } catch (error: any) {
       console.error('X login error:', error);
@@ -88,6 +77,12 @@ const ReminderModal = ({ isOpen, onOpenChange, platform }: ReminderModalProps) =
         toast.error("X login failed");
       }
     } finally {
+      if (typeof window !== 'undefined') {
+        const url = new URL(window.location.href).pathname;
+
+        window.history.replaceState({}, '', url);
+        console.log('Cleaned up X OAuth parameters from URL');
+      }
       console.log('Setting processing flags to false for X callback');
       setIsConnecting(false);
       setIsProcessingCallback(false);
@@ -142,19 +137,8 @@ const ReminderModal = ({ isOpen, onOpenChange, platform }: ReminderModalProps) =
       const ref = params.get("ref");
       const redirectUri = `${baseRedirectUri}?type=connect-discord`;
       console.log('Calling signInWithDiscord with:', { code, redirectUri, ref });
-      const result = await signInWithDiscord(code, redirectUri, ref || "");
+      await signInWithDiscord(code, redirectUri, ref || "");
 
-      if (result && typeof window !== "undefined") {
-        console.log("Discord login successful", result);
-
-        // Clean up URL by removing OAuth query parameters
-        const url = new URL(window.location.href);
-        url.searchParams.delete('code');
-        url.searchParams.delete('type');
-        url.searchParams.delete('state');
-        window.history.replaceState({}, '', url.toString());
-        console.log('Cleaned up Discord OAuth parameters from URL');
-      }
       // Close the modal when Discord login is successful
       onOpenChange(false)
     } catch (error: any) {
@@ -164,6 +148,12 @@ const ReminderModal = ({ isOpen, onOpenChange, platform }: ReminderModalProps) =
         toast.error("Discord login failed");
       }
     } finally {
+      if (typeof window !== "undefined") {
+        const url = new URL(window.location.href).pathname;
+
+        window.history.replaceState({}, '', url);
+        console.log('Cleaned up Discord OAuth parameters from URL');
+      }
       console.log('Setting processing flags to false');
       setIsConnecting(false);
       setIsProcessingCallback(false);
@@ -185,7 +175,7 @@ const ReminderModal = ({ isOpen, onOpenChange, platform }: ReminderModalProps) =
     const socialConnectCode = params.get("code");
     const callbackType = params.get("type");
 
-  
+
     // Only process if not already processed and not currently processing OAuth globally
     if (
       socialConnectCode &&
@@ -236,11 +226,9 @@ const ReminderModal = ({ isOpen, onOpenChange, platform }: ReminderModalProps) =
           ).then(() => {
             // Clean up URL by removing Telegram query parameters
             if (typeof window !== 'undefined') {
-              const url = new URL(window.location.href);
-              url.searchParams.delete('telegram-success');
-              url.searchParams.delete('telegram-error');
-              url.searchParams.delete('ref');
-              window.history.replaceState({}, '', url.toString());
+              const url = new URL(window.location.href).pathname;
+
+              window.history.replaceState({}, '', url);
               console.log('Cleaned up Telegram OAuth parameters from URL');
             }
             onOpenChange(false);
@@ -260,11 +248,9 @@ const ReminderModal = ({ isOpen, onOpenChange, platform }: ReminderModalProps) =
 
       // Clean up URL by removing Telegram error parameters
       if (typeof window !== 'undefined') {
-        const url = new URL(window.location.href);
-        url.searchParams.delete('telegram-success');
-        url.searchParams.delete('telegram-error');
-        url.searchParams.delete('ref');
-        window.history.replaceState({}, '', url.toString());
+        const url = new URL(window.location.href).pathname;
+
+        window.history.replaceState({}, '', url);
         console.log('Cleaned up Telegram error parameters from URL');
       }
     }
@@ -274,19 +260,19 @@ const ReminderModal = ({ isOpen, onOpenChange, platform }: ReminderModalProps) =
   return (
     <>
       <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="!bg-bg-modal">
-        <div className="text-white text-2xl font-medium mt-5">Reminder</div>
-        <div className="text-white text-sm">
-          To participate in this quest, please link your {platform}
-        </div>
-        <div className="flex justify-end mt-5">
-          <GradientButton onClick={handleConnectUser} isLoading={isConnecting}>Go now</GradientButton>
-        </div>
-      </DialogContent>
-    </Dialog>
+        <DialogContent className="!bg-bg-modal">
+          <div className="text-white text-2xl font-medium mt-5">Reminder</div>
+          <div className="text-white text-sm">
+            To participate in this quest, please link your {platform}
+          </div>
+          <div className="flex justify-end mt-5">
+            <GradientButton onClick={handleConnectUser} isLoading={isConnecting}>Go now</GradientButton>
+          </div>
+        </DialogContent>
+      </Dialog>
 
 
-    <TelegramModal
+      <TelegramModal
         isOpen={isTelegramModalOpen}
         onClose={() => setIsTelegramModalOpen(false)}
         onSuccess={(result) => {

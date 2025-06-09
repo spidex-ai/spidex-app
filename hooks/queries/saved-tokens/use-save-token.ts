@@ -42,6 +42,9 @@ export const useSaveToken = (address: string) => {
           Authorization: `Bearer ${accessToken}`,
         },
       }).then(res => res.json());
+      if (!res) {
+        throw new Error('Failed to save token');
+      }
 
       mutateSavedTokens();
       mutateIsTokenSaved();

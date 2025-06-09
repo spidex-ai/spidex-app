@@ -14,6 +14,7 @@ interface SpidexCoreContextType {
   isAuthenticated: boolean;
   isProcessingOAuth: boolean;
   setIsProcessingOAuth: (processing: boolean) => void;
+  getMe: () => Promise<any>;
   getTopTokensByVolume: (
     timeframe?: string,
     page?: number,
@@ -165,6 +166,7 @@ export const SpidexCoreProvider: React.FC<{ children: React.ReactNode }> = ({
     isAuthenticated,
     isProcessingOAuth,
     setIsProcessingOAuth,
+    getMe: spidexCore.getMe,
     getTopTokensByVolume: spidexCore.getTopTokensByVolume,
     getTopTokensByMcap: spidexCore.getTopTokensByMcap,
     getNounce: spidexCore.getNounce,
