@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-import { SidebarMenuItem, SidebarMenuButton } from '@/components/ui';
+import { SidebarMenuItem, SidebarMenuButton, Badge } from '@/components/ui';
 import Image from 'next/image';
 
 const Leaderboard: React.FC = () => {
@@ -14,7 +14,7 @@ const Leaderboard: React.FC = () => {
         <SidebarMenuButton
           isActive={pathname?.includes('/leaderboard') ?? false}
         >
-          <div className="flex items-center justify-between gap-2 w-full">
+          <div className="flex items-center gap-2 w-full">
             <h1 className="flex items-center gap-2 font-semibold">
               {isActive ? (
                 <Image
@@ -37,9 +37,12 @@ const Leaderboard: React.FC = () => {
             </h1>
 
             {process.env.NEXT_PUBLIC_ENVIRONMENT === 'production' && (
-              <div className="bg-amber-100 text-amber-700 font-semibold text-sm px-1 rounded-md">
-                soon
-              </div>
+              <Badge
+                variant="brandOutline"
+                className="text-[10px] h-5 w-fit px-1 rounded-md"
+              >
+                Soon
+              </Badge>
             )}
           </div>
         </SidebarMenuButton>

@@ -232,8 +232,12 @@ const ReminderModal = ({ isOpen, onOpenChange, platform }: ReminderModalProps) =
               console.log('Cleaned up Telegram OAuth parameters from URL');
             }
             onOpenChange(false);
-          }).catch(() => {
-            toast.error("Telegram login failed");
+          }).catch((error) => {
+            if (typeof error === "string") {
+              toast.error(error);
+            } else {
+              toast.error("Telegram login failed");
+            }
           });
         } catch (error) {
           console.error("Failed to process Telegram authentication", error);
