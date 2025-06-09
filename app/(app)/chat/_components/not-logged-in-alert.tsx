@@ -17,12 +17,12 @@ import { useSpidexCoreContext } from '@/app/_contexts';
 import LoginButtonWrapper from '@/app/_components/login-button-wrapper';
 
 const NotLoggedInAlert: React.FC = () => {
-  const { auth } = useSpidexCoreContext();
+  const { isAuthenticated } = useSpidexCoreContext();
 
   const { confirmed } = useExperimentalConfirmed();
 
   return (
-    <AlertDialog open={!auth?.user && confirmed}>
+    <AlertDialog open={!isAuthenticated && confirmed}>
       <AlertDialogHeader className="hidden">
         <AlertDialogTitle>You are not logged in</AlertDialogTitle>
         <AlertDialogDescription>

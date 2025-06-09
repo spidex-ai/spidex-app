@@ -73,7 +73,6 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
   }, [auth]);
 
   useEffect(() => {
-    console.log('Current auth in useSpidexCoreInternal:', auth);
     if (auth?.accessToken) {
       getMe();
     }
@@ -787,6 +786,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     auth,
     loading,
     error,
+    getMe,
     getTopTokensByVolume,
     getTopTokensByMcap,
     getNounce,
