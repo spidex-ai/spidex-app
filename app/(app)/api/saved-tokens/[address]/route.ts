@@ -2,14 +2,12 @@ import { NextResponse } from 'next/server';
 
 import { addSavedToken, deleteSavedToken, getSavedToken } from '@/db/services';
 
-import tokenCardanoService from '@/services/token-cardano';
-
 export const GET = async (
   request: Request,
   { params }: { params: Promise<{ address: string }> }
 ) => {
   try {
-    // Get the authorization header
+
     const authHeader = request.headers.get('authorization');
     if (!authHeader?.startsWith('Bearer ')) {
       return NextResponse.json(
@@ -33,7 +31,7 @@ export const GET = async (
     );
 
     const { address } = await params;
-    // Verify the token with Privy
+
     if (!user.ok) {
       return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
     }
@@ -78,7 +76,6 @@ export const POST = async (
       }
     );
 
-    // Verify the token with Privy
     if (!user.ok) {
       return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
     }
@@ -87,9 +84,18 @@ export const POST = async (
 
     const { address } = await params;
 
-    const tokenData = await tokenCardanoService.tokenInfo(address);
+    const tokenRes = await fetch(
+      `${process.env.NEXT_PUBLIC_SPIDEX_CORE_API_URL}/tokens/${address}/metadata`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+    const tokenDetail = await tokenRes.json();
 
-    if (!tokenData) {
+    if (!tokenDetail) {
       return NextResponse.json(null, { status: 404 });
     }
 
@@ -97,8 +103,8 @@ export const POST = async (
     const savedToken = await addSavedToken({
       id: address,
       userId: userData.data.id,
-      name: tokenData.name.value,
-      symbol: tokenData.ticker.value,
+      name: tokenDetail.data.name,
+      symbol: tokenDetail.data.ticker,
     });
 
     return NextResponse.json(savedToken);
