@@ -68,6 +68,7 @@ interface SpidexCoreContextType {
   estimateSwap: (payload: EsitmateSwapPayload) => Promise<any>;
   submitSwapRequest: (payload: SubmitSwapPayload) => Promise<any>;
   triggerSocialQuest: (id: number) => Promise<any>;
+  verifySocialQuest: (id: number) => Promise<any>;
   startSocialQuest: (id: number) => Promise<any>;
   triggerDailyLogin: () => Promise<any>;
   uploadAvatar: (file: FormData) => Promise<any>;
@@ -253,6 +254,7 @@ export const SpidexCoreProvider: React.FC<{ children: React.ReactNode }> = ({
     estimateSwap: spidexCore.estimateSwap,
     submitSwapRequest: spidexCore.submitSwapRequest,
     triggerSocialQuest: spidexCore.triggerSocialQuest,
+    verifySocialQuest: spidexCore.verifySocialQuest,
     triggerDailyLogin: spidexCore.triggerDailyLogin,
     startSocialQuest: spidexCore.startSocialQuest,
     uploadAvatar: spidexCore.uploadAvatar,

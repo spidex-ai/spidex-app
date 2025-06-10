@@ -40,7 +40,7 @@ const Missions = ({ onMissionComplete }: Props) => {
     refetchQuests
   } = useQuests();
 
-  const { triggerSocialQuest, triggerDailyLogin, startSocialQuest } =
+  const { triggerSocialQuest, triggerDailyLogin, startSocialQuest, verifySocialQuest } =
     useSpidexCoreContext();
   const [loadingMissionId, setLoadingMissionId] = React.useState<number | null>(
     null
@@ -218,8 +218,12 @@ const Missions = ({ onMissionComplete }: Props) => {
           if (result.step === STEP.VERIFY) {
             data = await triggerSocialQuest(result.id);
             await new Promise(resolve => setTimeout(resolve, 10000));
-            // window.open(result.requireUrl, "_blank");
-            toast.success(`You earned +${result.point} points!`);
+            const verifyResult = await verifySocialQuest(result.id);
+            if (verifyResult?.status === 2) {
+              toast.success(`You earned +${result.point} points!`);
+            } else {
+              toast.error("You have failed the mission! Please try again.");
+            }
           } else {
             data = await startSocialQuest(result.id);
             window.open(result.requireUrl, "_blank");

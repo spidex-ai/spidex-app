@@ -154,7 +154,6 @@ export const GradientSecondaryBtn = (props: any) => {
 
 export const ButtonBlack = (props: any) => {
   const { children, className, isLoading, disabled, ...rest } = props;
-  console.log("🚀 ~ ButtonBlack ~ disabled:", disabled, isLoading)
   return (
     <button
     {...rest}
