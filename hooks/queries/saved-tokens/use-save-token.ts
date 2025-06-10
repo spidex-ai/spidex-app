@@ -20,6 +20,7 @@ export const useSaveToken = (address: string) => {
   const [isUpdating, setIsUpdating] = useState(false);
 
   const makeTokenRequest = async (method: 'POST' | 'DELETE') => {
+    console.log("🚀 ~ useSaveToken ~ address:", address)
     // Check token saved state matches intended action
     if (
       (method === 'POST' && isTokenSaved) ||
@@ -49,6 +50,7 @@ export const useSaveToken = (address: string) => {
       mutateSavedTokens();
       mutateIsTokenSaved();
     } catch (error) {
+      console.log("🚀 ~ makeTokenRequest ~ error:", error)
       throw error;
     } finally {
       setIsUpdating(false);
