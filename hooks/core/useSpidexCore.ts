@@ -63,7 +63,6 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     }
   }, [initialAuth]);
 
-  // Update localStorage whenever auth changes
   useEffect(() => {
     if (auth) {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(auth));
@@ -71,6 +70,36 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
       localStorage.removeItem(STORAGE_KEY);
     }
   }, [auth]);
+
+  // Validate auth object before setting
+  const validateAuth = useCallback((authObj: Auth | null): boolean => {
+    if (authObj === null) return true; // null is valid for logout
+
+    // Check if auth object has required properties
+    if (!authObj.accessToken || !authObj.refreshToken || !authObj.userId) {
+      console.error('Invalid auth object: missing required properties', authObj);
+      return false;
+    }
+
+    return true;
+  }, []);
+
+  // Safe auth setter with validation
+  const setAuthSafely = useCallback((newAuth: Auth | null) => {
+    if (!validateAuth(newAuth)) {
+      console.warn('Attempted to set invalid auth object, ignoring update');
+      return;
+    }
+
+    setAuth(newAuth);
+  }, [validateAuth]);
+
+  // Logout function that can be used anywhere
+  const performLogout = useCallback(() => {
+    setAuth(null);
+    localStorage.removeItem(STORAGE_KEY);
+    router.push('/chat');
+  }, [router]);
 
   useEffect(() => {
     if (auth?.accessToken) {
@@ -123,7 +152,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
           if (refreshResponse.status === 200) {
             const refreshData = await refreshResponse.json();
             const newAuth = { ...auth, ...refreshData.data };
-            setAuth(newAuth);
+            setAuthSafely(newAuth);
 
             // Retry the original request with new access token
             const retryResponse = await fetch(
@@ -144,7 +173,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
             }
             return await retryResponse.json();
           } else {
-            logout();
+            performLogout();
             throw new Error('Session expired. Please login again.');
           }
         }
@@ -163,21 +192,22 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
         throw err || 'An error occurred';
       }
     },
-    [auth?.accessToken]
+    [auth?.accessToken, setAuthSafely, performLogout]
   );
 
   const getMe = useCallback(async () => {
     try {
       const data = await fetchWithAuth('/auth/me');
       if (auth) {
-        setAuth({ ...auth, user: data.data, avatar: data.data.avatar });
+        const updatedAuth = { ...auth, user: data.data, avatar: data.data.avatar };
+        setAuthSafely(updatedAuth);
       }
       return data.data;
     } catch (err) {
       // Error is already handled in fetchWithAuth
       return null;
     }
-  }, [fetchWithAuth, auth]);
+  }, [fetchWithAuth, auth, setAuthSafely]);
 
   const getTopTokensByVolume = useCallback(
     async (timeframe = '24h', page = 1, perPage = 10) => {
@@ -223,13 +253,14 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
           method: 'POST',
           body: JSON.stringify(message),
         });
-        setAuth({ ...data.data, walletName });
+        const newAuth = { ...data.data, walletName };
+        setAuthSafely(newAuth);
         return data.data;
       } catch (err) {
         throw err;
       }
     },
-    [fetchWithAuth]
+    [fetchWithAuth, setAuthSafely]
   );
 
   const refreshToken = useCallback(async () => {
@@ -246,12 +277,12 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
         }),
       });
       const newAuth = { ...auth, ...data.data };
-      setAuth(newAuth);
+      setAuthSafely(newAuth);
       return newAuth;
     } catch (err) {
       return null;
     }
-  }, [fetchWithAuth, auth]);
+  }, [fetchWithAuth, auth, setAuthSafely]);
 
   const connectX = useCallback(
     async (code: string, redirectUri: string, referralCode?: string) => {
@@ -264,13 +295,13 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
             referralCode,
           }),
         });
-        setAuth({ ...data.data });
+        setAuthSafely({ ...data.data });
         return data.data;
       } catch (err) {
         throw err;
       }
     },
-    [fetchWithAuth, auth]
+    [fetchWithAuth, setAuthSafely]
   );
 
   const connectGoogle = useCallback(
@@ -283,13 +314,13 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
             referralCode,
           }),
         });
-        setAuth({ ...data.data });
+        setAuthSafely({ ...data.data });
         return data.data;
       } catch (err) {
         throw err;
       }
     },
-    [fetchWithAuth, auth]
+    [fetchWithAuth, setAuthSafely]
   );
 
   const connectDiscord = useCallback(
@@ -303,13 +334,13 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
             referralCode,
           }),
         });
-        setAuth({ ...data.data});
+        setAuthSafely({ ...data.data});
         return data.data;
       } catch (err) {
         throw err;
       }
     },
-    [fetchWithAuth, auth]
+    [fetchWithAuth, setAuthSafely]
   );
 
   const connectTelegram = useCallback(
@@ -338,20 +369,19 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
           method: 'POST',
           body: JSON.stringify(requestData),
         });
-        setAuth({ ...data.data });
+        setAuthSafely({ ...data.data });
         return data.data;
       } catch (err) {
         throw err;
       }
     },
-    [fetchWithAuth, auth]
+    [fetchWithAuth, setAuthSafely]
   );
 
-  const logout = async () => {
-    setAuth(null);
-    localStorage.removeItem(STORAGE_KEY);
-    router.push('/chat');
-  }
+  const logout = useCallback(async () => {
+    // This is the only place where setting auth to null is intentional
+    performLogout();
+  }, [performLogout]);
 
   const getUserRefMeInfo = useCallback(async () => {
     setLoading(true);
