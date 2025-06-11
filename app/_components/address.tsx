@@ -39,7 +39,7 @@ const Address: React.FC<Props> = ({ address, className }) => {
             )}
             onClick={handleCopy}
           >
-            {address === 'lovelace' ? 'lovelace' : truncateAddress(address)}
+            {address === 'lovelace' ? 'lovelace' : address === 'ADA' ? 'ADA' : truncateAddress(address)}
             <Image
               src={`/icons/${copied ? 'tick-blue.svg' : 'copy-gray.svg'}`}
               alt="copy"

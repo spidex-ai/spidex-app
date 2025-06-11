@@ -14,6 +14,7 @@ type tParams = Promise<{ address: string }>;
 const TokenPage = ({ params }: { params: tParams }) => {
   const { address } = use(params);
   const { data, isLoading } = useTokenDetail(address);
+  console.log("🚀 ~ TokenPage ~ data:", data)
   const [quote, setQuote] = useState<QuoteType>(QuoteType.USD);
 
   return (

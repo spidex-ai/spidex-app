@@ -77,6 +77,24 @@ const WINDOWS = [
   },
 ];
 
+const wINDOWS_ADA = [
+  {
+    label: CandleStickInterval.ONE_DAY,
+    timeframe: CandleStickInterval.ONE_DAY,
+    numDays: 180,
+  },
+  {
+    label: CandleStickInterval.ONE_WEEK,
+    timeframe: CandleStickInterval.ONE_WEEK,
+    numDays: 12,
+  },
+  {
+    label: CandleStickInterval.ONE_MONTH,
+    timeframe: CandleStickInterval.ONE_MONTH,
+    numDays: 12,
+  },
+]
+
 interface Props {
   data: CardanoTokenDetail | null;
   isLoadingTokenDetail: boolean;
@@ -88,9 +106,11 @@ const TokenChart: React.FC<Props> = ({
   isLoadingTokenDetail,
   quote,
 }) => {
+
   const [timeframe, setTimeframe] = useState<CandleStickInterval>(
-    CandleStickInterval.FOUR_HOURS
+  CandleStickInterval.ONE_DAY
   );
+
   const [numDays, setNumDays] = useState<number>(180);
   const { data, isLoading, refetchDataChart } = usePriceChartCore(
     tokenDetail?.unit ?? '',
@@ -123,6 +143,8 @@ const TokenChart: React.FC<Props> = ({
 
   const currentPrice = price < 0.0001 ? '~0.0001' : formatNumber(price, 4);
 
+  const windows = tokenDetail?.ticker === 'ADA' ? wINDOWS_ADA : WINDOWS;
+
   return (
     <div className="flex flex-col h-full w-full">
       <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-1 bg-neutral-100 dark:bg-bg-secondary p-2">
@@ -154,7 +176,7 @@ const TokenChart: React.FC<Props> = ({
           </>
         )}
         <div className="flex flex-row gap-1 items-center">
-          {WINDOWS.map(window => (
+          {windows.map(window => (
             <Button
               key={window.label}
               onClick={() => {
