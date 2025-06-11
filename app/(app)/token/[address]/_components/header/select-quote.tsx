@@ -26,6 +26,7 @@ const SelectQuote = ({
   onQuoteChange,
   disabled,
 }: SelectQuoteProps) => {
+  const quoteOptions = token === 'ADA' ? [QuoteType.USD] : Object.values(QuoteType);
   return (
     <Select
       value={quote}
@@ -36,7 +37,7 @@ const SelectQuote = ({
         <SelectValue placeholder={`${token}/${quote}`} />
       </SelectTrigger>
       <SelectContent className="bg-bg-tab">
-        {Object.values(QuoteType).map(quoteValue => (
+        {quoteOptions.map(quoteValue => (
           <SelectItem
             key={quoteValue}
             value={quoteValue}

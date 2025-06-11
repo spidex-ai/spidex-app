@@ -113,19 +113,25 @@ const Header: React.FC<Props> = ({
           </div>
         </div>
       </div>
-      <div className="col-span-4 relative group">
-        <Slide {...slideProperties}>
-          {slideImages.map((image, index) => (
-            <div
-              key={index}
-              className="each-slide cursor-pointer rounded-xl"
-              onClick={() => window.open(image.link, '_blank')}
-            >
-              <img src={image.url} alt={`${index+1}`} className="w-full rounded-xl" />
-            </div>
-          ))}
-        </Slide>
-      </div>
+      {isSearch && (
+        <div className="col-span-4 relative group">
+          <Slide {...slideProperties}>
+            {slideImages.map((image, index) => (
+              <div
+                key={index}
+                className="each-slide cursor-pointer rounded-xl"
+                onClick={() => window.open(image.link, '_blank')}
+              >
+                <img
+                  src={image.url}
+                  alt={`${index + 1}`}
+                  className="w-full rounded-xl"
+                />
+              </div>
+            ))}
+          </Slide>
+        </div>
+      )}
     </div>
   );
 };
