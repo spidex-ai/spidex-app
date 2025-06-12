@@ -106,7 +106,8 @@ const TokenChart: React.FC<Props> = ({
   isLoadingTokenDetail,
   quote,
 }) => {
-
+  const price24hChange = tokenDetail?.price24hChg ? tokenDetail?.price24hChg * 100 : 0;
+  const price24hChg = formatNumber(price24hChange, 2);
   const [timeframe, setTimeframe] = useState<CandleStickInterval>(
   CandleStickInterval.ONE_DAY
   );
@@ -139,7 +140,6 @@ const TokenChart: React.FC<Props> = ({
 
   const price = data?.length > 0 ? data[data.length - 1].close : 0;
   const open = data?.length > 0 ? data[0].open : 0;
-  const change = ((price - open) / open) * 100;
 
   const currentPrice = price < 0.0001 ? '~0.0001' : formatNumber(price, 4);
 
@@ -162,13 +162,11 @@ const TokenChart: React.FC<Props> = ({
                 {price && open && (
                   <span
                     className={cn(
-                      change > 0 ? 'text-green-500' : 'text-red-500'
+                      tokenDetail?.price24hChg && tokenDetail?.price24hChg > 0 ? 'text-green-500' : 'text-red-500'
                     )}
                   >
                     {' '}
-                    ({change > 0 ? '+' : ''}
-                    {formatNumber(change, 2)}
-                    %)
+                    {`(${tokenDetail?.price24hChg && tokenDetail?.price24hChg > 0 ? `+${price24hChg}` : price24hChg}%)`}
                   </span>
                 )}
               </p>

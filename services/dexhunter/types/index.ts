@@ -28,6 +28,7 @@ export interface TokenDetail {
 export interface CardanoTokenDetail extends SearchTokenInfo {
   total_supply?: number;
   decimals?: number;
+  price24hChg?: number;
 }
 
 /**
