@@ -4,7 +4,7 @@ import {
   SwapPayload,
 } from '@/services/dexhunter/types';
 import { useRouter } from 'next/navigation';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { UpdateUserPayload } from './type';
 import { QuoteType } from '@/app/(app)/token/[address]/_components/header/select-quote';
 import { STORAGE_KEY } from '@/app/_contexts';
@@ -50,8 +50,32 @@ export interface UserSpidex {
 export const useSpidexCore = (initialAuth: Auth | null = null) => {
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
-  const [auth, setAuth] = useState<Auth | null>(initialAuth);
+  const [auth, setAuthInternal] = useState<Auth | null>(initialAuth);
   const [error, setError] = useState<string | null>(null);
+
+  // Wrapper around setAuth to log all direct calls
+  const setAuth = useCallback((newAuth: Auth | null) => {
+    const stack = new Error().stack;
+    console.log('🚨 DIRECT setAuth call detected:', {
+      from: auth ? 'authenticated' : 'null',
+      to: newAuth ? 'authenticated' : 'null',
+      timestamp: new Date().toISOString(),
+      stack: stack
+    });
+
+    // Extra protection: prevent setting to null unless it's from performLogout
+    if (newAuth === null && auth !== null) {
+      const isFromLogout = stack?.includes('performLogout') || stack?.includes('logout');
+      if (!isFromLogout) {
+        console.error('🛑 BLOCKED: Attempted to set auth to null from non-logout function!');
+        console.error('Current auth:', auth);
+        console.error('Stack trace:', stack);
+        return; // Block the null assignment
+      }
+    }
+
+    setAuthInternal(newAuth);
+  }, [auth]);
   // Update auth and localStorage when initialAuth changes
   useEffect(() => {
     if (
@@ -62,6 +86,23 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(initialAuth));
     }
   }, [initialAuth]);
+
+  // Monitor auth changes and log when it becomes null
+  useEffect(() => {
+    const stack = new Error().stack;
+    console.log('📊 Auth state changed in useEffect:', {
+      isAuthenticated: !!auth,
+      userId: auth?.userId,
+      hasToken: !!auth?.accessToken,
+      timestamp: new Date().toISOString(),
+      stack: stack
+    });
+
+    if (auth === null) {
+      console.warn('⚠️  Auth became NULL in useEffect!');
+      console.warn('Stack trace:', stack);
+    }
+  }, [auth]);
 
   useEffect(() => {
     if (auth) {
@@ -78,21 +119,43 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     // Check if auth object has required properties
     if (!authObj.accessToken || !authObj.refreshToken || !authObj.userId) {
       console.error('Invalid auth object: missing required properties', authObj);
+      console.error('Stack trace:', new Error().stack);
       return false;
     }
 
     return true;
   }, []);
 
-  // Safe auth setter with validation
+  // Safe auth setter with validation and detailed logging
   const setAuthSafely = useCallback((newAuth: Auth | null) => {
+    const stack = new Error().stack;
+
+    // Log all auth changes with stack trace
+    console.log('🔐 Auth state change attempt:', {
+      from: auth ? 'authenticated' : 'null',
+      to: newAuth ? 'authenticated' : 'null',
+      currentUserId: auth?.userId,
+      newUserId: newAuth?.userId,
+      currentToken: auth?.accessToken ? `${auth.accessToken.substring(0, 10)}...` : 'none',
+      newToken: newAuth?.accessToken ? `${newAuth.accessToken.substring(0, 10)}...` : 'none',
+      stack: stack
+    });
+
     if (!validateAuth(newAuth)) {
-      console.warn('Attempted to set invalid auth object, ignoring update');
+      console.warn('❌ Attempted to set invalid auth object, ignoring update');
+      console.warn('Stack trace:', stack);
       return;
     }
 
+    // Special warning for null auth when current auth exists
+    if (newAuth === null && auth !== null) {
+      console.warn('⚠️  Setting auth to NULL when current auth exists!');
+      console.warn('Current auth:', auth);
+      console.warn('Stack trace:', stack);
+    }
+
     setAuth(newAuth);
-  }, [validateAuth]);
+  }, [validateAuth, auth]);
 
   // Logout function that can be used anywhere
   const performLogout = useCallback(() => {
@@ -101,9 +164,20 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     router.push('/chat');
   }, [router]);
 
+  // Create a ref to track if we should call getMe
+  const shouldCallGetMe = useRef(false);
+
   useEffect(() => {
-    if (auth?.accessToken) {
-      getMe();
+    if (auth?.accessToken && !shouldCallGetMe.current) {
+      console.log('🔄 Calling getMe() due to accessToken change:', {
+        hasToken: !!auth?.accessToken,
+        userId: auth?.userId,
+        timestamp: new Date().toISOString()
+      });
+      shouldCallGetMe.current = true;
+      getMe().finally(() => {
+        shouldCallGetMe.current = false;
+      });
     }
   }, [auth?.accessToken]);
 
@@ -193,6 +267,51 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
       }
     },
     [auth?.accessToken, setAuthSafely, performLogout]
+  );
+
+  // Special fetch function for social connections that doesn't trigger logout on 401
+  const fetchSocialConnect = useCallback(
+    async (url: string, options: RequestInit = {}) => {
+      setLoading(true);
+      setError(null);
+
+      // Default headers with content type and authorization if token exists
+      const headers = {
+        ...(auth?.accessToken && {
+          Authorization: `Bearer ${auth.accessToken}`,
+        }),
+        ...(!options.body || !(options.body instanceof FormData)
+          ? { 'Content-Type': 'application/json' }
+          : {}),
+        ...options.headers,
+      };
+
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_SPIDEX_CORE_API_URL}${url}`,
+          {
+            ...options,
+            headers,
+          }
+        );
+
+        setLoading(false);
+        const data = await response.json();
+
+        // For social connections, don't trigger logout on 401 - just throw the error
+        if (response.status !== 200) {
+          throw data?.message || `Social connection failed with status: ${response.status}`;
+        }
+
+        return data;
+      } catch (err: any) {
+        setError(err.message || 'An error occurred');
+        setLoading(false);
+        console.error('Social connection error:', err);
+        throw err || 'An error occurred';
+      }
+    },
+    [auth?.accessToken]
   );
 
   const getMe = useCallback(async () => {
@@ -287,7 +406,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
   const connectX = useCallback(
     async (code: string, redirectUri: string, referralCode?: string) => {
       try {
-        const data = await fetchWithAuth('/auth/connect/x', {
+        const data = await fetchSocialConnect('/auth/connect/x', {
           method: 'POST',
           body: JSON.stringify({
             code,
@@ -301,13 +420,13 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
         throw err;
       }
     },
-    [fetchWithAuth, setAuthSafely]
+    [fetchSocialConnect, setAuthSafely]
   );
 
   const connectGoogle = useCallback(
     async (idToken: string, referralCode?: string) => {
       try {
-        const data = await fetchWithAuth('/auth/connect/google', {
+        const data = await fetchSocialConnect('/auth/connect/google', {
           method: 'POST',
           body: JSON.stringify({
             idToken,
@@ -320,13 +439,13 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
         throw err;
       }
     },
-    [fetchWithAuth, setAuthSafely]
+    [fetchSocialConnect, setAuthSafely]
   );
 
   const connectDiscord = useCallback(
     async (code: string, redirectUri: string, referralCode?: string) => {
       try {
-        const data = await fetchWithAuth('/auth/connect/discord', {
+        const data = await fetchSocialConnect('/auth/connect/discord', {
           method: 'POST',
           body: JSON.stringify({
             code,
@@ -340,7 +459,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
         throw err;
       }
     },
-    [fetchWithAuth, setAuthSafely]
+    [fetchSocialConnect, setAuthSafely]
   );
 
   const connectTelegram = useCallback(
@@ -365,7 +484,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
           hash: hash,
           referralCode: referralCode || undefined,
         };
-        const data = await fetchWithAuth('/auth/connect/telegram', {
+        const data = await fetchSocialConnect('/auth/connect/telegram', {
           method: 'POST',
           body: JSON.stringify(requestData),
         });
@@ -375,7 +494,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
         throw err;
       }
     },
-    [fetchWithAuth, setAuthSafely]
+    [fetchSocialConnect, setAuthSafely]
   );
 
   const logout = useCallback(async () => {
@@ -827,6 +946,33 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     }
   }, [fetchWithAuth, auth]);
 
+  // Debug helper - expose auth state to window for debugging
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      (window as any).debugSpidexAuth = {
+        currentAuth: auth,
+        isAuthenticated: !!auth,
+        userId: auth?.userId,
+        hasToken: !!auth?.accessToken,
+        timestamp: new Date().toISOString(),
+        forceLogout: () => {
+          console.log('🔧 Debug: Forcing logout...');
+          performLogout();
+        },
+        getAuthInfo: () => {
+          console.log('🔍 Current auth state:', {
+            auth,
+            isAuthenticated: !!auth,
+            userId: auth?.userId,
+            hasToken: !!auth?.accessToken,
+            timestamp: new Date().toISOString()
+          });
+          return auth;
+        }
+      };
+    }
+  }, [auth, performLogout]);
+
   return {
     auth,
     loading,
@@ -869,6 +1015,17 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     getTokenOHLCV,
     getTokenStats,
     getAchievements,
+    // Debug helpers
+    debugAuthState: () => {
+      console.log('🔍 Debug Auth State:', {
+        auth,
+        isAuthenticated: !!auth,
+        userId: auth?.userId,
+        hasToken: !!auth?.accessToken,
+        timestamp: new Date().toISOString()
+      });
+      return auth;
+    },
   };
 };
 
