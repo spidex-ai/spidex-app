@@ -90,6 +90,7 @@ const ReminderModal = ({ isOpen, onOpenChange, platform }: ReminderModalProps) =
     }
   };
   const handleConnectUser = () => {
+    onOpenChange(false)
     if (platform === 'X') {
       handleConnectX()
     } else if (platform === 'Telegram') {
@@ -97,7 +98,6 @@ const ReminderModal = ({ isOpen, onOpenChange, platform }: ReminderModalProps) =
     } else if (platform === 'Discord') {
       handleConnectDiscord()
     }
-    onOpenChange(false)
   }
 
   const handleConnectDiscord = () => {
