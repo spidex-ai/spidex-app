@@ -198,19 +198,59 @@ const LoginModal: React.FC = () => {
   });
   const anyConnectionInProgress = walletConnecting !== null || isConnecting;
 
+  // Helper function to extract wallet name from error message
+  const extractWalletNameFromError = (errorMessage: string): string | null => {
+    // Try different patterns to extract wallet name from error messages
+    const patterns = [
+      // Pattern for "window.cardano.{walletName} is not available"
+      /window\.cardano\.(\w+)\s+is\s+not\s+available/i,
+      // Pattern for "API of {WalletName} is not injected"
+      /API\s+of\s+(\w+)\s+is\s+not\s+injected/i,
+      // Pattern for "{WalletName} wallet is not installed"
+      /(\w+)\s+wallet\s+is\s+not\s+installed/i,
+      // Pattern for "Cannot find {walletName}"
+      /Cannot\s+find\s+(\w+)/i,
+      // Pattern for "{WalletName} is not available"
+      /(\w+)\s+is\s+not\s+available/i,
+      // Fallback: try to find wallet names in the message
+      new RegExp(`(${WALLET_METHODS.map(w => w.id).join('|')})`, 'i')
+    ];
+
+    for (const pattern of patterns) {
+      const match = errorMessage.match(pattern);
+      if (match && match[1]) {
+        const extractedName = match[1].toLowerCase();
+        // Verify it's a valid wallet name
+        const wallet = WALLET_METHODS.find(w => w.id.toLowerCase() === extractedName);
+        if (wallet) {
+          return wallet.id;
+        }
+      }
+    }
+
+    return null;
+  };
+
   const onWalletConnectError = (error: Error) => {
-    console.log('Wallet connection error', error);
+    console.log('Wallet connection error', error.message);
     if (error.name === 'WrongNetworkTypeError') {
       console.log('WrongNetworkTypeError');
       toast.error('Please connect to the mainnet');
-    } else if (error.name === 'WalletNotInstalledError') {
-      const walletName = error.message.split(' ')[2];
+    } else if (error.name === 'WalletNotInstalledError' || !(window as any).cardano) {
+      // Try to extract wallet name from error message using multiple patterns
+      let walletName = extractWalletNameFromError(error.message);
+
+      // Fallback to the currently connecting wallet if extraction fails
+      if (!walletName && walletConnecting) {
+        walletName = walletConnecting;
+      }
+
       const wallet = WALLET_METHODS.find(w => w.id === walletName);
       setNotInstalledWallet({
-        name: wallet?.name || '',
+        name: wallet?.name || 'Unknown Wallet',
         logo: wallet?.icon || '',
         link: wallet?.link || '',
-        id: wallet?.id || '',
+        id: wallet?.id || walletName || '',
       });
       setShowWalletNotInstalled(true);
     } else {
