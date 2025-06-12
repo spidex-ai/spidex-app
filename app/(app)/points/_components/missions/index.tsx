@@ -390,7 +390,7 @@ const Missions = ({ onMissionComplete }: Props) => {
 
       <ReminderModalWrapper
         isOpen={isReminderModalOpen}
-        onOpenChange={() => setIsReminderModalOpen(!isReminderModalOpen)}
+        onOpenChange={(value) => setIsReminderModalOpen(value)}
         platform={reminderModalPlatform}
       />
     </div>
