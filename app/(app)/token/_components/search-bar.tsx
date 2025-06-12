@@ -125,7 +125,7 @@ const SearchBar: React.FC<Props> = ({ isTitle = true }) => {
                                                             ${token.price.toLocaleString(undefined, { maximumFractionDigits: 5 })} <span className={token.price_change_24h_percent > 0 ? 'text-green-500' : 'text-red-500'}>({token.price_change_24h_percent > 0 ? '+' : ''}{token.price_change_24h_percent.toLocaleString(undefined, { maximumFractionDigits: 2 })}%)</span>
                                                         </p> */}
                             <p className="text-xs text-muted-foreground">
-                              {formatPrice(token.price)}
+                              {formatPrice(token.usdPrice || 0)}
                             </p>
                           </div>
                           <SaveToken address={token.token_id} />
