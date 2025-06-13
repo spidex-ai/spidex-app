@@ -50,38 +50,9 @@ export interface UserSpidex {
 export const useSpidexCore = (initialAuth: Auth | null = null) => {
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
-  const [auth, setAuthInternal] = useState<Auth | null>(initialAuth);
+  const [auth, setAuth] = useState<Auth | null>(initialAuth);
   const [error, setError] = useState<string | null>(null);
 
-  // Wrapper around setAuth to log all direct calls
-  const setAuth = useCallback(
-    (newAuth: Auth | null) => {
-      const stack = new Error().stack;
-      console.log('🚨 DIRECT setAuth call detected:', {
-        from: auth ? 'authenticated' : 'null',
-        to: newAuth ? 'authenticated' : 'null',
-        timestamp: new Date().toISOString(),
-        stack: stack,
-      });
-
-      // Extra protection: prevent setting to null unless it's from performLogout
-      if (newAuth === null && auth !== null) {
-        const isFromLogout =
-          stack?.includes('performLogout') || stack?.includes('logout');
-        if (!isFromLogout) {
-          console.error(
-            '🛑 BLOCKED: Attempted to set auth to null from non-logout function!'
-          );
-          console.error('Current auth:', auth);
-          console.error('Stack trace:', stack);
-          return; // Block the null assignment
-        }
-      }
-
-      setAuthInternal(newAuth);
-    },
-    [auth]
-  );
   // Update auth and localStorage when initialAuth changes
   useEffect(() => {
     if (
@@ -89,32 +60,13 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
       (!auth || initialAuth.accessToken !== auth.accessToken)
     ) {
       setAuth(initialAuth);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(initialAuth));
     }
   }, [initialAuth]);
 
-  // Monitor auth changes and log when it becomes null
-  useEffect(() => {
-    const stack = new Error().stack;
-    console.log('📊 Auth state changed in useEffect:', {
-      isAuthenticated: !!auth,
-      userId: auth?.userId,
-      hasToken: !!auth?.accessToken,
-      timestamp: new Date().toISOString(),
-      stack: stack,
-    });
-
-    if (auth === null) {
-      console.warn('⚠️  Auth became NULL in useEffect!');
-      console.warn('Stack trace:', stack);
-    }
-  }, [auth]);
 
   useEffect(() => {
     if (auth) {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(auth));
-    } else {
-      localStorage.removeItem(STORAGE_KEY);
     }
   }, [auth]);
 
@@ -124,56 +76,21 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
 
     // Check if auth object has required properties
     if (!authObj.accessToken || !authObj.refreshToken || !authObj.userId) {
-      console.error(
-        'Invalid auth object: missing required properties',
-        authObj
-      );
-      console.error('Stack trace:', new Error().stack);
       return false;
     }
 
     return true;
   }, []);
+  
+  // Safe auth setter with validation
+  const setAuthSafely = useCallback((newAuth: Auth | null) => {
+    if (!validateAuth(newAuth)) {
+      console.warn('Attempted to set invalid auth object, ignoring update');
+      return;
+    }
 
-  // Safe auth setter with validation and detailed logging
-  const setAuthSafely = useCallback(
-    (newAuth: Auth | null) => {
-      const stack = new Error().stack;
-
-      // Log all auth changes with stack trace
-      console.log('🔐 Auth state change attempt:', {
-        from: auth ? 'authenticated' : 'null',
-        to: newAuth ? 'authenticated' : 'null',
-        currentUserId: auth?.userId,
-        newUserId: newAuth?.userId,
-        currentToken: auth?.accessToken
-          ? `${auth.accessToken.substring(0, 10)}...`
-          : 'none',
-        newToken: newAuth?.accessToken
-          ? `${newAuth.accessToken.substring(0, 10)}...`
-          : 'none',
-        stack: stack,
-      });
-
-      if (!validateAuth(newAuth)) {
-        console.warn(
-          '❌ Attempted to set invalid auth object, ignoring update'
-        );
-        console.warn('Stack trace:', stack);
-        return;
-      }
-
-      // Special warning for null auth when current auth exists
-      if (newAuth === null && auth !== null) {
-        console.warn('⚠️  Setting auth to NULL when current auth exists!');
-        console.warn('Current auth:', auth);
-        console.warn('Stack trace:', stack);
-      }
-
-      setAuth(newAuth);
-    },
-    [validateAuth, auth]
-  );
+    setAuth(newAuth);
+  }, [validateAuth]);
 
   // Logout function that can be used anywhere
   const performLogout = useCallback(() => {
@@ -182,20 +99,9 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     router.push('/chat');
   }, [router]);
 
-  // Create a ref to track if we should call getMe
-  const shouldCallGetMe = useRef(false);
-
   useEffect(() => {
-    if (auth?.accessToken && !shouldCallGetMe.current) {
-      console.log('🔄 Calling getMe() due to accessToken change:', {
-        hasToken: !!auth?.accessToken,
-        userId: auth?.userId,
-        timestamp: new Date().toISOString(),
-      });
-      shouldCallGetMe.current = true;
-      getMe().finally(() => {
-        shouldCallGetMe.current = false;
-      });
+    if (auth?.accessToken) {
+      getMe();
     }
   }, [auth?.accessToken]);
 
@@ -530,7 +436,6 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
   );
 
   const logout = useCallback(async () => {
-    // This is the only place where setting auth to null is intentional
     performLogout();
   }, [performLogout]);
 
@@ -594,7 +499,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     try {
       const data = await fetchWithAuth(`/user-point/me/info`);
       return data.data;
-    } catch (error) {}
+    } catch (error) { }
   }, [fetchWithAuth, auth]);
 
   const getUserQuests = useCallback(
@@ -639,9 +544,8 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
       setError(null);
       try {
         const data = await fetchWithAuth(
-          `/portfolio/${
-            address ||
-            'addr1q9gykktajrgrmj5am8vwlhp65a72emlwn2s3e5cadkhe3vrfkfxs6yajls3ft0yn42uqlcnrq6qcn3l0lunkxy6aplgspxm6da'
+          `/portfolio/${address ||
+          'addr1q9gykktajrgrmj5am8vwlhp65a72emlwn2s3e5cadkhe3vrfkfxs6yajls3ft0yn42uqlcnrq6qcn3l0lunkxy6aplgspxm6da'
           }`
         );
         return data.data;
@@ -677,9 +581,8 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
       setError(null);
       try {
         const data = await fetchWithAuth(
-          `/portfolio/${
-            address ||
-            'addr1q9gykktajrgrmj5am8vwlhp65a72emlwn2s3e5cadkhe3vrfkfxs6yajls3ft0yn42uqlcnrq6qcn3l0lunkxy6aplgspxm6da'
+          `/portfolio/${address ||
+          'addr1q9gykktajrgrmj5am8vwlhp65a72emlwn2s3e5cadkhe3vrfkfxs6yajls3ft0yn42uqlcnrq6qcn3l0lunkxy6aplgspxm6da'
           }/transactions?page=1&count=20&order=desc`
         );
         return data;
