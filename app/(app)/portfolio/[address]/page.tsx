@@ -4,6 +4,7 @@ import Transactions from './_components/transactions';
 
 import ProtectedClient from '../../../components/protected-client';
 import { SwapModalProvider } from './_contexts/use-swap-modal';
+import ReportBug from '../../_components/report-bug';
 
 const Portfolio = async ({
   params,
@@ -15,10 +16,13 @@ const Portfolio = async ({
   return (
     <ProtectedClient>
       <SwapModalProvider>
-        <div className="max-w-4xl mx-auto w-full flex flex-col gap-8 md:pt-4 h-full overflow-y-scroll no-scrollbar">
+        <div className="relative h-full max-h-full">
+          <div className="max-w-4xl mx-auto w-full flex flex-col gap-8 md:pt-4 h-full overflow-y-scroll no-scrollbar">
           <Header address={address} />
           <Tokens address={address} />
           <Transactions address={address} />
+          </div>
+          <ReportBug />
         </div>
       </SwapModalProvider>
     </ProtectedClient>
