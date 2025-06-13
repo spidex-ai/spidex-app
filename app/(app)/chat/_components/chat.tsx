@@ -5,9 +5,7 @@ import React from 'react';
 import EmptyChat from './empty';
 import Messages from './messages';
 import ChatInput from './input';
-
 import { useChat } from '../_contexts/chat';
-import Image from 'next/image';
 import ReportBug from '../../_components/report-bug';
 
 const Chat: React.FC = () => {
@@ -32,7 +30,7 @@ const Chat: React.FC = () => {
             )}
           </div>
         </div>
-        {cleanedMessages.length === 0 && (
+        {/* {cleanedMessages.length === 0 && (
           <div
             className="absolute top-0 right-10 cursor-pointer"
             onClick={() => {
@@ -46,7 +44,7 @@ const Chat: React.FC = () => {
               height={100}
             />
           </div>
-        )}
+        )} */}
         <ReportBug />
       </div>
     </>
