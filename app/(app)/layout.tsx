@@ -7,6 +7,7 @@ import ExperimentalAlertDialog from './_components/experimental-alert-dialog';
 
 import { ChatProvider } from './chat/_contexts/chat';
 import { Toaster } from 'react-hot-toast';
+import ResponsiveDialog from './_components/responsive-dialog';
 
 interface Props {
   children: React.ReactNode;
@@ -15,7 +16,7 @@ interface Props {
 const Layout: React.FC<Props> = ({ children }) => {
   return (
     <SidebarProvider>
-      {/* <ResponsiveDialog /> */}
+      <ResponsiveDialog />
       <ExperimentalAlertDialog />
       <ChatProvider>
         <Sidebar>{children}</Sidebar>
