@@ -44,7 +44,7 @@ export interface UserSpidex {
   telegramUsername: string | null;
   xLink: string | null;
   createdAt: Date;
-  stakeAddress: string; 
+  stakeAddress: string;
 }
 
 export const useSpidexCore = (initialAuth: Auth | null = null) => {
@@ -54,28 +54,34 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
   const [error, setError] = useState<string | null>(null);
 
   // Wrapper around setAuth to log all direct calls
-  const setAuth = useCallback((newAuth: Auth | null) => {
-    const stack = new Error().stack;
-    console.log('🚨 DIRECT setAuth call detected:', {
-      from: auth ? 'authenticated' : 'null',
-      to: newAuth ? 'authenticated' : 'null',
-      timestamp: new Date().toISOString(),
-      stack: stack
-    });
+  const setAuth = useCallback(
+    (newAuth: Auth | null) => {
+      const stack = new Error().stack;
+      console.log('🚨 DIRECT setAuth call detected:', {
+        from: auth ? 'authenticated' : 'null',
+        to: newAuth ? 'authenticated' : 'null',
+        timestamp: new Date().toISOString(),
+        stack: stack,
+      });
 
-    // Extra protection: prevent setting to null unless it's from performLogout
-    if (newAuth === null && auth !== null) {
-      const isFromLogout = stack?.includes('performLogout') || stack?.includes('logout');
-      if (!isFromLogout) {
-        console.error('🛑 BLOCKED: Attempted to set auth to null from non-logout function!');
-        console.error('Current auth:', auth);
-        console.error('Stack trace:', stack);
-        return; // Block the null assignment
+      // Extra protection: prevent setting to null unless it's from performLogout
+      if (newAuth === null && auth !== null) {
+        const isFromLogout =
+          stack?.includes('performLogout') || stack?.includes('logout');
+        if (!isFromLogout) {
+          console.error(
+            '🛑 BLOCKED: Attempted to set auth to null from non-logout function!'
+          );
+          console.error('Current auth:', auth);
+          console.error('Stack trace:', stack);
+          return; // Block the null assignment
+        }
       }
-    }
 
-    setAuthInternal(newAuth);
-  }, [auth]);
+      setAuthInternal(newAuth);
+    },
+    [auth]
+  );
   // Update auth and localStorage when initialAuth changes
   useEffect(() => {
     if (
@@ -95,7 +101,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
       userId: auth?.userId,
       hasToken: !!auth?.accessToken,
       timestamp: new Date().toISOString(),
-      stack: stack
+      stack: stack,
     });
 
     if (auth === null) {
@@ -118,7 +124,10 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
 
     // Check if auth object has required properties
     if (!authObj.accessToken || !authObj.refreshToken || !authObj.userId) {
-      console.error('Invalid auth object: missing required properties', authObj);
+      console.error(
+        'Invalid auth object: missing required properties',
+        authObj
+      );
       console.error('Stack trace:', new Error().stack);
       return false;
     }
@@ -127,35 +136,44 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
   }, []);
 
   // Safe auth setter with validation and detailed logging
-  const setAuthSafely = useCallback((newAuth: Auth | null) => {
-    const stack = new Error().stack;
+  const setAuthSafely = useCallback(
+    (newAuth: Auth | null) => {
+      const stack = new Error().stack;
 
-    // Log all auth changes with stack trace
-    console.log('🔐 Auth state change attempt:', {
-      from: auth ? 'authenticated' : 'null',
-      to: newAuth ? 'authenticated' : 'null',
-      currentUserId: auth?.userId,
-      newUserId: newAuth?.userId,
-      currentToken: auth?.accessToken ? `${auth.accessToken.substring(0, 10)}...` : 'none',
-      newToken: newAuth?.accessToken ? `${newAuth.accessToken.substring(0, 10)}...` : 'none',
-      stack: stack
-    });
+      // Log all auth changes with stack trace
+      console.log('🔐 Auth state change attempt:', {
+        from: auth ? 'authenticated' : 'null',
+        to: newAuth ? 'authenticated' : 'null',
+        currentUserId: auth?.userId,
+        newUserId: newAuth?.userId,
+        currentToken: auth?.accessToken
+          ? `${auth.accessToken.substring(0, 10)}...`
+          : 'none',
+        newToken: newAuth?.accessToken
+          ? `${newAuth.accessToken.substring(0, 10)}...`
+          : 'none',
+        stack: stack,
+      });
 
-    if (!validateAuth(newAuth)) {
-      console.warn('❌ Attempted to set invalid auth object, ignoring update');
-      console.warn('Stack trace:', stack);
-      return;
-    }
+      if (!validateAuth(newAuth)) {
+        console.warn(
+          '❌ Attempted to set invalid auth object, ignoring update'
+        );
+        console.warn('Stack trace:', stack);
+        return;
+      }
 
-    // Special warning for null auth when current auth exists
-    if (newAuth === null && auth !== null) {
-      console.warn('⚠️  Setting auth to NULL when current auth exists!');
-      console.warn('Current auth:', auth);
-      console.warn('Stack trace:', stack);
-    }
+      // Special warning for null auth when current auth exists
+      if (newAuth === null && auth !== null) {
+        console.warn('⚠️  Setting auth to NULL when current auth exists!');
+        console.warn('Current auth:', auth);
+        console.warn('Stack trace:', stack);
+      }
 
-    setAuth(newAuth);
-  }, [validateAuth, auth]);
+      setAuth(newAuth);
+    },
+    [validateAuth, auth]
+  );
 
   // Logout function that can be used anywhere
   const performLogout = useCallback(() => {
@@ -172,7 +190,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
       console.log('🔄 Calling getMe() due to accessToken change:', {
         hasToken: !!auth?.accessToken,
         userId: auth?.userId,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
       shouldCallGetMe.current = true;
       getMe().finally(() => {
@@ -201,6 +219,13 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
           : {}),
         ...options.headers,
       };
+
+      console.log({
+        'fetchWithAuth called with URL:': url,
+        'and options:': options,
+        'from:': new Error().stack,
+        'headers:': headers,
+      });
 
       try {
         const response = await fetch(
@@ -300,7 +325,10 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
 
         // For social connections, don't trigger logout on 401 - just throw the error
         if (response.status !== 200) {
-          throw data?.message || `Social connection failed with status: ${response.status}`;
+          throw (
+            data?.message ||
+            `Social connection failed with status: ${response.status}`
+          );
         }
 
         return data;
@@ -318,7 +346,11 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     try {
       const data = await fetchWithAuth('/auth/me');
       if (auth) {
-        const updatedAuth = { ...auth, user: data.data, avatar: data.data.avatar };
+        const updatedAuth = {
+          ...auth,
+          user: data.data,
+          avatar: data.data.avatar,
+        };
         setAuthSafely(updatedAuth);
       }
       return data.data;
@@ -453,7 +485,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
             referralCode,
           }),
         });
-        setAuthSafely({ ...data.data});
+        setAuthSafely({ ...data.data });
         return data.data;
       } catch (err) {
         throw err;
@@ -792,38 +824,47 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     [fetchWithAuth, auth]
   );
 
-  const verifySocialQuest = useCallback(async (id: number) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const data = await fetchWithAuth(`/user-quest/verify/${id}`, {
-        method: "GET", 
-      });
-      return data.data;
-    } catch (error) {
-      return null;
-    } finally { 
-      setLoading(false);
-    }
-  }, [fetchWithAuth, auth]);
+  const verifySocialQuest = useCallback(
+    async (id: number) => {
+      setLoading(true);
+      setError(null);
+      try {
+        const data = await fetchWithAuth(`/user-quest/verify/${id}`, {
+          method: 'GET',
+        });
+        return data.data;
+      } catch (error) {
+        return null;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [fetchWithAuth, auth]
+  );
 
-  const startSocialQuest = useCallback(async (id: number) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const data = await fetchWithAuth(`/user-quest/start-social-quest/${id}`, {
-        method: "PUT", 
-        body: JSON.stringify({
-          questId: id,
-        }),
-      });
-      return data.data;
-    } catch (error) {
-      return null;
-    } finally { 
-      setLoading(false);
-    }
-  }, [fetchWithAuth, auth]);
+  const startSocialQuest = useCallback(
+    async (id: number) => {
+      setLoading(true);
+      setError(null);
+      try {
+        const data = await fetchWithAuth(
+          `/user-quest/start-social-quest/${id}`,
+          {
+            method: 'PUT',
+            body: JSON.stringify({
+              questId: id,
+            }),
+          }
+        );
+        return data.data;
+      } catch (error) {
+        return null;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [fetchWithAuth, auth]
+  );
 
   const triggerDailyLogin = useCallback(async () => {
     setLoading(true);
@@ -965,10 +1006,10 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
             isAuthenticated: !!auth,
             userId: auth?.userId,
             hasToken: !!auth?.accessToken,
-            timestamp: new Date().toISOString()
+            timestamp: new Date().toISOString(),
           });
           return auth;
-        }
+        },
       };
     }
   }, [auth, performLogout]);
@@ -1022,7 +1063,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
         isAuthenticated: !!auth,
         userId: auth?.userId,
         hasToken: !!auth?.accessToken,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
       return auth;
     },

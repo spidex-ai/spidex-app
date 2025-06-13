@@ -8,10 +8,6 @@ export class S3Service {
   private s3Client: S3Client;
   private bucket: string;
   constructor() {
-    console.log('AWS_ACCESS_KEY_ID:::', process.env.S3_ACCESS_KEY_ID);
-    console.log('AWS_SECRET_ACCESS_KEY:::', process.env.S3_SECRET_ACCESS_KEY);
-    console.log('S3_PREVIEW_URL:::', process.env.S3_PREVIEW_URL);
-    console.log('S3_BUCKET:::', process.env.S3_BUCKET);
     this.s3Client = new S3Client({
       credentials: {
         accessKeyId: process.env.S3_ACCESS_KEY_ID!,

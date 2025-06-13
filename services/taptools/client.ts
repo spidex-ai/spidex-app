@@ -9,8 +9,6 @@ export class TaptoolsClient {
   private apiKey: string;
 
   constructor(apiKey?: string) {
-    console.log('TAPTOOLS_API_URL:::', process.env.TAPTOOLS_API_URL);
-    console.log('TAPTOOLS_API_KEY:::', process.env.TAPTOOLS_API_KEY);
     this.apiKey = apiKey || process.env.TAPTOOLS_API_KEY || '';
     this.client = axios.create({
       baseURL: process.env.TAPTOOLS_API_URL,
@@ -33,7 +31,6 @@ export class TaptoolsClient {
         params,
       };
 
-      console.log(`Making GET request to: ${endpoint}`);
       const response = await this.client.get<T>(endpoint, config);
       return response.data;
     } catch (error: any) {
