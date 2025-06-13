@@ -1,14 +1,14 @@
-"use client";
-import Pagination from "@/app/(app)/_components/pagination";
-import { useSpidexCoreContext } from "@/app/_contexts/spidex-core";
-import { ButtonBlack, GradientSecondaryBtn } from "@/components/ui";
-import { Skeleton } from "@/components/ui/skeleton";
-import { useQuests } from "@/hooks/point/use-point";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
-import toast from "react-hot-toast";
-import ReminderModalWrapper, { Platform } from "./reminder-modal-wrapper";
+'use client';
+import Pagination from '@/app/(app)/_components/pagination';
+import { useSpidexCoreContext } from '@/app/_contexts/spidex-core';
+import { ButtonBlack, GradientSecondaryBtn } from '@/components/ui';
+import { Skeleton } from '@/components/ui/skeleton';
+import { useQuests } from '@/hooks/point/use-point';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+import ReminderModalWrapper, { Platform } from './reminder-modal-wrapper';
 
 interface MissionItem {
   id: number;
@@ -37,11 +37,15 @@ const Missions = ({ onMissionComplete }: Props) => {
     currentPage,
     setCurrentPage,
     totalPages,
-    refetchQuests
+    refetchQuests,
   } = useQuests();
 
-  const { triggerSocialQuest, triggerDailyLogin, startSocialQuest, verifySocialQuest } =
-    useSpidexCoreContext();
+  const {
+    triggerSocialQuest,
+    triggerDailyLogin,
+    startSocialQuest,
+    verifySocialQuest,
+  } = useSpidexCoreContext();
   const [loadingMissionId, setLoadingMissionId] = React.useState<number | null>(
     null
   );
@@ -49,21 +53,22 @@ const Missions = ({ onMissionComplete }: Props) => {
 
   const [isReminderModalOpen, setIsReminderModalOpen] =
     useState<boolean>(false);
-  const [reminderModalPlatform, setReminderModalPlatform] = useState<Platform>('X');
+  const [reminderModalPlatform, setReminderModalPlatform] =
+    useState<Platform>('X');
 
   useEffect(() => {
-    if ((auth?.user?.xId && reminderModalPlatform === 'X') ||
+    if (
+      (auth?.user?.xId && reminderModalPlatform === 'X') ||
       (auth?.user?.discordUsername && reminderModalPlatform === 'Discord') ||
       (auth?.user?.telegramUsername && reminderModalPlatform === 'Telegram')
     ) {
       setIsReminderModalOpen(false);
     }
-    return
+    return;
   }, [auth, reminderModalPlatform]);
   if (error) {
     return <div>Error: {error}</div>;
   }
-
 
   // SOCIAL = 0,
   // JOIN_DISCORD = 1,
@@ -80,113 +85,115 @@ const Missions = ({ onMissionComplete }: Props) => {
   const results: MissionItem[] =
     quests.length > 0
       ? quests.map((quest, index) => {
-        let icon = null;
-        switch (quest.type) {
-          case 0:
-            icon = (
-              <Image
-                src="/icons/x-bg-white.svg"
-                alt="x"
-                width={24}
-                height={24}
-              />
-            );
-            break;
-          case 1:
-            icon = (
-              <Image
-                src="/icons/discord.svg"
-                alt="discord"
-                width={24}
-                height={24}
-              />
-            );
-            break;
-          case 2:
-            icon = (
-              <Image
-                src="/icons/tele.svg"
-                alt="telegram"
-                width={24}
-                height={24}
-              />
-            );
-            break;
-          case 3:
-            icon = (
-              <Image
-                src="/icons/x-bg-white.svg"
-                alt="x"
-                width={24}
-                height={24}
-              />
-            );
-            break;
-          case 10:
-            icon = (
-              <Image
-                src="/icons/connect-bg-white.svg"
-                alt="x"
-                width={24}
-                height={24}
-              />
-            );
-            break;
-          case 20:
-            icon = (
-              <Image
-                src="/icons/connect-bg-white.svg"
-                alt="x"
-                width={24}
-                height={24}
-              />
-            );
-            break;
-          default:
-            icon = (
-              <Image
-                src="/icons/connect-bg-white.svg"
-                alt="x"
-                width={24}
-                height={24}
-              />
-            );
-        }
+          let icon = null;
+          switch (quest.type) {
+            case 0:
+              icon = (
+                <Image
+                  src="/icons/x-bg-white.svg"
+                  alt="x"
+                  width={24}
+                  height={24}
+                />
+              );
+              break;
+            case 1:
+              icon = (
+                <Image
+                  src="/icons/discord.svg"
+                  alt="discord"
+                  width={24}
+                  height={24}
+                />
+              );
+              break;
+            case 2:
+              icon = (
+                <Image
+                  src="/icons/tele.svg"
+                  alt="telegram"
+                  width={24}
+                  height={24}
+                />
+              );
+              break;
+            case 3:
+              icon = (
+                <Image
+                  src="/icons/x-bg-white.svg"
+                  alt="x"
+                  width={24}
+                  height={24}
+                />
+              );
+              break;
+            case 10:
+              icon = (
+                <Image
+                  src="/icons/connect-bg-white.svg"
+                  alt="x"
+                  width={24}
+                  height={24}
+                />
+              );
+              break;
+            case 20:
+              icon = (
+                <Image
+                  src="/icons/connect-bg-white.svg"
+                  alt="x"
+                  width={24}
+                  height={24}
+                />
+              );
+              break;
+            default:
+              icon = (
+                <Image
+                  src="/icons/connect-bg-white.svg"
+                  alt="x"
+                  width={24}
+                  height={24}
+                />
+              );
+          }
 
-        const step =
-          quest.status == 2
-            ? STEP.COMPLETED
-            : quest.status === 1 || quest.type === 10
-              ? STEP.VERIFY
-              : quest.type === 20 || quest.type === 32 || quest.type === 41
-                ? STEP.DISABLED
-                : STEP.START;
-        return {
-          id: quest.id,
-          icon: icon,
-          name: quest.name,
-          description: quest.description,
-          point: quest.point,
-          isBorderBottom: index !== quests.length - 1,
-          type: quest.type,
-          status: quest.status,
-          requireUrl: quest?.requirements?.url,
-          step: step,
-        };
-      })
+          const step =
+            quest.status == 2
+              ? STEP.COMPLETED
+              : quest.status === 1 || quest.type === 10
+                ? STEP.VERIFY
+                : quest.type === 20 || quest.type === 32 || quest.type === 41
+                  ? STEP.DISABLED
+                  : STEP.START;
+          return {
+            id: quest.id,
+            icon: icon,
+            name: quest.name,
+            description: quest.description,
+            point: quest.point,
+            isBorderBottom: index !== quests.length - 1,
+            type: quest.type,
+            status: quest.status,
+            requireUrl: quest?.requirements?.url,
+            step: step,
+          };
+        })
       : [];
 
   const toggleDescription = (id: number) => {
-    setExpandedMissions((prev) =>
+    setExpandedMissions(prev =>
       prev.includes(id)
-        ? prev.filter((missionId) => missionId !== id)
+        ? prev.filter(missionId => missionId !== id)
         : [...prev, id]
     );
   };
 
-
-  const handleFinish = async (result: MissionItem) => {
-    console.log('auth', auth);
+  const handleFinish = async (
+    result: MissionItem,
+    isClickTab: boolean = true
+  ) => {
+    console.log('isClickTab', isClickTab);
 
     if (!auth?.user?.xId && (result.type === 0 || result.type === 3)) {
       setIsReminderModalOpen(true);
@@ -206,7 +213,7 @@ const Missions = ({ onMissionComplete }: Props) => {
       return;
     }
 
-    console.log("🚀 ~ handleFinish ~ result.id:", result.id)
+    console.log('🚀 ~ handleFinish ~ result.id:', result.id);
     setLoadingMissionId(result.id);
     try {
       let data = null;
@@ -215,24 +222,26 @@ const Missions = ({ onMissionComplete }: Props) => {
         case 1:
         case 2:
         case 3:
-          if (result.step === STEP.VERIFY) {
+          if (result.step === STEP.START) {
+            data = await startSocialQuest(result.id);
+            window.open(result.requireUrl, '_blank');
+          } else if (result.step === STEP.VERIFY && isClickTab) {
+            window.open(result.requireUrl, '_blank');
+          } else {
             data = await triggerSocialQuest(result.id);
             await new Promise(resolve => setTimeout(resolve, 10000));
             const verifyResult = await verifySocialQuest(result.id);
             if (verifyResult?.status === 2) {
               toast.success(`You earned +${result.point} points!`);
             } else {
-              toast.error("You have failed the mission! Please try again.");
+              toast.error('You have failed the mission! Please try again.');
             }
-          } else {
-            data = await startSocialQuest(result.id);
-            window.open(result.requireUrl, "_blank");
-
           }
+
           break;
         case 10:
           data = await triggerDailyLogin();
-          toast.success("You earned +10 points!");
+          toast.success('You earned +10 points!');
           break;
         case 20:
           router.push(`/referral`);
@@ -242,7 +251,7 @@ const Missions = ({ onMissionComplete }: Props) => {
           return;
         case 32:
           const tokenTrade =
-            "c48cbb3d5e57ed56e276bc45f99ab39abe94e6cd7ac39fb402da47ad0014df105553444d";
+            'c48cbb3d5e57ed56e276bc45f99ab39abe94e6cd7ac39fb402da47ad0014df105553444d';
           router.push(`/token/${tokenTrade}?tab=trade`);
           return;
         default:
@@ -252,8 +261,8 @@ const Missions = ({ onMissionComplete }: Props) => {
       onMissionComplete();
       return data;
     } catch (error) {
-      console.log("🚀 ~ handleFinish ~ error:", error)
-      toast.error("You have failed the mission! Please try again.");
+      console.log('🚀 ~ handleFinish ~ error:', error);
+      toast.error('You have failed the mission! Please try again.');
     } finally {
       setLoadingMissionId(null);
     }
@@ -270,111 +279,124 @@ const Missions = ({ onMissionComplete }: Props) => {
         ) : (
           <>
             {results.length > 0
-              ? results.map((result) => (
-                <div className="bg-bg-main rounded-lg p-4" key={result.type}>
-                  <div
-                    className={`grid grid-cols-3 cursor-pointer`}
-                    onClick={() => handleFinish(result)}
-                  >
-                    <div className="col-span-1 flex gap-2 items-center cursor-pointer">
-                      <div
-                        className=""
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          toggleDescription(result.id);
-                        }}
-                      >
-                        <Image
-                          src="/icons/arrow-right.svg"
-                          alt="arrow-down"
-                          width={10}
-                          height={10}
-                          className={`transform transition-transform duration-200 ${expandedMissions.includes(result.id)
-                            ? "rotate-90"
-                            : ""
+              ? results.map(result => (
+                  <div className="bg-bg-main rounded-lg p-4" key={result.type}>
+                    <div
+                      className={`grid grid-cols-3 cursor-pointer`}
+                      onClick={() => handleFinish(result)}
+                    >
+                      <div className="col-span-1 flex gap-2 items-center cursor-pointer">
+                        <div
+                          className=""
+                          onClick={e => {
+                            e.stopPropagation();
+                            toggleDescription(result.id);
+                          }}
+                        >
+                          <Image
+                            src="/icons/arrow-right.svg"
+                            alt="arrow-down"
+                            width={10}
+                            height={10}
+                            className={`transform transition-transform duration-200 ${
+                              expandedMissions.includes(result.id)
+                                ? 'rotate-90'
+                                : ''
                             }`}
-                        />
-                      </div>
-                      <div className="w-full">
-                        <div className="flex items-center gap-2">
-                          <div className="flex items-center">
-                            {result.icon}
+                          />
+                        </div>
+                        <div className="w-full">
+                          <div className="flex items-center gap-2">
+                            <div className="flex items-center">
+                              {result.icon}
+                            </div>
+                            <div className="text-white text-lg">
+                              {result.name}
+                            </div>{' '}
                           </div>
-                          <div className="text-white text-lg">
-                            {result.name}
-                          </div>{" "}
+                        </div>
+                      </div>
+                      <div className="col-span-1 text-white text-lg flex justify-center gap-1 items-center">
+                        <div>+{result.point} </div>
+                        <div>
+                          <Image
+                            src="/icons/logo-gray.svg"
+                            alt="arrow-right"
+                            width={24}
+                            height={24}
+                          />
+                        </div>
+                        {result.type === 20 ||
+                        result.type === 0 ||
+                        result.type === 3 ||
+                        result.type === 1 ||
+                        result.type === 2 ? null : (
+                          <div>/day</div>
+                        )}
+                      </div>
+                      <div className="col-span-1 text-white flex items-center justify-end">
+                        <div className="w-[120px]">
+                          {result.step === STEP.COMPLETED ? (
+                            <div>
+                              <GradientSecondaryBtn
+                                className="w-full px-4 py-2 text-sm"
+                                disabled={true}
+                              >
+                                Completed
+                              </GradientSecondaryBtn>
+                            </div>
+                          ) : result.step === STEP.VERIFY ? (
+                            <div>
+                              <ButtonBlack
+                                isLoading={loadingMissionId === result.id}
+                                disabled={
+                                  (loadingMissionId !== null &&
+                                    loadingMissionId !== result.id) ||
+                                  result.status === 2
+                                }
+                                className="w-full px-4 py-2 text-sm"
+                                onClick={(e: any) => {
+                                  e.stopPropagation();
+                                  console.log('🚀 ~ handleFinish ~ result:', result);
+                                  handleFinish(result, false);
+                                }}
+                              >
+                                Verify
+                              </ButtonBlack>
+                            </div>
+                          ) : result.step === STEP.DISABLED ? null : (
+                            <div>
+                              <ButtonBlack
+                                isLoading={loadingMissionId === result.id}
+                                // isLoading={true}
+                                disabled={
+                                  (loadingMissionId !== null &&
+                                    loadingMissionId !== result.id) ||
+                                  result.status === 2
+                                }
+                                className="w-full px-4 py-2 text-sm"
+                              >
+                                Start
+                              </ButtonBlack>
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>
-                    <div className="col-span-1 text-white text-lg flex justify-center gap-1 items-center">
-                      <div>+{result.point} </div>
-                      <div>
-                        <Image
-                          src="/icons/logo-gray.svg"
-                          alt="arrow-right"
-                          width={24}
-                          height={24}
-                        />
-                      </div>
-                      {(result.type === 20 || result.type === 0 || result.type === 3 || result.type === 1 || result.type === 2) ? null : <div>/day</div>}
-                    </div>
-                    <div className="col-span-1 text-white flex items-center justify-end">
-                      <div className="w-[120px]">
-                        {result.step === STEP.COMPLETED ? (
-                          <div>
-                            <GradientSecondaryBtn
-                              className="w-full px-4 py-2 text-sm"
-                              disabled={true}
-                            >
-                              Completed
-                            </GradientSecondaryBtn>
-                          </div>
-                        ) : result.step === STEP.VERIFY ? (
-                          <div>
-                            <ButtonBlack
-                              isLoading={loadingMissionId === result.id}
-                              disabled={
-                                (loadingMissionId !== null &&
-                                  loadingMissionId !== result.id) ||
-                                result.status === 2
-                              }
-                              className="w-full px-4 py-2 text-sm"
-                            >
-                              Verify
-                            </ButtonBlack>
-                          </div>
-                        ) : result.step === STEP.DISABLED ? null : (
-                          <div>
-                            <ButtonBlack
-                              isLoading={loadingMissionId === result.id}
-                              // isLoading={true}
-                              disabled={
-                                (loadingMissionId !== null &&
-                                  loadingMissionId !== result.id) ||
-                                result.status === 2
-                              }
-                              className="w-full px-4 py-2 text-sm"
-                            >
-                              Start
-                            </ButtonBlack>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
 
-                  <div
-                    className={`w-full relative overflow-hidden transition-all duration-300 ease-in-out ${expandedMissions.includes(result.id)
-                      ? "opacity-100"
-                      : "max-h-0 opacity-0"
+                    <div
+                      className={`w-full relative overflow-hidden transition-all duration-300 ease-in-out ${
+                        expandedMissions.includes(result.id)
+                          ? 'opacity-100'
+                          : 'max-h-0 opacity-0'
                       }`}
-                  >
-                    <div className="px-5 py-2 w-full text-text-gray">
-                      {result.description}
+                    >
+                      <div className="px-5 py-2 w-full text-text-gray">
+                        {result.description}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))
+                ))
               : null}
           </>
         )}
@@ -390,7 +412,7 @@ const Missions = ({ onMissionComplete }: Props) => {
 
       <ReminderModalWrapper
         isOpen={isReminderModalOpen}
-        onOpenChange={(value) => setIsReminderModalOpen(value)}
+        onOpenChange={value => setIsReminderModalOpen(value)}
         platform={reminderModalPlatform}
       />
     </div>
