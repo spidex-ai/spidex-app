@@ -53,22 +53,21 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
   const [auth, setAuth] = useState<Auth | null>(initialAuth);
   const [error, setError] = useState<string | null>(null);
 
-  // Update auth and localStorage when initialAuth changes
+  // Update auth when initialAuth changes (but don't update localStorage here)
   useEffect(() => {
     if (
       initialAuth &&
       (!auth || initialAuth.accessToken !== auth.accessToken)
     ) {
+      console.log('🔄 useSpidexCore: Updating auth from initialAuth', {
+        hasInitialAuth: !!initialAuth,
+        hasCurrentAuth: !!auth,
+        initialAuthToken: initialAuth?.accessToken?.slice(0, 10) + '...',
+        currentAuthToken: auth?.accessToken?.slice(0, 10) + '...'
+      });
       setAuth(initialAuth);
     }
-  }, [initialAuth]);
-
-
-  useEffect(() => {
-    if (auth) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(auth));
-    }
-  }, [auth]);
+  }, [initialAuth, auth]);
 
   // Validate auth object before setting
   const validateAuth = useCallback((authObj: Auth | null): boolean => {
@@ -94,10 +93,34 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
 
   // Logout function that can be used anywhere
   const performLogout = useCallback(() => {
-    setAuth(null);
-    localStorage.removeItem(STORAGE_KEY);
-    router.push('/chat');
-  }, [router]);
+    console.log('🚪 performLogout: Starting logout process', {
+      hasAuth: !!auth,
+      userId: auth?.userId,
+      timestamp: new Date().toISOString(),
+      stackTrace: new Error().stack?.split('\n').slice(1, 4).join('\n')
+    });
+
+    try {
+      // Clear auth state first
+      setAuth(null);
+
+      // Clear localStorage with error handling
+      if (typeof window !== 'undefined') {
+        try {
+          localStorage.removeItem(STORAGE_KEY);
+          console.log('🧹 performLogout: Successfully cleared localStorage');
+        } catch (error) {
+          console.error('❌ performLogout: Failed to clear localStorage', error);
+        }
+      }
+
+      // Navigate to chat page
+      router.push('/chat');
+      console.log('🔄 performLogout: Redirected to /chat');
+    } catch (error) {
+      console.error('❌ performLogout: Error during logout process', error);
+    }
+  }, [router, auth]);
 
   useEffect(() => {
     if (auth?.accessToken) {
@@ -144,6 +167,12 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
 
         // Handle 401 Unauthorized (expired token)
         if (response.status === 401 && auth?.refreshToken) {
+          console.log('🔄 fetchWithAuth: Got 401, attempting token refresh', {
+            url,
+            hasRefreshToken: !!auth.refreshToken,
+            userId: auth.userId
+          });
+
           // Try to refresh the token
           const refreshResponse = await fetch(
             `${process.env.NEXT_PUBLIC_SPIDEX_CORE_API_URL}/auth/refresh-token`,
@@ -155,6 +184,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
           );
 
           if (refreshResponse.status === 200) {
+            console.log('✅ fetchWithAuth: Token refresh successful');
             const refreshData = await refreshResponse.json();
             const newAuth = { ...auth, ...refreshData.data };
             setAuthSafely(newAuth);
@@ -178,9 +208,26 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
             }
             return await retryResponse.json();
           } else {
+            console.log('❌ fetchWithAuth: Token refresh failed, triggering logout', {
+              refreshStatus: refreshResponse.status,
+              url,
+              userId: auth.userId
+            });
             performLogout();
             throw new Error('Session expired. Please login again.');
           }
+        }
+
+        // Handle 401 without refresh token - this should trigger logout
+        if (response.status === 401) {
+          console.log('❌ fetchWithAuth: Got 401 without refresh token, triggering logout', {
+            url,
+            hasAuth: !!auth,
+            hasRefreshToken: !!auth?.refreshToken,
+            userId: auth?.userId
+          });
+          performLogout();
+          throw new Error('Authentication required. Please login again.');
         }
 
         setLoading(false);
