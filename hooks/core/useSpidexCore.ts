@@ -52,6 +52,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [auth, setAuth] = useState<Auth | null>(initialAuth);
   const [error, setError] = useState<string | null>(null);
+
   // Update auth and localStorage when initialAuth changes
   useEffect(() => {
     if (
@@ -61,6 +62,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
       setAuth(initialAuth);
     }
   }, [initialAuth]);
+
 
   useEffect(() => {
     if (auth) {
@@ -74,13 +76,12 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
 
     // Check if auth object has required properties
     if (!authObj.accessToken || !authObj.refreshToken || !authObj.userId) {
-      console.error('Invalid auth object: missing required properties', authObj);
       return false;
     }
 
     return true;
   }, []);
-
+  
   // Safe auth setter with validation
   const setAuthSafely = useCallback((newAuth: Auth | null) => {
     if (!validateAuth(newAuth)) {
@@ -124,6 +125,13 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
           : {}),
         ...options.headers,
       };
+
+      console.log({
+        'fetchWithAuth called with URL:': url,
+        'and options:': options,
+        'from:': new Error().stack,
+        'headers:': headers,
+      });
 
       try {
         const response = await fetch(
@@ -223,7 +231,10 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
 
         // For social connections, don't trigger logout on 401 - just throw the error
         if (response.status !== 200) {
-          throw data?.message || `Social connection failed with status: ${response.status}`;
+          throw (
+            data?.message ||
+            `Social connection failed with status: ${response.status}`
+          );
         }
 
         return data;
@@ -241,7 +252,11 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     try {
       const data = await fetchWithAuth('/auth/me');
       if (auth) {
-        const updatedAuth = { ...auth, user: data.data, avatar: data.data.avatar };
+        const updatedAuth = {
+          ...auth,
+          user: data.data,
+          avatar: data.data.avatar,
+        };
         setAuthSafely(updatedAuth);
       }
       return data.data;
@@ -712,38 +727,47 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
     [fetchWithAuth, auth]
   );
 
-  const verifySocialQuest = useCallback(async (id: number) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const data = await fetchWithAuth(`/user-quest/verify/${id}`, {
-        method: "GET",
-      });
-      return data.data;
-    } catch (error) {
-      return null;
-    } finally {
-      setLoading(false);
-    }
-  }, [fetchWithAuth, auth]);
+  const verifySocialQuest = useCallback(
+    async (id: number) => {
+      setLoading(true);
+      setError(null);
+      try {
+        const data = await fetchWithAuth(`/user-quest/verify/${id}`, {
+          method: 'GET',
+        });
+        return data.data;
+      } catch (error) {
+        return null;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [fetchWithAuth, auth]
+  );
 
-  const startSocialQuest = useCallback(async (id: number) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const data = await fetchWithAuth(`/user-quest/start-social-quest/${id}`, {
-        method: "PUT",
-        body: JSON.stringify({
-          questId: id,
-        }),
-      });
-      return data.data;
-    } catch (error) {
-      return null;
-    } finally {
-      setLoading(false);
-    }
-  }, [fetchWithAuth, auth]);
+  const startSocialQuest = useCallback(
+    async (id: number) => {
+      setLoading(true);
+      setError(null);
+      try {
+        const data = await fetchWithAuth(
+          `/user-quest/start-social-quest/${id}`,
+          {
+            method: 'PUT',
+            body: JSON.stringify({
+              questId: id,
+            }),
+          }
+        );
+        return data.data;
+      } catch (error) {
+        return null;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [fetchWithAuth, auth]
+  );
 
   const triggerDailyLogin = useCallback(async () => {
     setLoading(true);
@@ -885,10 +909,10 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
             isAuthenticated: !!auth,
             userId: auth?.userId,
             hasToken: !!auth?.accessToken,
-            timestamp: new Date().toISOString()
+            timestamp: new Date().toISOString(),
           });
           return auth;
-        }
+        },
       };
     }
   }, [auth, performLogout]);
@@ -942,7 +966,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
         isAuthenticated: !!auth,
         userId: auth?.userId,
         hasToken: !!auth?.accessToken,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
       return auth;
     },
