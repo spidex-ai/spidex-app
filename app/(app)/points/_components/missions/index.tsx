@@ -225,7 +225,7 @@ const Missions = ({ onMissionComplete }: Props) => {
           if (result.step === STEP.START) {
             data = await startSocialQuest(result.id);
             window.open(result.requireUrl, '_blank');
-          } else if (result.step === STEP.VERIFY && isClickTab) {
+          } else if ((result.step === STEP.VERIFY && isClickTab) || result.step === STEP.COMPLETED) {
             window.open(result.requireUrl, '_blank');
           } else {
             data = await triggerSocialQuest(result.id);
