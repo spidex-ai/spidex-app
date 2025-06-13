@@ -98,11 +98,23 @@ export const SpidexCoreProvider: React.FC<{ children: React.ReactNode }> = ({
       try {
         const savedAuth = localStorage.getItem(STORAGE_KEY);
         if (savedAuth) {
-          return JSON.parse(savedAuth);
+          const parsedAuth = JSON.parse(savedAuth);
+          console.log('🔄 SpidexCoreProvider: Loaded auth from localStorage', {
+            hasAuth: !!parsedAuth,
+            userId: parsedAuth?.userId,
+            hasAccessToken: !!parsedAuth?.accessToken,
+            hasRefreshToken: !!parsedAuth?.refreshToken
+          });
+          return parsedAuth;
         }
       } catch (error) {
-        console.error('Failed to parse saved auth data', error);
-        localStorage.removeItem(STORAGE_KEY);
+        console.error('❌ SpidexCoreProvider: Failed to parse saved auth data', error);
+        try {
+          localStorage.removeItem(STORAGE_KEY);
+          console.log('🧹 SpidexCoreProvider: Cleared corrupted localStorage data');
+        } catch (clearError) {
+          console.error('❌ SpidexCoreProvider: Failed to clear corrupted localStorage', clearError);
+        }
       }
     }
     return null;
@@ -114,51 +126,141 @@ export const SpidexCoreProvider: React.FC<{ children: React.ReactNode }> = ({
     console.log('Global OAuth processing state changed:', isProcessingOAuth);
   }, [isProcessingOAuth]);
 
+  // Monitor localStorage changes for debugging
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const handleStorageChange = (e: StorageEvent) => {
+        if (e.key === STORAGE_KEY) {
+          console.log('🔍 SpidexCoreProvider: localStorage changed externally', {
+            key: e.key,
+            oldValue: e.oldValue ? 'exists' : 'null',
+            newValue: e.newValue ? 'exists' : 'null',
+            url: e.url,
+            timestamp: new Date().toISOString()
+          });
+
+          // Sync with external localStorage changes
+          if (e.newValue) {
+            try {
+              const parsedAuth = JSON.parse(e.newValue);
+              setLocalAuth(parsedAuth);
+            } catch (error) {
+              console.error('❌ SpidexCoreProvider: Failed to parse external localStorage change', error);
+            }
+          } else {
+            setLocalAuth(null);
+          }
+        }
+      };
+
+      window.addEventListener('storage', handleStorageChange);
+      return () => window.removeEventListener('storage', handleStorageChange);
+    }
+  }, []);
+
   const spidexCore = useSpidexCore(localAuth);
 
   const handleSetLocalAuth = (auth: Auth) => {
     if (typeof window !== 'undefined') {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(auth));
-      setLocalAuth(auth);
+      try {
+        console.log('💾 SpidexCoreProvider: Saving auth to localStorage', {
+          userId: auth?.userId,
+          hasAccessToken: !!auth?.accessToken,
+          hasRefreshToken: !!auth?.refreshToken,
+          timestamp: new Date().toISOString()
+        });
+
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(auth));
+        setLocalAuth(auth);
+
+        console.log('✅ SpidexCoreProvider: Successfully saved auth to localStorage');
+      } catch (error) {
+        console.error('❌ SpidexCoreProvider: Failed to save auth to localStorage', error);
+        // Still update the state even if localStorage fails
+        setLocalAuth(auth);
+      }
     }
   };
 
   const handleLogout = async () => {
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem(STORAGE_KEY);
-      setLocalAuth(null);
-    }
-    await spidexCore.logout();
-  };
+    console.log('🚪 SpidexCoreProvider: Starting logout process');
 
-  useEffect(() => {
     if (typeof window !== 'undefined') {
       try {
-        const savedAuth = localStorage.getItem(STORAGE_KEY);
-        if (savedAuth) {
-          const parsedAuth = JSON.parse(savedAuth);
-          setLocalAuth(parsedAuth);
-        }
-      } catch (error) {
-        console.error('Failed to parse saved auth data', error);
         localStorage.removeItem(STORAGE_KEY);
+        console.log('🧹 SpidexCoreProvider: Cleared localStorage');
+      } catch (error) {
+        console.error('❌ SpidexCoreProvider: Failed to clear localStorage', error);
       }
+      setLocalAuth(null);
     }
-  }, []);
 
-  // When spidexCore.auth changes, update localStorage
+    try {
+      await spidexCore.logout();
+      console.log('✅ SpidexCoreProvider: Logout completed successfully');
+    } catch (error) {
+      console.error('❌ SpidexCoreProvider: Error during logout', error);
+    }
+  };
+
+  // When spidexCore.auth changes, update localStorage and local state
   useEffect(() => {
     if (typeof window !== 'undefined' && spidexCore.auth) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(spidexCore.auth));
-      setLocalAuth(spidexCore.auth);
+      // Only update if the auth data is actually different
+      const currentAuthString = JSON.stringify(localAuth);
+      const newAuthString = JSON.stringify(spidexCore.auth);
+
+      if (currentAuthString !== newAuthString) {
+        console.log('🔄 SpidexCoreProvider: Syncing auth from spidexCore to localStorage', {
+          hasSpidexAuth: !!spidexCore.auth,
+          hasLocalAuth: !!localAuth,
+          userId: spidexCore.auth?.userId,
+          timestamp: new Date().toISOString()
+        });
+
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(spidexCore.auth));
+          setLocalAuth(spidexCore.auth);
+          console.log('✅ SpidexCoreProvider: Successfully synced auth to localStorage');
+        } catch (error) {
+          console.error('❌ SpidexCoreProvider: Failed to sync auth to localStorage', error);
+          // Still update local state even if localStorage fails
+          setLocalAuth(spidexCore.auth);
+        }
+      }
+    } else if (spidexCore.auth === null && localAuth !== null) {
+      // Handle case where spidexCore.auth becomes null (logout)
+      console.log('🧹 SpidexCoreProvider: spidexCore.auth is null, clearing local state');
+      setLocalAuth(null);
+
+      if (typeof window !== 'undefined') {
+        try {
+          localStorage.removeItem(STORAGE_KEY);
+          console.log('🧹 SpidexCoreProvider: Cleared localStorage due to null auth');
+        } catch (error) {
+          console.error('❌ SpidexCoreProvider: Failed to clear localStorage', error);
+        }
+      }
     }
-  }, [spidexCore.auth]);
+  }, [spidexCore.auth, localAuth]);
 
   const currentAuth = localAuth || spidexCore.auth;
 
   const isAuthenticated = Boolean(
     currentAuth?.accessToken && currentAuth?.userId
   );
+
+  // Debug helper - log auth state changes
+  useEffect(() => {
+    console.log('🔍 SpidexCoreProvider: Auth state changed', {
+      hasCurrentAuth: !!currentAuth,
+      hasLocalAuth: !!localAuth,
+      hasSpidexCoreAuth: !!spidexCore.auth,
+      isAuthenticated,
+      userId: currentAuth?.userId,
+      timestamp: new Date().toISOString()
+    });
+  }, [currentAuth, localAuth, spidexCore.auth, isAuthenticated]);
 
   const contextValue: SpidexCoreContextType = {
     auth: currentAuth,
