@@ -38,6 +38,7 @@ const PointsPage: React.FC = () => {
         <Missions  onMissionComplete={handleMissionComplete} />
         <History pointHistoryHook={pointHistoryHook} />
       </div>
+
     </ProtectedClient>
   );
 };

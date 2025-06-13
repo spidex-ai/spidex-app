@@ -8,6 +8,8 @@ import ChatInput from './input';
 
 import { useChat } from '../_contexts/chat';
 import Image from 'next/image';
+import ReportBug from '../../_components/report-bug';
+
 const Chat: React.FC = () => {
   const { messages } = useChat();
 
@@ -45,6 +47,7 @@ const Chat: React.FC = () => {
             />
           </div>
         )}
+        <ReportBug />
       </div>
     </>
   );
