@@ -373,7 +373,7 @@ body {
 .gradient-border-main {
   position: relative;
   /* display: inline-block; */
-  padding: 9px 52px !important;
+  /* padding: 9px 52px !important; */
   color: white;
   background-color: #010a19;
   border-radius: 8px;

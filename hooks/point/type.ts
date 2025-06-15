@@ -48,6 +48,8 @@ export interface Quest {
     current: number;
     target: number;
   };
+  completedAt: string;
+  verifyingAt: string;
 }
 
 export interface PointHistory {

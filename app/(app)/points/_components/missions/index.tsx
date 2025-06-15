@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import ReminderModalWrapper, { Platform } from './reminder-modal-wrapper';
+import dayjs from 'dayjs';
 
 interface MissionItem {
   id: number;
@@ -21,6 +22,8 @@ interface MissionItem {
   type: number;
   status: number;
   step: number;
+  completedAt: string;
+  verifyingAt: string;
 }
 
 interface Props {
@@ -77,7 +80,8 @@ const Missions = ({ onMissionComplete }: Props) => {
 
   // DAILY_LOGIN = 10,
   const STEP = {
-    COMPLETED: 2,
+    COMPLETED: 3,
+    VERIFYING: 2,
     VERIFY: 1,
     START: 0,
     DISABLED: -1,
@@ -158,14 +162,21 @@ const Missions = ({ onMissionComplete }: Props) => {
               );
           }
 
-          const step =
-            quest.status == 2
+          let step =
+            quest.status == 3
               ? STEP.COMPLETED
-              : quest.status === 1 || quest.type === 10
-                ? STEP.VERIFY
-                : quest.type === 20 || quest.type === 32 || quest.type === 41
-                  ? STEP.DISABLED
-                  : STEP.START;
+              : quest.status == 2
+                ? STEP.VERIFYING
+                : quest.status === 1 || quest.type === 10
+                  ? STEP.VERIFY
+                  : quest.type === 20 || quest.type === 32 || quest.type === 41
+                    ? STEP.DISABLED
+                    : STEP.START;
+
+          if (step === STEP.VERIFYING && quest.verifyingAt && dayjs().isAfter(dayjs(quest.verifyingAt).add(2, 'minute'))) {
+            step = STEP.VERIFY;
+          }
+          
           return {
             id: quest.id,
             icon: icon,
@@ -177,6 +188,8 @@ const Missions = ({ onMissionComplete }: Props) => {
             status: quest.status,
             requireUrl: quest?.requirements?.url,
             step: step,
+            completedAt: quest.completedAt,
+            verifyingAt: quest.verifyingAt,
           };
         })
       : [];
@@ -188,6 +201,11 @@ const Missions = ({ onMissionComplete }: Props) => {
         : [...prev, id]
     );
   };
+
+  const refreshData = () => {
+    refetchQuests();
+    onMissionComplete();
+  }
 
   const handleFinish = async (
     result: MissionItem,
@@ -225,14 +243,17 @@ const Missions = ({ onMissionComplete }: Props) => {
           if (result.step === STEP.START) {
             data = await startSocialQuest(result.id);
             window.open(result.requireUrl, '_blank');
-          } else if ((result.step === STEP.VERIFY && isClickTab) || result.step === STEP.COMPLETED) {
+          } else if (
+            (result.step === STEP.VERIFY && isClickTab) ||
+            result.step === STEP.COMPLETED
+          ) {
             window.open(result.requireUrl, '_blank');
           } else {
             data = await triggerSocialQuest(result.id);
-            await new Promise(resolve => setTimeout(resolve, 10000));
+            await new Promise(resolve => setTimeout(resolve, 1000));
             const verifyResult = await verifySocialQuest(result.id);
             if (verifyResult?.status === 2) {
-              toast.success(`You earned +${result.point} points!`);
+              toast.success(`Your mission is being verified!`);
             } else {
               toast.error('You have failed the mission! Please try again.');
             }
@@ -257,8 +278,7 @@ const Missions = ({ onMissionComplete }: Props) => {
         default:
           return;
       }
-      refetchQuests();
-      onMissionComplete();
+      refreshData();
       return data;
     } catch (error) {
       console.log('🚀 ~ handleFinish ~ error:', error);
@@ -267,6 +287,50 @@ const Missions = ({ onMissionComplete }: Props) => {
       setLoadingMissionId(null);
     }
   };
+
+
+
+  const [countdowns, setCountdowns] = useState<{[key: number]: number}>({});
+
+
+  useEffect(() => {
+    const timer = setInterval(async () => {
+      const now = new Date().getTime();
+      const newCountdowns: {[key: number]: number} = {};
+      let shouldRefetch = false;
+      let id = null;
+      
+      results.forEach(result => {
+        if (result.step === STEP.VERIFYING) {
+          const verifyingTime = new Date(result.verifyingAt).getTime();
+          const completedTime = verifyingTime + (120 * 1000);
+          const diff = Math.floor((completedTime - now) / 1000);
+          if (diff > 0) {
+            newCountdowns[result.id] = diff;
+          } else {
+            shouldRefetch = true;
+            id = result.id;
+          }
+        }
+      });
+      
+      setCountdowns(newCountdowns);
+      
+      if (shouldRefetch) {
+        if (id) {
+          const verifyResult = await verifySocialQuest(id);
+          if (verifyResult?.status === 3) {
+            toast.success(`You earned +${verifyResult.points} points!`);
+          } else {
+            toast.error('Please verify your mission again!');
+          }
+        }
+        refreshData();
+      }
+    }, 1000);
+  
+    return () => clearInterval(timer);
+  }, [results, refetchQuests]);
 
   return (
     <div className="border border-border-main rounded-lg bg-bg-secondary p-10">
@@ -335,7 +399,7 @@ const Missions = ({ onMissionComplete }: Props) => {
                         )}
                       </div>
                       <div className="col-span-1 text-white flex items-center justify-end">
-                        <div className="w-[120px]">
+                        <div className="w-[150px]">
                           {result.step === STEP.COMPLETED ? (
                             <div>
                               <GradientSecondaryBtn
@@ -345,6 +409,16 @@ const Missions = ({ onMissionComplete }: Props) => {
                                 Completed
                               </GradientSecondaryBtn>
                             </div>
+                          ) : result.step === STEP.VERIFYING ? (
+                            <div>
+                              <ButtonBlack
+                                isLoading={false}
+                                disabled={true}
+                                className="w-full px-4 py-2 text-sm"
+                              >
+                                Verifying{countdowns[result.id] ? `: ${countdowns[result.id]}s` : ' ...'}
+                              </ButtonBlack>
+                            </div>
                           ) : result.step === STEP.VERIFY ? (
                             <div>
                               <ButtonBlack
@@ -352,12 +426,15 @@ const Missions = ({ onMissionComplete }: Props) => {
                                 disabled={
                                   (loadingMissionId !== null &&
                                     loadingMissionId !== result.id) ||
-                                  result.status === 2
+                                  result.status === 3
                                 }
                                 className="w-full px-4 py-2 text-sm"
                                 onClick={(e: any) => {
                                   e.stopPropagation();
-                                  console.log('🚀 ~ handleFinish ~ result:', result);
+                                  console.log(
+                                    '🚀 ~ handleFinish ~ result:',
+                                    result
+                                  );
                                   handleFinish(result, false);
                                 }}
                               >
