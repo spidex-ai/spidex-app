@@ -36,7 +36,6 @@ const Missions = ({ onMissionComplete }: Props) => {
   const {
     quests,
     loading,
-    error,
     currentPage,
     setCurrentPage,
     totalPages,
@@ -59,6 +58,8 @@ const Missions = ({ onMissionComplete }: Props) => {
   const [reminderModalPlatform, setReminderModalPlatform] =
     useState<Platform>('X');
 
+  const [countdowns, setCountdowns] = useState<{ [key: number]: number }>({});
+
   useEffect(() => {
     if (
       (auth?.user?.xId && reminderModalPlatform === 'X') ||
@@ -69,9 +70,6 @@ const Missions = ({ onMissionComplete }: Props) => {
     }
     return;
   }, [auth, reminderModalPlatform]);
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
 
   // SOCIAL = 0,
   // JOIN_DISCORD = 1,
@@ -173,10 +171,14 @@ const Missions = ({ onMissionComplete }: Props) => {
                     ? STEP.DISABLED
                     : STEP.START;
 
-          if (step === STEP.VERIFYING && quest.verifyingAt && dayjs().isAfter(dayjs(quest.verifyingAt).add(2, 'minute'))) {
+          if (
+            step === STEP.VERIFYING &&
+            quest.verifyingAt &&
+            dayjs().isAfter(dayjs(quest.verifyingAt).add(2, 'minute'))
+          ) {
             step = STEP.VERIFY;
           }
-          
+
           return {
             id: quest.id,
             icon: icon,
@@ -194,6 +196,45 @@ const Missions = ({ onMissionComplete }: Props) => {
         })
       : [];
 
+  useEffect(() => {
+    const timer = setInterval(async () => {
+      const now = new Date().getTime();
+      const newCountdowns: { [key: number]: number } = {};
+      let shouldRefetch = false;
+      let id = null;
+
+      results.forEach(result => {
+        if (result.step === STEP.VERIFYING) {
+          const verifyingTime = new Date(result.verifyingAt).getTime();
+          const completedTime = verifyingTime + 120 * 1000;
+          const diff = Math.floor((completedTime - now) / 1000);
+          if (diff > 0) {
+            newCountdowns[result.id] = diff;
+          } else {
+            shouldRefetch = true;
+            id = result.id;
+          }
+        }
+      });
+
+      setCountdowns(newCountdowns);
+
+      if (shouldRefetch) {
+        if (id) {
+          const verifyResult = await verifySocialQuest(id);
+          if (verifyResult?.status === 3) {
+            toast.success(`You earned +${verifyResult.points} points!`);
+          } else {
+            toast.error('Please verify your mission again!');
+          }
+        }
+        refreshData();
+      }
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [results, refetchQuests]);
+
   const toggleDescription = (id: number) => {
     setExpandedMissions(prev =>
       prev.includes(id)
@@ -205,7 +246,7 @@ const Missions = ({ onMissionComplete }: Props) => {
   const refreshData = () => {
     refetchQuests();
     onMissionComplete();
-  }
+  };
 
   const handleFinish = async (
     result: MissionItem,
@@ -254,6 +295,8 @@ const Missions = ({ onMissionComplete }: Props) => {
             const verifyResult = await verifySocialQuest(result.id);
             if (verifyResult?.status === 2) {
               toast.success(`Your mission is being verified!`);
+            } else if (verifyResult?.status === 3) {
+              toast.success(`You earned +${verifyResult.points} points!`);
             } else {
               toast.error('You have failed the mission! Please try again.');
             }
@@ -287,50 +330,6 @@ const Missions = ({ onMissionComplete }: Props) => {
       setLoadingMissionId(null);
     }
   };
-
-
-
-  const [countdowns, setCountdowns] = useState<{[key: number]: number}>({});
-
-
-  useEffect(() => {
-    const timer = setInterval(async () => {
-      const now = new Date().getTime();
-      const newCountdowns: {[key: number]: number} = {};
-      let shouldRefetch = false;
-      let id = null;
-      
-      results.forEach(result => {
-        if (result.step === STEP.VERIFYING) {
-          const verifyingTime = new Date(result.verifyingAt).getTime();
-          const completedTime = verifyingTime + (120 * 1000);
-          const diff = Math.floor((completedTime - now) / 1000);
-          if (diff > 0) {
-            newCountdowns[result.id] = diff;
-          } else {
-            shouldRefetch = true;
-            id = result.id;
-          }
-        }
-      });
-      
-      setCountdowns(newCountdowns);
-      
-      if (shouldRefetch) {
-        if (id) {
-          const verifyResult = await verifySocialQuest(id);
-          if (verifyResult?.status === 3) {
-            toast.success(`You earned +${verifyResult.points} points!`);
-          } else {
-            toast.error('Please verify your mission again!');
-          }
-        }
-        refreshData();
-      }
-    }, 1000);
-  
-    return () => clearInterval(timer);
-  }, [results, refetchQuests]);
 
   return (
     <div className="border border-border-main rounded-lg bg-bg-secondary p-10">
@@ -416,7 +415,10 @@ const Missions = ({ onMissionComplete }: Props) => {
                                 disabled={true}
                                 className="w-full px-4 py-2 text-sm"
                               >
-                                Verifying{countdowns[result.id] ? `: ${countdowns[result.id]}s` : ' ...'}
+                                Verifying
+                                {countdowns[result.id]
+                                  ? `: ${countdowns[result.id]}s`
+                                  : ' ...'}
                               </ButtonBlack>
                             </div>
                           ) : result.step === STEP.VERIFY ? (
