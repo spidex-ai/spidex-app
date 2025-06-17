@@ -15,7 +15,7 @@ interface Props {
 
 const Information: React.FC<Props> = ({ user }) => {
   const wallets = [user.walletAddress];
-  const { logout, uploadAvatar, updateUserInfo } = useSpidexCoreContext();
+  const { logout, uploadAvatar, updateUserInfo, getMe } = useSpidexCoreContext();
 
   const [uploading, setUploading] = useState(false);
   const [avatar, setAvatar] = useState(user.avatar);
@@ -57,6 +57,7 @@ const Information: React.FC<Props> = ({ user }) => {
 
           setAvatar(avatar);
           toast.success('Avatar updated successfully!');
+          getMe();
         } catch (error) {
           if (typeof error === 'string') {
             toast.error(error);

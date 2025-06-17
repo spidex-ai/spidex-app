@@ -45,6 +45,7 @@ const Message: React.FC<Props> = ({
   compressed,
 }) => {
   const { auth } = useSpidexCoreContext();
+  console.log("🚀 ~ auth:", auth)
 
   const isUser = message.role === 'user';
 
@@ -101,7 +102,7 @@ const Message: React.FC<Props> = ({
               </AvatarFallback>
               {auth?.user && (
                 <AvatarImage
-                  src={auth?.avatar ? auth?.avatar : pfpURL(auth.user, false)}
+                  src={auth?.user?.avatar ? auth?.user?.avatar : pfpURL(auth.user, false)}
                 />
               )}
             </Avatar>
