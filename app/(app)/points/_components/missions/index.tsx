@@ -286,7 +286,8 @@ const Missions = ({ onMissionComplete }: Props) => {
             window.open(result.requireUrl, '_blank');
           } else if (
             (result.step === STEP.VERIFY && isClickTab) ||
-            result.step === STEP.COMPLETED
+            result.step === STEP.COMPLETED ||
+            result.step === STEP.VERIFYING
           ) {
             window.open(result.requireUrl, '_blank');
           } else {

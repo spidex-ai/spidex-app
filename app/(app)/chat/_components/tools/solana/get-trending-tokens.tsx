@@ -61,6 +61,7 @@ const TrendingTokens = ({
 };
 
 const TokenCard = ({ token }: { token: TopTokenMcap }) => {
+  console.log("🚀 ~ TokenCard ~ token:", token)
   return (
     <Link href={`/token/${token.unit}`}>
       <Card className="flex flex-col gap-2 p-2 justify-center hover:border-brand-600 dark:hover:border-brand-600 transition-all duration-300">
@@ -79,9 +80,9 @@ const TokenCard = ({ token }: { token: TopTokenMcap }) => {
               </p>
               <p className="text-xs text-muted-foreground">
                 $
-                {token.price < 0.0001
+                {token.usdPrice < 0.0001
                   ? '~0.0001'
-                  : token.price.toLocaleString(undefined, {
+                  : token.usdPrice.toLocaleString(undefined, {
                       maximumFractionDigits: 5,
                     })}
               </p>

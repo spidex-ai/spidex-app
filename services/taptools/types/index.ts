@@ -115,6 +115,7 @@ export interface TopTokenMcap extends TopToken {
   fdv: number;
   circSupply: number;
   totalSupply: number;
+  usdPrice: number;
 }
 
 export interface TopTokenVolume extends TopToken {

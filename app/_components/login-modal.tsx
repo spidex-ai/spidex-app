@@ -949,7 +949,7 @@ const LoginModal: React.FC = () => {
 
           <div>
             <div className="text-text-gray text-sm font-normal">
-              Register referral code and receive a 10% boost in SILK
+              Register referral code and receive a 10% boost in SILK Point
             </div>
             <div className="flex items-center gap-2 mt-6">
               <img src="/icons/dot-green.svg" alt="dot" />
