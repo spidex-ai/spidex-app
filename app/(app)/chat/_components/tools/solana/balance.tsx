@@ -31,6 +31,7 @@ const GetBalance: React.FC<Props> = ({ tool, prevToolAgent }) => {
           ),
       }}
       prevToolAgent={prevToolAgent}
+      fullWidth
     />
   );
 };
