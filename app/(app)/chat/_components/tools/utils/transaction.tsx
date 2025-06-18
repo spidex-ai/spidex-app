@@ -19,6 +19,7 @@ interface ListTransactionProps {
 export const ListTransaction: React.FC<ListTransactionProps> = (
   props: ListTransactionProps
 ) => {
+  console.log("🚀 ~ props:", props)
   return (
     <div>
       <div className="grid grid-cols-5">

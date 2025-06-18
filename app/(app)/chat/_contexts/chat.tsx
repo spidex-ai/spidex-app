@@ -15,13 +15,13 @@ import { generateId } from 'ai';
 import { useUserChats } from '@/hooks';
 
 import {
-  SOLANA_GET_WALLET_ADDRESS_NAME,
-  SOLANA_TRADE_NAME,
-  SOLANA_STAKE_NAME,
-  SOLANA_UNSTAKE_NAME,
-  SOLANA_TRANSFER_NAME,
-  SOLANA_DEPOSIT_LIQUIDITY_NAME,
-  SOLANA_WITHDRAW_LIQUIDITY_NAME,
+  CARDANO_STAKE_NAME,
+  CARDANO_TRANSFER_NAME,
+  CARDANO_UNSTAKE_NAME,
+  CARDANO_TRADE_NAME,
+  CARDANO_WITHDRAW_LIQUIDITY_NAME,
+  CARDANO_GET_WALLET_ADDRESS_NAME,
+  CARDANO_DEPOSIT_LIQUIDITY_NAME,
 } from '@/ai/action-names';
 // import { useSpidexCore } from '@/hooks/core/useSpidexCore';
 import { useSpidexCoreContext } from '@/app/_contexts';
@@ -179,20 +179,21 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
         const toolName = toolInvocation.toolName.slice(
           toolInvocation.toolName.indexOf('-') + 1
         );
+        console.log("🚀 ~ inputDisabledMessage ~ toolName:", toolName)
         switch (toolName) {
-          case SOLANA_TRADE_NAME:
+          case CARDANO_TRADE_NAME:
             return `Complete or cancel your trade`;
-          case SOLANA_TRANSFER_NAME:
+          case CARDANO_TRANSFER_NAME:
             return `Complete or cancel your transfer`;
-          case SOLANA_STAKE_NAME:
+          case CARDANO_STAKE_NAME:
             return `Complete or cancel your stake`;
-          case SOLANA_UNSTAKE_NAME:
+          case CARDANO_UNSTAKE_NAME:
             return `Complete or cancel your unstake`;
-          case SOLANA_DEPOSIT_LIQUIDITY_NAME:
+          case CARDANO_DEPOSIT_LIQUIDITY_NAME:
             return `Complete or cancel your deposit`;
-          case SOLANA_WITHDRAW_LIQUIDITY_NAME:
+          case CARDANO_WITHDRAW_LIQUIDITY_NAME:
             return `Complete or cancel your withdraw`;
-          case SOLANA_GET_WALLET_ADDRESS_NAME:
+          case CARDANO_GET_WALLET_ADDRESS_NAME:
             return `Connect your wallet`;
           default:
             return '';

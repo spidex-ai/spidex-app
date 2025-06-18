@@ -304,8 +304,11 @@ const Missions = ({ onMissionComplete }: Props) => {
 
           break;
         case 10:
-          data = await triggerDailyLogin();
-          toast.success('You earned +10 points!');
+          if (result.step !== STEP.COMPLETED) {
+            console.log("🚀 ~ Missions ~ result:", result)
+            data = await triggerDailyLogin();
+            toast.success('You earned +10 points!');
+          }
           break;
         case 20:
           router.push(`/referral`);
