@@ -47,7 +47,7 @@ export interface UserSpidex {
   stakeAddress: string;
 }
 
-export const useSpidexCore = (initialAuth: Auth | null = null) => {
+export const useSpidexCore = (initialAuth: Auth | null = null, onSessionExpired?: () => void) => {
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
   const [auth, setAuth] = useState<Auth | null>(initialAuth);
@@ -66,6 +66,10 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
         currentAuthToken: auth?.accessToken?.slice(0, 10) + '...'
       });
       setAuth(initialAuth);
+    } else if (initialAuth === null && auth !== null) {
+      // Handle case where initialAuth becomes null (external logout)
+      console.log('🧹 useSpidexCore: initialAuth is null, clearing internal auth state');
+      setAuth(null);
     }
   }, [initialAuth, auth]);
 
@@ -208,25 +212,33 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
             }
             return await retryResponse.json();
           } else {
-            console.log('❌ fetchWithAuth: Token refresh failed, triggering logout', {
+            console.log('❌ fetchWithAuth: Token refresh failed, triggering session expiry', {
               refreshStatus: refreshResponse.status,
               url,
               userId: auth.userId
             });
-            performLogout();
+            if (onSessionExpired) {
+              onSessionExpired();
+            } else {
+              performLogout();
+            }
             throw new Error('Session expired. Please login again.');
           }
         }
 
-        // Handle 401 without refresh token - this should trigger logout
+        // Handle 401 without refresh token - this should trigger session expiry
         if (response.status === 401) {
-          console.log('❌ fetchWithAuth: Got 401 without refresh token, triggering logout', {
+          console.log('❌ fetchWithAuth: Got 401 without refresh token, triggering session expiry', {
             url,
             hasAuth: !!auth,
             hasRefreshToken: !!auth?.refreshToken,
             userId: auth?.userId
           });
-          performLogout();
+          if (onSessionExpired) {
+            onSessionExpired();
+          } else {
+            performLogout();
+          }
           throw new Error('Authentication required. Please login again.');
         }
 
@@ -244,7 +256,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
         throw err || 'An error occurred';
       }
     },
-    [auth?.accessToken, setAuthSafely, performLogout]
+    [auth?.accessToken, setAuthSafely, performLogout, onSessionExpired]
   );
 
   // Special fetch function for social connections that doesn't trigger logout on 401
@@ -399,7 +411,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
             referralCode,
           }),
         });
-        setAuthSafely({ ...data.data });
+        setAuthSafely({ ...data.data, walletName: auth?.walletName });
         return data.data;
       } catch (err) {
         throw err;
@@ -418,7 +430,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
             referralCode,
           }),
         });
-        setAuthSafely({ ...data.data });
+        setAuthSafely({ ...data.data, walletName: auth?.walletName });
         return data.data;
       } catch (err) {
         throw err;
@@ -438,7 +450,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null) => {
             referralCode,
           }),
         });
-        setAuthSafely({ ...data.data });
+        setAuthSafely({ ...data.data, walletName: auth?.walletName });
         return data.data;
       } catch (err) {
         throw err;

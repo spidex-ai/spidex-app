@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState, useRef } from 'react';
 import { Auth, useSpidexCore } from '@/hooks/core/useSpidexCore';
 import { SubmitSwapPayload, SwapPayload } from '@/services/dexhunter/types';
 import { EsitmateSwapPayload } from '@/services/dexhunter/types';
@@ -48,6 +48,7 @@ interface SpidexCoreContextType {
   fetchWithAuth: (url: string, options?: RequestInit) => Promise<any>;
   logout: () => Promise<void>;
   setLocalAuth: (auth: Auth) => void;
+  onSessionExpired: () => void;
   getUserRefMeInfo: () => Promise<any>;
   getUserRefMeReferredUsers: (page?: number, perPage?: number) => Promise<any>;
   getUserRefHistory: (page?: number, perPage?: number) => Promise<any>;
@@ -85,6 +86,19 @@ interface SpidexCoreContextType {
 }
 
 export const STORAGE_KEY = 'spidex_auth';
+export const LOGOUT_EVENT_KEY = 'spidex_logout_event';
+export const SESSION_EXPIRED_KEY = 'spidex_session_expired';
+
+// Cross-tab communication types
+interface LogoutEvent {
+  type: 'INTENTIONAL_LOGOUT' | 'SESSION_EXPIRED';
+  timestamp: number;
+  tabId: string;
+}
+
+// Generate unique tab ID for this session
+const generateTabId = () => `tab_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
+const CURRENT_TAB_ID = typeof window !== 'undefined' ? generateTabId() : 'ssr';
 
 const SpidexCoreContext = createContext<SpidexCoreContextType | undefined>(
   undefined
@@ -120,45 +134,111 @@ export const SpidexCoreProvider: React.FC<{ children: React.ReactNode }> = ({
     return null;
   });
   const [isProcessingOAuth, setIsProcessingOAuth] = useState<boolean>(false);
+  const [isHydrated, setIsHydrated] = useState<boolean>(false);
+  const tabIdRef = useRef<string>(CURRENT_TAB_ID);
+
+  // Handle SSR hydration
+  useEffect(() => {
+    setIsHydrated(true);
+  }, []);
 
   // Add logging for OAuth processing state changes
   useEffect(() => {
     console.log('Global OAuth processing state changed:', isProcessingOAuth);
   }, [isProcessingOAuth]);
 
-  // Monitor localStorage changes for debugging
+  // Enhanced cross-tab communication system
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const handleStorageChange = (e: StorageEvent) => {
-        if (e.key === STORAGE_KEY) {
-          console.log('🔍 SpidexCoreProvider: localStorage changed externally', {
-            key: e.key,
-            oldValue: e.oldValue ? 'exists' : 'null',
-            newValue: e.newValue ? 'exists' : 'null',
-            url: e.url,
-            timestamp: new Date().toISOString()
-          });
+    if (!isHydrated || typeof window === 'undefined') return;
 
-          // Sync with external localStorage changes
-          if (e.newValue) {
-            try {
-              const parsedAuth = JSON.parse(e.newValue);
+    const handleStorageChange = (e: StorageEvent) => {
+      // Handle auth data changes (for login/token refresh sync)
+      if (e.key === STORAGE_KEY) {
+        console.log('🔍 SpidexCoreProvider: Auth localStorage changed externally', {
+          key: e.key,
+          oldValue: e.oldValue ? 'exists' : 'null',
+          newValue: e.newValue ? 'exists' : 'null',
+          url: e.url,
+          timestamp: new Date().toISOString()
+        });
+
+        // Only sync auth updates (login/token refresh), not removals
+        if (e.newValue && e.oldValue) {
+          try {
+            const parsedAuth = JSON.parse(e.newValue);
+            const oldAuth = JSON.parse(e.oldValue);
+
+            // Only update if it's a genuine auth update (not a logout)
+            if (parsedAuth.accessToken && parsedAuth.userId &&
+                (parsedAuth.accessToken !== oldAuth.accessToken ||
+                 parsedAuth.userId !== oldAuth.userId)) {
+              console.log('✅ SpidexCoreProvider: Syncing auth update from another tab');
               setLocalAuth(parsedAuth);
-            } catch (error) {
-              console.error('❌ SpidexCoreProvider: Failed to parse external localStorage change', error);
             }
-          } else {
-            setLocalAuth(null);
+          } catch (error) {
+            console.error('❌ SpidexCoreProvider: Failed to parse external auth change', error);
           }
         }
-      };
+      }
 
-      window.addEventListener('storage', handleStorageChange);
-      return () => window.removeEventListener('storage', handleStorageChange);
+      // Handle logout events
+      if (e.key === LOGOUT_EVENT_KEY && e.newValue) {
+        try {
+          const logoutEvent: LogoutEvent = JSON.parse(e.newValue);
+          console.log('🔍 SpidexCoreProvider: Received logout event', {
+            type: logoutEvent.type,
+            fromTab: logoutEvent.tabId,
+            currentTab: tabIdRef.current,
+            timestamp: new Date(logoutEvent.timestamp).toISOString()
+          });
+
+          // Only handle session expired events from other tabs
+          if (logoutEvent.type === 'SESSION_EXPIRED' && logoutEvent.tabId !== tabIdRef.current) {
+            console.log('⚠️ SpidexCoreProvider: Session expired in another tab, logging out');
+            setLocalAuth(null);
+            if (typeof window !== 'undefined') {
+              try {
+                localStorage.removeItem(STORAGE_KEY);
+              } catch (error) {
+                console.error('❌ SpidexCoreProvider: Failed to clear localStorage on session expiry', error);
+              }
+            }
+          }
+          // Intentional logouts from other tabs are ignored to prevent cross-tab logout
+        } catch (error) {
+          console.error('❌ SpidexCoreProvider: Failed to parse logout event', error);
+        }
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, [isHydrated]);
+
+  // Helper function for session expiry (called by useSpidexCore)
+  const handleSessionExpired = () => {
+    console.log('⚠️ SpidexCoreProvider: Session expired, broadcasting to other tabs', {
+      tabId: tabIdRef.current,
+      timestamp: new Date().toISOString()
+    });
+
+    // Clear local state
+    setLocalAuth(null);
+
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.removeItem(STORAGE_KEY);
+        console.log('🧹 SpidexCoreProvider: Cleared localStorage due to session expiry');
+      } catch (error) {
+        console.error('❌ SpidexCoreProvider: Failed to clear localStorage', error);
+      }
     }
-  }, []);
 
-  const spidexCore = useSpidexCore(localAuth);
+    // Broadcast session expiry to other tabs
+    broadcastLogoutEvent('SESSION_EXPIRED');
+  };
+
+  const spidexCore = useSpidexCore(localAuth, handleSessionExpired);
 
   const handleSetLocalAuth = (auth: Auth) => {
     if (typeof window !== 'undefined') {
@@ -182,8 +262,38 @@ export const SpidexCoreProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
+  // Helper function to broadcast logout events
+  const broadcastLogoutEvent = (type: 'INTENTIONAL_LOGOUT' | 'SESSION_EXPIRED') => {
+    if (typeof window !== 'undefined') {
+      try {
+        const logoutEvent: LogoutEvent = {
+          type,
+          timestamp: Date.now(),
+          tabId: tabIdRef.current
+        };
+        localStorage.setItem(LOGOUT_EVENT_KEY, JSON.stringify(logoutEvent));
+        // Clean up the event after a short delay to prevent accumulation
+        setTimeout(() => {
+          try {
+            localStorage.removeItem(LOGOUT_EVENT_KEY);
+          } catch (error) {
+            console.error('❌ Failed to clean up logout event', error);
+          }
+        }, 1000);
+      } catch (error) {
+        console.error('❌ SpidexCoreProvider: Failed to broadcast logout event', error);
+      }
+    }
+  };
+
   const handleLogout = async () => {
-    console.log('🚪 SpidexCoreProvider: Starting logout process');
+    console.log('🚪 SpidexCoreProvider: Starting intentional logout process', {
+      tabId: tabIdRef.current,
+      timestamp: new Date().toISOString()
+    });
+
+    // Clear local state first
+    setLocalAuth(null);
 
     if (typeof window !== 'undefined') {
       try {
@@ -192,8 +302,10 @@ export const SpidexCoreProvider: React.FC<{ children: React.ReactNode }> = ({
       } catch (error) {
         console.error('❌ SpidexCoreProvider: Failed to clear localStorage', error);
       }
-      setLocalAuth(null);
     }
+
+    // Broadcast intentional logout (other tabs will ignore this)
+    broadcastLogoutEvent('INTENTIONAL_LOGOUT');
 
     try {
       await spidexCore.logout();
@@ -202,6 +314,8 @@ export const SpidexCoreProvider: React.FC<{ children: React.ReactNode }> = ({
       console.error('❌ SpidexCoreProvider: Error during logout', error);
     }
   };
+
+
 
   // When spidexCore.auth changes, update localStorage and local state
   useEffect(() => {
@@ -228,20 +342,10 @@ export const SpidexCoreProvider: React.FC<{ children: React.ReactNode }> = ({
           setLocalAuth(spidexCore.auth);
         }
       }
-    } else if (spidexCore.auth === null && localAuth !== null) {
-      // Handle case where spidexCore.auth becomes null (logout)
-      console.log('🧹 SpidexCoreProvider: spidexCore.auth is null, clearing local state');
-      setLocalAuth(null);
-
-      if (typeof window !== 'undefined') {
-        try {
-          localStorage.removeItem(STORAGE_KEY);
-          console.log('🧹 SpidexCoreProvider: Cleared localStorage due to null auth');
-        } catch (error) {
-          console.error('❌ SpidexCoreProvider: Failed to clear localStorage', error);
-        }
-      }
     }
+    // Note: We no longer handle spidexCore.auth becoming null here
+    // Session expiry is handled by handleSessionExpired callback
+    // Intentional logout is handled by handleLogout function
   }, [spidexCore.auth, localAuth]);
 
   const currentAuth = localAuth || spidexCore.auth;
@@ -340,6 +444,7 @@ export const SpidexCoreProvider: React.FC<{ children: React.ReactNode }> = ({
     fetchWithAuth: spidexCore.fetchWithAuth,
     logout: handleLogout,
     setLocalAuth: handleSetLocalAuth,
+    onSessionExpired: handleSessionExpired,
     getUserRefMeInfo: spidexCore.getUserRefMeInfo,
     getUserRefMeReferredUsers: spidexCore.getUserRefMeReferredUsers,
     getUserRefHistory: spidexCore.getUserRefHistory,
