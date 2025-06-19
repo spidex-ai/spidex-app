@@ -70,7 +70,7 @@ const Agents: Agent[] = [
       />
     ),
     name: 'Token Agent',
-    prompt: 'Show me the best tokens',
+    prompt: 'Show me the token analytics of minswap token',
     isBorder: true,
   },
   {
@@ -85,7 +85,7 @@ const Agents: Agent[] = [
       />
     ),
     name: 'Intelligence Agent',
-    prompt: 'Get me developer docs for Cardano',
+    prompt: 'Get me developer docs for Cardano in 2025',
   },
 ];
 

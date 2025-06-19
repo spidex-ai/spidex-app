@@ -23,7 +23,7 @@ const starterButtons = [
         height={13}
       />
     ),
-    prompt: 'Catch up with latest news on Cardano',
+    prompt: 'Catch up with latest news on Cardano in 2025',
   },
   {
     title: 'Trade',
