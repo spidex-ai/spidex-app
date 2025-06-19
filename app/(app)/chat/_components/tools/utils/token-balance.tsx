@@ -3,6 +3,7 @@
 import React from 'react';
 
 import { Card } from '@/components/ui';
+import { formatNumber } from '@/lib/utils';
 
 interface Props {
   token: string;
@@ -19,7 +20,7 @@ const TokenBalance: React.FC<Props> = ({ token, balance, logoURI, name }) => {
         <p className="text-xs text-neutral-600 dark:text-neutral-400">
           {name} ({token})
         </p>
-        <p className="text-md font-bold">{balance.toFixed(4)}</p>
+        <p className="text-md font-bold">{formatNumber(balance, 4)}</p>
       </div>
     </Card>
   );
