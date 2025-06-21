@@ -1,11 +1,18 @@
 'use client';
 
-import React, { createContext, useContext, useEffect, useState, useRef } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useRef,
+} from 'react';
 import { Auth, useSpidexCore } from '@/hooks/core/useSpidexCore';
 import { SubmitSwapPayload, SwapPayload } from '@/services/dexhunter/types';
 import { EsitmateSwapPayload } from '@/services/dexhunter/types';
 import { UpdateUserPayload } from '@/hooks/core/type';
 import { QuoteType } from '../(app)/token/[address]/_components/header/select-quote';
+import { NounceResponse } from '@/types/spidex-core';
 
 interface SpidexCoreContextType {
   auth: Auth | null;
@@ -21,7 +28,7 @@ interface SpidexCoreContextType {
     perPage?: number
   ) => Promise<any>;
   getTopTokensByMcap: (page?: number, perPage?: number) => Promise<any>;
-  getNounce: () => Promise<any>;
+  getNounce: (walletAddress: string) => Promise<NounceResponse>;
   signMessage: (message: any, walletName: string) => Promise<any>;
   refreshToken: () => Promise<any>;
   connectX: (
@@ -97,7 +104,8 @@ interface LogoutEvent {
 }
 
 // Generate unique tab ID for this session
-const generateTabId = () => `tab_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
+const generateTabId = () =>
+  `tab_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
 const CURRENT_TAB_ID = typeof window !== 'undefined' ? generateTabId() : 'ssr';
 
 const SpidexCoreContext = createContext<SpidexCoreContextType | undefined>(
@@ -117,17 +125,25 @@ export const SpidexCoreProvider: React.FC<{ children: React.ReactNode }> = ({
             hasAuth: !!parsedAuth,
             userId: parsedAuth?.userId,
             hasAccessToken: !!parsedAuth?.accessToken,
-            hasRefreshToken: !!parsedAuth?.refreshToken
+            hasRefreshToken: !!parsedAuth?.refreshToken,
           });
           return parsedAuth;
         }
       } catch (error) {
-        console.error('❌ SpidexCoreProvider: Failed to parse saved auth data', error);
+        console.error(
+          '❌ SpidexCoreProvider: Failed to parse saved auth data',
+          error
+        );
         try {
           localStorage.removeItem(STORAGE_KEY);
-          console.log('🧹 SpidexCoreProvider: Cleared corrupted localStorage data');
+          console.log(
+            '🧹 SpidexCoreProvider: Cleared corrupted localStorage data'
+          );
         } catch (clearError) {
-          console.error('❌ SpidexCoreProvider: Failed to clear corrupted localStorage', clearError);
+          console.error(
+            '❌ SpidexCoreProvider: Failed to clear corrupted localStorage',
+            clearError
+          );
         }
       }
     }
@@ -154,13 +170,16 @@ export const SpidexCoreProvider: React.FC<{ children: React.ReactNode }> = ({
     const handleStorageChange = (e: StorageEvent) => {
       // Handle auth data changes (for login/token refresh sync)
       if (e.key === STORAGE_KEY) {
-        console.log('🔍 SpidexCoreProvider: Auth localStorage changed externally', {
-          key: e.key,
-          oldValue: e.oldValue ? 'exists' : 'null',
-          newValue: e.newValue ? 'exists' : 'null',
-          url: e.url,
-          timestamp: new Date().toISOString()
-        });
+        console.log(
+          '🔍 SpidexCoreProvider: Auth localStorage changed externally',
+          {
+            key: e.key,
+            oldValue: e.oldValue ? 'exists' : 'null',
+            newValue: e.newValue ? 'exists' : 'null',
+            url: e.url,
+            timestamp: new Date().toISOString(),
+          }
+        );
 
         // Only sync auth updates (login/token refresh), not removals
         if (e.newValue && e.oldValue) {
@@ -169,14 +188,22 @@ export const SpidexCoreProvider: React.FC<{ children: React.ReactNode }> = ({
             const oldAuth = JSON.parse(e.oldValue);
 
             // Only update if it's a genuine auth update (not a logout)
-            if (parsedAuth.accessToken && parsedAuth.userId &&
-                (parsedAuth.accessToken !== oldAuth.accessToken ||
-                 parsedAuth.userId !== oldAuth.userId)) {
-              console.log('✅ SpidexCoreProvider: Syncing auth update from another tab');
+            if (
+              parsedAuth.accessToken &&
+              parsedAuth.userId &&
+              (parsedAuth.accessToken !== oldAuth.accessToken ||
+                parsedAuth.userId !== oldAuth.userId)
+            ) {
+              console.log(
+                '✅ SpidexCoreProvider: Syncing auth update from another tab'
+              );
               setLocalAuth(parsedAuth);
             }
           } catch (error) {
-            console.error('❌ SpidexCoreProvider: Failed to parse external auth change', error);
+            console.error(
+              '❌ SpidexCoreProvider: Failed to parse external auth change',
+              error
+            );
           }
         }
       }
@@ -189,24 +216,35 @@ export const SpidexCoreProvider: React.FC<{ children: React.ReactNode }> = ({
             type: logoutEvent.type,
             fromTab: logoutEvent.tabId,
             currentTab: tabIdRef.current,
-            timestamp: new Date(logoutEvent.timestamp).toISOString()
+            timestamp: new Date(logoutEvent.timestamp).toISOString(),
           });
 
           // Only handle session expired events from other tabs
-          if (logoutEvent.type === 'SESSION_EXPIRED' && logoutEvent.tabId !== tabIdRef.current) {
-            console.log('⚠️ SpidexCoreProvider: Session expired in another tab, logging out');
+          if (
+            logoutEvent.type === 'SESSION_EXPIRED' &&
+            logoutEvent.tabId !== tabIdRef.current
+          ) {
+            console.log(
+              '⚠️ SpidexCoreProvider: Session expired in another tab, logging out'
+            );
             setLocalAuth(null);
             if (typeof window !== 'undefined') {
               try {
                 localStorage.removeItem(STORAGE_KEY);
               } catch (error) {
-                console.error('❌ SpidexCoreProvider: Failed to clear localStorage on session expiry', error);
+                console.error(
+                  '❌ SpidexCoreProvider: Failed to clear localStorage on session expiry',
+                  error
+                );
               }
             }
           }
           // Intentional logouts from other tabs are ignored to prevent cross-tab logout
         } catch (error) {
-          console.error('❌ SpidexCoreProvider: Failed to parse logout event', error);
+          console.error(
+            '❌ SpidexCoreProvider: Failed to parse logout event',
+            error
+          );
         }
       }
     };
@@ -217,10 +255,13 @@ export const SpidexCoreProvider: React.FC<{ children: React.ReactNode }> = ({
 
   // Helper function for session expiry (called by useSpidexCore)
   const handleSessionExpired = () => {
-    console.log('⚠️ SpidexCoreProvider: Session expired, broadcasting to other tabs', {
-      tabId: tabIdRef.current,
-      timestamp: new Date().toISOString()
-    });
+    console.log(
+      '⚠️ SpidexCoreProvider: Session expired, broadcasting to other tabs',
+      {
+        tabId: tabIdRef.current,
+        timestamp: new Date().toISOString(),
+      }
+    );
 
     // Clear local state
     setLocalAuth(null);
@@ -228,9 +269,14 @@ export const SpidexCoreProvider: React.FC<{ children: React.ReactNode }> = ({
     if (typeof window !== 'undefined') {
       try {
         localStorage.removeItem(STORAGE_KEY);
-        console.log('🧹 SpidexCoreProvider: Cleared localStorage due to session expiry');
+        console.log(
+          '🧹 SpidexCoreProvider: Cleared localStorage due to session expiry'
+        );
       } catch (error) {
-        console.error('❌ SpidexCoreProvider: Failed to clear localStorage', error);
+        console.error(
+          '❌ SpidexCoreProvider: Failed to clear localStorage',
+          error
+        );
       }
     }
 
@@ -247,15 +293,20 @@ export const SpidexCoreProvider: React.FC<{ children: React.ReactNode }> = ({
           userId: auth?.userId,
           hasAccessToken: !!auth?.accessToken,
           hasRefreshToken: !!auth?.refreshToken,
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
         });
 
         localStorage.setItem(STORAGE_KEY, JSON.stringify(auth));
         setLocalAuth(auth);
 
-        console.log('✅ SpidexCoreProvider: Successfully saved auth to localStorage');
+        console.log(
+          '✅ SpidexCoreProvider: Successfully saved auth to localStorage'
+        );
       } catch (error) {
-        console.error('❌ SpidexCoreProvider: Failed to save auth to localStorage', error);
+        console.error(
+          '❌ SpidexCoreProvider: Failed to save auth to localStorage',
+          error
+        );
         // Still update the state even if localStorage fails
         setLocalAuth(auth);
       }
@@ -263,13 +314,15 @@ export const SpidexCoreProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   // Helper function to broadcast logout events
-  const broadcastLogoutEvent = (type: 'INTENTIONAL_LOGOUT' | 'SESSION_EXPIRED') => {
+  const broadcastLogoutEvent = (
+    type: 'INTENTIONAL_LOGOUT' | 'SESSION_EXPIRED'
+  ) => {
     if (typeof window !== 'undefined') {
       try {
         const logoutEvent: LogoutEvent = {
           type,
           timestamp: Date.now(),
-          tabId: tabIdRef.current
+          tabId: tabIdRef.current,
         };
         localStorage.setItem(LOGOUT_EVENT_KEY, JSON.stringify(logoutEvent));
         // Clean up the event after a short delay to prevent accumulation
@@ -281,7 +334,10 @@ export const SpidexCoreProvider: React.FC<{ children: React.ReactNode }> = ({
           }
         }, 1000);
       } catch (error) {
-        console.error('❌ SpidexCoreProvider: Failed to broadcast logout event', error);
+        console.error(
+          '❌ SpidexCoreProvider: Failed to broadcast logout event',
+          error
+        );
       }
     }
   };
@@ -289,7 +345,7 @@ export const SpidexCoreProvider: React.FC<{ children: React.ReactNode }> = ({
   const handleLogout = async () => {
     console.log('🚪 SpidexCoreProvider: Starting intentional logout process', {
       tabId: tabIdRef.current,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
 
     // Clear local state first
@@ -300,7 +356,10 @@ export const SpidexCoreProvider: React.FC<{ children: React.ReactNode }> = ({
         localStorage.removeItem(STORAGE_KEY);
         console.log('🧹 SpidexCoreProvider: Cleared localStorage');
       } catch (error) {
-        console.error('❌ SpidexCoreProvider: Failed to clear localStorage', error);
+        console.error(
+          '❌ SpidexCoreProvider: Failed to clear localStorage',
+          error
+        );
       }
     }
 
@@ -315,8 +374,6 @@ export const SpidexCoreProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
-
-
   // When spidexCore.auth changes, update localStorage and local state
   useEffect(() => {
     if (typeof window !== 'undefined' && spidexCore.auth) {
@@ -325,19 +382,27 @@ export const SpidexCoreProvider: React.FC<{ children: React.ReactNode }> = ({
       const newAuthString = JSON.stringify(spidexCore.auth);
 
       if (currentAuthString !== newAuthString) {
-        console.log('🔄 SpidexCoreProvider: Syncing auth from spidexCore to localStorage', {
-          hasSpidexAuth: !!spidexCore.auth,
-          hasLocalAuth: !!localAuth,
-          userId: spidexCore.auth?.userId,
-          timestamp: new Date().toISOString()
-        });
+        console.log(
+          '🔄 SpidexCoreProvider: Syncing auth from spidexCore to localStorage',
+          {
+            hasSpidexAuth: !!spidexCore.auth,
+            hasLocalAuth: !!localAuth,
+            userId: spidexCore.auth?.userId,
+            timestamp: new Date().toISOString(),
+          }
+        );
 
         try {
           localStorage.setItem(STORAGE_KEY, JSON.stringify(spidexCore.auth));
           setLocalAuth(spidexCore.auth);
-          console.log('✅ SpidexCoreProvider: Successfully synced auth to localStorage');
+          console.log(
+            '✅ SpidexCoreProvider: Successfully synced auth to localStorage'
+          );
         } catch (error) {
-          console.error('❌ SpidexCoreProvider: Failed to sync auth to localStorage', error);
+          console.error(
+            '❌ SpidexCoreProvider: Failed to sync auth to localStorage',
+            error
+          );
           // Still update local state even if localStorage fails
           setLocalAuth(spidexCore.auth);
         }
@@ -362,7 +427,7 @@ export const SpidexCoreProvider: React.FC<{ children: React.ReactNode }> = ({
       hasSpidexCoreAuth: !!spidexCore.auth,
       isAuthenticated,
       userId: currentAuth?.userId,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   }, [currentAuth, localAuth, spidexCore.auth, isAuthenticated]);
 
@@ -376,7 +441,7 @@ export const SpidexCoreProvider: React.FC<{ children: React.ReactNode }> = ({
     getMe: spidexCore.getMe,
     getTopTokensByVolume: spidexCore.getTopTokensByVolume,
     getTopTokensByMcap: spidexCore.getTopTokensByMcap,
-    getNounce: spidexCore.getNounce,
+    getNounce: (walletAddress: string) => spidexCore.getNounce(walletAddress),
     signMessage: async (message, walletName) => {
       const result = await spidexCore.signMessage(message, walletName);
       if (result) {

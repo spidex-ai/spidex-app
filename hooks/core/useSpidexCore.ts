@@ -47,7 +47,10 @@ export interface UserSpidex {
   stakeAddress: string;
 }
 
-export const useSpidexCore = (initialAuth: Auth | null = null, onSessionExpired?: () => void) => {
+export const useSpidexCore = (
+  initialAuth: Auth | null = null,
+  onSessionExpired?: () => void
+) => {
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
   const [auth, setAuth] = useState<Auth | null>(initialAuth);
@@ -63,12 +66,14 @@ export const useSpidexCore = (initialAuth: Auth | null = null, onSessionExpired?
         hasInitialAuth: !!initialAuth,
         hasCurrentAuth: !!auth,
         initialAuthToken: initialAuth?.accessToken?.slice(0, 10) + '...',
-        currentAuthToken: auth?.accessToken?.slice(0, 10) + '...'
+        currentAuthToken: auth?.accessToken?.slice(0, 10) + '...',
       });
       setAuth(initialAuth);
     } else if (initialAuth === null && auth !== null) {
       // Handle case where initialAuth becomes null (external logout)
-      console.log('🧹 useSpidexCore: initialAuth is null, clearing internal auth state');
+      console.log(
+        '🧹 useSpidexCore: initialAuth is null, clearing internal auth state'
+      );
       setAuth(null);
     }
   }, [initialAuth, auth]);
@@ -84,16 +89,19 @@ export const useSpidexCore = (initialAuth: Auth | null = null, onSessionExpired?
 
     return true;
   }, []);
-  
-  // Safe auth setter with validation
-  const setAuthSafely = useCallback((newAuth: Auth | null) => {
-    if (!validateAuth(newAuth)) {
-      console.warn('Attempted to set invalid auth object, ignoring update');
-      return;
-    }
 
-    setAuth(newAuth);
-  }, [validateAuth]);
+  // Safe auth setter with validation
+  const setAuthSafely = useCallback(
+    (newAuth: Auth | null) => {
+      if (!validateAuth(newAuth)) {
+        console.warn('Attempted to set invalid auth object, ignoring update');
+        return;
+      }
+
+      setAuth(newAuth);
+    },
+    [validateAuth]
+  );
 
   // Logout function that can be used anywhere
   const performLogout = useCallback(() => {
@@ -101,7 +109,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null, onSessionExpired?
       hasAuth: !!auth,
       userId: auth?.userId,
       timestamp: new Date().toISOString(),
-      stackTrace: new Error().stack?.split('\n').slice(1, 4).join('\n')
+      stackTrace: new Error().stack?.split('\n').slice(1, 4).join('\n'),
     });
 
     try {
@@ -114,7 +122,10 @@ export const useSpidexCore = (initialAuth: Auth | null = null, onSessionExpired?
           localStorage.removeItem(STORAGE_KEY);
           console.log('🧹 performLogout: Successfully cleared localStorage');
         } catch (error) {
-          console.error('❌ performLogout: Failed to clear localStorage', error);
+          console.error(
+            '❌ performLogout: Failed to clear localStorage',
+            error
+          );
         }
       }
 
@@ -174,7 +185,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null, onSessionExpired?
           console.log('🔄 fetchWithAuth: Got 401, attempting token refresh', {
             url,
             hasRefreshToken: !!auth.refreshToken,
-            userId: auth.userId
+            userId: auth.userId,
           });
 
           // Try to refresh the token
@@ -212,11 +223,14 @@ export const useSpidexCore = (initialAuth: Auth | null = null, onSessionExpired?
             }
             return await retryResponse.json();
           } else {
-            console.log('❌ fetchWithAuth: Token refresh failed, triggering session expiry', {
-              refreshStatus: refreshResponse.status,
-              url,
-              userId: auth.userId
-            });
+            console.log(
+              '❌ fetchWithAuth: Token refresh failed, triggering session expiry',
+              {
+                refreshStatus: refreshResponse.status,
+                url,
+                userId: auth.userId,
+              }
+            );
             if (onSessionExpired) {
               onSessionExpired();
             } else {
@@ -228,12 +242,15 @@ export const useSpidexCore = (initialAuth: Auth | null = null, onSessionExpired?
 
         // Handle 401 without refresh token - this should trigger session expiry
         if (response.status === 401) {
-          console.log('❌ fetchWithAuth: Got 401 without refresh token, triggering session expiry', {
-            url,
-            hasAuth: !!auth,
-            hasRefreshToken: !!auth?.refreshToken,
-            userId: auth?.userId
-          });
+          console.log(
+            '❌ fetchWithAuth: Got 401 without refresh token, triggering session expiry',
+            {
+              url,
+              hasAuth: !!auth,
+              hasRefreshToken: !!auth?.refreshToken,
+              userId: auth?.userId,
+            }
+          );
           if (onSessionExpired) {
             onSessionExpired();
           } else {
@@ -353,14 +370,22 @@ export const useSpidexCore = (initialAuth: Auth | null = null, onSessionExpired?
     [fetchWithAuth]
   );
 
-  const getNounce = useCallback(async () => {
-    try {
-      const data = await fetchWithAuth('/auth/connect-wallet/sign-message');
-      return data.data;
-    } catch (err) {
-      return null;
-    }
-  }, [fetchWithAuth]);
+  const getNounce = useCallback(
+    async (walletAddress: string) => {
+      try {
+        const data = await fetchWithAuth('/auth/wallet/nonce', {
+          method: 'POST',
+          body: JSON.stringify({
+            walletAddress,
+          }),
+        });
+        return data.data;
+      } catch (err) {
+        return null;
+      }
+    },
+    [fetchWithAuth]
+  );
 
   const signMessage = useCallback(
     async (message: SignMessageData, walletName: string) => {
@@ -558,7 +583,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null, onSessionExpired?
     try {
       const data = await fetchWithAuth(`/user-point/me/info`);
       return data.data;
-    } catch (error) { }
+    } catch (error) {}
   }, [fetchWithAuth, auth]);
 
   const getUserQuests = useCallback(
@@ -603,8 +628,9 @@ export const useSpidexCore = (initialAuth: Auth | null = null, onSessionExpired?
       setError(null);
       try {
         const data = await fetchWithAuth(
-          `/portfolio/${address ||
-          'addr1q9gykktajrgrmj5am8vwlhp65a72emlwn2s3e5cadkhe3vrfkfxs6yajls3ft0yn42uqlcnrq6qcn3l0lunkxy6aplgspxm6da'
+          `/portfolio/${
+            address ||
+            'addr1q9gykktajrgrmj5am8vwlhp65a72emlwn2s3e5cadkhe3vrfkfxs6yajls3ft0yn42uqlcnrq6qcn3l0lunkxy6aplgspxm6da'
           }`
         );
         return data.data;
@@ -640,8 +666,9 @@ export const useSpidexCore = (initialAuth: Auth | null = null, onSessionExpired?
       setError(null);
       try {
         const data = await fetchWithAuth(
-          `/portfolio/${address ||
-          'addr1q9gykktajrgrmj5am8vwlhp65a72emlwn2s3e5cadkhe3vrfkfxs6yajls3ft0yn42uqlcnrq6qcn3l0lunkxy6aplgspxm6da'
+          `/portfolio/${
+            address ||
+            'addr1q9gykktajrgrmj5am8vwlhp65a72emlwn2s3e5cadkhe3vrfkfxs6yajls3ft0yn42uqlcnrq6qcn3l0lunkxy6aplgspxm6da'
           }/transactions?page=1&count=20&order=desc`
         );
         return data;
