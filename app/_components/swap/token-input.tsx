@@ -65,6 +65,15 @@ const TokenInput: React.FC<Props> = ({
             value={amount}
             onChange={e => {
               const value = e.target.value;
+              if (!/^\d*\.?\d*$/.test(value)) return;
+              
+              const parts = value.split('.');
+              const integerPart = parts[0];
+              const decimalPart = parts[1] || '';
+              
+              if (integerPart.length > 8) return;
+              if (decimalPart.length > 8) return;
+
               if (Number(value) >= 0) {
                 if (onChange) {
                   onChange(value);

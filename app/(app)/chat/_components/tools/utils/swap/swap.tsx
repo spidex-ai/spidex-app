@@ -39,7 +39,7 @@ export interface SwapWrapperProps {
   initialInputAmount?: string;
   swapText?: string;
   swappingText?: string;
-  onSuccess?: (txHash: string) => void;
+  onSuccess?: (txHash: string, inputAmount: string) => void;
   onError?: (error: string) => void;
   onCancel?: () => void;
 }
@@ -183,8 +183,10 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
       });
 
       const submitTx = await api?.submitTx(submitSwap?.cbor);
-      onSuccess?.(submitTx);
+      onSuccess?.(submitTx, inputAmount);
       toast.success('You have swapped successfully!');
+      setInputAmount('');
+      setOutputAmount(''); 
     } catch (error) {
       onError?.(error instanceof Error ? error.message : 'Unknown error');
       toast.error('You have swapped failed! Please try again later!');

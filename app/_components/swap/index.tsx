@@ -181,6 +181,8 @@ const Swap: React.FC<Props> = ({
       const submitTx = await api?.submitTx(submitSwap?.cbor);
       onSuccess?.(submitTx);
       toast.success('You have swapped successfully!');
+      setInputAmount('');
+      setOutputAmount('');
     } catch (error) {
       onError?.(error instanceof Error ? error.message : 'Unknown error');
       toast.error('You have swapped failed! Please try again later!');
