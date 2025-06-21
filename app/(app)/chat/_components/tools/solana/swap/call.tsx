@@ -55,12 +55,14 @@ const SwapCallBody: React.FC<Props> = ({ toolCallId, args }) => {
           initialInputAmount={args.inputAmount?.toString()}
           swapText="Swap"
           swappingText="Swapping..."
-          onSuccess={tx => {
+          onSuccess={(tx, inputAmount) => {
+            console.log("🚀 ~ tx:", tx)
+            console.log("🚀 ~ inputAmount:", inputAmount)
             addToolResult<SolanaTradeResultBodyType>(toolCallId, {
               message: `Swap successful!`,
               body: {
                 transaction: tx,
-                inputAmount: args.inputAmount || 0,
+                inputAmount: Number(inputAmount) || args.inputAmount || 0,
                 inputToken: inputTokenData?.unit || '',
                 outputToken: outputTokenData?.unit || '',
               },

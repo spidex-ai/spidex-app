@@ -12,6 +12,7 @@ import {
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { dexLogoMap } from '@/app/utils/logo';
 import { dexNameMap } from '@/app/utils/dexes';
+import { formatNumber } from '@/lib/utils';
 
 interface Props {
   swapDetails: {
@@ -82,7 +83,7 @@ export default function SwapPoint({
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <div className="text-[10px] text-text-gray">{`${inputAmount} ${inputToken} = ${outputAmount} ${outputToken}`}</div>
+            <div className="text-[10px] text-text-gray">{`${formatNumber(parseFloat(inputAmount))} ${inputToken} = ${formatNumber(parseFloat(outputAmount))} ${outputToken}`}</div>
             {!isOpenSwapDetails ? (
               <div
                 className="cursor-pointer"
