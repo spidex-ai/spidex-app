@@ -3,22 +3,22 @@
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useRef, useState } from 'react';
 
+import TelegramModal from '@/app/_components/telegram-modal';
 import { TextGradient } from '@/components/ui/text';
-import { UserSpidex, useSpidexCore } from '@/hooks/core/useSpidexCore';
+import { UserSpidex } from '@/hooks/core/useSpidexCore';
 import {
   useDiscordLogin,
   useGoogleLogin,
   useTelegramLogin,
   useXLogin,
 } from '@/hooks/social/useSocialLogin';
+import { useAppDispatch } from '@/store/hooks';
+import { selectIsProcessingOAuth } from '@/store/selectors/authSelectors';
+import { setIsProcessingOAuth } from '@/store/slices/authSlice';
 import Image from 'next/image';
 import toast from 'react-hot-toast';
-import ConnectedAccountWrapper from './connected-account-wrapper';
-import TelegramModal from '@/app/_components/telegram-modal';
 import { useSelector } from 'react-redux';
-import { selectIsProcessingOAuth } from '@/store/selectors/authSelectors';
-import { useAppDispatch } from '@/store/hooks';
-import { setIsProcessingOAuth } from '@/store/slices/authSlice';
+import ConnectedAccountWrapper from './connected-account-wrapper';
 
 interface Props {
   user: UserSpidex;

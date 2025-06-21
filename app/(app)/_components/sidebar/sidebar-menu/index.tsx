@@ -2,17 +2,17 @@
 
 import React from 'react';
 
-import { SidebarMenu as SidebarMenuUI, useSidebar } from '@/components/ui';
+import { SidebarMenu as SidebarMenuUI } from '@/components/ui';
 
-import ChatsGroup from './chats-group';
 import AccountButton from './account-button';
+import ChatsGroup from './chats-group';
 // import PortfolioButton from './portfolio-button';
-import SavedTokensGroup from './saved-tokens-group';
-import Points from './points';
-import RefferalProgram from './referral-program';
-import PortfolioWapper from './portfolio-wapper';
-import Trade from './trade';
 import Leaderboard from './leaderboard';
+import Points from './points';
+import PortfolioWapper from './portfolio-wapper';
+import RefferalProgram from './referral-program';
+import SavedTokensGroup from './saved-tokens-group';
+import Trade from './trade';
 const SidebarMenu: React.FC = () => {
   return (
     <SidebarMenuUI>

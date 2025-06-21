@@ -6,15 +6,14 @@ import {
   GradientButton,
 } from "@/components/ui";
 import { useDiscordLogin, useTelegramLogin, useXLogin } from "@/hooks/social/useSocialLogin";
+import { useAppDispatch } from "@/store/hooks";
+import { selectIsProcessingOAuth } from "@/store/selectors/authSelectors";
+import { setIsProcessingOAuth } from "@/store/slices/authSlice";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
-import { Platform } from "./reminder-modal-wrapper";
-import { useSpidexCore } from "@/hooks/core/useSpidexCore";
 import { useSelector } from "react-redux";
-import { selectIsProcessingOAuth } from "@/store/selectors/authSelectors";
-import { useAppDispatch } from "@/store/hooks";
-import { setIsProcessingOAuth } from "@/store/slices/authSlice";
+import { Platform } from "./reminder-modal-wrapper";
 
 interface ReminderModalProps {
   isOpen: boolean;
