@@ -23,10 +23,9 @@ import { useChat } from '../../../_contexts';
 import { cn } from '@/lib/utils';
 
 import Image from 'next/image';
-// import { useSpidexCore } from '@/hooks/core/useSpidexCore';
-import { useSpidexCoreContext } from '@/app/_contexts';
+import { useSpidexCore } from '@/hooks/core/useSpidexCore';
 const ChatInput: React.FC = () => {
-  const { auth } = useSpidexCoreContext();
+  const { auth } = useSpidexCore();
 
   const { input, setInput, onSubmit, isLoading, inputDisabledMessage } =
     useChat();

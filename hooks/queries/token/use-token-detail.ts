@@ -1,13 +1,13 @@
 'use client';
 
+import { useSpidexCore } from '@/hooks/core/useSpidexCore';
 import { CardanoTokenDetail } from '@/services/dexhunter/types';
 import { useEffect, useState } from 'react';
-import { useSpidexCoreContext } from '@/app/_contexts/spidex-core';
 export const useTokenDetail = (address: string) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [data, setData] = useState<CardanoTokenDetail | null>(null);
-  const { getTokenDetailCore } = useSpidexCoreContext();
+  const { getTokenDetailCore } = useSpidexCore();
 
   useEffect(() => {
     if (address) {

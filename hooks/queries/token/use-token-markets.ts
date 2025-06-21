@@ -6,7 +6,7 @@ import type { MarketsResponseData } from '@/services/birdeye/types';
 import { useEffect, useState } from 'react';
 
 import type { TokenStats } from '@/services/taptools/types';
-import { useSpidexCoreContext } from '@/app/_contexts';
+import { useSpidexCore } from '@/hooks/core/useSpidexCore';
 
 export const useTokenMarkets = (address: string) => {
   const { data, isLoading, error } = useSWR<MarketsResponseData>(
@@ -26,7 +26,7 @@ export const useTokenMarkets = (address: string) => {
 };
 
 export const useTokenStats = (tokenId: string | undefined) => {
-  const { getTokenStats } = useSpidexCoreContext();
+  const { getTokenStats } = useSpidexCore();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
   const [data, setData] = useState<TokenStats | null>(null);

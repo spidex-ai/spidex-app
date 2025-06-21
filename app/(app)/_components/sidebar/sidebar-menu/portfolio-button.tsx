@@ -9,13 +9,12 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 import { SidebarMenuItem, SidebarMenuButton } from '@/components/ui';
-
-import { useSpidexCoreContext } from '@/app/_contexts';
+import { useSpidexCore } from '@/hooks/core/useSpidexCore';
 
 const PortfolioButton: React.FC = () => {
   const pathname = usePathname();
 
-  const { auth } = useSpidexCoreContext();
+  const { auth } = useSpidexCore();
 
   if (!auth?.user?.walletAddress) return null;
 

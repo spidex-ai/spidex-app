@@ -8,8 +8,8 @@ import {
 } from '@/services/hellomoon/types';
 import { useTaptools } from '@/hooks/useTaptools';
 import { useEffect, useState } from 'react';
-import { useSpidexCoreContext } from '@/app/_contexts';
 import { QuoteType } from '@/app/(app)/token/[address]/_components/header/select-quote';
+import { useSpidexCore } from '@/hooks/core/useSpidexCore';
 
 export const usePriceChart = (
   mint: string,
@@ -93,7 +93,7 @@ export const usePriceChartCore = (
   numIntervals: number,
   quote: QuoteType
 ) => {
-  const { getTokenOHLCV } = useSpidexCoreContext();
+  const { getTokenOHLCV } = useSpidexCore();
 
   const [data, setData] = useState<TokenPriceCandlestick[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);

@@ -8,13 +8,13 @@ import Link from 'next/link';
 
 import { usePathname } from 'next/navigation';
 
-import { useSpidexCoreContext } from '@/app/_contexts';
 import { SidebarMenuButton, SidebarMenuItem } from '@/components/ui';
 import Image from 'next/image';
+import { useSpidexCore } from '@/hooks/core/useSpidexCore';
 
 const Portfolio: React.FC = () => {
   const pathname = usePathname();
-  const { auth } = useSpidexCoreContext();
+  const { auth } = useSpidexCore();
   if (!auth?.user?.stakeAddress) return null;
   const isActive = pathname?.includes('/portfolio');
   return (

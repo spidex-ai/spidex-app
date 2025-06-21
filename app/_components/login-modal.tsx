@@ -26,10 +26,14 @@ import { cn } from '@/lib/utils';
 import { initNufiDappCardanoSdk } from '@nufi/dapp-client-cardano';
 import nufiCoreSdk from '@nufi/dapp-client-core';
 import toast from 'react-hot-toast';
-import { useSpidexCoreContext } from '../_contexts';
 import { useLoginModal } from '../_contexts/login-modal-context';
 import TelegramModal from './telegram-modal';
 import WalletNotInstalledDialog from './wallet-not-installed-dialog';
+import { useSpidexCore } from '@/hooks/core/useSpidexCore';
+import { useAppDispatch } from '@/store/hooks';
+import { selectIsProcessingOAuth } from '@/store/selectors/authSelectors';
+import { useSelector } from 'react-redux';
+import { setIsProcessingOAuth } from '@/store/slices/authSlice';
 
 // Wallet methods configuration
 const WALLET_METHODS = [
@@ -127,7 +131,7 @@ const SOCIAL_METHODS = [
 ];
 
 const METAMASK_METHOD = {
-  id: 'metamask',
+  id: 'nufisnap',
   name: 'Metamask',
   icon: '/icons/metamask.svg',
   description: 'Metamask',
@@ -158,9 +162,9 @@ const LoginModal: React.FC = () => {
   const {
     signMessage: signMessageSpidex,
     getNounce,
-    isProcessingOAuth,
-    setIsProcessingOAuth,
-  } = useSpidexCoreContext();
+  } = useSpidexCore();
+  const isProcessingOAuth = useSelector(selectIsProcessingOAuth);
+  const dispatch = useAppDispatch();
   const { signInWithGoogle } = useGoogleLogin();
   const { signInWithX } = useXLogin();
   const { signInWithDiscord } = useDiscordLogin();
@@ -190,6 +194,7 @@ const LoginModal: React.FC = () => {
       nufiCoreSdk.init('https://wallet.nu.fi', {
         zIndex: 1402,
       });
+
     }
   }, []);
 
@@ -278,7 +283,6 @@ const LoginModal: React.FC = () => {
     );
   };
   const handleCheckReferral = (method: string) => {
-    console.log('handleCheckReferral called with method:', method);
     if (!isPrivacyAccepted) {
       console.log('Privacy policy not accepted');
       toast.error(
@@ -286,7 +290,6 @@ const LoginModal: React.FC = () => {
       );
       return;
     }
-    console.log('Setting method:', method);
     setMethod(method);
     if (params.get('ref')) {
       console.log('Referral code found, opening referral modal');
@@ -298,7 +301,7 @@ const LoginModal: React.FC = () => {
   };
 
   const handleConnect = (method: string) => {
-    if (method === 'nufisnap') {
+    if (method === 'metamask') {
       handleConnectMetamask();
     } else if (method === 'google') {
       handleConnectGoogle();
@@ -316,7 +319,7 @@ const LoginModal: React.FC = () => {
   const handleConnectReferral = useCallback(() => {
     console.log('🚀 ~ handleConnect ~ method:', method);
     setIsReferralModalOpen(false);
-    if (method === 'nufisnap') {
+    if (method === 'metamask') {
       handleConnectMetamask();
     } else if (method === 'google') {
       handleConnectGoogle();
@@ -355,12 +358,12 @@ const LoginModal: React.FC = () => {
         toast.error('No address found');
         return;
       }
-      const nonce = await getNounce();
+      const nonce = await getNounce(address);
       if (!nonce) return;
       const ref = params.get('ref');
 
       await signMessage(
-        nonce,
+        nonce.challengeMessage,
         async (signature: string, key: string | undefined) => {
           await handleSignMessageSpidex(
             address,
@@ -368,7 +371,8 @@ const LoginModal: React.FC = () => {
             signature,
             key,
             ref,
-            walletName
+            walletName,
+            nonce.nonce
           );
         },
         (error: any) => {
@@ -396,7 +400,8 @@ const LoginModal: React.FC = () => {
     signature: string,
     key: string | undefined,
     ref: string | null,
-    walletName: string
+    walletName: string,
+    nonce: string
   ) => {
     try {
       await signMessageSpidex(
@@ -407,8 +412,9 @@ const LoginModal: React.FC = () => {
           role: 'user',
           referralCode: ref || '',
           stakeAddress,
+          nonce,
         },
-        walletName || ''
+        walletName || '',
       );
       closeModal();
     } catch (error: any) {
@@ -488,7 +494,7 @@ const LoginModal: React.FC = () => {
       }
       console.log('Setting isConnecting to false');
       setIsConnecting(false);
-      setIsProcessingOAuth(false);
+      dispatch(setIsProcessingOAuth(false));
     }
   };
 
@@ -547,7 +553,7 @@ const LoginModal: React.FC = () => {
       console.log('Setting processing flags to false');
       setIsConnecting(false);
       setIsProcessingCallback(false);
-      setIsProcessingOAuth(false);
+      dispatch(setIsProcessingOAuth(false));
     }
   }, [isConnecting, isProcessingCallback, params, signInWithDiscord, closeModal]);
 
@@ -566,13 +572,10 @@ const LoginModal: React.FC = () => {
       isProcessingCallback
     });
 
-    // Don't process OAuth callbacks if we're on pages with their own OAuth handlers
     const isOnAccountPage = currentPath.includes('/account');
     const isOnPointsPage = currentPath.includes('/points');
     const shouldDeferToOtherComponent = isOnAccountPage || isOnPointsPage;
 
-    // Only process if we have a code, haven't processed it yet, not currently processing OAuth globally,
-    // and we're NOT on pages that have their own OAuth handling components
     if (
       socialConnectCode &&
       socialConnectCode !== processedCodeRef.current &&
@@ -583,7 +586,7 @@ const LoginModal: React.FC = () => {
     ) {
       console.log('Login Modal: Taking control of OAuth processing');
       processedCodeRef.current = socialConnectCode;
-      setIsProcessingOAuth(true);
+      dispatch(setIsProcessingOAuth(true));
 
       // Use the type parameter to determine which callback handler to use
       // Only call Discord API if type=connect-discord, otherwise default to X
@@ -697,6 +700,12 @@ const LoginModal: React.FC = () => {
 
   const handleConnectMetamask = () => {
     if (typeof window === 'undefined') return;
+    if (anyConnectionInProgress) {
+      console.log('Connection already in progress');
+      return;
+    }
+
+    setWalletConnecting('metamask');
 
     nufiCoreSdk.isMetamaskInstalled().then(async isMetamaskInstalled => {
       if (isMetamaskInstalled) {
@@ -709,10 +718,14 @@ const LoginModal: React.FC = () => {
             configurable: true,
           });
         }
-        handleCheckReferral('nufisnap');
+        handleConnectWallet('nufisnap');
       } else {
         console.log('Metamask is not installed');
+        setWalletConnecting(null);
       }
+    }).catch(error => {
+      console.error('Error checking Metamask installation:', error);
+      setWalletConnecting(null);
     });
   };
   // Render wallet option
@@ -788,7 +801,7 @@ const LoginModal: React.FC = () => {
 
   // Render Metamask option
   const renderMetamaskConnect = () => {
-    const isThisWalletConnecting = walletConnecting === 'nufisnap';
+    const isThisWalletConnecting = walletConnecting === 'metamask';
     const isDisabled =
       (anyConnectionInProgress && !isThisWalletConnecting) ||
       !isPrivacyAccepted;
@@ -802,7 +815,7 @@ const LoginModal: React.FC = () => {
             : 'cursor-pointer hover:bg-blue-50 hover:text-black',
           'transition-all duration-200'
         )}
-        onClick={() => handleConnectMetamask()}
+        onClick={() => !isDisabled && handleCheckReferral('metamask')}
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">

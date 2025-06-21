@@ -1,10 +1,10 @@
 import useSWR from 'swr';
 
-import { useSpidexCoreContext } from '@/app/_contexts';
 import type { SavedToken } from '@/db/types';
+import { useSpidexCore } from '@/hooks/core/useSpidexCore';
 
 export const useSavedTokens = () => {
-  const { auth } = useSpidexCoreContext();
+  const { auth } = useSpidexCore();
 
   const { data, isLoading, error, mutate } = useSWR<SavedToken[]>(
     '/api/saved-tokens',

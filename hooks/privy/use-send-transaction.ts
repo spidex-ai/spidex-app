@@ -1,7 +1,7 @@
-import { useSpidexCoreContext } from '@/app/_contexts';
+import { useSpidexCore } from "../core/useSpidexCore";
 
 export const useSendTransaction = () => {
-  const { auth } = useSpidexCoreContext();
+  const { auth } = useSpidexCore();
 
   const wallet = auth?.user?.walletAddress;
 

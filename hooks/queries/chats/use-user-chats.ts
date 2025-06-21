@@ -1,8 +1,8 @@
-import { useSpidexCoreContext } from '@/app/_contexts';
 import type { Chat } from '@/db/types';
+import { useSpidexCore } from '@/hooks/core/useSpidexCore';
 import useSWR from 'swr';
 export const useUserChats = () => {
-  const { auth } = useSpidexCoreContext();
+  const { auth } = useSpidexCore();
 
   const { data, isLoading, error, mutate } = useSWR<Chat[]>(
     '/api/chats',

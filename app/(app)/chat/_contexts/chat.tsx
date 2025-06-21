@@ -23,8 +23,7 @@ import {
   CARDANO_GET_WALLET_ADDRESS_NAME,
   CARDANO_DEPOSIT_LIQUIDITY_NAME,
 } from '@/ai/action-names';
-// import { useSpidexCore } from '@/hooks/core/useSpidexCore';
-import { useSpidexCoreContext } from '@/app/_contexts';
+import { useSpidexCore } from '@/hooks/core/useSpidexCore';
 export enum ColorMode {
   LIGHT = 'light',
   DARK = 'dark',
@@ -75,7 +74,7 @@ interface ChatProviderProps {
 }
 
 export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
-  const { auth } = useSpidexCoreContext();
+  const { auth } = useSpidexCore();
 
   const [chatId, setChatId] = useState<string>(generateId());
   const [isResponseLoading, setIsResponseLoading] = useState(false);

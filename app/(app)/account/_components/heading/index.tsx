@@ -17,8 +17,7 @@ import Address from '@/app/_components/address';
 import ChangePfp from './change-pfp';
 import { Loader2 } from 'lucide-react';
 import { pfpURL } from '@/lib/pfp';
-import { UserSpidex } from '@/hooks/core/useSpidexCore';
-import { useSpidexCoreContext } from '@/app/_contexts';
+import { UserSpidex, useSpidexCore } from '@/hooks/core/useSpidexCore';
 
 interface Props {
   user: UserSpidex;
@@ -26,7 +25,7 @@ interface Props {
 
 const AccountHeading: React.FC<Props> = ({ user }) => {
   const [isUploading, setIsUploading] = useState<boolean>(false);
-  const { logout } = useSpidexCoreContext();
+  const { logout } = useSpidexCore();
 
   return (
     <div className="flex flex-col gap-4">

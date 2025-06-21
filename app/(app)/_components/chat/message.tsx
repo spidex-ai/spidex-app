@@ -18,11 +18,12 @@ import { cn } from '@/lib/utils';
 import { pfpURL } from '@/lib/pfp';
 import { getAgentName } from '../../chat/_components/tools/tool-to-agent';
 
-import { useSpidexCoreContext } from '@/app/_contexts';
 import type {
   Message as MessageType,
   ToolInvocation as ToolInvocationType,
 } from 'ai';
+import { useSelector } from 'react-redux';
+import { selectAuthData } from '@/store/selectors/authSelectors';
 
 interface Props {
   message: MessageType;
@@ -44,8 +45,7 @@ const Message: React.FC<Props> = ({
   nextMessage,
   compressed,
 }) => {
-  const { auth } = useSpidexCoreContext();
-  console.log("🚀 ~ auth:", auth)
+  const auth = useSelector(selectAuthData);
 
   const isUser = message.role === 'user';
 

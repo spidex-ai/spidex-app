@@ -1,6 +1,5 @@
 'use client';
 import Pagination from '@/app/(app)/_components/pagination';
-import { useSpidexCoreContext } from '@/app/_contexts/spidex-core';
 import { ButtonBlack, GradientSecondaryBtn } from '@/components/ui';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useQuests } from '@/hooks/point/use-point';
@@ -10,6 +9,7 @@ import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import ReminderModalWrapper, { Platform } from './reminder-modal-wrapper';
 import dayjs from 'dayjs';
+import { useSpidexCore } from '@/hooks/core/useSpidexCore';
 
 interface MissionItem {
   id: number;
@@ -32,7 +32,7 @@ interface Props {
 
 const Missions = ({ onMissionComplete }: Props) => {
   const router = useRouter();
-  const { auth } = useSpidexCoreContext();
+  const { auth } = useSpidexCore();
   const {
     quests,
     loading,
@@ -47,7 +47,7 @@ const Missions = ({ onMissionComplete }: Props) => {
     triggerDailyLogin,
     startSocialQuest,
     verifySocialQuest,
-  } = useSpidexCoreContext();
+  } = useSpidexCore();
   const [loadingMissionId, setLoadingMissionId] = React.useState<number | null>(
     null
   );

@@ -1,10 +1,10 @@
-import { useSpidexCoreContext } from '@/app/_contexts';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { PortfolioToken, PortfolioTransaction } from './type';
+import { useSpidexCore } from '../core/useSpidexCore';
 
 export const usePortfolioToken = (address?: string) => {
-  const { getPortfolioToken } = useSpidexCoreContext();
+  const { getPortfolioToken } = useSpidexCore();
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -35,7 +35,7 @@ export const usePortfolioToken = (address?: string) => {
 };
 
 export const usePortfolioTransaction = (address?: string) => {
-  const { getPortfolioTransaction } = useSpidexCoreContext();
+  const { getPortfolioTransaction } = useSpidexCore();
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

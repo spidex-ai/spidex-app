@@ -11,8 +11,8 @@ import {
 
 import Swap from '@/app/_components/swap';
 
-import { useSpidexCoreContext } from '@/app/_contexts/spidex-core';
 import { CardanoTokenDetail } from '@/services/dexhunter/types';
+import { useSpidexCore } from '@/hooks/core/useSpidexCore';
 
 interface SwapModalContextType {
   isOpen: boolean;
@@ -37,7 +37,7 @@ const SwapModalContextType = createContext<SwapModalContextType>({
 export const SwapModalProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const { getTokenDetailCore } = useSpidexCoreContext();
+  const { getTokenDetailCore } = useSpidexCore();
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const [inputToken, setInputToken] = useState<CardanoTokenDetail | null>(null);

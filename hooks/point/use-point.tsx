@@ -3,11 +3,11 @@
 
 import { useEffect, useState } from "react";
 
-import { useSpidexCoreContext } from "@/app/_contexts/spidex-core";
 import { Achievement, PointHistory, PointInfo, Quest } from "./type";
+import { useSpidexCore } from "../core/useSpidexCore";
 
 export const usePointInfo = () => {
-    const {getUserPointMeInfo, getAchievements} = useSpidexCoreContext()
+    const {getUserPointMeInfo, getAchievements} = useSpidexCore()
 
     const [pointInfo, setPointInfo] = useState<PointInfo>();
     const [achievements, setAchievements] = useState<Achievement[]>([]);
@@ -63,7 +63,7 @@ export const usePointInfo = () => {
 }
 
 export const useQuests = () => {
-    const {getUserQuests} = useSpidexCoreContext()
+    const {getUserQuests} = useSpidexCore()
 
     const [currentPage, setCurrentPage] = useState(0); 
     const [totalPages, setTotalPages] = useState(0); 
@@ -100,7 +100,7 @@ export const useQuests = () => {
 }
 
 export const usePointHistory = () => {
-    const {getUserPointHistory} = useSpidexCoreContext()
+    const {getUserPointHistory} = useSpidexCore()
 
     const [currentPage, setCurrentPage] = useState(0); 
     const [totalPages, setTotalPages] = useState(0); 

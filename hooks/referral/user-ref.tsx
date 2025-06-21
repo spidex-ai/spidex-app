@@ -4,10 +4,9 @@ import { useSpidexCore } from '../core/useSpidexCore';
 
 import { useEffect, useState } from 'react';
 import { MyRefItem, ReferralInfo, RefHistoryItem } from './type';
-import { useSpidexCoreContext } from '@/app/_contexts/spidex-core';
 
 export const useRefInfo = () => {
-  const { getUserRefMeInfo } = useSpidexCoreContext();
+  const { getUserRefMeInfo } = useSpidexCore();
 
   const [referralInfo, setReferralInfo] = useState<ReferralInfo | null>(null);
   const [loading, setLoading] = useState(false);
@@ -33,7 +32,7 @@ export const useRefInfo = () => {
 };
 
 export const useRefHistory = () => {
-  const { getUserRefHistory } = useSpidexCoreContext();
+  const { getUserRefHistory } = useSpidexCore();
 
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
@@ -70,7 +69,7 @@ export const useRefHistory = () => {
 };
 
 export const useRefReferredUsers = () => {
-  const { getUserRefMeReferredUsers } = useSpidexCoreContext();
+  const { getUserRefMeReferredUsers } = useSpidexCore();
 
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);

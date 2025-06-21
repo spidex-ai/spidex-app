@@ -19,13 +19,13 @@ import React, { useEffect, useState } from 'react';
 import Balances from './balances';
 
 import { LOGIN_METHODS } from '@/app/_components/login-modal';
-import { useSpidexCoreContext } from '@/app/_contexts';
 import { useLoginModal } from '@/app/_contexts/login-modal-context';
 import { truncateAddress } from '@/lib/wallet';
 import Image from 'next/image';
+import { useSpidexCore } from '@/hooks/core/useSpidexCore';
 
 const AuthButton: React.FC = () => {
-  const { auth, logout } = useSpidexCoreContext();
+  const { auth, logout } = useSpidexCore();
   const { openModal } = useLoginModal();
   const { isMobile, open } = useSidebar();
   const [walletIcon, setWalletIcon] = useState<string>(

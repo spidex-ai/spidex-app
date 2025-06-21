@@ -24,9 +24,9 @@ import {
 } from '@/services/dexhunter/types';
 import { useCardano } from '@cardano-foundation/cardano-connect-with-wallet';
 import { decodeHexAddress } from '@cardano-foundation/cardano-connect-with-wallet-core';
-import { useSpidexCoreContext } from '@/app/_contexts';
 import SwapPoint from './swap-point';
 import { toast } from 'react-hot-toast';
+import { useSpidexCore } from '@/hooks/core/useSpidexCore';
 
 interface Props {
   initialInputToken: CardanoTokenDetail | null;
@@ -74,10 +74,10 @@ const Swap: React.FC<Props> = ({
     estimateSwap,
     buildSwapRequest,
     submitSwapRequest,
-  } = useSpidexCoreContext();
+  } = useSpidexCore();
   const { enabledWallet, unusedAddresses, accountBalance } =
     useCardano();
-  const {auth}= useSpidexCoreContext()
+  const {auth}= useSpidexCore()
 
   const [inputAmount, setInputAmount] = useState<string>(
     initialInputAmount || ''

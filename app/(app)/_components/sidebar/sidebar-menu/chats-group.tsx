@@ -29,14 +29,14 @@ import { useChat } from '../../../chat/_contexts/chat';
 import { cn } from '@/lib/utils';
 
 import Image from 'next/image';
-import { useSpidexCoreContext } from '@/app/_contexts';
+import { useSpidexCore } from '@/hooks/core/useSpidexCore';
 
 const ChatsGroup: React.FC = () => {
   const pathname = usePathname();
 
   const { isMobile, setOpenMobile } = useSidebar();
 
-  const { auth } = useSpidexCoreContext();
+  const { auth } = useSpidexCore();
 
   const { chats, isLoading, mutate } = useUserChats();
 

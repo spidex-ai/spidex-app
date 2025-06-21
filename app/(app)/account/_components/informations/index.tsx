@@ -5,8 +5,7 @@ import Image from 'next/image';
 import { GradientBorderButton } from '@/components/ui/button';
 import { TextGradient } from '@/components/ui/text';
 
-import { UserSpidex } from '@/hooks/core/useSpidexCore';
-import { useSpidexCoreContext } from '@/app/_contexts';
+import { UserSpidex, useSpidexCore } from '@/hooks/core/useSpidexCore';
 import Address from '@/app/_components/address';
 import toast from 'react-hot-toast';
 interface Props {
@@ -15,7 +14,7 @@ interface Props {
 
 const Information: React.FC<Props> = ({ user }) => {
   const wallets = [user.walletAddress];
-  const { logout, uploadAvatar, updateUserInfo, getMe } = useSpidexCoreContext();
+  const { logout, uploadAvatar, updateUserInfo, getMe } = useSpidexCore();
 
   const [uploading, setUploading] = useState(false);
   const [avatar, setAvatar] = useState(user.avatar);

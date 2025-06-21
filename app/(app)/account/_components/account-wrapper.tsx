@@ -5,10 +5,10 @@ import '@/components/utils/suppress-console';
 import NotLoggedInAlert from '../../chat/_components/not-logged-in-alert';
 import Information from './informations';
 import ConnectedAccounts from './connected-accounts';
-import { useSpidexCoreContext } from '@/app/_contexts';
+import { useSpidexCore } from '@/hooks/core/useSpidexCore';
 
 const Account: React.FC = () => {
-  const { auth } = useSpidexCoreContext();
+  const { auth } = useSpidexCore();
 
   return (
     <>

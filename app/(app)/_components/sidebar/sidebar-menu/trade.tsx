@@ -6,13 +6,12 @@ import { SidebarMenuItem, SidebarMenuButton } from '@/components/ui';
 
 import { usePathname } from 'next/navigation';
 
-// import { useSpidexCoreContext } from '@/app/_contexts'
 import Link from 'next/link';
 import Image from 'next/image';
 
 const Trade: React.FC = () => {
   const pathname = usePathname();
-  // const { auth } = useSpidexCoreContext()
+  // const { auth } = useSpidexCore()
 
   // if(!auth?.user?.walletAddress) return null
   const tokenTrade =

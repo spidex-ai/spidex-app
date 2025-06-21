@@ -23,11 +23,13 @@ import {
 
 import AuthButton from '@/app/(app)/_components/sidebar/auth-button';
 import SwapPoint from '@/app/_components/swap/swap-point';
-import { useSpidexCoreContext } from '@/app/_contexts/spidex-core';
 import { useCardano } from '@cardano-foundation/cardano-connect-with-wallet';
 import Image from 'next/image';
 import toast from 'react-hot-toast';
 import { decodeHexAddress } from '@cardano-foundation/cardano-connect-with-wallet-core';
+import { useSpidexCore } from '@/hooks/core/useSpidexCore';
+import { useSelector } from 'react-redux';
+import { selectAuthData } from '@/store/selectors/authSelectors';
 
 export interface SwapWrapperProps {
   initialInputToken: CardanoTokenDetail | null;
@@ -72,11 +74,11 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
     estimateSwap,
     buildSwapRequest,
     submitSwapRequest,
-  } = useSpidexCoreContext();
+  } = useSpidexCore();
   const { enabledWallet, unusedAddresses, accountBalance } =
     useCardano();
   
-  const {auth} = useSpidexCoreContext()
+  const auth = useSelector(selectAuthData)
 
   const [inputAmount, setInputAmount] = useState<string>(
     initialInputAmount || ''

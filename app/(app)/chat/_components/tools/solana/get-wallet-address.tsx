@@ -8,8 +8,7 @@ import { useChat } from '@/app/(app)/chat/_contexts/chat';
 
 import type { ToolInvocation } from 'ai';
 import type { CardanoGetWalletAddressResultType } from '@/ai';
-// import { useSpidexCore } from '@/hooks/core/useSpidexCore';
-import { useSpidexCoreContext } from '@/app/_contexts';
+import { useSpidexCore } from '@/hooks/core/useSpidexCore';
 
 interface Props {
   tool: ToolInvocation;
@@ -39,7 +38,7 @@ const GetWalletAddress: React.FC<Props> = ({ tool, prevToolAgent }) => {
 };
 
 const GetWalletAddressAction = ({ toolCallId }: { toolCallId: string }) => {
-  const { auth } = useSpidexCoreContext();
+  const { auth } = useSpidexCore();
 
   const { addToolResult, isLoading } = useChat();
 

@@ -9,15 +9,15 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { useSpidexCoreContext } from '@/app/_contexts/spidex-core';
 import { formatSILK } from '@/app/utils/format';
 import SharePostModalWrapper from './share-post-modal-wrapper';
 import toast from 'react-hot-toast';
+import { useSpidexCore } from '@/hooks/core/useSpidexCore';
 
 const AgentClub: React.FC = () => {
   const { referralInfo, loading, error } = useRefInfo();
-  const { uploadAvatar, updateUserInfo } = useSpidexCoreContext();
-  const { auth, getMe } = useSpidexCoreContext();
+  const { uploadAvatar, updateUserInfo } = useSpidexCore();
+  const { auth, getMe } = useSpidexCore();
   console.log('🚀 ~ auth:', auth);
   const [copied, setCopied] = useState(false);
   const [postModalOpen, setPostModalOpen] = useState(false);

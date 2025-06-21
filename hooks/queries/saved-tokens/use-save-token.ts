@@ -2,12 +2,12 @@
 
 import { useState } from 'react';
 
-import { useSpidexCoreContext } from '@/app/_contexts';
 import { useIsTokenSaved } from './use-is-token-saved';
 import { useSavedTokens } from './use-saved-tokens';
+import { useSpidexCore } from '@/hooks/core/useSpidexCore';
 
 export const useSaveToken = (address: string) => {
-  const { auth } = useSpidexCoreContext();
+  const { auth } = useSpidexCore();
 
   const { mutate: mutateSavedTokens } = useSavedTokens();
 

@@ -1,9 +1,9 @@
-import { useSpidexCoreContext } from '@/app/_contexts';
 import { firebaseAuth } from '@/lib/firebase';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { useSpidexCore } from '../core/useSpidexCore';
 
 export const useGoogleLogin = () => {
-  const { connectGoogle } = useSpidexCoreContext();
+  const { connectGoogle } = useSpidexCore();
 
   const signInWithGoogle = async (referralCode?: string) => {
     try {
@@ -24,7 +24,7 @@ export const useGoogleLogin = () => {
 };
 
 export const useXLogin = () => {
-  const { connectX } = useSpidexCoreContext();
+  const { connectX } = useSpidexCore();
 
   const signInWithX = async (
     code: string,
@@ -43,7 +43,7 @@ export const useXLogin = () => {
 };
 
 export const useDiscordLogin = () => {
-  const { connectDiscord } = useSpidexCoreContext();
+  const { connectDiscord } = useSpidexCore();
 
   const signInWithDiscord = async (
     code: string,
@@ -62,7 +62,7 @@ export const useDiscordLogin = () => {
 };
 
 export const useTelegramLogin = () => {
-  const { connectTelegram } = useSpidexCoreContext();
+  const { connectTelegram } = useSpidexCore();
 
   const signInWithTelegram = async (
     id: string,

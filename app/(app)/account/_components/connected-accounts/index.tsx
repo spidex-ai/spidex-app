@@ -4,7 +4,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useRef, useState } from 'react';
 
 import { TextGradient } from '@/components/ui/text';
-import { UserSpidex } from '@/hooks/core/useSpidexCore';
+import { UserSpidex, useSpidexCore } from '@/hooks/core/useSpidexCore';
 import {
   useDiscordLogin,
   useGoogleLogin,
@@ -15,17 +15,21 @@ import Image from 'next/image';
 import toast from 'react-hot-toast';
 import ConnectedAccountWrapper from './connected-account-wrapper';
 import TelegramModal from '@/app/_components/telegram-modal';
-import { useSpidexCoreContext } from '@/app/_contexts';
+import { useSelector } from 'react-redux';
+import { selectIsProcessingOAuth } from '@/store/selectors/authSelectors';
+import { useAppDispatch } from '@/store/hooks';
+import { setIsProcessingOAuth } from '@/store/slices/authSlice';
 
 interface Props {
   user: UserSpidex;
 }
 
 const ConnectedAccounts: React.FC<Props> = ({ user }) => {
+  const dispatch = useAppDispatch();
   const { signInWithGoogle } = useGoogleLogin();
   const { signInWithX } = useXLogin();
   const { signInWithDiscord } = useDiscordLogin();
-  const { isProcessingOAuth, setIsProcessingOAuth } = useSpidexCoreContext();
+  const isProcessingOAuth  = useSelector(selectIsProcessingOAuth);
   const params = useSearchParams();
   const router = useRouter();
   const [isConnecting, setIsConnecting] = useState(false);
@@ -33,6 +37,7 @@ const ConnectedAccounts: React.FC<Props> = ({ user }) => {
   const [isProcessingCallback, setIsProcessingCallback] = useState(false);
   const { signInWithTelegram } = useTelegramLogin();
   const processedCodeRef = useRef<string | null>(null);
+
 
   // Get current URL dynamically
   const getCurrentUrl = () => {
@@ -94,7 +99,7 @@ const ConnectedAccounts: React.FC<Props> = ({ user }) => {
         router.refresh();
       }
       setIsConnecting(false);
-      setIsProcessingOAuth(false);
+      dispatch(setIsProcessingOAuth(false));
     }
   };
 
@@ -160,7 +165,7 @@ const ConnectedAccounts: React.FC<Props> = ({ user }) => {
       console.log('Setting processing flags to false');
       setIsConnecting(false);
       setIsProcessingCallback(false);
-      setIsProcessingOAuth(false);
+      dispatch(setIsProcessingOAuth(false));
     }
   };
 
@@ -194,7 +199,7 @@ const ConnectedAccounts: React.FC<Props> = ({ user }) => {
     ) {
       console.log('Connected Accounts: Taking control of OAuth processing (priority on account page)');
       processedCodeRef.current = socialConnectCode;
-      setIsProcessingOAuth(true);
+      dispatch(setIsProcessingOAuth(true));
 
       // Only call Discord API if type=connect-discord, otherwise default to X
       if (callbackType === 'connect-discord') {

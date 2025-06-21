@@ -13,11 +13,11 @@ import {
 } from '@/components/ui';
 
 import { useExperimentalConfirmed } from '../../_hooks';
-import { useSpidexCoreContext } from '@/app/_contexts';
 import LoginButtonWrapper from '@/app/_components/login-button-wrapper';
+import { useSpidexCore } from '@/hooks/core/useSpidexCore';
 
 const NotLoggedInAlert: React.FC = () => {
-  const { isAuthenticated } = useSpidexCoreContext();
+  const { isAuthenticated } = useSpidexCore();
 
   const { confirmed } = useExperimentalConfirmed();
 

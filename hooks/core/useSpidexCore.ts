@@ -1,13 +1,38 @@
+import { QuoteType } from '@/app/(app)/token/[address]/_components/header/select-quote';
 import {
   EsitmateSwapPayload,
   SubmitSwapPayload,
   SwapPayload,
 } from '@/services/dexhunter/types';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import {
+  selectAccessToken,
+  selectAuthData,
+  selectError,
+  selectIsAuthenticated,
+  selectIsLoading,
+  selectRefreshToken,
+} from '@/store/selectors/authSelectors';
+import {
+  clearError,
+  logout as logoutAction,
+  sessionExpired,
+  setAuth,
+  setError,
+  setLoading
+} from '@/store/slices/authSlice';
 import { useRouter } from 'next/navigation';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { UpdateUserPayload } from './type';
-import { QuoteType } from '@/app/(app)/token/[address]/_components/header/select-quote';
-import { STORAGE_KEY } from '@/app/_contexts';
+
+// Global singleton to prevent multiple getMe() calls across different hook instances
+const globalGetMeState = {
+  isProcessing: false,
+  lastProcessedToken: null as string | null,
+  callCount: 0,
+  pendingPromise: null as Promise<any> | null
+};
+
 export interface SignMessageData {
   signature: string;
   address: string;
@@ -15,6 +40,7 @@ export interface SignMessageData {
   stakeAddress: string;
   referralCode: string;
   role: string;
+  nonce: string;
 }
 
 export interface Auth {
@@ -47,33 +73,17 @@ export interface UserSpidex {
   stakeAddress: string;
 }
 
-export const useSpidexCore = (initialAuth: Auth | null = null, onSessionExpired?: () => void) => {
+export const useSpidexCore = () => {
   const router = useRouter();
-  const [loading, setLoading] = useState<boolean>(false);
-  const [auth, setAuth] = useState<Auth | null>(initialAuth);
-  const [error, setError] = useState<string | null>(null);
+  const dispatch = useAppDispatch();
 
-  // Update auth when initialAuth changes (but don't update localStorage here)
-  useEffect(() => {
-    if (
-      initialAuth &&
-      (!auth || initialAuth.accessToken !== auth.accessToken)
-    ) {
-      console.log('🔄 useSpidexCore: Updating auth from initialAuth', {
-        hasInitialAuth: !!initialAuth,
-        hasCurrentAuth: !!auth,
-        initialAuthToken: initialAuth?.accessToken?.slice(0, 10) + '...',
-        currentAuthToken: auth?.accessToken?.slice(0, 10) + '...'
-      });
-      setAuth(initialAuth);
-    } else if (initialAuth === null && auth !== null) {
-      // Handle case where initialAuth becomes null (external logout)
-      console.log('🧹 useSpidexCore: initialAuth is null, clearing internal auth state');
-      setAuth(null);
-    }
-  }, [initialAuth, auth]);
+  const auth = useAppSelector(selectAuthData);
+  const loading = useAppSelector(selectIsLoading);
+  const error = useAppSelector(selectError);
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
+  const accessToken = useAppSelector(selectAccessToken);
+  const refreshToken = useAppSelector(selectRefreshToken);
 
-  // Validate auth object before setting
   const validateAuth = useCallback((authObj: Auth | null): boolean => {
     if (authObj === null) return true; // null is valid for logout
 
@@ -84,7 +94,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null, onSessionExpired?
 
     return true;
   }, []);
-  
+
   // Safe auth setter with validation
   const setAuthSafely = useCallback((newAuth: Auth | null) => {
     if (!validateAuth(newAuth)) {
@@ -92,73 +102,101 @@ export const useSpidexCore = (initialAuth: Auth | null = null, onSessionExpired?
       return;
     }
 
-    setAuth(newAuth);
-  }, [validateAuth]);
+    // Check if the auth data has actually changed to prevent unnecessary updates
+    if (newAuth && auth) {
+      const currentAuthString = JSON.stringify({
+        userId: auth.userId,
+        accessToken: auth.accessToken,
+        refreshToken: auth.refreshToken,
+        user: auth.user,
+        avatar: auth.avatar,
+        walletName: auth.walletName
+      });
+      const newAuthString = JSON.stringify({
+        userId: newAuth.userId,
+        accessToken: newAuth.accessToken,
+        refreshToken: newAuth.refreshToken,
+        user: newAuth.user,
+        avatar: newAuth.avatar,
+        walletName: newAuth.walletName
+      });
+
+      if (currentAuthString === newAuthString) {
+        return;
+      }
+    }
+
+    dispatch(setAuth(newAuth));
+  }, [validateAuth, dispatch, auth]);
 
   // Logout function that can be used anywhere
   const performLogout = useCallback(() => {
-    console.log('🚪 performLogout: Starting logout process', {
-      hasAuth: !!auth,
-      userId: auth?.userId,
-      timestamp: new Date().toISOString(),
-      stackTrace: new Error().stack?.split('\n').slice(1, 4).join('\n')
-    });
-
     try {
-      // Clear auth state first
-      setAuth(null);
-
-      // Clear localStorage with error handling
-      if (typeof window !== 'undefined') {
-        try {
-          localStorage.removeItem(STORAGE_KEY);
-          console.log('🧹 performLogout: Successfully cleared localStorage');
-        } catch (error) {
-          console.error('❌ performLogout: Failed to clear localStorage', error);
-        }
-      }
-
-      // Navigate to chat page
+      dispatch(logoutAction());
       router.push('/chat');
       console.log('🔄 performLogout: Redirected to /chat');
     } catch (error) {
       console.error('❌ performLogout: Error during logout process', error);
     }
-  }, [router, auth]);
+  }, [router, auth, dispatch]);
+
+  // Track if we've already fetched user data for this session
+  const hasFetchedUserData = useRef(false);
+  const lastAccessToken = useRef<string | null>(null);
+  const getMeCallCount = useRef(0);
+
+
 
   useEffect(() => {
-    if (auth?.accessToken) {
+    const currentAccessToken = auth?.accessToken;
+
+    // Only call getMe() when:
+    // 1. We have an access token
+    // 2. The access token has changed (new login)
+    // 3. We haven't fetched user data for this token yet
+    // 4. No other hook instance is already processing this token (GLOBAL CHECK)
+    if (
+      currentAccessToken &&
+      currentAccessToken !== lastAccessToken.current &&
+      !hasFetchedUserData.current &&
+      !globalGetMeState.isProcessing &&
+      currentAccessToken !== globalGetMeState.lastProcessedToken
+    ) {
+      // Mark as processing globally
+      globalGetMeState.isProcessing = true;
+      globalGetMeState.lastProcessedToken = currentAccessToken;
+
+      lastAccessToken.current = currentAccessToken;
+      hasFetchedUserData.current = true;
       getMe();
     }
-  }, [auth?.accessToken]);
 
-  const isAuthenticated = useMemo(() => {
-    return auth?.accessToken && auth?.userId;
-  }, [auth]);
+    // Reset flag when user logs out
+    if (!currentAccessToken) {
+      hasFetchedUserData.current = false;
+      lastAccessToken.current = null;
+      // Reset global state on logout
+      globalGetMeState.isProcessing = false;
+      globalGetMeState.lastProcessedToken = null;
+    }
+  }, [accessToken]); // Use accessToken from selector instead of auth?.accessToken
 
   // Fetch manager to handle API requests
   const fetchWithAuth = useCallback(
     async (url: string, options: RequestInit = {}) => {
-      setLoading(true);
-      setError(null);
+      dispatch(setLoading(true));
+      dispatch(clearError());
 
       // Default headers with content type and authorization if token exists
       const headers = {
-        ...(auth?.accessToken && {
-          Authorization: `Bearer ${auth.accessToken}`,
+        ...(accessToken && {
+          Authorization: `Bearer ${accessToken}`,
         }),
         ...(!options.body || !(options.body instanceof FormData)
           ? { 'Content-Type': 'application/json' }
           : {}),
         ...options.headers,
       };
-
-      console.log({
-        'fetchWithAuth called with URL:': url,
-        'and options:': options,
-        'from:': new Error().stack,
-        'headers:': headers,
-      });
 
       try {
         const response = await fetch(
@@ -170,12 +208,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null, onSessionExpired?
         );
 
         // Handle 401 Unauthorized (expired token)
-        if (response.status === 401 && auth?.refreshToken) {
-          console.log('🔄 fetchWithAuth: Got 401, attempting token refresh', {
-            url,
-            hasRefreshToken: !!auth.refreshToken,
-            userId: auth.userId
-          });
+        if (response.status === 401 && refreshToken) {
 
           // Try to refresh the token
           const refreshResponse = await fetch(
@@ -183,12 +216,11 @@ export const useSpidexCore = (initialAuth: Auth | null = null, onSessionExpired?
             {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ refreshToken: auth.refreshToken }),
+              body: JSON.stringify({ refreshToken }),
             }
           );
 
           if (refreshResponse.status === 200) {
-            console.log('✅ fetchWithAuth: Token refresh successful');
             const refreshData = await refreshResponse.json();
             const newAuth = { ...auth, ...refreshData.data };
             setAuthSafely(newAuth);
@@ -206,43 +238,26 @@ export const useSpidexCore = (initialAuth: Auth | null = null, onSessionExpired?
               }
             );
 
-            setLoading(false);
+            dispatch(setLoading(false));
             if (retryResponse.status !== 200) {
               throw new Error(`API error: ${retryResponse.status}`);
             }
             return await retryResponse.json();
           } else {
-            console.log('❌ fetchWithAuth: Token refresh failed, triggering session expiry', {
-              refreshStatus: refreshResponse.status,
-              url,
-              userId: auth.userId
-            });
-            if (onSessionExpired) {
-              onSessionExpired();
-            } else {
-              performLogout();
-            }
+            dispatch(sessionExpired());
+            performLogout();
             throw new Error('Session expired. Please login again.');
           }
         }
 
         // Handle 401 without refresh token - this should trigger session expiry
         if (response.status === 401) {
-          console.log('❌ fetchWithAuth: Got 401 without refresh token, triggering session expiry', {
-            url,
-            hasAuth: !!auth,
-            hasRefreshToken: !!auth?.refreshToken,
-            userId: auth?.userId
-          });
-          if (onSessionExpired) {
-            onSessionExpired();
-          } else {
-            performLogout();
-          }
+          dispatch(sessionExpired());
+          performLogout();
           throw new Error('Authentication required. Please login again.');
         }
 
-        setLoading(false);
+        dispatch(setLoading(false));
         const data = await response.json();
         if (response.status !== 200) {
           throw data?.message || 'An error occurred';
@@ -250,20 +265,20 @@ export const useSpidexCore = (initialAuth: Auth | null = null, onSessionExpired?
 
         return data;
       } catch (err: any) {
-        setError(err.message || 'An error occurred');
-        setLoading(false);
+        dispatch(setError(err.message || 'An error occurred'));
+        dispatch(setLoading(false));
         console.error('Spidex API error:', err);
         throw err || 'An error occurred';
       }
     },
-    [auth?.accessToken, setAuthSafely, performLogout, onSessionExpired]
+    [accessToken, refreshToken, auth, setAuthSafely, performLogout, dispatch]
   );
 
   // Special fetch function for social connections that doesn't trigger logout on 401
   const fetchSocialConnect = useCallback(
     async (url: string, options: RequestInit = {}) => {
-      setLoading(true);
-      setError(null);
+      dispatch(setLoading(true));
+      dispatch(clearError());
 
       // Default headers with content type and authorization if token exists
       const headers = {
@@ -285,7 +300,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null, onSessionExpired?
           }
         );
 
-        setLoading(false);
+        dispatch(setLoading(false));
         const data = await response.json();
 
         // For social connections, don't trigger logout on 401 - just throw the error
@@ -298,30 +313,54 @@ export const useSpidexCore = (initialAuth: Auth | null = null, onSessionExpired?
 
         return data;
       } catch (err: any) {
-        setError(err.message || 'An error occurred');
-        setLoading(false);
+        dispatch(setError(err.message || 'An error occurred'));
+        dispatch(setLoading(false));
         console.error('Social connection error:', err);
         throw err || 'An error occurred';
       }
     },
-    [auth?.accessToken]
+    [auth?.accessToken, dispatch]
   );
 
   const getMe = useCallback(async () => {
+    getMeCallCount.current += 1;
+    globalGetMeState.callCount += 1;
+
+    // If there's already a pending promise, return it to avoid duplicate calls
+    if (globalGetMeState.pendingPromise) {
+      return globalGetMeState.pendingPromise;
+    }
+
     try {
-      const data = await fetchWithAuth('/auth/me');
+      // Store the promise globally to prevent duplicate calls
+      const apiPromise = fetchWithAuth('/auth/me');
+      globalGetMeState.pendingPromise = apiPromise;
+
+      const data = await apiPromise;
+
       if (auth) {
-        const updatedAuth = {
-          ...auth,
-          user: data.data,
-          avatar: data.data.avatar,
-        };
-        setAuthSafely(updatedAuth);
+        // Only update auth if user data has actually changed
+        const currentUserData = JSON.stringify(auth.user);
+        const newUserData = JSON.stringify(data.data);
+
+        if (currentUserData !== newUserData || auth.avatar !== data.data.avatar) {
+          const updatedAuth = {
+            ...auth,
+            user: data.data,
+            avatar: data.data.avatar,
+          };
+          setAuthSafely(updatedAuth);
+        }
       }
+
       return data.data;
     } catch (err) {
       // Error is already handled in fetchWithAuth
       return null;
+    } finally {
+      // Reset global state when done
+      globalGetMeState.isProcessing = false;
+      globalGetMeState.pendingPromise = null;
     }
   }, [fetchWithAuth, auth, setAuthSafely]);
 
@@ -353,14 +392,26 @@ export const useSpidexCore = (initialAuth: Auth | null = null, onSessionExpired?
     [fetchWithAuth]
   );
 
-  const getNounce = useCallback(async () => {
-    try {
-      const data = await fetchWithAuth('/auth/connect-wallet/sign-message');
-      return data.data;
-    } catch (err) {
-      return null;
-    }
-  }, [fetchWithAuth]);
+  const getNounce = useCallback(
+    async (walletAddress: string) => {
+      try {
+        const data = await fetchWithAuth('/auth/wallet/nonce', {
+          method: 'POST',
+          body: JSON.stringify({
+            walletAddress,
+          }),
+        });
+        return data.data as {
+          nonce: string;
+          challengeMessage: string;
+          expiresAt: string;
+        };
+      } catch (err) {
+        return null;
+      }
+    },
+    [fetchWithAuth]
+  );
 
   const signMessage = useCallback(
     async (message: SignMessageData, walletName: string) => {
@@ -379,9 +430,9 @@ export const useSpidexCore = (initialAuth: Auth | null = null, onSessionExpired?
     [fetchWithAuth, setAuthSafely]
   );
 
-  const refreshToken = useCallback(async () => {
+  const refreshAuthToken = useCallback(async () => {
     if (!auth) {
-      setError('No auth token found');
+      dispatch(setError('No auth token found'));
       return null;
     }
 
@@ -398,7 +449,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null, onSessionExpired?
     } catch (err) {
       return null;
     }
-  }, [fetchWithAuth, auth, setAuthSafely]);
+  }, [fetchWithAuth, auth, setAuthSafely, dispatch]);
 
   const connectX = useCallback(
     async (code: string, redirectUri: string, referralCode?: string) => {
@@ -949,32 +1000,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null, onSessionExpired?
     }
   }, [fetchWithAuth, auth]);
 
-  // Debug helper - expose auth state to window for debugging
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      (window as any).debugSpidexAuth = {
-        currentAuth: auth,
-        isAuthenticated: !!auth,
-        userId: auth?.userId,
-        hasToken: !!auth?.accessToken,
-        timestamp: new Date().toISOString(),
-        forceLogout: () => {
-          console.log('🔧 Debug: Forcing logout...');
-          performLogout();
-        },
-        getAuthInfo: () => {
-          console.log('🔍 Current auth state:', {
-            auth,
-            isAuthenticated: !!auth,
-            userId: auth?.userId,
-            hasToken: !!auth?.accessToken,
-            timestamp: new Date().toISOString(),
-          });
-          return auth;
-        },
-      };
-    }
-  }, [auth, performLogout]);
+
 
   return {
     auth,
@@ -985,7 +1011,7 @@ export const useSpidexCore = (initialAuth: Auth | null = null, onSessionExpired?
     getTopTokensByMcap,
     getNounce,
     signMessage,
-    refreshToken,
+    refreshToken: refreshAuthToken,
     connectX,
     connectGoogle,
     connectDiscord,
@@ -1018,21 +1044,6 @@ export const useSpidexCore = (initialAuth: Auth | null = null, onSessionExpired?
     getTokenOHLCV,
     getTokenStats,
     getAchievements,
-    // Debug helpers
-    debugAuthState: () => {
-      console.log('🔍 Debug Auth State:', {
-        auth,
-        isAuthenticated: !!auth,
-        userId: auth?.userId,
-        hasToken: !!auth?.accessToken,
-        timestamp: new Date().toISOString(),
-      });
-      return auth;
-    },
+
   };
 };
-
-// export const useSpidexCore = () => {
-//   const { auth } = useSpidexCoreContext();
-//   return useSpidexCoreInternal(auth);
-// };

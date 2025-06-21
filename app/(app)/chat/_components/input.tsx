@@ -21,10 +21,10 @@ import { cn } from '@/lib/utils';
 // import ModelSelector from '../../_components/chat/model-selector';
 import FollowUpSuggestions from './follow-up-suggestions';
 import Image from 'next/image';
-import { useSpidexCoreContext } from '@/app/_contexts';
+import { useSpidexCore } from '@/hooks/core/useSpidexCore';
 const ChatInput: React.FC = () => {
   const [isFocused, setIsFocused] = React.useState(false);
-  const { auth } = useSpidexCoreContext();
+  const { auth } = useSpidexCore();
 
   const { input, setInput, onSubmit, isLoading, inputDisabledMessage } =
     useChat();

@@ -22,8 +22,8 @@ import {
   CARDANO_WITHDRAW_LIQUIDITY_NAME,
 } from '@/ai/action-names';
 
-import { useSpidexCoreContext } from '@/app/_contexts';
 import type { TokenChatData } from '@/types';
+import { useSpidexCore } from '@/hooks/core/useSpidexCore';
 export enum ColorMode {
   LIGHT = 'light',
   DARK = 'dark',
@@ -74,7 +74,7 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({
   token,
   children,
 }) => {
-  const { auth } = useSpidexCoreContext();
+  const { auth } = useSpidexCore();
 
   const [isResponseLoading, setIsResponseLoading] = useState(false);
   const [model, setModel] = useState<Models>(Models.OpenAI);

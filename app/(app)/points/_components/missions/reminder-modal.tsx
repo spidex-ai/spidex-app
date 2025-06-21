@@ -1,6 +1,5 @@
 'use client'
 import TelegramModal from "@/app/_components/telegram-modal";
-import { useSpidexCoreContext } from "@/app/_contexts";
 import {
   Dialog,
   DialogContent,
@@ -11,6 +10,11 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { Platform } from "./reminder-modal-wrapper";
+import { useSpidexCore } from "@/hooks/core/useSpidexCore";
+import { useSelector } from "react-redux";
+import { selectIsProcessingOAuth } from "@/store/selectors/authSelectors";
+import { useAppDispatch } from "@/store/hooks";
+import { setIsProcessingOAuth } from "@/store/slices/authSlice";
 
 interface ReminderModalProps {
   isOpen: boolean;
@@ -18,10 +22,11 @@ interface ReminderModalProps {
   platform: Platform
 }
 const ReminderModal = ({ isOpen, onOpenChange, platform }: ReminderModalProps) => {
+  const dispatch = useAppDispatch();
   const { signInWithX } = useXLogin();
   const { signInWithDiscord } = useDiscordLogin();
   const { signInWithTelegram } = useTelegramLogin();
-  const { isProcessingOAuth, setIsProcessingOAuth } = useSpidexCoreContext();
+  const isProcessingOAuth = useSelector(selectIsProcessingOAuth);
   const [isTelegramModalOpen, setIsTelegramModalOpen] = useState<boolean>(false);
   const [isConnecting, setIsConnecting] = useState(false);
   const [isProcessingCallback, setIsProcessingCallback] = useState(false);
@@ -86,7 +91,7 @@ const ReminderModal = ({ isOpen, onOpenChange, platform }: ReminderModalProps) =
       console.log('Setting processing flags to false for X callback');
       setIsConnecting(false);
       setIsProcessingCallback(false);
-      setIsProcessingOAuth(false);
+      dispatch(setIsProcessingOAuth(false));
     }
   };
   const handleConnectUser = () => {
@@ -157,7 +162,7 @@ const ReminderModal = ({ isOpen, onOpenChange, platform }: ReminderModalProps) =
       console.log('Setting processing flags to false');
       setIsConnecting(false);
       setIsProcessingCallback(false);
-      setIsProcessingOAuth(false);
+      dispatch(setIsProcessingOAuth(false));
     }
   };
 
@@ -186,7 +191,7 @@ const ReminderModal = ({ isOpen, onOpenChange, platform }: ReminderModalProps) =
     ) {
       console.log('Reminder Modal: Taking control of OAuth processing (priority on points page)');
       processedCodeRef.current = socialConnectCode;
-      setIsProcessingOAuth(true);
+      dispatch(setIsProcessingOAuth(true));
 
       // Use the type parameter to determine which callback handler to use
       // Only call Discord API if type=connect-discord, otherwise default to X

@@ -4,8 +4,8 @@ import { Analytics } from '@vercel/analytics/react';
 
 import { ColorModeProvider } from './color-mode';
 import { PostHogProvider } from './posthog';
-import { SpidexCoreProvider } from './spidex-core';
 import { LoginModalProvider } from './login-modal-context';
+import { ReduxProvider } from '@/store/ReduxProvider';
 
 interface Props {
   children: React.ReactNode;
@@ -14,14 +14,14 @@ interface Props {
 const Providers: React.FC<Props> = ({ children }) => {
   return (
     <PostHogProvider>
-      <ColorModeProvider>
-        <SpidexCoreProvider>
+      <ReduxProvider>
+        <ColorModeProvider>
           <LoginModalProvider>
             <Analytics />
             {children}
           </LoginModalProvider>
-        </SpidexCoreProvider>
-      </ColorModeProvider>
+        </ColorModeProvider>
+      </ReduxProvider>
     </PostHogProvider>
   );
 };
@@ -29,5 +29,4 @@ const Providers: React.FC<Props> = ({ children }) => {
 export default Providers;
 
 export * from './color-mode';
-export * from './spidex-core';
 export * from './login-modal-context';

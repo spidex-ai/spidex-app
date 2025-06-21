@@ -11,10 +11,10 @@ import {
   Button,
   Logo,
 } from '@/components/ui';
-import { useSpidexCoreContext } from '@/app/_contexts';
+import { useSpidexCore } from '@/hooks/core/useSpidexCore';
 
 const NotLoggedIn: React.FC = () => {
-  const { auth } = useSpidexCoreContext();
+  const { auth } = useSpidexCore();
   return (
     <AlertDialog open={!auth?.user}>
       <AlertDialogHeader className="hidden">

@@ -22,14 +22,14 @@ import {
   useSidebar,
 } from '@/components/ui';
 
-import { useSpidexCoreContext } from '@/app/_contexts';
 import { useSavedTokens } from '@/hooks';
 import Image from 'next/image';
 import SaveToken from '../../save-token';
+import { useSpidexCore } from '@/hooks/core/useSpidexCore';
 const SavedTokensGroup: React.FC = () => {
   const pathname = usePathname();
 
-  const { auth } = useSpidexCoreContext();
+  const { auth } = useSpidexCore();
 
   const { open: isSidebarOpen } = useSidebar();
 

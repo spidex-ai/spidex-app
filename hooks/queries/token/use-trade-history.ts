@@ -1,11 +1,11 @@
 'use client';
-import { useSpidexCoreContext } from '@/app/_contexts/spidex-core';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { TokenTradeHistory } from './type';
+import { useSpidexCore } from '@/hooks/core/useSpidexCore';
 
 export const useTradeHistory = (tokenId: string) => {
-  const { getTokenTradeHistory } = useSpidexCoreContext();
+  const { getTokenTradeHistory } = useSpidexCore();
 
   const [data, setData] = useState<TokenTradeHistory[]>([]);
   const [loading, setLoading] = useState(false);

@@ -14,10 +14,6 @@ import PortfolioWapper from './portfolio-wapper';
 import Trade from './trade';
 import Leaderboard from './leaderboard';
 const SidebarMenu: React.FC = () => {
-  const { open } = useSidebar();
-
-  console.log('open: ', open);
-
   return (
     <SidebarMenuUI>
       <ChatsGroup />

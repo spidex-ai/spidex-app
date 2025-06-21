@@ -1,8 +1,8 @@
-import { useSpidexCoreContext } from '@/app/_contexts';
+import { useSpidexCore } from '@/hooks/core/useSpidexCore';
 import useSWR from 'swr';
 
 export const useIsTokenSaved = (address: string) => {
-  const { auth } = useSpidexCoreContext();
+  const { auth } = useSpidexCore();
 
   const { data, isLoading, error, mutate } = useSWR<boolean>(
     `/api/saved-tokens/${address}`,
