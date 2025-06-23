@@ -25,7 +25,7 @@ import { useChat } from '@/app/(app)/chat/_contexts/chat';
 
 import { raydiumTransactionClient } from '@/services/raydium';
 
-import type { SolanaWithdrawLiquidityResultBodyType } from '@/ai';
+import type { CardanoWithdrawLiquidityResultBodyType } from '@/ai/cardano';
 
 interface Props {
   pool: ApiV3PoolInfoStandardItem;
@@ -86,7 +86,7 @@ const StandardPool: React.FC<Props> = ({ pool, toolCallId }) => {
         txVersion: TxVersion.V0,
       });
       const txHash: any = await sendTransaction(transaction);
-      addToolResult<SolanaWithdrawLiquidityResultBodyType>(toolCallId, {
+      addToolResult<CardanoWithdrawLiquidityResultBodyType>(toolCallId, {
         message:
           'Withdraw liquidity successful. The user is shown the transaction hash, so you do not have to repeat it. Ask what they want to do next.',
         body: {

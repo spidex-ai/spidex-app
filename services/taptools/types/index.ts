@@ -32,6 +32,8 @@ export interface TokenHolders {
 export interface TokenHolder {
   address: string;
   amount: number;
+  pnl: number;
+  volume: number;
 }
 
 export interface TokenPool {

@@ -10,7 +10,6 @@ import { deepseek } from '@ai-sdk/deepseek';
 
 import { Models } from '@/types/models';
 import {
-  CardanoTokenPageLiquidityAction,
   CardanoTokenPagePriceAnalysisAction,
   CardanoTokenPageTopHoldersAction,
   tokenPageTools,
@@ -94,7 +93,6 @@ export const POST = async (req: NextRequest) => {
     system: system(token),
     tools: tokenPageTools(token, [
       new CardanoTokenPageTopHoldersAction(),
-      new CardanoTokenPageLiquidityAction(),
       new CardanoTokenPagePriceAnalysisAction(),
     ]),
   });

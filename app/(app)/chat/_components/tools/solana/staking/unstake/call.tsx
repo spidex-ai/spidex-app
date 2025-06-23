@@ -10,11 +10,11 @@ import { Card } from '@/components/ui';
 
 // import { useChat } from '@/app/(app)/chat/_contexts/chat';
 
-import type { UnstakeArgumentsType } from '@/ai';
+import type { CardanoUnstakeArgumentsType } from '@/ai/cardano';
 
 interface Props {
   toolCallId: string;
-  args: UnstakeArgumentsType;
+  args: CardanoUnstakeArgumentsType;
 }
 
 const UnstakeCallBody: React.FC<Props> = ({ toolCallId, args }) => {

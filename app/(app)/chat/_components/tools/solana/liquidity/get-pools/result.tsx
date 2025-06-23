@@ -2,12 +2,12 @@
 
 import React, { useState } from 'react';
 
-import type { GetPoolsResultBodyType } from '@/ai';
+import type { CardanoGetPoolsResultBodyType } from '@/ai/cardano';
 import { RaydiumPool } from '../../../utils';
 import { Button } from '@/components/ui';
 
 interface Props {
-  body: GetPoolsResultBodyType;
+  body: CardanoGetPoolsResultBodyType;
 }
 
 const GetPoolsResult: React.FC<Props> = ({ body }) => {

@@ -6,10 +6,10 @@ import GetTokenDataResultHeading from './heading';
 import Stats from './stats';
 import TwentyFourHrStats from './24hr-stats';
 
-import type { GetTokenDataResultBodyType } from '@/ai';
+import type { CardanoGetTokenDataResultBodyType } from '@/ai/cardano';
 
 interface Props {
-  body: GetTokenDataResultBodyType | any;
+  body: CardanoGetTokenDataResultBodyType | any;
 }
 
 const GetTokenDataResult: React.FC<Props> = ({ body }) => {

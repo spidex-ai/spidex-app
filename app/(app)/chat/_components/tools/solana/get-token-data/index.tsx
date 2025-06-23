@@ -5,7 +5,7 @@ import ToolCard from '../../tool-card';
 import GetTokenDataResult from './result';
 
 import type { ToolInvocation } from 'ai';
-import type { GetTokenDataResultType } from '@/ai';
+import type { CardanoGetTokenDataResultType } from '@/ai/cardano';
 
 interface Props {
   tool: ToolInvocation;
@@ -18,11 +18,11 @@ const GetTokenData: React.FC<Props> = ({ tool, prevToolAgent }) => {
       tool={tool}
       loadingText={`Getting Token Data...`}
       result={{
-        heading: (result: GetTokenDataResultType) =>
+        heading: (result: CardanoGetTokenDataResultType) =>
           result.body
             ? `Fetched ${result.body.token.name || 'Token'} Data`
             : `Failed to fetch token data`,
-        body: (result: GetTokenDataResultType) =>
+        body: (result: CardanoGetTokenDataResultType) =>
           result.body ? (
             <GetTokenDataResult body={result.body} />
           ) : (

@@ -1,16 +1,13 @@
-import { getTopTokenHolders } from '@/services/hellomoon';
-import { getStreamsByMint } from '@/services/streamflow';
-
-import { knownAddresses } from '@/lib/known-addresses';
 
 import type {
-  TokenPageTopHoldersResultBodyType,
+
   TokenPageTopHoldersArgumentsType,
 } from './types';
-import type { SolanaActionResult } from '../../../solana/actions/solana-action';
+
 import type { TokenChatData } from '@/types';
-import { AddressType, KnownAddress } from '@/types/known-address';
+
 import taptoolsService from '@/services/taptools';
+import { CardanoActionResult } from '@/ai/cardano';
 
 interface TopHolder {
   address: string;
@@ -23,7 +20,7 @@ interface TopHolder {
 export async function getTokenPageTopHolders(
   token: TokenChatData,
   _: TokenPageTopHoldersArgumentsType
-): Promise<SolanaActionResult<any>> {
+): Promise<CardanoActionResult<any>> {
   try {
     const numHolders = 50;
 

@@ -4,13 +4,13 @@ import { GetTokenAddressArgumentsSchema } from './input-schema';
 import { getTokenAddress } from './function';
 
 import type { CardanoAction } from '../../cardano-action';
-import { GetTokenAddressResultBodyType } from '@/ai/solana';
+import { CardanoGetTokenAddressResultBodyType } from '@/ai/cardano';
 
 export class CardanoGetTokenAddressAction
   implements
     CardanoAction<
       typeof GetTokenAddressArgumentsSchema,
-      GetTokenAddressResultBodyType
+      CardanoGetTokenAddressResultBodyType
     >
 {
   public name = CARDANO_GET_TOKEN_ADDRESS_NAME;

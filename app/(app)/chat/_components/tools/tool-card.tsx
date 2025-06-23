@@ -22,7 +22,6 @@ import {
   TOKEN_ANALYSIS_AGENT_NAME,
   TRADING_AGENT_NAME,
   SOCIAL_AGENT_NAME,
-  LIQUIDITY_AGENT_NAME,
 } from '@/ai/agents/names';
 import { ChevronDown } from 'lucide-react';
 
@@ -102,15 +101,6 @@ const getAgentIcon = (agentName: string) => {
       return (
         <Image
           src="/icons/token-analysis.svg"
-          alt="Chart Candlestick"
-          width={20}
-          height={20}
-        />
-      );
-    case LIQUIDITY_AGENT_NAME:
-      return (
-        <Image
-          src="/icons/trading-agent.svg"
           alt="Chart Candlestick"
           width={20}
           height={20}

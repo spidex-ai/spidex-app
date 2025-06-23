@@ -1,8 +1,8 @@
 import { z } from 'zod';
 
 import type { GetTrendingTokensInputSchema } from './input-schema';
-import type { TopTokenMcap } from '@/services/taptools/types';
 import { CardanoActionResult } from '@/ai/cardano/actions/cardano-action';
+import { TopTokenMcap } from '@/services/taptools/types';
 
 export type CardanoGetTrendingTokensSchemaType =
   typeof GetTrendingTokensInputSchema;

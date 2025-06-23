@@ -6,7 +6,7 @@ import UnstakeCallBody from './call';
 import UnstakeResult from './unstake-result';
 
 import type { ToolInvocation } from 'ai';
-import type { UnstakeResultType, UnstakeArgumentsType } from '@/ai';
+import type { CardanoUnstakeResultType, CardanoUnstakeArgumentsType } from '@/ai/cardano';
 
 interface Props {
   tool: ToolInvocation;
@@ -19,14 +19,14 @@ const Unstake: React.FC<Props> = ({ tool, prevToolAgent }) => {
       tool={tool}
       loadingText="Unstaking..."
       result={{
-        heading: (result: UnstakeResultType) =>
+        heading: (result: CardanoUnstakeResultType) =>
           result.body ? 'Unstake Complete' : 'Failed to Unstake',
-        body: (result: UnstakeResultType) =>
+        body: (result: CardanoUnstakeResultType) =>
           result.body ? <UnstakeResult /> : result.message,
       }}
       call={{
         heading: 'Unstake',
-        body: (toolCallId: string, args: UnstakeArgumentsType) => (
+        body: (toolCallId: string, args: CardanoUnstakeArgumentsType) => (
           <UnstakeCallBody toolCallId={toolCallId} args={args} />
         ),
       }}

@@ -5,7 +5,7 @@ import ToolCard from '../../../tool-card';
 import LpToken from './lp-token';
 
 import type { ToolInvocation } from 'ai';
-import type { GetLpTokensResultType } from '@/ai';
+import type { CardanoGetLpTokensResultType } from '@/ai/cardano';
 
 interface Props {
   tool: ToolInvocation;
@@ -18,9 +18,9 @@ const GetLpTokens: React.FC<Props> = ({ tool, prevToolAgent }) => {
       tool={tool}
       loadingText={`Getting All Balances...`}
       result={{
-        heading: (result: GetLpTokensResultType) =>
+        heading: (result: CardanoGetLpTokensResultType) =>
           result.body ? `Fetched LP Tokens` : `Failed to fetch LP tokens`,
-        body: (result: GetLpTokensResultType) =>
+        body: (result: CardanoGetLpTokensResultType) =>
           result.body && result.body.lpTokens.length > 0 ? (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
               {result.body.lpTokens.map(lpToken => (

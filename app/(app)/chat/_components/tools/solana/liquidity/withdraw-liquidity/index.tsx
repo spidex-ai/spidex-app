@@ -7,9 +7,9 @@ import WithdrawLiquidityResult from './result';
 
 import type { ToolInvocation } from 'ai';
 import type {
-  SolanaWithdrawLiquidityResultType,
-  SolanaWithdrawLiquidityArgumentsType,
-} from '@/ai';
+  CardanoWithdrawLiquidityResultType,
+  CardanoWithdrawLiquidityArgumentsType,
+} from '@/ai/cardano';
 
 interface Props {
   tool: ToolInvocation;
@@ -22,9 +22,9 @@ const WithdrawLiquidity: React.FC<Props> = ({ tool, prevToolAgent }) => {
       tool={tool}
       loadingText={`Getting Liquidity Pools...`}
       result={{
-        heading: (result: SolanaWithdrawLiquidityResultType) =>
+        heading: (result: CardanoWithdrawLiquidityResultType) =>
           result.body ? `Withdrawn Liquidity` : `Failed to withdraw liquidity`,
-        body: (result: SolanaWithdrawLiquidityResultType) =>
+        body: (result: CardanoWithdrawLiquidityResultType) =>
           result.body ? (
             <WithdrawLiquidityResult body={result.body} />
           ) : (
@@ -36,7 +36,7 @@ const WithdrawLiquidity: React.FC<Props> = ({ tool, prevToolAgent }) => {
         heading: 'Withdraw Liquidity',
         body: (
           toolCallId: string,
-          args: SolanaWithdrawLiquidityArgumentsType
+          args: CardanoWithdrawLiquidityArgumentsType
         ) => <WithdrawLiquidityCall toolCallId={toolCallId} args={args} />,
       }}
       className="w-96 max-w-full"

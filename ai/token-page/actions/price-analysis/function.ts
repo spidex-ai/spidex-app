@@ -1,22 +1,22 @@
 // ai/token-page/actions/price-analysis/function.ts
-import { getTokenCandlesticks } from '@/services/hellomoon/get-token-candlesticks';
 
-import type { SolanaActionResult } from '../../../solana/actions/solana-action';
+
 import type { TokenChatData } from '@/types';
 import type {
   TokenPagePriceAnalysisArgumentsType,
   TokenPagePriceAnalysisResultBodyType,
   TrendAnalysis,
 } from './types';
-import type { TokenOverview } from '@/services/birdeye/types/token-overview';
+
 import {
   CandlestickGranularity,
   CardanoCandlestickGranularity,
   TokenPriceCandlestick,
 } from '@/services/hellomoon/types';
 import taptoolsService from '@/services/taptools';
-import { getTokenStats } from '../liquidity/function';
-import { TokenStats } from '@/services/taptools/types';
+
+import { CardanoActionResult } from '@/ai/cardano';
+import coreService from '@/services/core';
 
 // Map timeframes to minutes for calculations
 const TIMEFRAME_TO_MINUTES: Record<CandlestickGranularity, number> = {
@@ -87,7 +87,7 @@ function calculateNumIntervals(
 export async function analyzeTokenPrice(
   token: TokenChatData,
   args: TokenPagePriceAnalysisArgumentsType
-): Promise<SolanaActionResult<TokenPagePriceAnalysisResultBodyType>> {
+): Promise<CardanoActionResult<TokenPagePriceAnalysisResultBodyType>> {
   console.log('🚀 ~ token:', token);
   console.log('🚀 ~ args:', args);
   console.log('🚀 ~ token:', token.address);
@@ -95,8 +95,8 @@ export async function analyzeTokenPrice(
     const granularity = getGranularity(args.length);
     console.log('🚀 ~ granularity:', granularity);
 
-    const stats = await getTokenStats(token.address);
-    const tokenStats = stats.data;
+    const tokenStats = await coreService.getTokenStats(token.address);
+
     console.log('🚀 ~ tokenStats:', tokenStats);
     const timeframeMinutes = TIMEFRAME_TO_GRANULARITY[granularity];
     console.log('🚀 ~ timeframeMinutes:', timeframeMinutes);
@@ -126,7 +126,7 @@ export async function analyzeTokenPrice(
       pricesResponse,
       timeframeMinutes
     );
-    console.log('🚀 ~ tokenStats.mcap.supply:', tokenStats.mcap.supply);
+    console.log('🚀 ~ tokenStats.mcap.supply:', tokenStats.mcap.totalSupply);
     console.log('🚀 ~ tokenStats.mcap.circSupply:', tokenStats.mcap.circSupply);
     const marketMetrics = calculateMarketMetrics(
       currentPrice,

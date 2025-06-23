@@ -5,7 +5,7 @@ import ToolCard from '../../../tool-card';
 import StakeCallBody from './call';
 import StakeResult from './stake-result';
 
-import type { StakeResultType, StakeArgumentsType } from '@/ai';
+import type { CardanoStakeResultType, CardanoStakeArgumentsType } from '@/ai/cardano';
 import type { ToolInvocation } from 'ai';
 
 interface Props {
@@ -19,14 +19,14 @@ const Stake: React.FC<Props> = ({ tool, prevToolAgent }) => {
       tool={tool}
       loadingText="Staking..."
       result={{
-        heading: (result: StakeResultType) =>
+        heading: (result: CardanoStakeResultType) =>
           result.body ? 'Stake Complete' : 'Failed to Stake',
-        body: (result: StakeResultType) =>
+        body: (result: CardanoStakeResultType) =>
           result.body ? <StakeResult /> : result.message,
       }}
       call={{
         heading: 'Stake',
-        body: (toolCallId: string, args: StakeArgumentsType) => (
+        body: (toolCallId: string, args: CardanoStakeArgumentsType) => (
           <StakeCallBody toolCallId={toolCallId} args={args} />
         ),
       }}

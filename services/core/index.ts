@@ -1,6 +1,8 @@
-import { orderBy } from 'lodash';
+
 import { CoreClient } from './client';
 import { ApiResponse, WalletBalances, WalletTransaction } from './types';
+import { Token } from '@/db/types';
+import { TokenHolder, TokenStats, TopTokenMcap } from '../taptools/types';
 
 export class CoreService {
   private client: CoreClient;
@@ -30,6 +32,50 @@ export class CoreService {
     );
     return response.data;
   }
+
+  async getTopTokensByMcap(page: number, limit: number) {
+    try {
+      const response = await this.client.get<ApiResponse<TopTokenMcap[]>>(
+        `tokens/top/mcap?page=${page}&limit=${limit}`
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getTopTokensByVolume(page: number, limit: number, timeframe = '24h') {
+    try {
+      const response = await this.client.get<ApiResponse<Token[]>>(
+        `tokens/top/volume?page=${page}&limit=${limit}&timeframe=${timeframe}`
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getTopTokenTraders(tokenId: string, page: number, limit: number) {
+    try {
+      const response = await this.client.get<ApiResponse<TokenHolder[]>>(
+        `tokens/${tokenId}/top-traders?page=${page}&limit=${limit}&timeFrame=1h`
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getTokenStats(tokenId: string) {
+    try {
+      const response = await this.client.get<ApiResponse<TokenStats>>(
+        `tokens/${tokenId}/stats`
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  } 
 }
 
 export const coreService = new CoreService();

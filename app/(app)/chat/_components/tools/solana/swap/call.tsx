@@ -10,12 +10,12 @@ import { useTokenDetail } from '@/hooks';
 
 import { useChat } from '@/app/(app)/chat/_contexts/chat';
 
-import type { SolanaTradeArgumentsType, SolanaTradeResultBodyType } from '@/ai';
+import type { CardanoTradeArgumentsType, CardanoTradeResultBodyType } from '@/ai/cardano';
 import { CardanoTokenDetail } from '@/services/dexhunter/types';
 
 interface Props {
   toolCallId: string;
-  args: SolanaTradeArgumentsType;
+  args: CardanoTradeArgumentsType;
 }
 
 export const adaTokenDetail: CardanoTokenDetail = {
@@ -58,7 +58,7 @@ const SwapCallBody: React.FC<Props> = ({ toolCallId, args }) => {
           onSuccess={(tx, inputAmount) => {
             console.log("🚀 ~ tx:", tx)
             console.log("🚀 ~ inputAmount:", inputAmount)
-            addToolResult<SolanaTradeResultBodyType>(toolCallId, {
+            addToolResult<CardanoTradeResultBodyType>(toolCallId, {
               message: `Swap successful!`,
               body: {
                 transaction: tx,

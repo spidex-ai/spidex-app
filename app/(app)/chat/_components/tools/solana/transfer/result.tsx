@@ -1,9 +1,9 @@
 import React from 'react';
 
-import type { SolanaTransferResultBodyType } from '@/ai';
+import type { CardanoTransferResultBodyType } from '@/ai/cardano';
 
 interface Props {
-  transferResult: SolanaTransferResultBodyType;
+  transferResult: CardanoTransferResultBodyType;
   amount: number;
   to: string;
 }

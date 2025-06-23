@@ -7,9 +7,9 @@ import DepositLiquidityResult from './result';
 
 import type { ToolInvocation } from 'ai';
 import type {
-  SolanaDepositLiquidityArgumentsType,
-  SolanaDepositLiquidityResultType,
-} from '@/ai';
+  CardanoDepositLiquidityArgumentsType,
+  CardanoDepositLiquidityResultType,
+} from '@/ai/cardano';
 
 interface Props {
   tool: ToolInvocation;
@@ -22,9 +22,9 @@ const DepositLiquidity: React.FC<Props> = ({ tool, prevToolAgent }) => {
       tool={tool}
       loadingText={`Getting Liquidity Pools...`}
       result={{
-        heading: (result: SolanaDepositLiquidityResultType) =>
+        heading: (result: CardanoDepositLiquidityResultType) =>
           result.body ? `Deposited Liquidity` : `Failed to deposit liquidity`,
-        body: (result: SolanaDepositLiquidityResultType) =>
+        body: (result: CardanoDepositLiquidityResultType) =>
           result.body ? (
             <DepositLiquidityResult body={result.body} />
           ) : (
@@ -36,7 +36,7 @@ const DepositLiquidity: React.FC<Props> = ({ tool, prevToolAgent }) => {
         heading: 'Deposit Liquidity',
         body: (
           toolCallId: string,
-          args: SolanaDepositLiquidityArgumentsType
+          args: CardanoDepositLiquidityArgumentsType
         ) => <DepositLiquidityCall toolCallId={toolCallId} args={args} />,
       }}
       className="w-96 max-w-full"

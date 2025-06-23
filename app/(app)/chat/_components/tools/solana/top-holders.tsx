@@ -11,7 +11,7 @@ import ToolCard from '../tool-card';
 // import { getStreamsByMint } from '@/services/streamflow';
 
 import type { ToolInvocation } from 'ai';
-import type { TopHolderBodyType, TopHolderNewResultType } from '@/ai';
+import type { CardanoTopHoldersResultBodyType, CardanoTopHoldersResultType } from '@/ai/cardano';
 import type { TokenLargestAccount } from '@/services/helius';
 import Address from '@/app/_components/address';
 
@@ -26,11 +26,11 @@ const GetTopHolders: React.FC<Props> = ({ tool, prevToolAgent }) => {
       tool={tool}
       loadingText={`Getting Top Holders...`}
       result={{
-        heading: (result: TopHolderNewResultType) =>
+        heading: (result: CardanoTopHoldersResultType) =>
           result.body
             ? `Fetched Top 20 Holders`
             : `Failed to fetch top holders`,
-        body: (result: TopHolderNewResultType) =>
+        body: (result: CardanoTopHoldersResultType) =>
           result.body ? (
             <TopHolders body={result.body} mint={tool.args.tokenAddress} />
           ) : (
@@ -43,7 +43,7 @@ const GetTopHolders: React.FC<Props> = ({ tool, prevToolAgent }) => {
   );
 };
 
-const TopHolders = ({ body }: { body: TopHolderBodyType; mint: string }) => {
+const TopHolders = ({ body }: { body: CardanoTopHoldersResultBodyType; mint: string }) => {
   const [showAll, setShowAll] = useState(false);
 
   return (

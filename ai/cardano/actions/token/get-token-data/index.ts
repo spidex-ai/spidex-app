@@ -4,11 +4,11 @@ import { getTokenData } from './function';
 
 import type { CardanoAction } from '../../cardano-action';
 import { CARDANO_GET_TOKEN_DATA_NAME } from './name';
-import { GetTokenDataResultBodyType } from '@/ai/solana';
+import { CardanoGetTokenDataResultBodyType } from '@/ai/cardano';
 
 export class CardanoGetTokenDataAction
   implements
-    CardanoAction<typeof GetTokenDataInputSchema, GetTokenDataResultBodyType>
+    CardanoAction<typeof GetTokenDataInputSchema, CardanoGetTokenDataResultBodyType>
 {
   public name = CARDANO_GET_TOKEN_DATA_NAME;
   public description = CARDANO_GET_TOKEN_DATA_PROMPT;

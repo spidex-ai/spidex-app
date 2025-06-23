@@ -9,7 +9,7 @@ import ToolCard from '../tool-card';
 import { useTokenDetail } from '@/hooks';
 
 import type { ToolInvocation } from 'ai';
-import type { TokenPriceChartResultType } from '@/ai';
+import type { CardanoTokenPriceChartResultType } from '@/ai/cardano';
 import Header from '@/app/(app)/token/[address]/_components/header';
 import { QuoteType } from '@/app/(app)/token/[address]/_components/header/select-quote';
 
@@ -24,11 +24,11 @@ const PriceChart: React.FC<Props> = ({ tool, prevToolAgent }) => {
       tool={tool}
       loadingText={`Getting Token Price Chart...`}
       result={{
-        heading: (result: TokenPriceChartResultType) =>
+        heading: (result: CardanoTokenPriceChartResultType) =>
           result.body
             ? `Fetched Token Price Chart`
             : `Failed to fetch token price chart`,
-        body: (result: TokenPriceChartResultType) =>
+        body: (result: CardanoTokenPriceChartResultType) =>
           result.body ? (
             <PriceChartBody tokenAddress={tool.args.tokenAddress} />
           ) : (

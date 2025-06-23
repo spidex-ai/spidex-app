@@ -8,11 +8,11 @@ import { Card } from '@/components/ui';
 
 // import { useChat } from '@/app/(app)/chat/_contexts/chat';
 
-import type { StakeArgumentsType } from '@/ai';
+import type { CardanoStakeArgumentsType } from '@/ai/cardano';
 
 interface Props {
   toolCallId: string;
-  args: StakeArgumentsType;
+  args: CardanoStakeArgumentsType;
 }
 
 const SwapCallBody: React.FC<Props> = ({ toolCallId, args }) => {

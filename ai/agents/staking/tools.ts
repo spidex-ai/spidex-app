@@ -1,6 +1,5 @@
 import { Connection } from '@solana/web3.js';
 
-// import { SolanaStakeAction, SolanaUnstakeAction, SolanaLiquidStakingYieldsAction, SolanaGetTokenAddressAction } from "@/ai/solana/actions";
 
 import {
   CARDANO_STAKE_NAME,
@@ -8,7 +7,6 @@ import {
   CARDANO_GET_TOKEN_ADDRESS_NAME,
   CARDANO_UNSTAKE_NAME,
 } from '@/ai/action-names';
-// import { solanaTool } from "@/ai/solana";
 import {
   CardanoStakeAction,
   CardanoUnstakeAction,
@@ -16,13 +14,6 @@ import {
   CardanoGetTokenAddressAction,
 } from '@/ai/cardano/actions';
 import { cardanoTool } from '@/ai/cardano';
-
-// export const STAKING_TOOLS = {
-//     [`staking-${SOLANA_STAKE_NAME}`]: solanaTool(new SolanaStakeAction(), new Connection(process.env.NEXT_PUBLIC_SOLANA_RPC_URL!)),
-//     [`staking-${SOLANA_UNSTAKE_NAME}`]: solanaTool(new SolanaUnstakeAction(), new Connection(process.env.NEXT_PUBLIC_SOLANA_RPC_URL!)),
-//     [`staking-${SOLANA_LIQUID_STAKING_YIELDS_NAME}`]: solanaTool(new SolanaLiquidStakingYieldsAction(), new Connection(process.env.NEXT_PUBLIC_SOLANA_RPC_URL!)),
-//     [`staking-${SOLANA_GET_TOKEN_ADDRESS_NAME}`]: solanaTool(new SolanaGetTokenAddressAction(), new Connection(process.env.NEXT_PUBLIC_SOLANA_RPC_URL!)),
-// }
 
 export const STAKING_TOOLS = {
   [`staking-${CARDANO_STAKE_NAME}`]: cardanoTool(

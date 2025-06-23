@@ -21,9 +21,9 @@ import { knownAddresses } from '@/lib/known-addresses';
 
 import type { ToolInvocation } from 'ai';
 import type {
-  TopTokenTradersResultType,
-  TopTokenTradersResultBodyType,
-} from '@/ai';
+  CardanoTopTokenTradersResultType,
+  CardanoTopTokenTradersResultBodyType,
+} from '@/ai/cardano';
 import { formatNumber } from '@/lib/utils';
 
 interface Props {
@@ -37,11 +37,11 @@ const GetTopTokenTraders: React.FC<Props> = ({ tool, prevToolAgent }) => {
       tool={tool}
       loadingText={`Getting Top Traders...`}
       result={{
-        heading: (result: TopTokenTradersResultType) =>
+        heading: (result: CardanoTopTokenTradersResultType) =>
           result.body
             ? `Fetched Top Traders (${tool.args.timeFrame[0].toUpperCase() + tool.args.timeFrame.slice(1)})`
             : `Failed to fetch top traders`,
-        body: (result: TopTokenTradersResultType) =>
+        body: (result: CardanoTopTokenTradersResultType) =>
           result.body ? (
             <TopTokenTraders body={result.body} />
           ) : (
@@ -55,7 +55,7 @@ const GetTopTokenTraders: React.FC<Props> = ({ tool, prevToolAgent }) => {
   );
 };
 
-const TopTokenTraders = ({ body }: { body: TopTokenTradersResultBodyType }) => {
+const TopTokenTraders = ({ body }: { body: CardanoTopTokenTradersResultBodyType }) => {
   const [showAll, setShowAll] = useState(false);
 
   return (

@@ -6,6 +6,7 @@ import type {
 } from './types';
 import { CardanoActionResult } from '@/ai/cardano/actions/cardano-action';
 import taptoolsService from '@/services/taptools';
+import coreService from '@/services/core';
 
 /**
  * Gets the trending tokens from Birdeye API.
@@ -18,8 +19,8 @@ export async function getTopTraders(
   args: CardanoGetTopTradersArgumentsType
 ): Promise<CardanoActionResult<CardanoGetTopTradersResultBodyType>> {
   try {
-    const response = await taptoolsService.getTopTokenHolders(
-      '8fef2d34078659493ce161a6c7fba4b56afefa8535296a5743f6958741414441',
+    const response = await coreService.getTopTokenTraders(
+      args.address || '8fef2d34078659493ce161a6c7fba4b56afefa8535296a5743f6958741414441',
       1,
       args.limit
     );

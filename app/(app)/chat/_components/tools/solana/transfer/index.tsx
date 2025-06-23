@@ -6,9 +6,9 @@ import TransferCallBody from './call';
 import TransferResult from './result';
 
 import type {
-  SolanaTransferArgumentsType,
-  SolanaTransferResultType,
-} from '@/ai';
+  CardanoTransferArgumentsType,
+  CardanoTransferResultType,
+} from '@/ai/cardano';
 import type { ToolInvocation } from 'ai';
 
 interface Props {
@@ -22,9 +22,9 @@ const Transfer: React.FC<Props> = ({ tool, prevToolAgent }) => {
       tool={tool}
       loadingText="Transferring..."
       result={{
-        heading: (result: SolanaTransferResultType) =>
+        heading: (result: CardanoTransferResultType) =>
           result.body ? 'Transfer Complete' : 'Failed to Transfer',
-        body: (result: SolanaTransferResultType) =>
+        body: (result: CardanoTransferResultType) =>
           result.body ? (
             <TransferResult
               amount={tool.args.amount}
@@ -37,7 +37,7 @@ const Transfer: React.FC<Props> = ({ tool, prevToolAgent }) => {
       }}
       call={{
         heading: 'Transfer',
-        body: (toolCallId: string, args: SolanaTransferArgumentsType) => (
+        body: (toolCallId: string, args: CardanoTransferArgumentsType) => (
           <TransferCallBody toolCallId={toolCallId} args={args} />
         ),
       }}

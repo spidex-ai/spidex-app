@@ -3,7 +3,7 @@ import React from 'react';
 import ToolCard from '../tool-card';
 
 import type { ToolInvocation } from 'ai';
-import type { GetTokenAddressResultType } from '@/ai';
+import type { CardanoGetTokenAddressResultType } from '@/ai/cardano';
 import Address from '@/app/_components/address';
 
 interface Props {
@@ -17,11 +17,11 @@ const GetTokenAddress: React.FC<Props> = ({ tool, prevToolAgent }) => {
       tool={tool}
       loadingText={`Getting ${tool.args.keyword} Address...`}
       result={{
-        heading: (result: GetTokenAddressResultType) =>
+        heading: (result: CardanoGetTokenAddressResultType) =>
           result.body
             ? `Fetched ${tool.args.keyword} Address`
             : `Failed to fetch token address`,
-        body: (result: GetTokenAddressResultType) =>
+        body: (result: CardanoGetTokenAddressResultType) =>
           result.body ? (
             <Address address={result.body.address} />
           ) : (

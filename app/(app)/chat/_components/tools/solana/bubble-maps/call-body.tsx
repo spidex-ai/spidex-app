@@ -2,13 +2,13 @@
 
 import React, { useEffect } from 'react';
 
-import { BubbleMapsArgumentsType } from '@/ai';
+import { CardanoBubbleMapsArgumentsType } from '@/ai/cardano';
 import { useChat } from '@/app/(app)/chat/_contexts/chat';
 import { Skeleton } from '@/components/ui';
 
 interface Props {
   toolCallId: string;
-  args: BubbleMapsArgumentsType;
+  args: CardanoBubbleMapsArgumentsType;
 }
 
 const BubbleMapsCallBody: React.FC<Props> = ({ toolCallId, args }) => {

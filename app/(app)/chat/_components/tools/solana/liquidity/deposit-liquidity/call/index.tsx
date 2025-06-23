@@ -10,12 +10,12 @@ import { useRaydiumPool } from '@/hooks';
 
 import { useChat } from '@/app/(app)/chat/_contexts/chat';
 
-import type { SolanaDepositLiquidityArgumentsType } from '@/ai';
+import type { CardanoDepositLiquidityArgumentsType } from '@/ai/cardano';
 import type { ApiV3PoolInfoStandardItem } from '@raydium-io/raydium-sdk-v2';
 
 interface Props {
   toolCallId: string;
-  args: SolanaDepositLiquidityArgumentsType;
+  args: CardanoDepositLiquidityArgumentsType;
 }
 
 const DepositLiquidityCall: React.FC<Props> = ({ toolCallId, args }) => {

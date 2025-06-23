@@ -17,9 +17,9 @@ import ToolCard from '../tool-card';
 
 import type { ToolInvocation } from 'ai';
 import type {
-  GetTopTradersResultBodyType,
-  GetTopTradersResultType,
-} from '@/ai';
+  CardanoGetTopTradersResultBodyType,
+  CardanoGetTopTradersResultType,
+} from '@/ai/cardano';
 
 interface Props {
   tool: ToolInvocation;
@@ -32,11 +32,11 @@ const GetTopTraders: React.FC<Props> = ({ tool, prevToolAgent }) => {
       tool={tool}
       loadingText={`Getting Top Traders...`}
       result={{
-        heading: (result: GetTopTradersResultType) =>
+        heading: (result: CardanoGetTopTradersResultType) =>
           result.body
-            ? `Fetched Top Traders (${tool.args.timeFrame[0].toUpperCase() + tool.args.timeFrame.slice(1)})`
+            ? `Fetched Top Traders`
             : `Failed to fetch top traders`,
-        body: (result: GetTopTradersResultType) =>
+        body: (result: CardanoGetTopTradersResultType) =>
           result.body ? (
             <TopTraders body={result.body} />
           ) : (
@@ -50,7 +50,7 @@ const GetTopTraders: React.FC<Props> = ({ tool, prevToolAgent }) => {
   );
 };
 
-const TopTraders = ({ body }: { body: GetTopTradersResultBodyType }) => {
+const TopTraders = ({ body }: { body: CardanoGetTopTradersResultBodyType }) => {
   const [showAll, setShowAll] = useState(false);
 
   return (
@@ -78,14 +78,14 @@ const TopTraders = ({ body }: { body: GetTopTradersResultBodyType }) => {
                 </TableCell>
                 <TableCell className="text-green-500">
                   $
-                  {trader.pnl.toLocaleString(undefined, {
+                  {trader?.pnl.toLocaleString(undefined, {
                     maximumFractionDigits: 2,
                     minimumFractionDigits: 2,
                   })}
                 </TableCell>
                 <TableCell>
                   $
-                  {trader.volume.toLocaleString(undefined, {
+                  {trader?.volume.toLocaleString(undefined, {
                     maximumFractionDigits: 2,
                     minimumFractionDigits: 2,
                   })}

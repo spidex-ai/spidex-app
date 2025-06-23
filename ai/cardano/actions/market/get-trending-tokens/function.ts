@@ -8,6 +8,7 @@ import { CardanoActionResult } from '@/ai/cardano/actions/cardano-action';
 import tokenCardanoService from '@/services/token-cardano';
 import { keyBy } from 'lodash';
 import s3Service from '@/services/s3';
+import coreService from '@/services/core';
 
 /**
  * Gets the trending tokens from Birdeye API.
@@ -20,19 +21,7 @@ export async function getTrendingTokens(
   args: CardanoGetTrendingTokensArgumentsType
 ): Promise<CardanoActionResult<CardanoGetTrendingTokensResultBodyType>> {
   try {
-    const response = await fetchTopTokenMcap(1, args.limit);
-
-    for (const token of response) {
-      const existedKey = await s3Service.keyExists(`${token.ticker}.png`);
-      if (existedKey) {
-        token.logo = encodeURI(`${process.env.S3_URL}/${token.ticker}.png`);
-      } else {
-        token.logo = await s3Service.uploadBase64Image(
-          token.logo,
-          `${token.ticker}.png`
-        );
-      }
-    }
+    const response = await coreService.getTopTokensByMcap(1, args.limit);
 
     return {
       message: `Found ${response.length} trending tokens. The user is shown the tokens, do not list them. Ask the user what they want to do with the coin.`,

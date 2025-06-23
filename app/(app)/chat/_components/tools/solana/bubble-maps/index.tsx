@@ -5,7 +5,7 @@ import ToolCard from '../../tool-card';
 import BubbleMapsCallBody from './call-body';
 import BubbleMapsResult from './result';
 
-import type { BubbleMapsResultType, BubbleMapsArgumentsType } from '@/ai';
+import type { CardanoBubbleMapsResultType, CardanoBubbleMapsArgumentsType } from '@/ai/cardano';
 import type { ToolInvocation } from 'ai';
 
 interface Props {
@@ -19,9 +19,9 @@ const BubbleMaps: React.FC<Props> = ({ tool, prevToolAgent }) => {
       tool={tool}
       loadingText="Staking..."
       result={{
-        heading: (result: BubbleMapsResultType) =>
+        heading: (result: CardanoBubbleMapsResultType) =>
           result.body ? 'Bubble Maps Complete' : 'Failed to Get Bubble Maps',
-        body: (result: BubbleMapsResultType) =>
+        body: (result: CardanoBubbleMapsResultType) =>
           result.body && result.body.success ? (
             <BubbleMapsResult contractAddress={tool.args.contractAddress} />
           ) : (
@@ -30,7 +30,7 @@ const BubbleMaps: React.FC<Props> = ({ tool, prevToolAgent }) => {
       }}
       call={{
         heading: 'Get Bubble Maps',
-        body: (toolCallId: string, args: BubbleMapsArgumentsType) => (
+        body: (toolCallId: string, args: CardanoBubbleMapsArgumentsType) => (
           <BubbleMapsCallBody toolCallId={toolCallId} args={args} />
         ),
       }}

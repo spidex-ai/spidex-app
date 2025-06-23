@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 import { TokenPagePriceAnalysisInputSchema } from './input-schema';
-import { SolanaActionResult } from '../../../solana/actions/solana-action';
+import { CardanoActionResult } from '../../../cardano/actions/cardano-action';
 
 export type TokenPagePriceAnalysisSchemaType =
   typeof TokenPagePriceAnalysisInputSchema;
@@ -44,4 +44,4 @@ export type TokenPagePriceAnalysisResultBodyType = {
 };
 
 export type TokenPagePriceAnalysisResultType =
-  SolanaActionResult<TokenPagePriceAnalysisResultBodyType>;
+  CardanoActionResult<TokenPagePriceAnalysisResultBodyType>;

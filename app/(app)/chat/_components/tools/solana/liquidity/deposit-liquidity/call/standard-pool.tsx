@@ -5,13 +5,8 @@ import React, { useState } from 'react';
 import {
   ApiV3PoolInfoStandardItem,
   Percent,
-  TokenAmount,
-  toToken,
-  TxVersion,
 } from '@raydium-io/raydium-sdk-v2';
-import { VersionedTransaction } from '@solana/web3.js';
 
-import Decimal from 'decimal.js';
 
 import { Button, Separator } from '@/components/ui';
 
@@ -27,8 +22,7 @@ import {
 
 import { useChat } from '@/app/(app)/chat/_contexts/chat';
 
-import { raydiumApiClient, raydiumTransactionClient } from '@/services/raydium';
-import { SolanaDepositLiquidityResultBodyType } from '@/ai/solana/actions/raydium/deposit/types';
+import { raydiumApiClient } from '@/services/raydium';
 
 interface Props {
   pool: ApiV3PoolInfoStandardItem;
@@ -42,14 +36,13 @@ const StandardPool: React.FC<Props> = ({ pool, toolCallId }) => {
   const [amountB, setAmountB] = useState<string>('');
   const [amountsLoading, setAmountsLoading] = useState<boolean>(false);
 
-  const [baseIn, setBaseIn] = useState<boolean>(true);
 
   const [otherAmountMin, setOtherAmountMin] = useState<string>('');
-  const [isDepositing, setIsDepositing] = useState<boolean>(false);
+  const [isDepositing] = useState<boolean>(false);
 
   const [slippage] = useState<Percent>(new Percent(100, 1000));
 
-  const { sendTransaction, wallet } = useSendTransaction();
+  const { wallet } = useSendTransaction();
 
   const { data: mintA } = useTokenDataByAddress(pool.mintA.address);
   const { data: mintB } = useTokenDataByAddress(pool.mintB.address);
@@ -78,7 +71,7 @@ const StandardPool: React.FC<Props> = ({ pool, toolCallId }) => {
       });
     setAmountB(maxAnotherAmount.toExact());
     setOtherAmountMin(minAnotherAmount.toExact());
-    setBaseIn(true);
+
     setAmountsLoading(false);
   };
 
@@ -95,55 +88,11 @@ const StandardPool: React.FC<Props> = ({ pool, toolCallId }) => {
       });
     setAmountA(maxAnotherAmount.toExact());
     setOtherAmountMin(minAnotherAmount.toExact());
-    setBaseIn(false);
+
     setAmountsLoading(false);
   };
 
-  const onSubmit = async () => {
-    if (!wallet) return;
-    setIsDepositing(true);
-    try {
-      const raydium = await raydiumTransactionClient(wallet);
-      const { transaction } = await raydium.liquidity.addLiquidity({
-        poolInfo: pool,
-        amountInA: new TokenAmount(
-          toToken(pool.mintA),
-          new Decimal(amountA).mul(10 ** pool.mintA.decimals).toFixed(0)
-        ),
-        amountInB: new TokenAmount(
-          toToken(pool.mintB),
-          new Decimal(amountB).mul(10 ** pool.mintB.decimals).toFixed(0)
-        ),
-        otherAmountMin: new TokenAmount(
-          toToken(baseIn ? pool.mintA : pool.mintB),
-          new Decimal(otherAmountMin)
-            .mul(10 ** (baseIn ? pool.mintA.decimals : pool.mintB.decimals))
-            .toFixed(0)
-        ),
-        fixedSide: baseIn ? 'a' : 'b',
-        txVersion: TxVersion.V0,
-      });
-
-      const transactionBuffer = transaction.serialize();
-      const versionedTransaction =
-        VersionedTransaction.deserialize(transactionBuffer);
-
-      const txHash: any = await sendTransaction(versionedTransaction);
-      addToolResult<SolanaDepositLiquidityResultBodyType>(toolCallId, {
-        message:
-          'Deposit liquidity successful. The user is shown the transaction hash, so you do not have to repeat it. Ask what they want to do next.',
-        body: {
-          transaction: txHash,
-        },
-      });
-    } catch (error) {
-      console.error(error);
-      addToolResult(toolCallId, {
-        message: `Failed to deposit liquidity: ${error instanceof Error ? error.message : 'Unknown error'}`,
-      });
-    }
-    setIsDepositing(false);
-  };
+  const onSubmit = async () => {};
 
   const onCancel = () => {
     addToolResult(toolCallId, {

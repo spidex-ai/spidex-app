@@ -8,12 +8,6 @@ import type {
 } from './types';
 import type { CardanoAction } from '../../cardano-action';
 
-// export class SolanaDepositLiquidityAction implements SolanaAction<SolanaDepositLiquiditySchemaType, SolanaDepositLiquidityResultBodyType> {
-//   public name = SOLANA_DEPOSIT_LIQUIDITY_NAME;
-//   public description = SOLANA_DEPOSIT_LIQUIDITY_PROMPT;
-//   public argsSchema = DepositLiquidityInputSchema;
-// }
-
 export class CardanoDepositLiquidityAction
   implements
     CardanoAction<

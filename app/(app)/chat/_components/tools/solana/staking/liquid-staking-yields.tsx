@@ -5,9 +5,9 @@ import { Card } from '@/components/ui';
 
 import type { ToolInvocation } from 'ai';
 import type {
-  LiquidStakingYieldsResultBodyType,
-  LiquidStakingYieldsResultType,
-} from '@/ai';
+  CardanoLiquidStakingYieldsResultBodyType,
+  CardanoLiquidStakingYieldsResultType,
+} from '@/ai/cardano';
 
 interface Props {
   tool: ToolInvocation;
@@ -20,11 +20,11 @@ const LiquidStakingYieldsTool: React.FC<Props> = ({ tool, prevToolAgent }) => {
       tool={tool}
       loadingText={`Getting Best Liquid Staking Yields...`}
       result={{
-        heading: (result: LiquidStakingYieldsResultType) =>
+        heading: (result: CardanoLiquidStakingYieldsResultType) =>
           result.body
             ? `Fetched Best Liquid Staking Yields`
             : 'No staking yields found',
-        body: (result: LiquidStakingYieldsResultType) =>
+        body: (result: CardanoLiquidStakingYieldsResultType) =>
           result.body ? (
             <LiquidStakingYields body={result.body} />
           ) : (
@@ -38,7 +38,7 @@ const LiquidStakingYieldsTool: React.FC<Props> = ({ tool, prevToolAgent }) => {
 };
 
 const LiquidStakingYields: React.FC<{
-  body: LiquidStakingYieldsResultBodyType;
+  body: CardanoLiquidStakingYieldsResultBodyType;
 }> = ({ body }) => {
   const { sendMessage } = useChat();
 

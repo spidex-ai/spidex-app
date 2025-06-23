@@ -20,11 +20,11 @@ import {
 
 import { buildTransferTx } from './build-tx';
 
-import type { SolanaTransferArgumentsType } from '@/ai';
+import type { CardanoTransferArgumentsType } from '@/ai/cardano';
 import type { Token } from '@/db/types';
 
 interface Props {
-  args: SolanaTransferArgumentsType;
+  args: CardanoTransferArgumentsType;
   toolCallId: string;
 }
 

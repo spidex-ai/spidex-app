@@ -4,10 +4,10 @@ import React from 'react';
 
 import TransactionHash from '@/app/_components/transaction-hash';
 
-import type { SolanaWithdrawLiquidityResultBodyType } from '@/ai';
+import type { CardanoWithdrawLiquidityResultBodyType } from '@/ai/cardano';
 
 interface Props {
-  body: SolanaWithdrawLiquidityResultBodyType;
+  body: CardanoWithdrawLiquidityResultBodyType;
 }
 
 const WithdrawLiquidityResult: React.FC<Props> = ({ body }) => {

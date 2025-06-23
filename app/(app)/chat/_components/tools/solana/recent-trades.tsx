@@ -1,22 +1,22 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import {
-  Button,
+  // Button,
   Card,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
+  // Table,
+  // TableBody,
+  // TableCell,
+  // TableHead,
+  // TableHeader,
+  // TableRow,
 } from '@/components/ui';
 
 import ToolCard from '../tool-card';
 
 import type { ToolInvocation } from 'ai';
 import type {
-  GetTraderTradesResultBodyType,
-  GetTraderTradesResultType,
+  CardanoGetTraderTradesResultBodyType,
+  CardanoGetTraderTradesResultType,
 } from '@/ai';
 
 interface Props {
@@ -30,9 +30,9 @@ const GetTrades: React.FC<Props> = ({ tool, prevToolAgent }) => {
       tool={tool}
       loadingText="Getting Trades..."
       result={{
-        heading: (result: GetTraderTradesResultType) =>
+        heading: (result: CardanoGetTraderTradesResultType) =>
           result.body ? `Recent Trades` : `Failed to fetch trades`,
-        body: (result: GetTraderTradesResultType) =>
+        body: (result: CardanoGetTraderTradesResultType) =>
           result.body ? <TradesTable body={result.body} /> : 'No trades found',
       }}
       defaultOpen={true}
@@ -42,15 +42,16 @@ const GetTrades: React.FC<Props> = ({ tool, prevToolAgent }) => {
   );
 };
 
-const TradesTable = ({ body }: { body: GetTraderTradesResultBodyType }) => {
-  const [showAll, setShowAll] = useState(false);
-  const tokens = Object.entries(body.tokensTraded).sort(
-    (a, b) => b[1].usdChange - a[1].usdChange
-  );
+const TradesTable = ({ body }: { body: CardanoGetTraderTradesResultBodyType }) => {
+  console.log("🚀 ~ TradesTable ~ body:", body)
+  // const [showAll, setShowAll] = useState(false);
+  // const tokens = Object.entries(body.tokensTraded).sort(
+  //   (a, b) => b[1].usdChange - a[1].usdChange
+  // );
 
   return (
     <Card className="flex flex-col gap-2 w-full p-2">
-      <Table className="text-center">
+      {/* <Table className="text-center">
         <TableHeader>
           <TableRow>
             <TableHead className="text-center">Asset</TableHead>
@@ -152,7 +153,7 @@ const TradesTable = ({ body }: { body: GetTraderTradesResultBodyType }) => {
         <Button variant="ghost" onClick={() => setShowAll(!showAll)}>
           {showAll ? 'Show Less' : 'Show All'}
         </Button>
-      )}
+      )} */}
     </Card>
   );
 };

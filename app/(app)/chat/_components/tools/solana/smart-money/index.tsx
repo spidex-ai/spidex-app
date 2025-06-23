@@ -4,9 +4,9 @@ import ToolCard from '../../tool-card';
 
 import type { ToolInvocation } from 'ai';
 import type {
-  GetSmartMoneyInflowsResultType,
-  GetSmartMoneyInflowsResultBodyType,
-} from '@/ai';
+  CardanoGetSmartMoneyInflowsResultType,
+  CardanoGetSmartMoneyInflowsResultBodyType,
+} from '@/ai/cardano';
 
 import Link from 'next/link';
 import { TopTokenVolume } from '@/services/taptools/types';
@@ -25,11 +25,11 @@ const SmartMoneyInflows: React.FC<Props> = ({ tool, prevToolAgent }) => {
       tool={tool}
       loadingText={`Getting Smart Money Inflows...`}
       result={{
-        heading: (result: GetSmartMoneyInflowsResultType) =>
+        heading: (result: CardanoGetSmartMoneyInflowsResultType) =>
           result.body
             ? `Fetched Smart Money Inflows`
             : `Failed to fetch smart money inflows`,
-        body: (result: GetSmartMoneyInflowsResultType) =>
+        body: (result: CardanoGetSmartMoneyInflowsResultType) =>
           result.body ? (
             <SmartMonyeToken body={result.body} />
           ) : (
@@ -45,7 +45,7 @@ const SmartMoneyInflows: React.FC<Props> = ({ tool, prevToolAgent }) => {
 const SmartMonyeToken = ({
   body,
 }: {
-  body: GetSmartMoneyInflowsResultBodyType;
+  body: CardanoGetSmartMoneyInflowsResultBodyType;
 }) => {
   console.log('body:::::: ', body);
   // return <div>this is trending tokens</div>

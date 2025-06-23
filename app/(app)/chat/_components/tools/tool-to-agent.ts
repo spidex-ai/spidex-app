@@ -6,7 +6,7 @@ import {
   TOKEN_ANALYSIS_AGENT_NAME,
   TRADING_AGENT_NAME,
   SOCIAL_AGENT_NAME,
-  LIQUIDITY_AGENT_NAME,
+
 } from '@/ai/agents/names';
 
 import type { IconName } from '@/types';
@@ -20,7 +20,6 @@ export const toolToAgent = {
   trading: TRADING_AGENT_NAME,
   social: SOCIAL_AGENT_NAME,
   tokenanalysis: TOKEN_ANALYSIS_AGENT_NAME,
-  liquidity: LIQUIDITY_AGENT_NAME,
 };
 
 export const getAgentName = (tool: ToolInvocation) => {
@@ -45,8 +44,6 @@ export const getAgentIcon = (agentName: string): IconName => {
       return 'Twitter';
     case TOKEN_ANALYSIS_AGENT_NAME:
       return 'Coins';
-    case LIQUIDITY_AGENT_NAME:
-      return 'Droplet';
     default:
       return 'Brain';
   }

@@ -7,6 +7,7 @@ import taptoolsService from '@/services/taptools';
 import tokenCardanoService from '@/services/token-cardano';
 import { keyBy } from 'lodash';
 import s3Service from '@/services/s3';
+import coreService from '@/services/core';
 
 /**
  * Gets the trending tokens from Birdeye API.
@@ -19,19 +20,7 @@ export async function getSmartMoneyInflows(
   args: CardanoGetSmartMoneyInflowsArgumentsType
 ): Promise<CardanoActionResult<CardanoGetSmartMoneyInflowsResultBodyType>> {
   try {
-    const response = await fetchTopVolumeToken(args.granularity, args.limit);
-
-    for (const token of response) {
-      const existedKey = await s3Service.keyExists(`${token.ticker}.png`);
-      if (existedKey) {
-        token.logo = encodeURI(`${process.env.S3_URL}/${token.ticker}.png`);
-      } else {
-        token.logo = await s3Service.uploadBase64Image(
-          token.logo,
-          `${token.ticker}.png`
-        );
-      }
-    }
+    const response = await coreService.getTopTokensByVolume(1, args.limit);
 
     return {
       body: {
@@ -49,44 +38,3 @@ export async function getSmartMoneyInflows(
   }
 }
 
-export const fetchTopVolumeToken = async (
-  granularity: string,
-  limit: number
-) => {
-  try {
-    const data = await taptoolsService.getTopTokensByVolume(
-      granularity,
-      1,
-      limit
-    );
-    const tokenIds = data.map(token => token.unit);
-    const [tokenDetails, tokenPrices] = await Promise.all([
-      tokenCardanoService.batchTokenInfo(tokenIds, ['logo']),
-      Promise.all(
-        tokenIds.map(async token => {
-          const tokenPrice = await taptoolsService.getTokenQuote(token, 'USD');
-          return {
-            unit: token,
-            price: tokenPrice.price,
-          };
-        })
-      ),
-    ]);
-
-    const mapTokenWithPrices = keyBy(tokenPrices, 'unit');
-
-    const mapTokenWithDetails = keyBy(tokenDetails.subjects, 'subject');
-    const tokens = data.map(token => {
-      const tokenDetail = mapTokenWithDetails[token.unit];
-      return {
-        ...token,
-        logo: tokenDetail?.logo.value,
-        usdPrice: mapTokenWithPrices[token.unit]?.price,
-      };
-    });
-    return tokens;
-  } catch (error) {
-    console.error('Error fetching top token mcap:', error);
-    return [];
-  }
-};
