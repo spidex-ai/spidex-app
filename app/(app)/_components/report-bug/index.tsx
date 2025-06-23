@@ -5,7 +5,7 @@ const ReportBug = () => {
   const [isHovered, setIsHovered] = React.useState(false);
   return (
     <div
-      className="absolute bottom-0 right-5 cursor-pointer flex items-center gap-2 "
+      className="absolute bottom-0 right-5 cursor-pointer flex items-center gap-2"
       onClick={() => {
         window.open(
           'https://spidex-ai.gitbook.io/spidex-ai-docs/bug-bounty-program',
@@ -17,7 +17,7 @@ const ReportBug = () => {
     >
 
       <div
-        className={`flex gap-2 items-center ${isHovered ? 'border-2 border-[#009EFF] rounded-full' : ''}`}
+        className={`flex gap-2 items-center z-50 ${isHovered ? 'border-2 border-[#009EFF] rounded-full bg-bg-main' : ''}`}
       >
         <div
           className={`px-3 py-2 pl-6  rounded-lg text-[#009EFF] font-medium text-sm whitespace-nowrap transition-all duration-300 ${
@@ -44,7 +44,7 @@ export const ReportBugIcon = () => {
   const [isHovered, setIsHovered] = React.useState(false);
   return (
     <div
-    className="absolute bottom-4 right-5 cursor-pointer flex items-center gap-2 "
+    className="absolute bottom-4 right-5 cursor-pointer flex items-center gap-2"
     onClick={() => {
       window.open(
         'https://spidex-ai.gitbook.io/spidex-ai-docs/bug-bounty-program',
@@ -56,7 +56,7 @@ export const ReportBugIcon = () => {
   >
 
     <div
-      className={`flex gap-2 items-center ${isHovered ? 'border-2 border-[#009EFF] rounded-full' : ''}`}
+      className={`flex gap-2 items-center z-50 ${isHovered ? 'border-2 border-[#009EFF] rounded-full bg-bg-main' : ''}`}
     >
       <div
         className={`px-3 py-2 pl-6  rounded-lg text-[#009EFF] font-medium text-sm whitespace-nowrap transition-all duration-300 ${
