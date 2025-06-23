@@ -6,7 +6,7 @@ export class CoreService {
   private client: CoreClient;
 
   constructor() {
-    this.client = new CoreClient();
+    this.client = new CoreClient(); 
   }
 
   async getBalances(walletAddress: string): Promise<WalletBalances> {

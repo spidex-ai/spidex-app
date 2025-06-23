@@ -8,43 +8,47 @@ import SidePanel from './_components/side-panel';
 import ResizableLayout from './_components/resizable-layout';
 import { useTokenDetail } from '@/hooks';
 import { QuoteType } from './_components/header/select-quote';
+import { ReportBugIcon } from '../../_components/report-bug';
 
 type tParams = Promise<{ address: string }>;
 
 const TokenPage = ({ params }: { params: tParams }) => {
   const { address } = use(params);
   const { data, isLoading } = useTokenDetail(address);
-  console.log("🚀 ~ TokenPage ~ data:", data)
+  console.log('🚀 ~ TokenPage ~ data:', data);
   const [quote, setQuote] = useState<QuoteType>(QuoteType.USD);
 
   return (
-    <div className="flex flex-col gap-2 h-full max-h-full overflow-hidden">
-      <Header
-        data={data}
-        isLoading={isLoading}
-        isSearch={true}
-        quote={quote}
-        onQuoteChange={setQuote}
-      />
-      <ResizableLayout
-        chartComponent={
-          <TokenChart
-            data={data}
-            isLoadingTokenDetail={isLoading}
-            quote={quote}
-          />
-        }
-        tabsComponent={
-          <TokenDashboardTabs
-            address={address}
-            data={data}
-            isLoadingTokenDetail={isLoading}
-          />
-        }
-        sidePanelComponent={
-          <SidePanel data={data} isLoadingTokenDetail={isLoading} />
-        }
-      />
+    <div className="relative h-full max-h-full">
+      <div className="flex flex-col gap-2 h-full max-h-full overflow-hidden">
+        <Header
+          data={data}
+          isLoading={isLoading}
+          isSearch={true}
+          quote={quote}
+          onQuoteChange={setQuote}
+        />
+        <ResizableLayout
+          chartComponent={
+            <TokenChart
+              data={data}
+              isLoadingTokenDetail={isLoading}
+              quote={quote}
+            />
+          }
+          tabsComponent={
+            <TokenDashboardTabs
+              address={address}
+              data={data}
+              isLoadingTokenDetail={isLoading}
+            />
+          }
+          sidePanelComponent={
+            <SidePanel data={data} isLoadingTokenDetail={isLoading} />
+          }
+        />
+      </div>
+      <ReportBugIcon />
     </div>
   );
 };

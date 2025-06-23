@@ -7,6 +7,7 @@ import History from './_components/history';
 import Missions from './_components/missions';
 import PointInformation from './_components/point-information';
 import { usePointHistory, usePointInfo } from '@/hooks/point/use-point';
+import { ReportBugIcon } from '../_components/report-bug';
 
 const PointsPage: React.FC = () => {
   const pointHistoryHook = usePointHistory(); 
@@ -19,6 +20,7 @@ const PointsPage: React.FC = () => {
 
   return (
     <ProtectedClient>
+      <div  className="relative h-full max-h-full">
       <div className="flex flex-col gap-8 max-w-7xl mx-auto w-full h-full max-h-full overflow-y-auto px-1 pr-4">
         <div className="flex items-center gap-2">
           <Image
@@ -38,7 +40,8 @@ const PointsPage: React.FC = () => {
         <Missions  onMissionComplete={handleMissionComplete} />
         <History pointHistoryHook={pointHistoryHook} />
       </div>
-
+      </div>
+    <ReportBugIcon />
     </ProtectedClient>
   );
 };
