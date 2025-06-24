@@ -170,6 +170,8 @@ const Missions = ({ onMissionComplete }: Props) => {
               );
           }
 
+          icon = quest.icon ? <Image src={quest.icon} alt="icon" width={24} height={24} /> : icon;
+
           let step =
             quest.status == 3
               ? STEP.COMPLETED

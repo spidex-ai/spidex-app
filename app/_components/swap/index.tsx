@@ -12,7 +12,7 @@ import TokenInput from './token-input';
 
 import { useTokenBalance } from '@/hooks';
 
-import { cn } from '@/lib/utils';
+import { cn, DEXHUNTER_SAVE_FEE } from '@/lib/utils';
 
 import type { QuoteResponse } from '@jup-ag/api';
 
@@ -109,7 +109,7 @@ const Swap: React.FC<Props> = ({
 
   const isInsufficientBalance = useMemo(() => {
     if (Number(inputAmount) > Number(tokenInputBalance)) return true;
-    if (Number(accountBalance) < 5) return true;
+    if (Number(accountBalance) < DEXHUNTER_SAVE_FEE) return true;
     let totalDepositADA =
       Number(estimatedPoints?.deposits) +
       Number(estimatedPoints?.batcher_fee) +
@@ -117,7 +117,7 @@ const Swap: React.FC<Props> = ({
     if (inputToken?.ticker === 'ADA') {
       totalDepositADA += Number(inputAmount);
     }
-    if (Number(accountBalance) < totalDepositADA + 5) return true;
+    if (Number(accountBalance) < totalDepositADA + DEXHUNTER_SAVE_FEE) return true;
     return false;
   }, [
     inputAmount,

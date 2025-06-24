@@ -30,6 +30,7 @@ import { decodeHexAddress } from '@cardano-foundation/cardano-connect-with-walle
 import { useSpidexCore } from '@/hooks/core/useSpidexCore';
 import { useSelector } from 'react-redux';
 import { selectAuthData } from '@/store/selectors/authSelectors';
+import { DEXHUNTER_SAVE_FEE } from '@/lib/utils';
 
 export interface SwapWrapperProps {
   initialInputToken: CardanoTokenDetail | null;
@@ -112,7 +113,7 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
 
   const isInsufficientBalance = useMemo(() => {
     if (Number(inputAmount) > Number(tokenInputBalance)) return true;
-    if (Number(accountBalance) < 5) return true;
+    if (Number(accountBalance) < DEXHUNTER_SAVE_FEE) return true;
     let totalDepositADA =
       Number(estimatedPoints?.deposits) +
       Number(estimatedPoints?.batcher_fee) +
@@ -120,7 +121,7 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
     if (inputToken?.ticker === 'ADA') {
       totalDepositADA += Number(inputAmount);
     }
-    if (Number(accountBalance) < totalDepositADA + 5) return true;
+    if (Number(accountBalance) < totalDepositADA + DEXHUNTER_SAVE_FEE) return true;
     return false;
   }, [
     inputAmount,

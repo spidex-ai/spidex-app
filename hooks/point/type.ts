@@ -43,6 +43,7 @@ export interface Quest {
     atLeast?: number;
   };
   type: number;
+  icon: string | null;
   point: string;
   description: string;
   status: number;
