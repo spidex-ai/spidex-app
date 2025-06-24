@@ -78,7 +78,7 @@ const TokenCard = ({ token }: { token: TopTokenVolume }) => {
               </p>
               <p className="text-xs text-muted-foreground">
                 $
-                {token.price.toLocaleString(undefined, {
+                {token.usdPrice?.toLocaleString(undefined, {
                   maximumFractionDigits: 5,
                 })}
               </p>
