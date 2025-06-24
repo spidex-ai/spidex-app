@@ -2,11 +2,10 @@ import {
   KNOWLEDGE_AGENT_NAME,
   MARKET_AGENT_NAME,
   STAKING_AGENT_NAME,
-  WALLET_AGENT_NAME,
+  PORTFOLIO_AGENT_NAME,
   TOKEN_ANALYSIS_AGENT_NAME,
   TRADING_AGENT_NAME,
   SOCIAL_AGENT_NAME,
-
 } from '@/ai/agents/names';
 
 import type { IconName } from '@/types';
@@ -14,7 +13,7 @@ import type { ToolInvocation } from 'ai';
 
 export const toolToAgent = {
   staking: STAKING_AGENT_NAME,
-  wallet: WALLET_AGENT_NAME,
+  wallet: PORTFOLIO_AGENT_NAME,
   market: MARKET_AGENT_NAME,
   knowledge: KNOWLEDGE_AGENT_NAME,
   trading: TRADING_AGENT_NAME,
@@ -32,7 +31,7 @@ export const getAgentIcon = (agentName: string): IconName => {
   switch (agentName) {
     case STAKING_AGENT_NAME:
       return 'Beef';
-    case WALLET_AGENT_NAME:
+    case PORTFOLIO_AGENT_NAME:
       return 'Wallet';
     case MARKET_AGENT_NAME:
       return 'ChartLine';

@@ -4,7 +4,7 @@ import {
   CARDANO_TRANSACTION_NAME,
 } from '@/ai/action-names';
 
-export const WALLET_AGENT_DESCRIPTION = `You are a wallet agent. You are responsible for all queries regarding the user's wallet balance, wallet address, and transaction history.
+export const PORTFOLIO_AGENT_DESCRIPTION = `You are a portfolio agent. You are responsible for all queries regarding the user's wallet balance, wallet address, and transaction history.
 
 You have access to the following tools:
 - ${CARDANO_GET_WALLET_ADDRESS_NAME}

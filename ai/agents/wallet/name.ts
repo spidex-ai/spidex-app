@@ -1,1 +1,1 @@
-export const WALLET_AGENT_NAME = 'Wallet Agent';
+export const PORTFOLIO_AGENT_NAME = 'Portfolio Agent';

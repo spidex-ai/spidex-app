@@ -18,7 +18,7 @@ import {
   KNOWLEDGE_AGENT_NAME,
   MARKET_AGENT_NAME,
   STAKING_AGENT_NAME,
-  WALLET_AGENT_NAME,
+  PORTFOLIO_AGENT_NAME,
   TOKEN_ANALYSIS_AGENT_NAME,
   TRADING_AGENT_NAME,
   SOCIAL_AGENT_NAME,
@@ -52,7 +52,7 @@ const getAgentIcon = (agentName: string) => {
           height={20}
         />
       );
-    case WALLET_AGENT_NAME:
+    case PORTFOLIO_AGENT_NAME:
       return (
         <Image
           src="/icons/token-analysis.svg"
