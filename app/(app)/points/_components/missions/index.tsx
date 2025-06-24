@@ -28,6 +28,7 @@ interface MissionItem {
     token?: string;
     atLeast?: number;
   };
+  category: number;
 }
 
 interface Props {
@@ -87,6 +88,11 @@ const Missions = ({ onMissionComplete }: Props) => {
     VERIFY: 1,
     START: 0,
     DISABLED: -1,
+  };
+  const CATEGORY = {
+    ONE_TIME: 0,
+    DAILY: 1,
+    MULTI_TIME: 2,
   };
   const results: MissionItem[] =
     quests.length > 0
@@ -183,6 +189,8 @@ const Missions = ({ onMissionComplete }: Props) => {
             step = STEP.VERIFY;
           }
 
+          const category = quest.category === CATEGORY.ONE_TIME ? CATEGORY.ONE_TIME : quest.category === CATEGORY.DAILY ? CATEGORY.DAILY : CATEGORY.MULTI_TIME;
+
           return {
             id: quest.id,
             icon: icon,
@@ -197,6 +205,7 @@ const Missions = ({ onMissionComplete }: Props) => {
             completedAt: quest.completedAt,
             verifyingAt: quest.verifyingAt,
             requirements: quest?.requirements,
+            category: category,
           };
         })
       : [];
@@ -404,12 +413,10 @@ const Missions = ({ onMissionComplete }: Props) => {
                             height={24}
                           />
                         </div>
-                        {result.type === 20 ||
-                        result.type === 0 ||
-                        result.type === 3 ||
-                        result.type === 1 ||
-                        result.type === 2 ? null : (
+                        {result.category === CATEGORY.ONE_TIME ? null : result.category === CATEGORY.DAILY ? (
                           <div>/day</div>
+                        ) : (
+                          <div>/time</div>
                         )}
                       </div>
                       <div className="col-span-1 text-white flex items-center justify-end">
