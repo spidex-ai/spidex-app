@@ -24,6 +24,10 @@ interface MissionItem {
   step: number;
   completedAt: string;
   verifyingAt: string;
+  requirements?: {
+    token?: string;
+    atLeast?: number;
+  };
 }
 
 interface Props {
@@ -192,6 +196,7 @@ const Missions = ({ onMissionComplete }: Props) => {
             step: step,
             completedAt: quest.completedAt,
             verifyingAt: quest.verifyingAt,
+            requirements: quest?.requirements,
           };
         })
       : [];
@@ -321,6 +326,12 @@ const Missions = ({ onMissionComplete }: Props) => {
           const tokenTrade =
             'c48cbb3d5e57ed56e276bc45f99ab39abe94e6cd7ac39fb402da47ad0014df105553444d';
           router.push(`/token/${tokenTrade}?tab=trade`);
+          return;
+        case 35:
+          const tokenSwap = result?.requirements?.token;
+          if (tokenSwap) {
+            router.push(`/token/${tokenSwap}?tab=trade`);
+          }
           return;
         default:
           return;

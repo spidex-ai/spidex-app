@@ -38,7 +38,9 @@ export interface Quest {
   createdAt: string;
   category: number;
   requirements: {
-    url: string;
+    url?: string;
+    token?: string;
+    atLeast?: number;
   };
   type: number;
   point: string;
