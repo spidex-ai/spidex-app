@@ -486,7 +486,7 @@ export interface TokenStats {
   holders: number;
   '24h': TokenTradingStats;
   tokenAddress?: string;
-  tokenLogo?: string;
+  tokenLogo?: string | null;
   tokenPriceChange?: TokenPriceChange;
   tokenLinks?: TokenLinks;
   liquidity?: number;

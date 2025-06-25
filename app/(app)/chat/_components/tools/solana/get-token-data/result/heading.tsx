@@ -26,7 +26,7 @@ const GetTokenDataResultHeading: React.FC<Props> = ({ token }) => {
     <Card className="p-2 flex flex-col md:flex-row justify-between gap-4">
       <div className="flex items-center gap-2">
         <img
-          src={token.tokenLogo}
+          src={token.tokenLogo ?? ''}
           alt={token.mcap.ticker}
           className="w-10 h-10 rounded-full"
         />
@@ -45,7 +45,7 @@ const GetTokenDataResultHeading: React.FC<Props> = ({ token }) => {
           </div>
           <p className="text-sm font-semibold flex items-center gap-1">
             $
-            {token.price.toLocaleString(undefined, {
+            {token.usdPrice.toLocaleString(undefined, {
               maximumFractionDigits: 5,
             })}
             {token.tokenPriceChange?.['24h'] && (

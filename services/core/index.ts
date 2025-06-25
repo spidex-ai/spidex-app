@@ -3,6 +3,7 @@ import { CoreClient } from './client';
 import { ApiResponse, WalletBalances, WalletTransaction } from './types';
 import { Token } from '@/db/types';
 import { TokenHolder, TokenStats, TopTokenMcap } from '../taptools/types';
+import { CardanoTokenDetail } from '../dexhunter/types';
 
 export class CoreService {
   private client: CoreClient;
@@ -76,6 +77,29 @@ export class CoreService {
       throw error;
     }
   } 
+
+  async searchToken( query: string,limit = 1, page = 1, verified = true) {
+    try {
+      const response = await this.client.get<ApiResponse<CardanoTokenDetail[]>>(
+        `tokens/search?query=${query}&limit=${limit}&page=${page}&verified=${verified}`
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getTokenDetail(tokenId: string) {
+    try {
+      const response = await this.client.get<ApiResponse<CardanoTokenDetail>>(
+        `tokens/${tokenId}`
+      );
+      return response.data; 
+    } catch (error) {
+      throw error;
+    }
+  }
+
 }
 
 export const coreService = new CoreService();
