@@ -63,15 +63,18 @@ export async function getTokenData(
       tokenAddress = token.token_id;
 
       const stats = await coreService.getTokenStats(tokenAddress);
+      console.log("🚀 ~ stats:", stats)
+
+      const tokenDetail = await coreService.getTokenDetail(tokenAddress);
 
       const tokenStats: TokenStats = {
-        price: stats.price,
-        usdPrice: stats.price,
+        price: tokenDetail.price,
+        usdPrice: tokenDetail.usdPrice || 0,
         mcap: stats.mcap,
         holders: stats.holders,
         '24h': stats['24h'],
         tokenAddress,
-        tokenLogo: token?.logo ? token.logo : null,
+        tokenLogo: tokenDetail.logo,
         tokenPriceChange: stats.tokenPriceChange,
         tokenLinks: stats.tokenLinks,
       };
@@ -83,13 +86,6 @@ export async function getTokenData(
         },
       };
     }
-
-    // console.log("🚀 ~ response:", response);
-    // if (!tokenAddress) {
-    //   return {
-    //     message: `No token found for ${args.search}`,
-    //   };
-    // }
   } catch (error) {
     console.error(error);
     return {

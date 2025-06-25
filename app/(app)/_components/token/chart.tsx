@@ -138,7 +138,7 @@ const TokenChart: React.FC<Props> = ({
     return () => clearInterval(interval);
   }, [tokenDetail]);
 
-  const price = data?.length > 0 ? data[data.length - 1].close : 0;
+  const price = quote === QuoteType.USD ? (tokenDetail?.usdPrice ?? 0) : (tokenDetail?.price ?? 0);
   const open = data?.length > 0 ? data[0].open : 0;
 
   const currentPrice = price < 0.0001 ? '~0.0001' : formatNumber(price, 4);

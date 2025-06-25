@@ -3,19 +3,16 @@ import type {
   CardanoTopHoldersResultBodyType,
 } from './types';
 import type { CardanoActionResult } from '../../cardano-action';
-import { getTokenLargestAccounts } from '@/services/helius';
-import { Connection, PublicKey } from '@solana/web3.js';
-import { getAccount } from '@solana/spl-token';
 import taptoolsService from '@/services/taptools';
+import { coreService } from '@/services/core';
 
 export async function getTopHolders(
   args: CardanoTopHoldersArgumentsType
 ): Promise<CardanoActionResult<CardanoTopHoldersResultBodyType>> {
   try {
-    let topHolders = await taptoolsService.getTopTokenHolders(
+    let topHolders = await coreService.getTokenTopHolders(
       args.tokenAddress,
-      1,
-      args.limit
+      args.limit,      
     );
 
     if (!topHolders || topHolders.length === 0) {

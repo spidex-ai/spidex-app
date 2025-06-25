@@ -66,6 +66,7 @@ export class CoreService {
       throw error;
     }
   }
+  
 
   async getTokenStats(tokenId: string) {
     try {
@@ -100,6 +101,27 @@ export class CoreService {
     }
   }
 
+  async getTokenTopHolders(tokenId: string, limit = 20, page = 1) {
+    try {
+      const response = await this.client.get<ApiResponse<TokenHolder[]>>(
+        `tokens/${tokenId}/top-holders?limit=${limit}&page=${page}`
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getTokenTopTraders(tokenId: string, limit = 20, page = 1) {
+    try {
+      const response = await this.client.get<ApiResponse<TokenHolder[]>>(
+        `tokens/${tokenId}/top-traders?limit=${limit}&page=${page}`
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 export const coreService = new CoreService();
