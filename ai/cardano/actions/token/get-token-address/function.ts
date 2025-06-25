@@ -7,6 +7,7 @@ import type {
 } from './types';
 import { SearchTokenInfo } from '@/services/dexhunter/types';
 import dexHunterService from '@/services/dexhunter';
+import coreService from '@/services/core';
 
 /**
  * Gets the token data for a given ticker.
@@ -32,11 +33,11 @@ export async function getTokenAddress(
     };
   }
   try {
-    const response = await dexHunterService.searchToken(
+    const response = await coreService.searchToken(
       args.keyword,
-      true,
-      0,
-      1
+      1,
+      1,
+      true
     );
     if (!response) {
       throw new Error('Failed to fetch search results');
