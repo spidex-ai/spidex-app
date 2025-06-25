@@ -22,12 +22,8 @@ import { useSwapModal } from '../../_contexts/use-swap-modal';
 import { usePortfolioToken } from '@/hooks/portfolio';
 import { formatNumber } from '@/lib/utils';
 
-interface Props {
-  address: string;
-}
-
-const Tokens: React.FC<Props> = ({ address }) => {
-  const { data: portfolio, loading } = usePortfolioToken(address);
+const Tokens: React.FC = () => {
+  const { data: portfolio, loading } = usePortfolioToken();
 
   const { openSell, openBuy } = useSwapModal();
 

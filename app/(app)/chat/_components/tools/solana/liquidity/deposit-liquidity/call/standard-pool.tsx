@@ -51,11 +51,9 @@ const StandardPool: React.FC<Props> = ({ pool, toolCallId }) => {
 
   const { balance: balanceA, isLoading: isBalanceALoading } = useTokenBalance(
     pool.mintA.address,
-    wallet ?? ''
   );
   const { balance: balanceB, isLoading: isBalanceBLoading } = useTokenBalance(
     pool.mintB.address,
-    wallet ?? ''
   );
 
   const handleAmountAChange = async (amount: string) => {

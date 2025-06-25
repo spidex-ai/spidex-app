@@ -45,7 +45,6 @@ const TransferCall: React.FC<Props> = ({ args, toolCallId }) => {
 
   const { balance, isLoading: balanceLoading } = useTokenBalance(
     args.mint || 'So11111111111111111111111111111111111111112',
-    wallet || ''
   );
 
   useEffect(() => {

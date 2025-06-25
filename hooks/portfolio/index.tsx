@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { PortfolioToken, PortfolioTransaction } from './type';
 import { useSpidexCore } from '../core/useSpidexCore';
 
-export const usePortfolioToken = (address?: string) => {
+export const usePortfolioToken = () => {
   const { getPortfolioToken } = useSpidexCore();
 
   const [loading, setLoading] = useState(false);
@@ -12,13 +12,13 @@ export const usePortfolioToken = (address?: string) => {
 
   useEffect(() => {
     fetchPortfolioToken();
-  }, [address]);
+  }, []);
 
   const fetchPortfolioToken = async () => {
     setLoading(true);
     setError(null);
     try {
-      const data = await getPortfolioToken(address);
+      const data = await getPortfolioToken();
       setData(data);
     } catch (error) {
       setError(error as string);
@@ -34,7 +34,7 @@ export const usePortfolioToken = (address?: string) => {
   };
 };
 
-export const usePortfolioTransaction = (address?: string) => {
+export const usePortfolioTransaction = () => {
   const { getPortfolioTransaction } = useSpidexCore();
 
   const [loading, setLoading] = useState(false);
@@ -42,18 +42,17 @@ export const usePortfolioTransaction = (address?: string) => {
   const [data, setData] = useState<PortfolioTransaction[]>([]);
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
-  const pageSize = 5;
+  const pageSize = 30;
 
   useEffect(() => {
     fetchPortfolioTransaction();
-  }, [address, currentPage]);
+  }, [currentPage]);
 
   const fetchPortfolioTransaction = async () => {
     setLoading(true);
     setError(null);
     try {
       const data = await getPortfolioTransaction(
-        address,
         currentPage + 1,
         pageSize
       );

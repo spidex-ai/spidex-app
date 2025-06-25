@@ -20,18 +20,14 @@ import { formatNumber } from '@/lib/utils';
 import Pagination from '@/app/(app)/_components/pagination';
 import { formatDate } from '@/app/utils/format';
 
-interface Props {
-  address: string;
-}
-
-const Transactions: React.FC<Props> = ({ address }) => {
+const Transactions: React.FC = () => {
   const {
     data: transactions,
     loading,
     totalPages,
     currentPage,
     setCurrentPage,
-  } = usePortfolioTransaction(address);
+  } = usePortfolioTransaction();
 
   const onClickTxn = (hash: string) => {
     window.open(`https://cexplorer.io/tx/${hash}`, '_blank');

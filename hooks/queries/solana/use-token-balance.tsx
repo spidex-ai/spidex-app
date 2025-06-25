@@ -2,8 +2,8 @@
 
 import { usePortfolioToken } from '@/hooks/portfolio';
 
-export const useTokenBalance = (address: string, tokenUnit: string) => {
-  const { data: portfolio, loading } = usePortfolioToken(address);
+export const useTokenBalance = (tokenUnit: string) => {
+  const { data: portfolio, loading } = usePortfolioToken();
 
   const tokenBalance = portfolio?.amount.find(
     token => token.unit === tokenUnit

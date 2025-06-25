@@ -102,7 +102,7 @@ const Swap: React.FC<Props> = ({
     useState<EsitmateSwapResponse>();
 
   const { balance: inputBalance, isLoading: inputBalanceLoading } =
-    useTokenBalance(auth?.user?.stakeAddress || '', inputToken?.unit || '');
+    useTokenBalance(inputToken?.unit || '');
 
   const tokenInputBalance =
     inputToken?.ticker === 'ADA' ? accountBalance : inputBalance;

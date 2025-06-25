@@ -127,7 +127,7 @@ const AuthButton: React.FC = () => {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <Balances address={auth.user.walletAddress} />
+            <Balances />
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => logout()}>
               <LogOut />

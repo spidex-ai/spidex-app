@@ -47,7 +47,6 @@ const StandardPool: React.FC<Props> = ({ pool, toolCallId }) => {
 
   const { balance, isLoading: isBalanceLoading } = useTokenBalance(
     pool.lpMint.address,
-    wallet ?? ''
   );
 
   const handleAmountChange = async (amount: string) => {

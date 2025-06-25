@@ -19,7 +19,7 @@ import {
   sessionExpired,
   setAuth,
   setError,
-  setLoading
+  setLoading,
 } from '@/store/slices/authSlice';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useRef } from 'react';
@@ -30,7 +30,7 @@ const globalGetMeState = {
   isProcessing: false,
   lastProcessedToken: null as string | null,
   callCount: 0,
-  pendingPromise: null as Promise<any> | null
+  pendingPromise: null as Promise<any> | null,
 };
 
 export interface SignMessageData {
@@ -96,38 +96,41 @@ export const useSpidexCore = () => {
   }, []);
 
   // Safe auth setter with validation
-  const setAuthSafely = useCallback((newAuth: Auth | null) => {
-    if (!validateAuth(newAuth)) {
-      console.warn('Attempted to set invalid auth object, ignoring update');
-      return;
-    }
-
-    // Check if the auth data has actually changed to prevent unnecessary updates
-    if (newAuth && auth) {
-      const currentAuthString = JSON.stringify({
-        userId: auth.userId,
-        accessToken: auth.accessToken,
-        refreshToken: auth.refreshToken,
-        user: auth.user,
-        avatar: auth.avatar,
-        walletName: auth.walletName
-      });
-      const newAuthString = JSON.stringify({
-        userId: newAuth.userId,
-        accessToken: newAuth.accessToken,
-        refreshToken: newAuth.refreshToken,
-        user: newAuth.user,
-        avatar: newAuth.avatar,
-        walletName: newAuth.walletName
-      });
-
-      if (currentAuthString === newAuthString) {
+  const setAuthSafely = useCallback(
+    (newAuth: Auth | null) => {
+      if (!validateAuth(newAuth)) {
+        console.warn('Attempted to set invalid auth object, ignoring update');
         return;
       }
-    }
 
-    dispatch(setAuth(newAuth));
-  }, [validateAuth, dispatch, auth]);
+      // Check if the auth data has actually changed to prevent unnecessary updates
+      if (newAuth && auth) {
+        const currentAuthString = JSON.stringify({
+          userId: auth.userId,
+          accessToken: auth.accessToken,
+          refreshToken: auth.refreshToken,
+          user: auth.user,
+          avatar: auth.avatar,
+          walletName: auth.walletName,
+        });
+        const newAuthString = JSON.stringify({
+          userId: newAuth.userId,
+          accessToken: newAuth.accessToken,
+          refreshToken: newAuth.refreshToken,
+          user: newAuth.user,
+          avatar: newAuth.avatar,
+          walletName: newAuth.walletName,
+        });
+
+        if (currentAuthString === newAuthString) {
+          return;
+        }
+      }
+
+      dispatch(setAuth(newAuth));
+    },
+    [validateAuth, dispatch, auth]
+  );
 
   // Logout function that can be used anywhere
   const performLogout = useCallback(() => {
@@ -144,8 +147,6 @@ export const useSpidexCore = () => {
   const hasFetchedUserData = useRef(false);
   const lastAccessToken = useRef<string | null>(null);
   const getMeCallCount = useRef(0);
-
-
 
   useEffect(() => {
     const currentAccessToken = auth?.accessToken;
@@ -209,7 +210,6 @@ export const useSpidexCore = () => {
 
         // Handle 401 Unauthorized (expired token)
         if (response.status === 401 && refreshToken) {
-
           // Try to refresh the token
           const refreshResponse = await fetch(
             `${process.env.NEXT_PUBLIC_SPIDEX_CORE_API_URL}/auth/refresh-token`,
@@ -343,7 +343,10 @@ export const useSpidexCore = () => {
         const currentUserData = JSON.stringify(auth.user);
         const newUserData = JSON.stringify(data.data);
 
-        if (currentUserData !== newUserData || auth.avatar !== data.data.avatar) {
+        if (
+          currentUserData !== newUserData ||
+          auth.avatar !== data.data.avatar
+        ) {
           const updatedAuth = {
             ...auth,
             user: data.data,
@@ -609,7 +612,7 @@ export const useSpidexCore = () => {
     try {
       const data = await fetchWithAuth(`/user-point/me/info`);
       return data.data;
-    } catch (error) { }
+    } catch (error) {}
   }, [fetchWithAuth, auth]);
 
   const getUserQuests = useCallback(
@@ -648,25 +651,18 @@ export const useSpidexCore = () => {
     [fetchWithAuth, auth]
   );
 
-  const getPortfolioToken = useCallback(
-    async (address?: string) => {
-      setLoading(true);
-      setError(null);
-      try {
-        const data = await fetchWithAuth(
-          `/portfolio/${address ||
-          'addr1q9gykktajrgrmj5am8vwlhp65a72emlwn2s3e5cadkhe3vrfkfxs6yajls3ft0yn42uqlcnrq6qcn3l0lunkxy6aplgspxm6da'
-          }`
-        );
-        return data.data;
-      } catch (error) {
-        return null;
-      } finally {
-        setLoading(false);
-      }
-    },
-    [fetchWithAuth, auth]
-  );
+  const getPortfolioToken = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await fetchWithAuth(`/portfolio`);
+      return data.data;
+    } catch (error) {
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  }, [fetchWithAuth, auth]);
 
   const getTokenTradeHistory = useCallback(
     async (tokenId: string) => {
@@ -686,14 +682,12 @@ export const useSpidexCore = () => {
     [fetchWithAuth, auth]
   );
   const getPortfolioTransaction = useCallback(
-    async (address?: string, page?: number, perPage?: number) => {
+    async (page = 1, perPage = 20) => {
       setLoading(true);
       setError(null);
       try {
         const data = await fetchWithAuth(
-          `/portfolio/${address ||
-          'addr1q9gykktajrgrmj5am8vwlhp65a72emlwn2s3e5cadkhe3vrfkfxs6yajls3ft0yn42uqlcnrq6qcn3l0lunkxy6aplgspxm6da'
-          }/transactions?page=1&count=20&order=desc`
+          `/portfolio/transactions?page=${page}&count=${perPage}&order=desc`
         );
         return data;
       } catch (error) {
@@ -1000,8 +994,6 @@ export const useSpidexCore = () => {
     }
   }, [fetchWithAuth, auth]);
 
-
-
   return {
     auth,
     loading,
@@ -1044,6 +1036,5 @@ export const useSpidexCore = () => {
     getTokenOHLCV,
     getTokenStats,
     getAchievements,
-
   };
 };

@@ -6,12 +6,8 @@ import { Skeleton } from '@/components/ui';
 
 import { usePortfolioToken } from '@/hooks/portfolio';
 
-interface Props {
-  address: string;
-}
-
-const Balances: React.FC<Props> = ({ address }) => {
-  const { data: portfolio, loading } = usePortfolioToken(address);
+const Balances: React.FC = () => {
+  const { data: portfolio, loading } = usePortfolioToken();
 
   if (loading) return <Skeleton className="h-10 w-full" />;
 

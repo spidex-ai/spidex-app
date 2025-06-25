@@ -19,8 +19,8 @@ const Portfolio = async ({
         <div className="relative h-full max-h-full">
           <div className="max-w-4xl mx-auto w-full flex flex-col gap-8 md:pt-4 h-full overflow-y-scroll no-scrollbar">
           <Header address={address} />
-          <Tokens address={address} />
-          <Transactions address={address} />
+          <Tokens />
+          <Transactions />
           </div>
           <ReportBug />
         </div>
