@@ -18,6 +18,10 @@ export function chunkArray<T>(array: T[], size: number): T[][] {
 }
 
 export const formatNumber = (num: number, decimalPlaces?: number): string => {
+  if (num === undefined) return '0.00'; 
+  if (num === null) return '0.00';
+  if (num === 0) return '0.00';
+  if (num < 0.00001) return `~0.00001`;
   const options: Intl.NumberFormatOptions = {
     maximumFractionDigits: decimalPlaces ?? 2,
   };

@@ -4,6 +4,7 @@ import { getLogoUrl } from '@/app/utils/logo';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { useDebounce } from '@/hooks';
+import { formatNumber } from '@/lib/utils';
 import { SearchTokenInfo } from '@/services/dexhunter/types';
 import { Search } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -47,13 +48,6 @@ export function TokenSearch() {
   useEffect(() => {
     handleSearch(debouncedQuery);
   }, [debouncedQuery]);
-
-  const formatPrice = (price: number) => {
-    if (price === 0) return '$0.00';
-    if (price < 0.0001) return `$${price.toExponential(4)}`;
-    if (price < 1) return `$${price.toFixed(6)}`;
-    return `$${price.toFixed(2)}`;
-  };
 
   return (
     <div className="w-full max-w-2xl mx-auto">
@@ -109,7 +103,7 @@ export function TokenSearch() {
                   <div className="flex items-center space-x-2">
                     {token.price && (
                       <div className="text-sm font-medium">
-                        {formatPrice(token.price)}
+                         ${formatNumber(token.usdPrice || 0, 4)}
                       </div>
                     )}
                     {token.is_verified && (

@@ -15,7 +15,7 @@ import { useDebounce } from '@/hooks';
 // import type { TokenSearchResult } from '@/services/birdeye/types';
 import { SearchTokenInfo } from '@/services/dexhunter/types';
 import { getLogoUrl } from '@/app/utils/logo';
-import { formatPrice } from '@/app/utils/format';
+import { formatNumber } from '@/lib/utils';
 
 interface Props {
   isTitle?: boolean;
@@ -51,6 +51,7 @@ const SearchBar: React.FC<Props> = ({ isTitle = true }) => {
         throw new Error('Failed to fetch search results');
       }
       const data = await response.json();
+      console.log("🚀 ~ handleSearch ~ data.data:", data.data)
 
       setResults(data.data);
     } catch (err) {
@@ -121,11 +122,9 @@ const SearchBar: React.FC<Props> = ({ isTitle = true }) => {
                             <span className="font-bold text-sm">
                               {token.token_ascii} {token.ticker ? `(${token.ticker})` : null}
                             </span>
-                            {/* <p className="text-xs text-muted-foreground">
-                                                            ${token.price.toLocaleString(undefined, { maximumFractionDigits: 5 })} <span className={token.price_change_24h_percent > 0 ? 'text-green-500' : 'text-red-500'}>({token.price_change_24h_percent > 0 ? '+' : ''}{token.price_change_24h_percent.toLocaleString(undefined, { maximumFractionDigits: 2 })}%)</span>
-                                                        </p> */}
+                        
                             <p className="text-xs text-muted-foreground">
-                              {formatPrice(token.usdPrice || 0)}
+                              ${formatNumber(token.usdPrice || 0, 4)}
                             </p>
                           </div>
                           <SaveToken address={token.token_id} />
