@@ -52,18 +52,6 @@ export default function SwapPoint({
     batcherFee,
   } = swapDetails;
 
-  const outputAmount = splits?.[0]?.amount_in
-    ? String(
-        (
-          splits?.[0]?.expected_output ||
-          0 / splits?.[0]?.amount_in ||
-          0
-        ).toLocaleString(undefined, {
-          maximumFractionDigits: 4,
-        })
-      )
-    : '';
-
   const totalDepositADA =
     inputToken === 'ADA'
       ? Number(inputAmount) +
@@ -71,6 +59,21 @@ export default function SwapPoint({
         Number(batcherFee) +
         Number(serviceFee)
       : Number(dexDeposits) + Number(batcherFee) + Number(serviceFee);
+  const receiveAmount = minReceive.toLocaleString(undefined, {
+    maximumFractionDigits: 2,
+  });
+
+  const netPriceAmount = netPrice.toLocaleString(undefined, {
+    maximumFractionDigits: 2,
+  });
+
+  const dexFeeAmount = dexFee.toLocaleString(undefined, {
+    maximumFractionDigits: 2,
+  });
+
+  const dexDepositsAmount = dexDeposits.toLocaleString(undefined, {
+    maximumFractionDigits: 2,
+  });
 
   return (
     <div className="mt-2">
@@ -78,12 +81,12 @@ export default function SwapPoint({
         <div className="flex justify-between items-center gap-2 px-6 py-2 bg-bg-swap rounded-lg">
           <div className="flex items-center gap-2">
             <div className="text-xs">Swap details</div>
-            <div className="text-xs">
+            <div className="text-xs min-w-[50%]">
               <TextGradient>( Spidex AI Fee = 0 )</TextGradient>
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <div className="text-[10px] text-text-gray">{`${formatNumber(parseFloat(inputAmount))} ${inputToken} = ${formatNumber(parseFloat(outputAmount))} ${outputToken}`}</div>
+            <div className="text-[10px] text-text-gray">{`${formatNumber(parseFloat(inputAmount))} ${inputToken} = ${receiveAmount} ${outputToken}`}</div>
             {!isOpenSwapDetails ? (
               <div
                 className="cursor-pointer"
@@ -171,9 +174,7 @@ export default function SwapPoint({
                     </div>
                   </div>
                 }
-                value={`${netPrice.toLocaleString(undefined, {
-                  maximumFractionDigits: 2,
-                })} ${outputToken}`}
+                value={`${netPriceAmount} ${outputToken}`}
               />
               <SwapDetailItem
                 label={
@@ -200,9 +201,7 @@ export default function SwapPoint({
                     </div>
                   </div>
                 }
-                value={`${minReceive.toLocaleString(undefined, {
-                  maximumFractionDigits: 2,
-                })} ${outputToken}`}
+                value={`${receiveAmount} ${outputToken}`}
               />
               <SwapDetailItem
                 label={
@@ -230,9 +229,7 @@ export default function SwapPoint({
                     </div>
                   </div>
                 }
-                value={`${dexFee.toLocaleString(undefined, {
-                  maximumFractionDigits: 2,
-                })} ${outputToken}`}
+                value={`${dexFeeAmount} ${outputToken}`}
               />
 
               <SwapDetailItem
@@ -258,9 +255,7 @@ export default function SwapPoint({
                     </div>
                   </div>
                 }
-                value={`${dexDeposits.toLocaleString(undefined, {
-                  maximumFractionDigits: 2,
-                })} ${outputToken}`}
+                value={`${dexDepositsAmount} ${outputToken}`}
               />
 
               <SwapDetailItem

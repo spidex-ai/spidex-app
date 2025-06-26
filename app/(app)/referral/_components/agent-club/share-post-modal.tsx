@@ -34,7 +34,7 @@ Claim yours 👉 ${process.env.NEXT_PUBLIC_SPIDEX_APP_URL}/chat?ref=${refCode}
 
     params.set('text', text);
 
-    params.set('hashtags', 'DeFAI,Cardano,DeFi,AI,SpidexAI,SILK');
+    params.set('hashtags', 'SpidexAI,DeFAI,Cardano,ReferralRace');
     const url = `${baseUrl}?${params.toString()}`;
     window.open(url, '_blank');
 
