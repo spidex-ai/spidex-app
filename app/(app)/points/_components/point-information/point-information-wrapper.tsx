@@ -213,7 +213,7 @@ const PointInformationWrapper = ({ pointInfoHook }: Props) => {
                       />
                     )}
                   </TooltipTrigger>
-                  <TooltipContent>Level 1: 1000 SILK Points</TooltipContent>
+                  <TooltipContent>OG Scout: 1,000 SILK Points</TooltipContent>
                 </Tooltip>
               </TooltipProvider>
             </div>
@@ -237,7 +237,7 @@ const PointInformationWrapper = ({ pointInfoHook }: Props) => {
                       />
                     )}
                   </TooltipTrigger>
-                  <TooltipContent>Level 2: 5000 SILK Points</TooltipContent>
+                  <TooltipContent>OG Operative: 5,000 SILK Points</TooltipContent>
                 </Tooltip>
               </TooltipProvider>
             </div>
@@ -261,7 +261,7 @@ const PointInformationWrapper = ({ pointInfoHook }: Props) => {
                       />
                     )}
                   </TooltipTrigger>
-                  <TooltipContent>Level 3: 10000 SILK Points</TooltipContent>
+                  <TooltipContent>OG Elite: 10,000 SILK Points</TooltipContent>
                 </Tooltip>
               </TooltipProvider>
             </div>
