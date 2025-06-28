@@ -1,9 +1,9 @@
 'use client';
 
-import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
 import { CardTab } from '@/components/ui';
 import { useIsMobile } from '@/hooks';
-import { useState, cloneElement, isValidElement, useEffect } from 'react';
+import { cloneElement, isValidElement, useState } from 'react';
+import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
 
 interface ResizableLayoutProps {
   chartComponent: React.ReactNode;

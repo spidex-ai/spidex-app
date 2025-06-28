@@ -3,10 +3,8 @@
 import React from 'react';
 
 import { AlertDialog, AlertDialogContent } from '@/components/ui';
-import { useIsMobile } from '@/hooks/utils/use-mobile';
 
 const ResponsiveDialog: React.FC = () => {
-  const isMobile = useIsMobile();
 
   return (
     <AlertDialog open={false}>
