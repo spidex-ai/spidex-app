@@ -33,7 +33,7 @@ const Address: React.FC<Props> = ({ address, className }) => {
         <TooltipTrigger asChild>
           <p
             className={cn(
-              'text-sm cursor-pointer hover:bg-neutral-200 flex gap-2 items-center dark:hover:bg-neutral-700 rounded-md w-fit px-1',
+              'text-sm cursor-pointer hover:bg-neutral-200 flex gap-2 items-center dark:hover:bg-neutral-700 rounded-md w-full sm:w-fit px-1 flex-wrap sm:flex-nowrap',
               copied ? 'text-green-600' : 'text-muted-foreground',
               className
             )}

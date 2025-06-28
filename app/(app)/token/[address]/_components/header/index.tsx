@@ -78,20 +78,19 @@ const Header: React.FC<Props> = ({
   quote,
   onQuoteChange,
 }) => {
-  console.log('🚀 ~ data:', data);
   if (isLoading) {
     return <Skeleton className="h-6 w-full" />;
   }
 
   return (
     <div className="grid grid-cols-10 gap-4">
-      <div className="col-span-6 flex items-center">
+      <div className="col-span-full sm:col-span-6 flex items-center">
         <div className="flex items-center gap-2 mt-1 w-full">
           {data?.logo && (
             <img
               src={getLogoUrl(data.logo)}
               alt={data?.unit ? data.unit : data?.token_ascii}
-              className="w-6 h-6 rounded-full"
+              className="w-6 h-6 rounded-full hidden sm:block"
             />
           )}
           <div className="flex flex-col">
@@ -104,17 +103,21 @@ const Header: React.FC<Props> = ({
                 }
                 onQuoteChange={onQuoteChange}
               />
-              <Address address={data?.unit ?? ''} />
+              <div className='hidden sm:block'>
+                <Address address={data?.unit ?? ''} />
+              </div>
             </div>
           </div>
-          <SaveToken address={data?.unit ?? ''} />
+          <div className='hidden sm:block'>
+            <SaveToken address={data?.unit ?? ''} />
+          </div>
           <div className="flex-1">
             {isSearch && <SearchBar isTitle={false} />}
           </div>
         </div>
       </div>
       {isSearch && (
-        <div className="col-span-4 relative group">
+        <div className="col-span-full sm:col-span-4 relative group hidden sm:block">
           <Slide {...slideProperties}>
             {slideImages.map((image, index) => (
               <div

@@ -12,9 +12,10 @@ import { getLogoUrl } from '@/app/utils/logo';
 
 interface Props {
   token: TokenChatData;
+  hiddenSuggestions?: boolean;
 }
 
-const EmptyChat: React.FC<Props> = ({ token }) => {
+const EmptyChat: React.FC<Props> = ({ token, hiddenSuggestions }) => {
   return (
     <div
       className={cn(
@@ -40,7 +41,7 @@ const EmptyChat: React.FC<Props> = ({ token }) => {
           </h1>
         </div>
         <ChatInput />
-        <StarterButtons />
+        {!hiddenSuggestions && <StarterButtons />}
       </div>
     </div>
   );

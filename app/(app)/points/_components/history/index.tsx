@@ -46,12 +46,12 @@ const Hisotry = ({ pointHistoryHook }: Props) => {
         })
       : [];
   return (
-    <div className="border border-border-main rounded-lg bg-bg-secondary p-10">
+    <div className="border border-border-main rounded-lg bg-bg-secondary p-4 sm:p-10">
       <div className="">
-        <div className="text-[28px] font-medium text-white">SILK History</div>
+        <div className="text-[18px] sm:text-[28px] font-medium text-white">SILK History</div>
       </div>
-      <div className="flex flex-col mt-6">
-        <div className="grid grid-cols-3 border-b border-border-main py-6 text-text-gray text-base">
+      <div className="flex flex-col mt-4 sm:mt-6">
+        <div className="grid grid-cols-3 border-b border-border-main py-6 text-text-gray text-xs sm:text-base">
           <div className="col-span-1 flex items-center gap-2">Earned</div>
           <div className="col-span-1 flex items-center justify-center gap-2">
             Task completed
@@ -69,7 +69,7 @@ const Hisotry = ({ pointHistoryHook }: Props) => {
                 results.map(result => (
                   <div
                     key={result.task}
-                    className={`grid grid-cols-3 text-sm ${
+                    className={`grid grid-cols-3 text-xs sm:text-sm ${
                       result.isBorderBottom
                         ? 'border-b border-border-main py-6'
                         : 'pt-6'
@@ -101,7 +101,7 @@ const Hisotry = ({ pointHistoryHook }: Props) => {
           )}
         </div>
       </div>
-      <div className="mt-6">
+      <div className="mt-4 sm:mt-6">
         <Pagination
           total={totalPages}
           current={currentPage}

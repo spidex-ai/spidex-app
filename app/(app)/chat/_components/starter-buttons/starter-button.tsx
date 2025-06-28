@@ -37,7 +37,7 @@ const StarterButton: React.FC<Props> = ({
         </div>
         <div className="col-span-5 text-left">
           <div className="text-sm text-white">{title}</div>
-          <div className="text-xs text-neutral-400">{description}</div>
+          <div className="text-xs text-neutral-400 hidden sm:block">{description}</div>
         </div>
       </div>
     </div>

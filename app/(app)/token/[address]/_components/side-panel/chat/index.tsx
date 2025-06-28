@@ -13,9 +13,10 @@ import { TokenChatData } from '@/types';
 
 interface Props {
   token: TokenChatData;
+  hiddenSuggestions?: boolean;
 }
 
-const Chat: React.FC<Props> = ({ token }) => {
+const Chat: React.FC<Props> = ({ token, hiddenSuggestions }) => {
   const { messages } = useChat();
 
   return (
@@ -28,7 +29,7 @@ const Chat: React.FC<Props> = ({ token }) => {
               <ChatInput />
             </>
           ) : (
-            <EmptyChat token={token} />
+            <EmptyChat token={token} hiddenSuggestions={hiddenSuggestions}  />
           )}
         </div>
       </div>

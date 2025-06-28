@@ -19,7 +19,7 @@ const ReferralPage: React.FC = () => {
               height={5}
               className="w-6 h-6"
             />
-            <TextGradient className="text-2xl font-medium leading-none">
+            <TextGradient className="text-base sm:text-2xl font-medium leading-none">
               Referral Program
             </TextGradient>
           </div>

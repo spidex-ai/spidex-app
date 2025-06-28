@@ -72,10 +72,10 @@ const SearchBar: React.FC<Props> = ({ isTitle = true }) => {
       <div className="relative w-full">
         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground z-10 pointer-events-none" />
         <Input
-          placeholder="Search tokens..."
+          placeholder="Search by ticket, token, pair"
           value={inputValue}
           onChange={e => setInputValue(e.target.value)}
-          className="pl-9 w-full cursor-text bg-neutral-200 dark:bg-neutral-800"
+          className="pl-9 w-full cursor-text rounded-full placeholder:text-sm placeholder:text-text-gray placeholder:opacity-50"
           ref={inputRef}
           onFocus={() => setIsFocused(true)}
           onBlur={e => {

@@ -81,7 +81,7 @@ const FollowUpSuggestions: React.FC = () => {
   if (isLoading) return null;
 
   return (
-    <div className="grid grid-cols-3 gap-2 mt-4">
+    <div className="grid sm:grid-cols-3 grid-rows-3 gap-2 mt-4">
       {isGenerating
         ? Array.from({ length: 3 }).map((_, index) => (
             <Skeleton key={index} className="w-full h-[22px]" />

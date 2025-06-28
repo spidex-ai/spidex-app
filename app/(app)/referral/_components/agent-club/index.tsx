@@ -91,8 +91,8 @@ const AgentClub: React.FC = () => {
   };
 
   return (
-    <div className="p-8 border border-border-main rounded-lg bg-bg-secondary">
-      <div className="flex gap-8">
+    <div className="p-4 sm:p-8 border border-border-main rounded-lg bg-bg-secondary">
+      <div className="flex gap-8 flex-col sm:flex-row">
         <div className="relative group cursor-pointer">
           <input
             type="file"
@@ -102,17 +102,12 @@ const AgentClub: React.FC = () => {
             id="avatar-input"
           />
           <label htmlFor="avatar-input" className="cursor-pointer">
-            <div className="relative w-[120px] h-[120px] group">
+            <div className="relative sm:w-[120px] sm:h-[120px] w-full group flex items-center gap-4">
               <img
                 src={avatar}
                 alt="agent-club"
-                className="rounded-full w-[120px] h-[120px] object-cover"
-                style={{
-                  width: '120px',
-                  height: '120px',
-                  minWidth: '120px',
-                  minHeight: '120px',
-                }}
+                className="rounded-full sm:w-[120px] sm:h-[120px] w-[60px] h-[60px] object-cover"
+                
               />
               <div
                 className={`
@@ -122,12 +117,13 @@ const AgentClub: React.FC = () => {
               >
                 {uploading ? 'Uploading...' : 'Change avatar'}
               </div>
+              <div className="sm:hidden block text-base">Spidex Agent Club</div>
             </div>
           </label>
         </div>
         <div className="w-full">
-          <div className="text-lg">Spidex Agent Club</div>
-          <div className="grid grid-cols-2 gap-4 my-4">
+          <div className="hidden sm:block text-lg">Spidex Agent Club</div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-4">
             <div className="flex gap-4 p-4 bg-bg-main">
               <div>
                 <Image
@@ -166,9 +162,8 @@ const AgentClub: React.FC = () => {
                   <Tooltip delayDuration={0}>
                     <TooltipTrigger asChild>
                       <Image
-                        src={`/icons/${
-                          copied ? 'tick-blue.svg' : 'copy-gray.svg'
-                        }`}
+                        src={`/icons/${copied ? 'tick-blue.svg' : 'copy-gray.svg'
+                          }`}
                         alt="copy"
                         width={24}
                         height={24}

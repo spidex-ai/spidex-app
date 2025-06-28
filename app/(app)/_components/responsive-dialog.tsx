@@ -9,7 +9,7 @@ const ResponsiveDialog: React.FC = () => {
   const isMobile = useIsMobile();
 
   return (
-    <AlertDialog open={isMobile}>
+    <AlertDialog open={false}>
       <AlertDialogContent className="flex flex-col items-center justify-center text-center z-[100]">
         <h1 className="text-xl font-bold">Mobile version is being completed</h1>
         <p className="text-sm">

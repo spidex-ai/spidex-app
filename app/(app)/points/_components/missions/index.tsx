@@ -358,9 +358,9 @@ const Missions = ({ onMissionComplete }: Props) => {
   };
 
   return (
-    <div className="border border-border-main rounded-lg bg-bg-secondary p-10">
+    <div className="border border-border-main rounded-lg bg-bg-secondary p-4 sm:p-10">
       <div className="">
-        <div className="text-[28px] font-medium text-white">Missions</div>
+        <div className="text-[18px] sm:text-[28px] font-medium text-white">Missions</div>
       </div>
       <div className="flex flex-col mt-6 gap-3">
         {loading ? (
@@ -399,13 +399,13 @@ const Missions = ({ onMissionComplete }: Props) => {
                             <div className="flex items-center">
                               {result.icon}
                             </div>
-                            <div className="text-white text-lg">
+                            <div className="text-white text-xs sm:text-lg min-w-[20px]">
                               {result.name}
                             </div>{' '}
                           </div>
                         </div>
                       </div>
-                      <div className="col-span-1 text-white text-lg flex justify-center gap-1 items-center">
+                      <div className="col-span-1 text-white text-xs sm:text-lg flex justify-center gap-1 items-center">
                         <div>+{result.point} </div>
                         <div>
                           <Image
@@ -422,11 +422,11 @@ const Missions = ({ onMissionComplete }: Props) => {
                         )}
                       </div>
                       <div className="col-span-1 text-white flex items-center justify-end">
-                        <div className="w-[150px]">
+                        <div className="w-[85px] sm:w-[150px]">
                           {result.step === STEP.COMPLETED ? (
                             <div>
                               <GradientSecondaryBtn
-                                className="w-full px-4 py-2 text-sm"
+                                className="w-full px-2 py-2 sm:px-4 sm:py-2 text-xs sm:text-sm "
                                 disabled={true}
                               >
                                 Completed
@@ -437,7 +437,7 @@ const Missions = ({ onMissionComplete }: Props) => {
                               <ButtonBlack
                                 isLoading={false}
                                 disabled={true}
-                                className="w-full px-4 py-2 text-sm"
+                                className="w-full px-2 py-2 sm:px-4 sm:py-2 text-xs sm:text-sm"
                               >
                                 Verifying
                                 {countdowns[result.id]
@@ -454,7 +454,7 @@ const Missions = ({ onMissionComplete }: Props) => {
                                     loadingMissionId !== result.id) ||
                                   result.status === 3
                                 }
-                                className="w-full px-4 py-2 text-sm"
+                                className="w-full px-2 py-2 sm:px-4 sm:py-2 text-xs sm:text-sm"
                                 onClick={(e: any) => {
                                   e.stopPropagation();
                                   console.log(
@@ -477,7 +477,7 @@ const Missions = ({ onMissionComplete }: Props) => {
                                     loadingMissionId !== result.id) ||
                                   result.status === 2
                                 }
-                                className="w-full px-4 py-2 text-sm"
+                                className="w-full px-2 py-2 sm:px-4 sm:py-2 text-xs sm:text-sm"
                               >
                                 Start
                               </ButtonBlack>
@@ -494,7 +494,7 @@ const Missions = ({ onMissionComplete }: Props) => {
                           : 'max-h-0 opacity-0'
                       }`}
                     >
-                      <div className="px-5 py-2 w-full text-text-gray">
+                      <div className="px-5 py-2 w-full text-text-gray text-xs sm:text-sm">
                         {result.description}
                       </div>
                     </div>

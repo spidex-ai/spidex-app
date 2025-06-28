@@ -68,7 +68,7 @@ const SidePanel: React.FC<Props> = ({
       <ChatProvider token={tokenChatData}>
         <div className="flex-1 h-0 overflow-y-auto w-full no-scrollbar">
           <TabsContent value="chat" className="h-full m-0 p-2">
-            <Chat token={tokenChatData} />
+            <Chat token={tokenChatData} hiddenSuggestions />
           </TabsContent>
           <TabsContent value="trade" className="h-full m-0 p-2">
             <Swap

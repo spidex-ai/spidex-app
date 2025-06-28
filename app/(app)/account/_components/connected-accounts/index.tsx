@@ -272,11 +272,11 @@ const ConnectedAccounts: React.FC<Props> = ({ user }) => {
   }, [params, signInWithTelegram]);
 
   return (
-    <div className="flex flex-col gap-4 mt-8">
-      <TextGradient className="text-2xl font-bold">
+    <div className="flex flex-col gap-4 mt-4 sm:mt-8">
+      <TextGradient className=" text-base sm:text-2xl font-bold">
         Connected Accounts
       </TextGradient>
-      <div className="border boder-1 border-gray-800 p-8 mt-4 rounded-2xl">
+      <div className="border boder-1 border-gray-800 p-4 sm:p-8 mt-4 rounded-2xl">
         <div className="flex flex-col gap-4">
           <ConnectedAccountWrapper
             icon={

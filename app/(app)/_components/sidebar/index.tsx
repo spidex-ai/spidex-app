@@ -101,7 +101,7 @@ const Sidebar: React.FC<Props> = ({ children }) => {
         </SidebarFooter>
       </SidebarUI>
       <SidebarInset>
-        <div className="p-2 pt-0 md:p-4 flex-1 h-0 overflow-y-hidden relative flex flex-col">
+        <div className="p-2 pb-20 sm:pb-2 pt-0 md:p-4 flex-1 h-0 overflow-y-hidden relative flex flex-col">
           <ClosedSidebarTrigger />
           <MobileNavbar />
           {children}

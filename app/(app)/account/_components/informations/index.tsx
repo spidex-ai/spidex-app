@@ -85,7 +85,7 @@ const Information: React.FC<Props> = ({ user }) => {
               className="w-6 h-6"
             />
           </div>
-          <TextGradient className="text-2xl font-medium leading-none">
+          <TextGradient className="text-base sm:text-2xl font-medium leading-none">
             Account
           </TextGradient>
         </div>
@@ -126,11 +126,11 @@ const Information: React.FC<Props> = ({ user }) => {
               )}
             </div>
             <div>
-              <div>
+              <div className="text-sm sm:text-md font-bold">
                 {user?.walletAddress ? (
                   <Address
                     address={user?.walletAddress}
-                    className="text-md font-bold"
+                    className=" text-sm sm:text-md font-bold"
                   />
                 ) : (
                   'No wallet connected'
@@ -147,7 +147,7 @@ const Information: React.FC<Props> = ({ user }) => {
 
           <div>
             <GradientBorderButton
-              className="px-8 py-2"
+              className="px-8 py-2 text-xs sm:text-sm"
               onClick={handleImageUpload}
               disabled={uploading}
             >
@@ -169,7 +169,7 @@ const Information: React.FC<Props> = ({ user }) => {
           {wallets?.length > 0 ? (
             <>
               {wallets.map(wallet => (
-                <div className="text-xs mt-2" key={wallet}>
+                <div className="text-xs mt-2 break-all sm:break-normal" key={wallet}>
                   {wallet}
                 </div>
               ))}

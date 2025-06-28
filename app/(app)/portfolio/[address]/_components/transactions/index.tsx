@@ -52,13 +52,13 @@ const Transactions: React.FC = () => {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Action</TableHead>
-                <TableHead>Token A</TableHead>
-                <TableHead>Amount A</TableHead>
-                <TableHead>Token B</TableHead>
-                <TableHead>Amount B</TableHead>
-                <TableHead>Time</TableHead>
-                <TableHead className="text-right">TXN</TableHead>
+                <TableHead className='min-w-[200px]'>Action</TableHead>
+                <TableHead className='min-w-[200px]'>Token A</TableHead>
+                <TableHead className='min-w-[200px]'>Amount A</TableHead>
+                <TableHead className='min-w-[200px]'>Token B</TableHead>
+                <TableHead className='min-w-[200px]'>Amount B</TableHead>
+                <TableHead className='min-w-[200px]'>Time</TableHead>
+                <TableHead className="  min-w-[200px] text-right">TXN</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody className="max-h-96 overflow-y-hidden">

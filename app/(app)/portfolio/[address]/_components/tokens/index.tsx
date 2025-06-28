@@ -59,10 +59,10 @@ const Tokens: React.FC = () => {
               <TableHeader>
                 <TableRow>
                   <TableHead className="w-[200px]">Asset</TableHead>
-                  <TableHead className="text-center">Balance</TableHead>
-                  <TableHead className="text-center">Price</TableHead>
-                  <TableHead className="text-center">Value</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
+                  <TableHead className="min-w-[200px] text-center">Balance</TableHead>
+                  <TableHead className="min-w-[200px] text-center">Price</TableHead>
+                  <TableHead className="min-w-[200px] text-center">Value</TableHead>
+                  <TableHead className="min-w-[200px] text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody className="max-h-96 overflow-y-auto">

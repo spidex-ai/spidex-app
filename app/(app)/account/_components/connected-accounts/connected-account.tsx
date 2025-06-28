@@ -27,7 +27,7 @@ const ConnectedAccount: React.FC<ConnectedAccountProps> = ({
         <div className="flex items-center gap-2">
           <div className="">{Icon}</div>
           <div className="flex flex-col">
-            <p className="text-sm font-bold">{name}</p>
+            <p className="text-xs sm:text-sm font-bold">{name}</p>
             <p className="text-xs text-muted-foreground">
               {value ?? 'Not Connected'}
             </p>
@@ -37,7 +37,7 @@ const ConnectedAccount: React.FC<ConnectedAccountProps> = ({
           <GradientBorderButton
             onClick={onConnect}
             disabled={isConnected}
-            className="px-8 py-2"
+            className="px-4 py-2 sm:px-8 sm:py-2 text-xs sm:text-sm"
           >
             Connect
           </GradientBorderButton>

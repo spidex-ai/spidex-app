@@ -27,8 +27,8 @@ const RefHistory = () => {
 
   return (
     <div className="border border-border-main rounded-lg bg-bg-secondary">
-      <div className="p-8">
-        <div className="text-2xl font-bold text-white">Referral History</div>
+      <div className="p-4 sm:p-8">
+        <div className="text-base sm:text-2xl font-bold text-white">Referral History</div>
       </div>
 
       <div className="mb-4">

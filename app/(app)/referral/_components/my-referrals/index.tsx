@@ -25,13 +25,13 @@ const MyReferrals: React.FC = () => {
 
   return (
     <div className="border border-border-main rounded-lg bg-bg-secondary">
-      <div className="p-8">
-        <div className="text-2xl font-bold text-white">My Referrals</div>
+      <div className="p-4 sm:p-8">
+        <div className="text-base sm:text-2xl font-bold text-white">My Referrals</div>
       </div>
 
       <div className="mb-4">
         <div className="grid grid-cols-3 mb-4">
-          <div className="flex items-center justify-center gap-2">User</div>
+          <div className="flex items-center justify-center gap-2 ">User</div>
           <div className="flex items-center justify-center gap-2">
             SILK Earned
           </div>

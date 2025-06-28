@@ -96,7 +96,8 @@ const AgentButtons = () => {
       <div className="uppercase text-sm font-bold text-neutral-500 text-center">
         supported agents
       </div>
-      <div className="flex gap-6 mt-5 mx-auto justify-center">
+      {/* Desktop: Single line layout */}
+      <div className="hidden sm:flex gap-6 mt-5 mx-auto justify-center">
         {Agents.map(agent => (
           <div key={agent.key} className="flex items-center gap-6">
             <div
@@ -111,6 +112,45 @@ const AgentButtons = () => {
             )}
           </div>
         ))}
+      </div>
+
+      {/* Mobile: Two lines layout - 3 items first line, 2 items second line */}
+      <div className="sm:hidden mt-5 mx-auto">
+        {/* First line: 3 items */}
+        <div className="flex gap-4 justify-center mb-4">
+          {Agents.slice(0, 3).map((agent, index) => (
+            <div key={agent.key} className="flex items-center gap-4">
+              <div
+                className="flex items-center gap-2 cursor-pointer"
+                onClick={() => sendMessage(agent.prompt)}
+              >
+                <div>{agent.icon}</div>
+                <div className="text-xs">{agent.name}</div>
+              </div>
+              {index < 2 && (
+                <div className="border-r border-border-main h-4"></div>
+              )}
+            </div>
+          ))}
+        </div>
+
+        {/* Second line: 2 items */}
+        <div className="flex gap-4 justify-center">
+          {Agents.slice(3, 5).map((agent, index) => (
+            <div key={agent.key} className="flex items-center gap-4">
+              <div
+                className="flex items-center gap-2 cursor-pointer"
+                onClick={() => sendMessage(agent.prompt)}
+              >
+                <div>{agent.icon}</div>
+                <div className="text-xs">{agent.name}</div>
+              </div>
+              {index < 1 && (
+                <div className="border-r border-border-main h-4"></div>
+              )}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

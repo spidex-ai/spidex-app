@@ -38,7 +38,7 @@ const TokenDashboardTabs: React.FC<Props> = ({
     scrollToTab(activeTab);
   }, [activeTab]);
   return (
-    <div className="p-2 h-full flex flex-col">
+    <div className="p-2 h-full flex flex-col w-full min-w-[720px]">
       <Tabs
         className="h-full flex flex-col items-start w-full max-w-full"
         defaultValue="market-stats"
