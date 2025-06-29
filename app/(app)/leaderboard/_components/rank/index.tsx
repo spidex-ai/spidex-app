@@ -16,7 +16,7 @@ import { truncateAddress } from '@/lib/wallet';
 import React from 'react';
 
 const Rank: React.FC = () => {
-  const { data, loading, error, currentPage, setCurrentPage, totalPages } =
+  const { data, loading, currentPage, setCurrentPage, totalPages } =
     useLeaderboard();
   console.log('🚀 ~ data:', data);
   return (
