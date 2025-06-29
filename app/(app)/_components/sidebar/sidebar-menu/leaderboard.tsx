@@ -8,8 +8,9 @@ import Image from 'next/image';
 const Leaderboard: React.FC = () => {
   const pathname = usePathname();
   const isActive = pathname?.includes('/leaderboard');
+  const href = process.env.NEXT_PUBLIC_ENVIRONMENT === 'production' ? '#' : '/leaderboard';
   return (
-    <Link href="#">
+    <Link href={href}>
       <SidebarMenuItem>
         <SidebarMenuButton
           isActive={pathname?.includes('/leaderboard') ?? false}

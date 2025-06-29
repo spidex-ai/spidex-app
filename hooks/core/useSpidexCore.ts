@@ -994,6 +994,19 @@ export const useSpidexCore = () => {
     }
   }, [fetchWithAuth, auth]);
 
+  const getRankLeaderboard = useCallback(async (page = 1, perPage = 10) => {
+    try {
+      const data = await fetchWithAuth(
+        `/user-point/leaderboard?page=${page}&limit=${perPage}&order=desc`
+      );
+      return data;
+    } catch (error) {
+      throw error;
+    } finally {
+
+    }
+  },[])
+
   return {
     auth,
     loading,
@@ -1036,5 +1049,6 @@ export const useSpidexCore = () => {
     getTokenOHLCV,
     getTokenStats,
     getAchievements,
+    getRankLeaderboard
   };
 };
