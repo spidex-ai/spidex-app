@@ -1007,6 +1007,16 @@ export const useSpidexCore = () => {
     }
   },[])
 
+  const getUserRankLeaderboard = useCallback(async () => {
+    try {
+      const data = await fetchWithAuth(`/user-point/me/rank`);
+      return data.data;
+    } catch (error) {
+      throw error;
+    }
+  }, [fetchWithAuth, auth]); 
+
+
   return {
     auth,
     loading,
@@ -1049,6 +1059,7 @@ export const useSpidexCore = () => {
     getTokenOHLCV,
     getTokenStats,
     getAchievements,
-    getRankLeaderboard
+    getRankLeaderboard,
+    getUserRankLeaderboard
   };
 };

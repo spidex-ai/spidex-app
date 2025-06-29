@@ -16,8 +16,9 @@ import { truncateAddress } from '@/lib/wallet';
 import React from 'react';
 
 const Rank: React.FC = () => {
-  const { data, loading, currentPage, setCurrentPage, totalPages } =
+  const { data, loading, currentPage, setCurrentPage, totalPages, userRank } =
     useLeaderboard();
+  console.log('🚀 ~ userRank:', userRank);
   console.log('🚀 ~ data:', data);
   return (
     <div>
@@ -27,7 +28,7 @@ const Rank: React.FC = () => {
         </div>
       ) : (
         <Table>
-          <TableHeader className="border border-neutral-200 dark:border-[#5D717D] text-white">
+          <TableHeader className="border border-neutral-200 dark:border-border-main text-white">
             <TableHead className="text-center text-white">Rank</TableHead>
             <TableHead className="text-center text-white">Address</TableHead>
             <TableHead className="text-center text-white">
@@ -38,7 +39,61 @@ const Rank: React.FC = () => {
             </TableHead>
           </TableHeader>
 
-          <TableBody className="border border-neutral-200 dark:border-[#5D717D]">
+          <TableBody className="border border-neutral-200 dark:border-border-main">
+            {userRank && (
+              <TableRow className="bg-bg-secondary border-b border-neutral-100 dark:border-neutral-700">
+                <TableCell className="text-center border-r border-neutral-200 dark:border-border-main ">
+                  <div className="flex items-center justify-center">
+                    <div className="w-7 h-7 rounded-full flex items-center justify-center text-sm font-medium relative bg-[#1A1A1A]">
+                      <div
+                        className="absolute inset-0 rounded-full"
+                        style={{
+                          background:
+                            'linear-gradient(90deg, #BBF985 0%, #009EFF 100%)',
+                          margin: '-0.5px',
+                          zIndex: 0,
+                        }}
+                      />
+                      <div className="absolute inset-[0.5px] rounded-full bg-[#1A1A1A] z-[1]" />
+                      <span
+                        className="relative z-[2] font-semibold"
+                        style={{
+                          background:
+                            'linear-gradient(203.26deg, #009EFF 15.03%, #BBF985 94.22%)',
+                          WebkitBackgroundClip: 'text',
+                          WebkitTextFillColor: 'transparent',
+                          backgroundClip: 'text',
+                        }}
+                      >
+                        {userRank?.rank}
+                      </span>
+                    </div>
+                  </div>
+                </TableCell>
+                <TableCell className="border-r border-neutral-200 dark:border-border-main">
+                  <div className="flex items-center justify-center">
+                    <div className="grid grid-cols-[24px_1fr] items-center gap-2">
+                      <img
+                        src={userRank?.user.avatar ?? '/icons/agent-club.svg'}
+                        alt={userRank?.user.username}
+                        className="w-6 h-6 rounded-full justify-self-center"
+                      />
+                      <div>
+                        {userRank?.user.address
+                          ? truncateAddress(userRank?.user.address)
+                          : userRank?.user.username}
+                      </div>
+                    </div>
+                  </div>
+                </TableCell>
+                <TableCell className="text-center border-r border-neutral-200 dark:border-border-main">
+                  {formatNumber(Number(userRank?.totalPoint))}
+                </TableCell>
+                <TableCell className="text-center ">
+                  {formatNumber(Number(userRank?.totalReferralCount))}
+                </TableCell>
+              </TableRow>
+            )}
             {data.map(item => (
               <TableRow
                 key={item.rank}
@@ -65,7 +120,7 @@ const Rank: React.FC = () => {
                 }
                 className="border-b border-neutral-200 dark:border-[#5D717D]"
               >
-                <TableCell className="flex items-center justify-center border-r border-neutral-200 dark:border-[#5D717D]">
+                <TableCell className="flex items-center justify-center border-r border-neutral-200 dark:border-border-main">
                   {item?.rank === 1 ? (
                     <div className="flex items-center gap-2 justify-center">
                       <img
@@ -96,7 +151,7 @@ const Rank: React.FC = () => {
                     </div>
                   )}
                 </TableCell>
-                <TableCell className="border-r border-neutral-200 dark:border-[#5D717D]">
+                <TableCell className="border-r border-neutral-200 dark:border-border-main">
                   <div className="flex items-center justify-center">
                     <div className="grid grid-cols-[24px_1fr] items-center gap-2">
                       <img
@@ -112,7 +167,7 @@ const Rank: React.FC = () => {
                     </div>
                   </div>
                 </TableCell>
-                <TableCell className="text-center border-r border-neutral-200 dark:border-[#5D717D]">
+                <TableCell className="text-center border-r border-neutral-200 dark:border-border-main">
                   {formatNumber(Number(item.totalPoint))}
                 </TableCell>
                 <TableCell className="text-center ">

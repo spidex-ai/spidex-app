@@ -5,7 +5,7 @@ import { useSpidexCore } from '../core/useSpidexCore';
 import { LeaderboardItem } from './type';
 
 export const useLeaderboard = () => {
-  const { getRankLeaderboard } = useSpidexCore();
+  const { getRankLeaderboard, getUserRankLeaderboard } = useSpidexCore();
 
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
@@ -13,10 +13,15 @@ export const useLeaderboard = () => {
   const [data, setData] = useState<LeaderboardItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [userRank, setUserRank] = useState<LeaderboardItem>();
 
   useEffect(() => {
     fetchLeaderboard();
   }, [currentPage]);
+
+  useEffect(() => {
+    fetchUserRankLeaderboard();
+  }, []);
 
   const fetchLeaderboard = async () => {
     try {
@@ -31,6 +36,18 @@ export const useLeaderboard = () => {
     }
   };
 
+  const fetchUserRankLeaderboard = async () => {
+    try {
+      setLoading(true);
+      const data = await getUserRankLeaderboard();
+      console.log('🚀 ~ fetchUserRankLeaderboard ~ data:', data);
+      setUserRank(data);
+    } catch (error) {
+      setError(error as string);
+    } finally {
+      setLoading(false);
+    }
+  };
   return {
     data,
     loading,
@@ -38,5 +55,6 @@ export const useLeaderboard = () => {
     currentPage,
     setCurrentPage,
     totalPages,
+    userRank,
   };
 };
