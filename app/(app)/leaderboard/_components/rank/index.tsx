@@ -44,7 +44,7 @@ const Rank: React.FC = () => {
 
           <TableBody className="border border-neutral-200 dark:border-border-main">
             {userRank && (
-              <TableRow className="bg-bg-secondary border-b border-neutral-100 dark:border-neutral-700">
+              <TableRow className="bg-[#14271d] border-b border-neutral-100 dark:border-neutral-700">
                 <TableCell className="text-left border-r border-neutral-200 dark:border-border-main ">
                   <div className="flex items-center justify-center">
                     <div className="w-7 h-7 rounded-full flex items-center justify-center text-sm font-medium relative bg-[#1A1A1A]">
