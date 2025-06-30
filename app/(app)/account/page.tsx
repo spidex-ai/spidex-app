@@ -7,9 +7,9 @@ import ReportBug from '../_components/report-bug';
 const AccountPage = () => {
   return (
     <ProtectedClient>
-      <div className='flex flex-col gap-8 mx-auto w-full h-full max-h-full px-1 relative'>
-      <Account />
-      <ReportBug />
+      <div className="flex flex-col gap-8 mx-auto w-full h-full max-h-full px-1 relative">
+        <Account />
+        <ReportBug />
       </div>
     </ProtectedClient>
   );

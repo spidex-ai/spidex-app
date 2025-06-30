@@ -32,6 +32,7 @@ const Rank: React.FC = () => {
         <Table>
           <TableHeader className="border border-neutral-200 dark:border-border-main text-white">
             <TableHead className="text-center text-white">Rank</TableHead>
+            <TableHead className="text-center text-white">Username</TableHead>
             <TableHead className="text-center text-white">Address</TableHead>
             <TableHead className="text-center text-white">
               Total Silk Points
@@ -72,6 +73,7 @@ const Rank: React.FC = () => {
                     </div>
                   </div>
                 </TableCell>
+
                 <TableCell className="border-r border-neutral-200 dark:border-border-main">
                   <div className="">
                     <div className="grid grid-cols-[24px_1fr] items-center gap-2">
@@ -80,13 +82,14 @@ const Rank: React.FC = () => {
                         alt={userRank?.user.username}
                         className="w-6 h-6 rounded-full justify-self-center"
                       />
-                      <div>
-                        {userRank?.user.address
-                          ? truncateAddress(userRank?.user.address, isMobile ? 4 : 10)
-                          : userRank?.user.username}
-                      </div>
+                      <div>{userRank?.user.username}</div>
                     </div>
                   </div>
+                </TableCell>
+                <TableCell className="text-left border-r border-neutral-200 dark:border-border-main">
+                  {userRank?.user.address
+                    ? truncateAddress(userRank?.user.address, isMobile ? 4 : 10)
+                    : null}
                 </TableCell>
                 <TableCell className="text-center border-r border-neutral-200 dark:border-border-main">
                   {formatNumber(Number(userRank?.totalPoint))}
@@ -153,6 +156,7 @@ const Rank: React.FC = () => {
                     </div>
                   )}
                 </TableCell>
+
                 <TableCell className="border-r border-neutral-200 dark:border-border-main">
                   <div className="flex items-center justify-start">
                     <div className="grid grid-cols-[24px_1fr] items-center gap-2">
@@ -161,13 +165,14 @@ const Rank: React.FC = () => {
                         alt={item.user.username}
                         className="w-6 h-6 rounded-full justify-self-center"
                       />
-                      <div>
-                        {item.user.address
-                          ? truncateAddress(item.user.address, isMobile ? 4 : 10)
-                          : item.user.username}
-                      </div>
+                      <div>{item.user.username}</div>
                     </div>
                   </div>
+                </TableCell>
+                <TableCell className="text-left border-r border-neutral-200 dark:border-border-main">
+                  {item.user.address
+                    ? truncateAddress(item.user.address, isMobile ? 4 : 10)
+                    : null}
                 </TableCell>
                 <TableCell className="text-center border-r border-neutral-200 dark:border-border-main">
                   {formatNumber(Number(item.totalPoint))}
