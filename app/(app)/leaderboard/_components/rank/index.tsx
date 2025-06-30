@@ -10,6 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { useIsMobile } from '@/hooks';
 import { useLeaderboard } from '@/hooks/leaderboard/use-leaderboard';
 import { formatNumber } from '@/lib/utils';
 import { truncateAddress } from '@/lib/wallet';
@@ -20,6 +21,7 @@ const Rank: React.FC = () => {
     useLeaderboard();
   console.log('🚀 ~ userRank:', userRank);
   console.log('🚀 ~ data:', data);
+  const isMobile = useIsMobile();
   return (
     <div>
       {loading ? (
@@ -42,7 +44,7 @@ const Rank: React.FC = () => {
           <TableBody className="border border-neutral-200 dark:border-border-main">
             {userRank && (
               <TableRow className="bg-bg-secondary border-b border-neutral-100 dark:border-neutral-700">
-                <TableCell className="text-center border-r border-neutral-200 dark:border-border-main ">
+                <TableCell className="text-left border-r border-neutral-200 dark:border-border-main ">
                   <div className="flex items-center justify-center">
                     <div className="w-7 h-7 rounded-full flex items-center justify-center text-sm font-medium relative bg-[#1A1A1A]">
                       <div
@@ -71,7 +73,7 @@ const Rank: React.FC = () => {
                   </div>
                 </TableCell>
                 <TableCell className="border-r border-neutral-200 dark:border-border-main">
-                  <div className="flex items-center justify-center">
+                  <div className="">
                     <div className="grid grid-cols-[24px_1fr] items-center gap-2">
                       <img
                         src={userRank?.user.avatar ?? '/icons/agent-club.svg'}
@@ -80,7 +82,7 @@ const Rank: React.FC = () => {
                       />
                       <div>
                         {userRank?.user.address
-                          ? truncateAddress(userRank?.user.address)
+                          ? truncateAddress(userRank?.user.address, isMobile ? 4 : 10)
                           : userRank?.user.username}
                       </div>
                     </div>
@@ -152,7 +154,7 @@ const Rank: React.FC = () => {
                   )}
                 </TableCell>
                 <TableCell className="border-r border-neutral-200 dark:border-border-main">
-                  <div className="flex items-center justify-center">
+                  <div className="flex items-center justify-start">
                     <div className="grid grid-cols-[24px_1fr] items-center gap-2">
                       <img
                         src={item.user.avatar ?? '/icons/agent-club.svg'}
@@ -161,7 +163,7 @@ const Rank: React.FC = () => {
                       />
                       <div>
                         {item.user.address
-                          ? truncateAddress(item.user.address)
+                          ? truncateAddress(item.user.address, isMobile ? 4 : 10)
                           : item.user.username}
                       </div>
                     </div>

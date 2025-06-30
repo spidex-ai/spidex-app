@@ -21,7 +21,7 @@ export const formatNumber = (num: number, decimalPlaces?: number): string => {
   if (num === undefined) return '0'; 
   if (num === null) return '0';
   if (num === 0) return '0';
-  if (num < 0.00001) return `~0.00001`;
+  if (num < 0.0001) return `~0.0001`;
   const options: Intl.NumberFormatOptions = {
     maximumFractionDigits: decimalPlaces ?? 2,
   };

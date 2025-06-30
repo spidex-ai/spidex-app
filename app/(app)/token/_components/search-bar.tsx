@@ -27,6 +27,7 @@ const SearchBar: React.FC<Props> = ({ isTitle = true }) => {
   const [isFocused, setIsFocused] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [results, setResults] = useState<SearchTokenInfo[]>([]);
+  console.log("🚀 ~ results:", results)
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
