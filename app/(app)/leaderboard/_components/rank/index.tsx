@@ -29,8 +29,8 @@ const Rank: React.FC = () => {
           <Skeleton className="h-20 w-full" />
         </div>
       ) : (
-        <Table>
-          <TableHeader className="border border-neutral-200 dark:border-border-main text-white">
+        <Table className="rounded-lg">
+          <TableHeader className="border border-neutral-200 dark:border-border-main text-white [&_tr:first-child]:rounded-t-lg overflow-hidden">
             <TableHead className="text-center text-white">Rank</TableHead>
             <TableHead className="text-center text-white">Username</TableHead>
             <TableHead className="text-center text-white">Address</TableHead>
@@ -42,10 +42,10 @@ const Rank: React.FC = () => {
             </TableHead>
           </TableHeader>
 
-          <TableBody className="border border-neutral-200 dark:border-border-main">
+          <TableBody className="border border-neutral-200 dark:border-border-main [&_tr:last-child]:rounded-b-lg overflow-hidden">
             {userRank && (
               <TableRow className="bg-[#14271d] border-b border-neutral-100 dark:border-neutral-700">
-                <TableCell className="text-left border-r border-neutral-200 dark:border-border-main ">
+                <TableCell className="text-left border-r border-neutral-200 dark:border-border-main p-4">
                   <div className="flex items-center justify-center">
                     <div className="w-7 h-7 rounded-full flex items-center justify-center text-sm font-medium relative bg-[#1A1A1A]">
                       <div
@@ -74,11 +74,11 @@ const Rank: React.FC = () => {
                   </div>
                 </TableCell>
 
-                <TableCell className="border-r border-neutral-200 dark:border-border-main">
+                <TableCell className="border-r border-neutral-200 dark:border-border-main p-4">
                   <div className="">
                     <div className="grid grid-cols-[24px_1fr] items-center gap-2">
                       <img
-                        src={userRank?.user.avatar ?? '/icons/agent-club.svg'}
+                        src={userRank?.user.avatar ?? '/icons/example-ava.svg'}
                         alt={userRank?.user.username}
                         className="w-6 h-6 rounded-full justify-self-center"
                       />
@@ -86,15 +86,15 @@ const Rank: React.FC = () => {
                     </div>
                   </div>
                 </TableCell>
-                <TableCell className="text-left border-r border-neutral-200 dark:border-border-main">
+                <TableCell className="text-left border-r border-neutral-200 dark:border-border-main p-4">
                   {userRank?.user.address
                     ? truncateAddress(userRank?.user.address, isMobile ? 4 : 10)
-                    : null}
+                    : '-'}
                 </TableCell>
-                <TableCell className="text-center border-r border-neutral-200 dark:border-border-main">
+                <TableCell className="text-center border-r border-neutral-200 dark:border-border-main p-4">
                   {formatNumber(Number(userRank?.totalPoint))}
                 </TableCell>
-                <TableCell className="text-center ">
+                <TableCell className="text-center p-4">
                   {formatNumber(Number(userRank?.totalReferralCount))}
                 </TableCell>
               </TableRow>
@@ -125,7 +125,7 @@ const Rank: React.FC = () => {
                 }
                 className="border-b border-neutral-200 dark:border-[#5D717D]"
               >
-                <TableCell className="flex items-center justify-center border-r border-neutral-200 dark:border-border-main">
+                <TableCell className="flex items-center justify-center border-r border-neutral-200 dark:border-border-main p-4">
                   {item?.rank === 1 ? (
                     <div className="flex items-center gap-2 justify-center">
                       <img
@@ -151,17 +151,15 @@ const Rank: React.FC = () => {
                       />
                     </div>
                   ) : (
-                    <div className="bg-white text-black rounded-full w-7 h-7 flex items-center justify-center text-sm font-medium">
-                      {item?.rank}
-                    </div>
+                    <div className=" text-white py-1">{item?.rank}</div>
                   )}
                 </TableCell>
 
-                <TableCell className="border-r border-neutral-200 dark:border-border-main">
+                <TableCell className="border-r border-neutral-200 dark:border-border-main p-4">
                   <div className="flex items-center justify-start">
                     <div className="grid grid-cols-[24px_1fr] items-center gap-2">
                       <img
-                        src={item.user.avatar ?? '/icons/agent-club.svg'}
+                        src={item.user.avatar ?? '/icons/example-ava.svg'}
                         alt={item.user.username}
                         className="w-6 h-6 rounded-full justify-self-center"
                       />
@@ -169,15 +167,15 @@ const Rank: React.FC = () => {
                     </div>
                   </div>
                 </TableCell>
-                <TableCell className="text-left border-r border-neutral-200 dark:border-border-main">
+                <TableCell className="text-left border-r border-neutral-200 dark:border-border-main p-4">
                   {item.user.address
                     ? truncateAddress(item.user.address, isMobile ? 4 : 10)
-                    : null}
+                    : '-'}
                 </TableCell>
-                <TableCell className="text-center border-r border-neutral-200 dark:border-border-main">
+                <TableCell className="text-center border-r border-neutral-200 dark:border-border-main p-4">
                   {formatNumber(Number(item.totalPoint))}
                 </TableCell>
-                <TableCell className="text-center ">
+                <TableCell className="text-center p-4">
                   {formatNumber(Number(item.totalReferralCount))}
                 </TableCell>
               </TableRow>
