@@ -70,7 +70,7 @@ const TokenInput: React.FC<Props> = ({
               }
             }}
             onKeyDown={e => {
-              if (e.key === '-') {
+              if (e.key === '-' || e.key.toLowerCase() === 'e') {
                 e.preventDefault();
               }
             }}
