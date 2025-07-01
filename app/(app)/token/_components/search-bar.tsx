@@ -75,9 +75,15 @@ const SearchBar: React.FC<Props> = ({ isTitle = true }) => {
         <Input
           placeholder="Search by ticket, token, pair"
           value={inputValue}
-          onChange={e => setInputValue(e.target.value)}
+          onChange={e => {
+            const value = e.target.value;
+            const sanitizedValue = value.replace(/[^a-zA-Z0-9]/g, '');
+            const truncatedValue = sanitizedValue.slice(0, 25);
+            setInputValue(truncatedValue);
+          }}
           className="pl-9 w-full cursor-text rounded-full placeholder:text-sm placeholder:text-text-gray placeholder:opacity-50"
           ref={inputRef}
+          maxLength={25}
           onFocus={() => setIsFocused(true)}
           onBlur={e => {
             if (!e.relatedTarget?.closest('.search-results')) {
