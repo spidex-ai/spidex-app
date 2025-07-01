@@ -82,7 +82,7 @@ const Tokens: React.FC = () => {
                           <img
                             src={token.logo}
                             alt={token.name}
-                            className="w-4 h-4 rounded-full"
+                            className="w-4 h-4 rounded-full border dark:border-border-main"
                           />
                           <p>{token.name}</p>
                         </div>

@@ -29,7 +29,7 @@ const EmptyChat: React.FC<Props> = ({ token, hiddenSuggestions }) => {
             <img
               src={getLogoUrl(token.logoURI)}
               alt={token.name}
-              className="w-16 h-16 rounded-full"
+              className="w-16 h-16 rounded-full border dark:border-border-main"
             />
           ) : null}
           <h1 className="font-semibold text-center text-md">

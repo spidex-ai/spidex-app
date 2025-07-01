@@ -70,7 +70,7 @@ const Transactions: React.FC = () => {
                       <img
                         src={tx.tokenAIcon}
                         alt={tx.tokenAName}
-                        className="w-4 h-4 rounded-full"
+                        className="w-4 h-4 rounded-full border dark:border-border-main"
                       />
                       <p>{tx.tokenAName}</p>
                     </div>
@@ -81,7 +81,7 @@ const Transactions: React.FC = () => {
                       <img
                         src={tx.tokenBIcon}
                         alt={tx.tokenBName}
-                        className="w-4 h-4 rounded-full"
+                        className="w-4 h-4 rounded-full border dark:border-border-main"
                       />
                       <p>{tx.tokenBName}</p>
                     </div>

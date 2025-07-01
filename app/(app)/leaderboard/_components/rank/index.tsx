@@ -1,7 +1,12 @@
 'use client';
 
-import Pagination from '@/app/(app)/_components/pagination';
-import { Skeleton } from '@/components/ui';
+import {
+  Skeleton,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui';
 import ImageWithFallback from '@/components/ui/image-fallback';
 import {
   Table,
@@ -13,16 +18,13 @@ import {
 } from '@/components/ui/table';
 import { useIsMobile } from '@/hooks';
 import { useLeaderboard } from '@/hooks/leaderboard/use-leaderboard';
-import { formatNumber } from '@/lib/utils';
+import { cn, formatNumber } from '@/lib/utils';
 import { truncateAddress } from '@/lib/wallet';
-import React from 'react';
+import Image from 'next/image';
+import React, { useState } from 'react';
 
 const Rank: React.FC = () => {
-  const { data, loading, currentPage, setCurrentPage, totalPages, userRank } =
-    useLeaderboard();
-  console.log('🚀 ~ userRank:', userRank);
-  console.log('🚀 ~ data:', data);
-  const isMobile = useIsMobile();
+  const { data, loading, userRank } = useLeaderboard();
   return (
     <div>
       {loading ? (
@@ -32,10 +34,16 @@ const Rank: React.FC = () => {
       ) : (
         <Table className="rounded-lg">
           <TableHeader className="border border-neutral-200 dark:border-border-main text-white [&_tr:first-child]:rounded-t-lg overflow-hidden">
-            <TableHead className="text-center text-white">Rank</TableHead>
-            <TableHead className="text-center text-white">Username</TableHead>
-            <TableHead className="text-center text-white">Address</TableHead>
-            <TableHead className="text-center text-white">
+            <TableHead className="text-center text-white border-r border-neutral-200 dark:border-border-main">
+              Rank
+            </TableHead>
+            <TableHead className="text-center text-white border-r border-neutral-200 dark:border-border-main">
+              Username
+            </TableHead>
+            <TableHead className="text-center text-white border-r border-neutral-200 dark:border-border-main">
+              Address
+            </TableHead>
+            <TableHead className="text-center text-white border-r border-neutral-200 dark:border-border-main">
               Total Silk Points
             </TableHead>
             <TableHead className="text-center text-white">
@@ -82,16 +90,14 @@ const Rank: React.FC = () => {
                         src={userRank?.user.avatar ?? 'error'}
                         alt={userRank?.user.username}
                         fallbackSrc="/icons/example-ava.svg"
-                        className="w-6 h-6 rounded-full justify-self-center"
+                        className="w-6 h-6 rounded-full justify-self-center border dark:border-green-500"
                       />
                       <div>{userRank?.user.username}</div>
                     </div>
                   </div>
                 </TableCell>
                 <TableCell className="text-left border-r border-neutral-200 dark:border-border-main p-4">
-                  {userRank?.user.address
-                    ? truncateAddress(userRank?.user.address, isMobile ? 4 : 10)
-                    : '-'}
+                  <TruncateAddress address={userRank?.user.address} />
                 </TableCell>
                 <TableCell className="text-center border-r border-neutral-200 dark:border-border-main p-4">
                   {formatNumber(Number(userRank?.totalPoint))}
@@ -164,16 +170,14 @@ const Rank: React.FC = () => {
                         src={item.user.avatar ?? 'error'}
                         alt={item.user.username}
                         fallbackSrc="/icons/example-ava.svg"
-                        className="w-6 h-6 rounded-full justify-self-center"
+                        className="w-6 h-6 rounded-full justify-self-center border dark:border-green-500"
                       />
                       <div>{item.user.username}</div>
                     </div>
                   </div>
                 </TableCell>
                 <TableCell className="text-left border-r border-neutral-200 dark:border-border-main p-4">
-                  {item.user.address
-                    ? truncateAddress(item.user.address, isMobile ? 4 : 10)
-                    : '-'}
+                  <TruncateAddress address={item.user.address} />
                 </TableCell>
                 <TableCell className="text-center border-r border-neutral-200 dark:border-border-main p-4">
                   {formatNumber(Number(item.totalPoint))}
@@ -187,14 +191,60 @@ const Rank: React.FC = () => {
         </Table>
       )}
 
-      <div className="mt-6">
+      {/* <div className="mt-6">
         <Pagination
           total={totalPages}
           current={currentPage}
           onPageChange={setCurrentPage}
         />
-      </div>
+      </div> */}
     </div>
+  );
+};
+
+interface Props {
+  address: string;
+  className?: string;
+}
+
+export const TruncateAddress = ({ address, className }: Props) => {
+  const isMobile = useIsMobile();
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(address);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <p
+            className={cn(
+              'text-sm cursor-pointer hover:bg-neutral-200 flex gap-2 items-center dark:hover:bg-neutral-700 rounded-md w-full sm:w-fit px-1 flex-wrap sm:flex-nowrap',
+              copied ? 'text-green-600' : 'text-muted-foreground',
+              className
+            )}
+            onClick={handleCopy}
+          >
+            {address ? truncateAddress(address, isMobile ? 4 : 10) : '-'}
+            {address ? (
+              <Image
+                src={`/icons/${copied ? 'tick-blue.svg' : 'copy-gray.svg'}`}
+                alt="copy"
+                width={15}
+                height={15}
+              />
+            ) : null}
+          </p>
+        </TooltipTrigger>
+        <TooltipContent side="bottom">
+          {copied ? 'Copied to clipboard' : 'Copy to clipboard'}
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 };
 

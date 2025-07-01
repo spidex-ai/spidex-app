@@ -90,7 +90,7 @@ const Header: React.FC<Props> = ({
             <img
               src={getLogoUrl(data.logo)}
               alt={data?.unit ? data.unit : data?.token_ascii}
-              className="w-6 h-6 rounded-full hidden sm:block"
+              className="w-6 h-6 rounded-full hidden sm:block border dark:border-border-main"
             />
           )}
           <div className="flex flex-col">
