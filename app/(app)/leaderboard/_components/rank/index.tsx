@@ -2,6 +2,7 @@
 
 import Pagination from '@/app/(app)/_components/pagination';
 import { Skeleton } from '@/components/ui';
+import ImageWithFallback from '@/components/ui/image-fallback';
 import {
   Table,
   TableBody,
@@ -77,9 +78,10 @@ const Rank: React.FC = () => {
                 <TableCell className="border-r border-neutral-200 dark:border-border-main p-4">
                   <div className="">
                     <div className="grid grid-cols-[24px_1fr] items-center gap-2">
-                      <img
-                        src={userRank?.user.avatar ?? '/icons/example-ava.svg'}
+                      <ImageWithFallback
+                        src={userRank?.user.avatar ?? 'error'}
                         alt={userRank?.user.username}
+                        fallbackSrc="/icons/example-ava.svg"
                         className="w-6 h-6 rounded-full justify-self-center"
                       />
                       <div>{userRank?.user.username}</div>
@@ -158,9 +160,10 @@ const Rank: React.FC = () => {
                 <TableCell className="border-r border-neutral-200 dark:border-border-main p-4">
                   <div className="flex items-center justify-start">
                     <div className="grid grid-cols-[24px_1fr] items-center gap-2">
-                      <img
-                        src={item.user.avatar ?? '/icons/example-ava.svg'}
+                      <ImageWithFallback
+                        src={item.user.avatar ?? 'error'}
                         alt={item.user.username}
+                        fallbackSrc="/icons/example-ava.svg"
                         className="w-6 h-6 rounded-full justify-self-center"
                       />
                       <div>{item.user.username}</div>
