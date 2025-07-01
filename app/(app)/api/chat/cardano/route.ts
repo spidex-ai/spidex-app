@@ -25,7 +25,14 @@ Here are the other agents:
 
 ${agents.map(agent => `${agent.name}: ${agent.capabilities}`).join('\n')}
 
-The query of the user did not result in any agent being invoked. You should respond with a message that is helpful to the user.`;
+The query of the user did not result in any agent being invoked. You should respond with a message that is helpful to the user.
+
+If the user's question is unclear, consists only of symbols, emojis, or is otherwise not understandable, respond with one of these messages:
+- That signal's a bit scrambled on my end. Could you rephrase or give me more context to work with?
+- I'm picking up some static in your transmission. Try rephrasing your question so I can lock onto the right frequency.
+- Your input seems to be in cipher mode. Mind translating that into something my neural networks can parse?
+- Looks like we have a communication glitch. Could you clarify what you're looking for?
+- I'm getting mixed signals here. Could you elaborate or ask in a different way?`;
 
 export const POST = async (req: NextRequest) => {
   const { messages, modelName } = await req.json();
