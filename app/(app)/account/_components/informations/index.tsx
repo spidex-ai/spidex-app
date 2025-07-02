@@ -8,16 +8,22 @@ import { TextGradient } from '@/components/ui/text';
 import { UserSpidex, useSpidexCore } from '@/hooks/core/useSpidexCore';
 import Address from '@/app/_components/address';
 import toast from 'react-hot-toast';
+import ChangeUserNameModal from './change-username-modal';
+import { useIsMobile } from '@/hooks/utils/use-mobile';
 interface Props {
   user: UserSpidex;
 }
 
 const Information: React.FC<Props> = ({ user }) => {
+  console.log('🚀 ~ user:', user);
   const wallets = [user.walletAddress];
   const { logout, uploadAvatar, updateUserInfo, getMe } = useSpidexCore();
+  const isMobile = useIsMobile();
 
   const [uploading, setUploading] = useState(false);
   const [avatar, setAvatar] = useState(user.avatar);
+
+  const [isOpenChangeUsername, setIsOpenChangeUsername] = useState(false);
 
   const handleImageUpload = async () => {
     const input = document.createElement('input');
@@ -146,13 +152,49 @@ const Information: React.FC<Props> = ({ user }) => {
           </div>
 
           <div>
-            <GradientBorderButton
-              className="px-8 py-2 text-xs sm:text-sm"
-              onClick={handleImageUpload}
-              disabled={uploading}
-            >
-              {uploading ? 'Uploading...' : 'Change profile picture'}
-            </GradientBorderButton>
+            {isMobile ? (
+              <div className="flex flex-col">
+              <div>
+                <GradientBorderButton
+                  className="px-8 py-2 text-xs sm:text-sm"
+                  onClick={handleImageUpload}
+                  disabled={uploading}
+                >
+                  {uploading ? 'Uploading...' : 'Change avatar'}
+                </GradientBorderButton>
+              </div>
+              <div>
+                <GradientBorderButton
+                  className="px-8 py-2 text-xs sm:text-sm"
+                  onClick={() => setIsOpenChangeUsername(true)}
+                  disabled={uploading}
+                >
+                  {'Change username'}
+                </GradientBorderButton>
+              </div>
+            </div>
+            ) : (
+              <div className="flex gap-2">
+                <div>
+                  <GradientBorderButton
+                    className="px-8 py-2 text-xs sm:text-sm"
+                    onClick={handleImageUpload}
+                    disabled={uploading}
+                  >
+                    {uploading ? 'Uploading...' : 'Change avatar'}
+                  </GradientBorderButton>
+                </div>
+                <div>
+                  <GradientBorderButton
+                    className="px-8 py-2 text-xs sm:text-sm"
+                    onClick={() => setIsOpenChangeUsername(true)}
+                    disabled={uploading}
+                  >
+                    {'Change username'}
+                  </GradientBorderButton>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
@@ -169,7 +211,10 @@ const Information: React.FC<Props> = ({ user }) => {
           {wallets?.length > 0 ? (
             <>
               {wallets.map(wallet => (
-                <div className="text-xs mt-2 break-all sm:break-normal" key={wallet}>
+                <div
+                  className="text-xs mt-2 break-all sm:break-normal"
+                  key={wallet}
+                >
                   {wallet}
                 </div>
               ))}
@@ -179,6 +224,12 @@ const Information: React.FC<Props> = ({ user }) => {
           )}
         </div>
       </div>
+
+      <ChangeUserNameModal
+        isOpen={isOpenChangeUsername}
+        onOpenChange={setIsOpenChangeUsername}
+        user={user}
+      />
     </>
   );
 };
