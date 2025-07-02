@@ -87,12 +87,12 @@ const Rank: React.FC = () => {
                   <div className="">
                     <div className="grid grid-cols-[24px_1fr] items-center gap-2">
                       <ImageWithFallback
-                        src={userRank?.user.avatar ?? 'error'}
+                        src={userRank?.user.avatar ? userRank?.user.avatar : 'error'}
                         alt={userRank?.user.username}
                         fallbackSrc="/icons/example-ava.svg"
                         className="w-6 h-6 rounded-full justify-self-center border dark:border-green-500"
                       />
-                      <div>{userRank?.user.username}</div>
+                      <div>{`${userRank?.user.username} (You)`}</div>
                     </div>
                   </div>
                 </TableCell>
@@ -167,12 +167,12 @@ const Rank: React.FC = () => {
                   <div className="flex items-center justify-start">
                     <div className="grid grid-cols-[24px_1fr] items-center gap-2">
                       <ImageWithFallback
-                        src={item.user.avatar ?? 'error'}
+                        src={item.user.avatar ? item.user.avatar : 'error'}
                         alt={item.user.username}
                         fallbackSrc="/icons/example-ava.svg"
                         className="w-6 h-6 rounded-full justify-self-center border dark:border-green-500"
                       />
-                      <div>{item.user.username}</div>
+                      <div>{`${item.user.username} ${item.user.id === userRank?.user.id ? '(You)' : ''}`}</div>
                     </div>
                   </div>
                 </TableCell>

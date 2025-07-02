@@ -360,7 +360,7 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
         ) : (
           <AuthButton />
         )}
-        {estimatedPoints?.estimated_point && (
+        {estimatedPoints?.estimated_point && inputAmount && (
           <SwapPoint
             swapDetails={{
               inputToken: inputToken?.ticker || '',

@@ -352,7 +352,7 @@ const Swap: React.FC<Props> = ({
           </Button>
         )}
 
-        {estimatedPoints?.estimated_point && (
+        {estimatedPoints?.estimated_point && inputAmount && (
           <SwapPoint
             swapDetails={{
               inputToken: inputToken?.ticker || '',
