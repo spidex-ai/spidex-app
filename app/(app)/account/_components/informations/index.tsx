@@ -120,7 +120,7 @@ const Information: React.FC<Props> = ({ user }) => {
                   alt="profile"
                   width={40}
                   height={40}
-                  className="rounded-full w-[40px] h-[40px] object-cover"
+                  className="rounded-full w-[40px] h-[40px] object-cover border border-green-500"
                 />
               ) : (
                 <Image
@@ -128,6 +128,7 @@ const Information: React.FC<Props> = ({ user }) => {
                   alt="profile"
                   width={40}
                   height={40}
+                  className="rounded-full w-[40px] h-[40px] object-cover border border-green-500"
                 />
               )}
             </div>

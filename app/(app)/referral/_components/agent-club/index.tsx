@@ -106,7 +106,7 @@ const AgentClub: React.FC = () => {
               <img
                 src={avatar}
                 alt="agent-club"
-                className="rounded-full sm:w-[120px] sm:h-[120px] w-[60px] h-[60px] object-cover border dark:border-border-main"
+                className="rounded-full sm:w-[120px] sm:h-[120px] w-[60px] h-[60px] object-cover border dark:border-green-500"
                 
               />
               <div

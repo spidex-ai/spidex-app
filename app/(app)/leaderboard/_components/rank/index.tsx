@@ -7,7 +7,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui';
-import ImageWithFallback from '@/components/ui/image-fallback';
+import { AvatarUser } from '@/components/ui/image-fallback';
 import {
   Table,
   TableBody,
@@ -114,15 +114,14 @@ const Rank: React.FC = () => {
                 <TableCell className="border-r border-neutral-200 dark:border-border-main p-4">
                   <div className="">
                     <div className="grid grid-cols-[24px_1fr] items-center gap-2">
-                      <ImageWithFallback
+                      <AvatarUser
                         src={
                           userRank?.user.avatar
                             ? userRank?.user.avatar
                             : 'error'
                         }
                         alt={userRank?.user.username}
-                        fallbackSrc="/icons/example-ava.svg"
-                        className="w-6 h-6 rounded-full justify-self-center border dark:border-green-500"
+                        className="w-6 h-6 rounded-full justify-self-center"
                       />
                       <div>{`${userRank?.user.username} (You)`}</div>
                     </div>
@@ -198,11 +197,10 @@ const Rank: React.FC = () => {
                 <TableCell className="border-r border-neutral-200 dark:border-border-main p-4">
                   <div className="flex items-center justify-start">
                     <div className="grid grid-cols-[24px_1fr] items-center gap-2">
-                      <ImageWithFallback
+                      <AvatarUser
                         src={item.user.avatar ? item.user.avatar : 'error'}
                         alt={item.user.username}
-                        fallbackSrc="/icons/example-ava.svg"
-                        className="w-6 h-6 rounded-full justify-self-center border dark:border-green-500"
+                        className="w-6 h-6 rounded-full justify-self-center"
                       />
                       <div>{`${item.user.username} ${item.user.id === userRank?.user.id ? '(You)' : ''}`}</div>
                     </div>

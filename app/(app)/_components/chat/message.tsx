@@ -90,19 +90,21 @@ const Message: React.FC<Props> = ({
           )}
         >
           {isUser ? (
-            <Avatar className={cn('w-10 h-10', compressed && 'w-6 h-6')}>
+            <Avatar className={cn('w-10 h-10', compressed && 'w-6 h-6', 'border border-green-500')}>
               <AvatarFallback>
                 <Icon
                   name="User"
                   className={cn(
                     'w-4 h-4 md:w-6 md:h-6',
                     compressed && 'md:w-4 md:h-4'
+                    
                   )}
                 />
               </AvatarFallback>
               {auth?.user && (
                 <AvatarImage
                   src={auth?.user?.avatar ? auth?.user?.avatar : pfpURL(auth.user, false)}
+                  className='border border-green-500'
                 />
               )}
             </Avatar>
