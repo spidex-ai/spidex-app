@@ -7,7 +7,7 @@ import { Wallet } from 'lucide-react';
 import { Button, Skeleton } from '@/components/ui';
 
 import { useTokenBalance } from '@/hooks';
-import { useCardano } from '@cardano-foundation/cardano-connect-with-wallet';
+
 
 interface Props {
   address: string;
@@ -23,10 +23,10 @@ const TokenBalanceWrapper: React.FC<Props> = ({
   setAmount,
   digits = 2,
 }) => {
-  const { accountBalance } = useCardano();
+
   const { balance, isLoading } = useTokenBalance(tokenAddress);
 
-  const tokenBalance = tokenAddress === 'ADA' ? accountBalance : balance;
+  const tokenBalance = balance;
 
   if (isLoading) return <Skeleton className="w-16 h-4" />;
 

@@ -3,7 +3,6 @@
 import { Button, Skeleton } from '@/components/ui';
 import { useTokenBalance } from '@/hooks';
 import { formatNumber } from '@/lib/utils';
-import { useCardano } from '@cardano-foundation/cardano-connect-with-wallet';
 import { Wallet } from 'lucide-react';
 import React from 'react';
 
@@ -21,11 +20,10 @@ const TokenBalanceWrapper: React.FC<Props> = ({
   setAmount,
   digits = 2,
 }) => {
-  const { accountBalance } = useCardano();
 
   const { balance, isLoading } = useTokenBalance(tokenAddress);
 
-  const tokenBalance = tokenSymbol === 'ADA' ? accountBalance : balance;
+  const tokenBalance = balance;
 
   if (isLoading) return <Skeleton className="w-16 h-4" />;
 
