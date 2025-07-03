@@ -997,7 +997,7 @@ export const useSpidexCore = () => {
   const getRankLeaderboard = useCallback(async (page = 1, perPage = 10, orderBy = 'point') => {
     try {
       const data = await fetchWithAuth(
-        `/user-point/leaderboard?page=${page}&limit=${perPage}&order=${orderBy}`
+        `/user-point/leaderboard?page=${page}&limit=${perPage}&orderBy=${orderBy}`
       );
       return data;
     } catch (error) {
