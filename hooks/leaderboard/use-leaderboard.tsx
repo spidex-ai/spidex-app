@@ -14,10 +14,11 @@ export const useLeaderboard = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [userRank, setUserRank] = useState<LeaderboardItem>();
+  const [orderBy, setOrderBy] = useState<'point' | 'referral'>('point');
 
   useEffect(() => {
     fetchLeaderboard();
-  }, [currentPage]);
+  }, [currentPage, orderBy]);
 
   useEffect(() => {
     fetchUserRankLeaderboard();
@@ -26,7 +27,7 @@ export const useLeaderboard = () => {
   const fetchLeaderboard = async () => {
     try {
       setLoading(true);
-      const data = await getRankLeaderboard(currentPage + 1, perPage);
+      const data = await getRankLeaderboard(currentPage + 1, perPage, orderBy);
       setData(data.data);
       setTotalPages(Math.ceil(data.metadata.total / perPage));
     } catch (error) {
@@ -56,5 +57,7 @@ export const useLeaderboard = () => {
     setCurrentPage,
     totalPages,
     userRank,
+    orderBy,
+    setOrderBy,
   };
 };

@@ -448,3 +448,20 @@ body {
   border-image: linear-gradient(90deg, #009eff, #bbf985) 1;
   border-radius: 6px;
 }
+
+.table-sort-icon {
+  padding-top: 4px;
+  > img:nth-child(1) {
+    rotate: 180deg;
+  }
+  &.asc > img:nth-child(2) {
+    visibility: hidden;
+  }
+
+  &.desc > img:nth-child(1) {
+    visibility: hidden;
+  }
+  &.asc > img:nth-child(2) {
+    visibility: hidden;
+  }
+}

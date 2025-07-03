@@ -24,7 +24,11 @@ import Image from 'next/image';
 import React, { useState } from 'react';
 
 const Rank: React.FC = () => {
-  const { data, loading, userRank } = useLeaderboard();
+  const { data, loading, userRank, orderBy, setOrderBy } = useLeaderboard();
+  const changeOrderBy = (orderBy: 'point' | 'referral') => {
+    console.log("🚀 ~ changeOrderBy ~ orderBy:", orderBy)
+    setOrderBy(orderBy);
+  };
   return (
     <div>
       {loading ? (
@@ -43,11 +47,35 @@ const Rank: React.FC = () => {
             <TableHead className="text-center text-white border-r border-neutral-200 dark:border-border-main">
               Address
             </TableHead>
-            <TableHead className="text-center text-white border-r border-neutral-200 dark:border-border-main">
-              Total Silk Points
+            <TableHead className="text-center flex justify-center items-center text-white border-r border-neutral-200 dark:border-border-main">
+              <div className="flex gap-1 cursor-pointer" onClick={() => changeOrderBy('point')}>
+                <div>Total Silk Points</div>
+                <div className="table-sort-icon">
+                  {orderBy === 'point' ? (
+                    <img src="/icons/icon-sort-desc.svg" alt="sort" className='w-2' />
+                  ) : (
+                    <>
+                      <img src="/icons/icon-sort-desc.svg" alt="sort" className='w-2' />
+                      <img src="/icons/icon-sort-desc.svg" alt="sort" className='w-2' />
+                    </>
+                  )}
+                </div>
+              </div>
             </TableHead>
-            <TableHead className="text-center text-white">
-              Total Referral
+            <TableHead className="text-center  text-white">
+              <div className="flex justify-center gap-1 cursor-pointer" onClick={() => changeOrderBy('referral')}>
+                <div>Total Referral</div>
+                <div className="table-sort-icon">
+                  {orderBy === 'referral' ? (
+                    <img src="/icons/icon-sort-desc.svg" alt="sort" className='w-2' />
+                  ) : (
+                    <>
+                      <img src="/icons/icon-sort-desc.svg" alt="sort" className='w-2' />
+                      <img src="/icons/icon-sort-desc.svg" alt="sort" className='w-2' />
+                    </>
+                  )}
+                </div>
+              </div>
             </TableHead>
           </TableHeader>
 
@@ -87,7 +115,11 @@ const Rank: React.FC = () => {
                   <div className="">
                     <div className="grid grid-cols-[24px_1fr] items-center gap-2">
                       <ImageWithFallback
-                        src={userRank?.user.avatar ? userRank?.user.avatar : 'error'}
+                        src={
+                          userRank?.user.avatar
+                            ? userRank?.user.avatar
+                            : 'error'
+                        }
                         alt={userRank?.user.username}
                         fallbackSrc="/icons/example-ava.svg"
                         className="w-6 h-6 rounded-full justify-self-center border dark:border-green-500"

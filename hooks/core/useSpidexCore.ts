@@ -994,10 +994,10 @@ export const useSpidexCore = () => {
     }
   }, [fetchWithAuth, auth]);
 
-  const getRankLeaderboard = useCallback(async (page = 1, perPage = 10) => {
+  const getRankLeaderboard = useCallback(async (page = 1, perPage = 10, orderBy = 'point') => {
     try {
       const data = await fetchWithAuth(
-        `/user-point/leaderboard?page=${page}&limit=${perPage}&order=desc`
+        `/user-point/leaderboard?page=${page}&limit=${perPage}&order=${orderBy}`
       );
       return data;
     } catch (error) {
