@@ -43,10 +43,10 @@ Claim yours 👉 ${process.env.NEXT_PUBLIC_SPIDEX_APP_URL}/chat?ref=${refCode}
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="!bg-bg-modal">
-        <div className="text-white text-2xl font-medium mt-5">
+        <div className="text-white text-lg md:text-2xl font-medium mt-5">
           Sharing this post
         </div>
-        <div className="mt-5 text-sm flex flex-col gap-2 border border-border-main p-4 rounded-lg">
+        <div className="mt-5 text-[10px] md:text-sm flex flex-col gap-2 border border-border-main p-4 rounded-lg">
           <div>
             Just got 10 SILK score on{' '}
             <span className="text-white font-semibold">@Spidex_ag</span> 🕸
@@ -73,7 +73,7 @@ Claim yours 👉 ${process.env.NEXT_PUBLIC_SPIDEX_APP_URL}/chat?ref=${refCode}
         <div className="flex justify-between mt-5">
           <div></div>
           <div>
-            <GradientButton onClick={handleShareToX}>Retweet</GradientButton>
+            <GradientButton onClick={handleShareToX} className="text-[10px] md:text-sm">Retweet</GradientButton>
           </div>
         </div>
       </DialogContent>
