@@ -15,7 +15,6 @@ interface Props {
 }
 
 const Information: React.FC<Props> = ({ user }) => {
-  console.log('🚀 ~ user:', user);
   const wallets = [user.walletAddress];
   const { logout, uploadAvatar, updateUserInfo, getMe } = useSpidexCore();
   const isMobile = useIsMobile();
@@ -203,6 +202,11 @@ const Information: React.FC<Props> = ({ user }) => {
         <div>
           <div className="text-xs text-text-gray">User ID</div>
           <div className="text-xs mt-2">{user.id.toString()}</div>
+        </div>
+
+        <div className="mt-8">
+          <div className="text-xs text-text-gray">Username</div>
+          <div className="text-xs mt-2">{user.username}</div>
         </div>
 
         <div className="h-[1px] w-full my-5" />

@@ -1,6 +1,10 @@
 'use client';
 
-import { GradientBorderButton, GradientBorderButtonMobile, GradientButton } from '@/components/ui';
+import {
+  GradientBorderButton,
+  GradientBorderButtonMobile,
+  GradientButton,
+} from '@/components/ui';
 import { TextGradient } from '@/components/ui/text';
 import { useIsMobile } from '@/hooks/utils';
 import Image from 'next/image';
@@ -13,7 +17,7 @@ const Banner: React.FC = () => {
       {isMobile ? (
         <div className="relative">
           <img src={`/icons/rank-banner.svg`} className="w-full" />
-          <div className="absolute top-1/3 left-[10px] ">
+          <div className="absolute top-[8px] left-[10px] ">
             <TextGradient className="text-[10px] font-meidum">
               Referral Race
             </TextGradient>
@@ -32,7 +36,7 @@ const Banner: React.FC = () => {
               <div className="relative">
                 <div>
                   <GradientButton
-                    className="font-medium px-4 md:px-6 py-1 md:py-2 rounded-3xl text-[10px]"
+                    className="font-medium px-2 md:px-6 py-1 md:py-2 rounded-3xl text-[10px]"
                     onClick={() => {
                       window.open(
                         'https://spidex-ai.gitbook.io/spidex-ai-docs/referral-race',
@@ -54,7 +58,6 @@ const Banner: React.FC = () => {
               </div>
             </div>
           </div>
-
         </div>
       ) : (
         <div className="relative">
