@@ -17,9 +17,9 @@ const LeaderboardPage: React.FC = () => {
               alt="points"
               width={5}
               height={5}
-              className="w-6 h-6"
+              className="w-4 h-4 md:w-6 md:h-6"
             />
-            <TextGradient className="text-3xl font-medium leading-none">
+            <TextGradient className="text-xl md:text-3xl font-medium leading-none">
               Leaderboard
             </TextGradient>
           </div>

@@ -83,6 +83,21 @@ const GradientBorderButton = (props: any) => {
   );
 };
 
+const GradientBorderButtonMobile = (props: any) => {
+  const { isLoading, children, className, ...rest } = props;
+  return (
+    <button
+      {...rest}
+      disabled={isLoading}
+      className={cn('gradient-border-mobile cursor-pointer', className)}
+    >
+      {children}
+    </button>
+  );
+};
+
+
+
 export const GradientButton = (props: any) => {
   const { isLoading, children, disabled, className, ...rest } = props;
   return (
@@ -174,4 +189,4 @@ export const ButtonBlack = (props: any) => {
   </button>
   );
 };
-export { Button, buttonVariants, GradientBorderButton };
+export { Button, buttonVariants, GradientBorderButton, GradientBorderButtonMobile };

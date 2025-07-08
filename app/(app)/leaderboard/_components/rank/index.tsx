@@ -38,16 +38,16 @@ const Rank: React.FC = () => {
       ) : (
         <Table className="rounded-lg">
           <TableHeader className="border border-neutral-200 dark:border-border-main text-white [&_tr:first-child]:rounded-t-lg overflow-hidden">
-            <TableHead className="text-center text-white border-r border-neutral-200 dark:border-border-main">
+            <TableHead className="text-center text-[10px] md:text-base text-white border-r border-neutral-200 dark:border-border-main">
               Rank
             </TableHead>
-            <TableHead className="text-center text-white border-r border-neutral-200 dark:border-border-main">
+            <TableHead className="text-center text-[10px] md:text-base text-white border-r border-neutral-200 dark:border-border-main">
               Username
             </TableHead>
-            <TableHead className="text-center text-white border-r border-neutral-200 dark:border-border-main">
+            <TableHead className="text-center text-[10px] md:text-base text-white border-r border-neutral-200 dark:border-border-main">
               Address
             </TableHead>
-            <TableHead className="text-center flex justify-center items-center text-white border-r border-neutral-200 dark:border-border-main">
+            <TableHead className="text-center text-[10px] md:text-base flex justify-center items-center text-white border-r border-neutral-200 dark:border-border-main">
               <div className="flex gap-1 cursor-pointer" onClick={() => changeOrderBy('point')}>
                 <div>Total Silk Points</div>
                 <div className="table-sort-icon">
@@ -62,7 +62,7 @@ const Rank: React.FC = () => {
                 </div>
               </div>
             </TableHead>
-            <TableHead className="text-center  text-white">
+            <TableHead className="text-center text-[10px] md:text-base text-white">
               <div className="flex justify-center gap-1 cursor-pointer" onClick={() => changeOrderBy('referral')}>
                 <div>Total Referral</div>
                 <div className="table-sort-icon">
@@ -82,9 +82,9 @@ const Rank: React.FC = () => {
           <TableBody className="border border-neutral-200 dark:border-border-main [&_tr:last-child]:rounded-b-lg overflow-hidden">
             {userRank && (
               <TableRow className="bg-[#14271d] border-b border-neutral-100 dark:border-neutral-700">
-                <TableCell className="text-left border-r border-neutral-200 dark:border-border-main p-4">
+                <TableCell className="text-left border-r border-neutral-200 dark:border-border-main p-2 md:p-4">
                   <div className="flex items-center justify-center">
-                    <div className="w-7 h-7 rounded-full flex items-center justify-center text-sm font-medium relative bg-[#1A1A1A]">
+                    <div className="w-5 h-5 md:w-7 md:h-7 rounded-full flex items-center justify-center text-sm font-medium relative bg-[#1A1A1A]">
                       <div
                         className="absolute inset-0 rounded-full"
                         style={{
@@ -111,9 +111,9 @@ const Rank: React.FC = () => {
                   </div>
                 </TableCell>
 
-                <TableCell className="border-r border-neutral-200 dark:border-border-main p-4">
+                <TableCell className="border-r border-neutral-200 dark:border-border-main p-1 md:p-4">
                   <div className="">
-                    <div className="grid grid-cols-[24px_1fr] items-center gap-2">
+                    <div className="grid grid-cols-[24px_1fr] items-center gap-1 md:gap-2">
                       <AvatarUser
                         src={
                           userRank?.user.avatar
@@ -121,19 +121,19 @@ const Rank: React.FC = () => {
                             : 'error'
                         }
                         alt={userRank?.user.username}
-                        className="w-6 h-6 rounded-full justify-self-center"
+                        className="w-4 h-4 md:w-6 md:h-6 rounded-full justify-self-center"
                       />
-                      <div>{`${userRank?.user.username} (You)`}</div>
+                      <div className='text-[10px] md:text-base'>{`${userRank?.user.username} (You)`}</div>
                     </div>
                   </div>
                 </TableCell>
-                <TableCell className="text-left border-r border-neutral-200 dark:border-border-main p-4">
-                  <TruncateAddress address={userRank?.user.address} />
+                <TableCell className="text-left border-r border-neutral-200 dark:border-border-main p-2 md:p-4">
+                  <TruncateAddress address={userRank?.user.address} className='text-[10px] md:text-base' />
                 </TableCell>
-                <TableCell className="text-center border-r border-neutral-200 dark:border-border-main p-4">
+                <TableCell className="text-center text-[10px] md:text-base border-r border-neutral-200 dark:border-border-main p-2 md:p-4">
                   {formatNumber(Number(userRank?.totalPoint))}
                 </TableCell>
-                <TableCell className="text-center p-4">
+                <TableCell className="text-center text-[10px] md:text-base p-2 md:p-4">
                   {formatNumber(Number(userRank?.totalReferralCount))}
                 </TableCell>
               </TableRow>
@@ -164,13 +164,13 @@ const Rank: React.FC = () => {
                 }
                 className="border-b border-neutral-200 dark:border-[#5D717D]"
               >
-                <TableCell className="flex items-center justify-center border-r border-neutral-200 dark:border-border-main p-4">
+                <TableCell className="flex items-center justify-center border-r border-neutral-200 dark:border-border-main p-2 md:p-4">
                   {item?.rank === 1 ? (
                     <div className="flex items-center gap-2 justify-center">
                       <img
                         src="/icons/first.svg"
                         alt="gold-medal"
-                        className="w-6 h-6"
+                        className="w-4 h-4 md:w-6 md:h-6"
                       />
                     </div>
                   ) : item?.rank === 2 ? (
@@ -178,7 +178,7 @@ const Rank: React.FC = () => {
                       <img
                         src="/icons/second.svg"
                         alt="gold-medal"
-                        className="w-6 h-6"
+                        className="w-4 h-4 md:w-6 md:h-6"
                       />
                     </div>
                   ) : item?.rank === 3 ? (
@@ -186,33 +186,33 @@ const Rank: React.FC = () => {
                       <img
                         src="/icons/third.svg"
                         alt="gold-medal"
-                        className="w-6 h-6"
+                        className="w-4 h-4 md:w-6 md:h-6"
                       />
                     </div>
                   ) : (
-                    <div className=" text-white py-1">{item?.rank}</div>
+                    <div className="text-[10px] md:text-base text-white py-1">{item?.rank}</div>
                   )}
                 </TableCell>
 
-                <TableCell className="border-r border-neutral-200 dark:border-border-main p-4">
+                <TableCell className="border-r border-neutral-200 dark:border-border-main p-1 md:p-4">
                   <div className="flex items-center justify-start">
-                    <div className="grid grid-cols-[24px_1fr] items-center gap-2">
+                    <div className="grid grid-cols-[24px_1fr] items-center gap-1 md:gap-2">
                       <AvatarUser
                         src={item.user.avatar ? item.user.avatar : 'error'}
                         alt={item.user.username}
-                        className="w-6 h-6 rounded-full justify-self-center"
+                        className="w-4 h-4 md:w-6 md:h-6 rounded-full justify-self-center"
                       />
-                      <div>{`${item.user.username} ${item.user.id === userRank?.user.id ? '(You)' : ''}`}</div>
+                      <div className='text-[10px] md:text-base'>{`${item.user.username} ${item.user.id === userRank?.user.id ? '(You)' : ''}`}</div>
                     </div>
                   </div>
                 </TableCell>
-                <TableCell className="text-left border-r border-neutral-200 dark:border-border-main p-4">
-                  <TruncateAddress address={item.user.address} />
+                <TableCell className="text-left border-r border-neutral-200 dark:border-border-main p-1 md:p-4">
+                  <TruncateAddress address={item.user.address} className='text-[10px] md:text-base' />
                 </TableCell>
-                <TableCell className="text-center border-r border-neutral-200 dark:border-border-main p-4">
+                <TableCell className="text-center text-[10px] md:text-base border-r border-neutral-200 dark:border-border-main p-2 md:p-4">
                   {formatNumber(Number(item.totalPoint))}
                 </TableCell>
-                <TableCell className="text-center p-4">
+                <TableCell className="text-center text-[10px] md:text-base p-2 md:p-4">
                   {formatNumber(Number(item.totalReferralCount))}
                 </TableCell>
               </TableRow>
@@ -253,7 +253,7 @@ export const TruncateAddress = ({ address, className }: Props) => {
         <TooltipTrigger asChild>
           <p
             className={cn(
-              'text-sm cursor-pointer hover:bg-neutral-200 flex gap-2 items-center dark:hover:bg-neutral-700 rounded-md w-full sm:w-fit px-1 flex-wrap sm:flex-nowrap',
+              'text-sm cursor-pointer hover:bg-neutral-200 flex gap-1 md:gap-2 items-center dark:hover:bg-neutral-700 rounded-md w-full sm:w-fit px-1 flex-wrap sm:flex-nowrap',
               copied ? 'text-green-600' : 'text-muted-foreground',
               className
             )}
@@ -264,8 +264,8 @@ export const TruncateAddress = ({ address, className }: Props) => {
               <Image
                 src={`/icons/${copied ? 'tick-blue.svg' : 'copy-gray.svg'}`}
                 alt="copy"
-                width={15}
-                height={15}
+                width={isMobile ? 10 : 15}
+                height={isMobile ? 10 : 15}
               />
             ) : null}
           </p>
