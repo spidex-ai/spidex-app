@@ -349,6 +349,7 @@ export default function SwapPoint({
               </div>
             ) : null}
           </div>
+          <div></div>
         </div>
 
         {isOpenMarketOffers && (
@@ -372,11 +373,7 @@ export default function SwapPoint({
                     </div>
 
                     <div className="col-span-1 flex items-center justify-between gap-1">
-                      <div>{`${path.amountIn} ${inputToken} = ${Number(
-                        path.amountOut
-                      ).toLocaleString(undefined, {
-                        maximumFractionDigits: 2,
-                      })} ${outputToken}`}</div>
+                      <div>{`${path.amountIn} ${inputToken} = ${formatNumber(Number(path.amountOut))} ${outputToken}`}</div>
                       <div className="flex items-center gap-1">
                         <Image
                           src="/icons/fee-gray.svg"

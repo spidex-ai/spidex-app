@@ -31,7 +31,7 @@ import { decodeHexAddress } from '@cardano-foundation/cardano-connect-with-walle
 import { useSpidexCore } from '@/hooks/core/useSpidexCore';
 import { useSelector } from 'react-redux';
 import { selectAuthData } from '@/store/selectors/authSelectors';
-import { DEXHUNTER_SAVE_FEE } from '@/lib/utils';
+import { DEXHUNTER_SAVE_FEE, MINSWAP_SAVE_FEE } from '@/lib/utils';
 import { ProtocolType } from '@/app/_components/swap/select-protocol';
 
 export interface SwapWrapperProps {
@@ -118,9 +118,10 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
     inputToken?.ticker === 'ADA' ? accountBalance : inputBalance;
 
   const isInsufficientBalance = useMemo(() => {
+    const saveFee = protocol === ProtocolType.DEXHUNTER ? DEXHUNTER_SAVE_FEE : MINSWAP_SAVE_FEE;
     if (Number(inputAmount) > Number(tokenInputBalance)) return true;
 
-    if (Number(accountBalance) < DEXHUNTER_SAVE_FEE) return true;
+    if (Number(accountBalance) < saveFee) return true;
 
     let totalDepositADA = Number(
       protocol === ProtocolType.DEXHUNTER
@@ -132,8 +133,7 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
       totalDepositADA += Number(inputAmount);
     }
 
-    if (Number(accountBalance) < totalDepositADA + DEXHUNTER_SAVE_FEE)
-      return true;
+    if (Number(accountBalance) < totalDepositADA + saveFee) return true;
 
     return false;
   }, [
@@ -142,6 +142,7 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
     accountBalance,
     inputToken,
     estimatedPoints,
+    protocol,
   ]);
 
   const onChangeInputOutput = () => {
@@ -403,33 +404,33 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
               inputAmount: inputAmount || '',
               swapRoute: '',
               netPrice: Number(
-                protocol === 'dexhunter'
+                protocol === ProtocolType.DEXHUNTER
                   ? estimatedPoints?.dexhunter?.netPrice
                   : estimatedPoints?.minswap?.netPrice
               ),
               minReceive: Number(
-                protocol === 'dexhunter'
+                protocol === ProtocolType.DEXHUNTER
                   ? estimatedPoints?.dexhunter?.minReceive
                   : estimatedPoints?.minswap?.minReceive
               ),
               dexFee: Number(
-                protocol === 'dexhunter'
+                protocol === ProtocolType.DEXHUNTER
                   ? estimatedPoints?.dexhunter?.dexFee
                   : estimatedPoints?.minswap?.dexFee
               ),
               dexDeposits: Number(
-                protocol === 'dexhunter'
+                protocol === ProtocolType.DEXHUNTER
                   ? estimatedPoints?.dexhunter?.dexDeposits
                   : estimatedPoints?.minswap?.dexDeposits
               ),
               totalDeposits: Number(
-                protocol === 'dexhunter'
+                protocol === ProtocolType.DEXHUNTER
                   ? estimatedPoints?.dexhunter?.totalDeposits
                   : estimatedPoints?.minswap?.totalDeposits
               ),
             }}
             paths={
-              protocol === 'dexhunter'
+              protocol === ProtocolType.DEXHUNTER
                 ? estimatedPoints?.dexhunter?.paths
                 : estimatedPoints?.minswap?.paths
             }

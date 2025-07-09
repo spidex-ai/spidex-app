@@ -12,7 +12,7 @@ import TokenInput from './token-input';
 
 import { useTokenBalance } from '@/hooks';
 
-import { cn, DEXHUNTER_SAVE_FEE } from '@/lib/utils';
+import { cn, DEXHUNTER_SAVE_FEE, MINSWAP_SAVE_FEE } from '@/lib/utils';
 
 import type { QuoteResponse } from '@jup-ag/api';
 
@@ -114,9 +114,10 @@ const Swap: React.FC<Props> = ({
   );
 
   const isInsufficientBalance = useMemo(() => {
+    const saveFee = protocol === ProtocolType.DEXHUNTER ? DEXHUNTER_SAVE_FEE : MINSWAP_SAVE_FEE;
     if (Number(inputAmount) > Number(tokenInputBalance)) return true;
 
-    if (Number(accountBalance) < DEXHUNTER_SAVE_FEE) return true;
+    if (Number(accountBalance) < saveFee) return true;
 
     let totalDepositADA = Number(
       protocol === ProtocolType.DEXHUNTER
@@ -128,8 +129,7 @@ const Swap: React.FC<Props> = ({
       totalDepositADA += Number(inputAmount);
     }
 
-    if (Number(accountBalance) < totalDepositADA + DEXHUNTER_SAVE_FEE)
-      return true;
+    if (Number(accountBalance) < totalDepositADA + saveFee) return true;
 
     return false;
   }, [
@@ -138,6 +138,7 @@ const Swap: React.FC<Props> = ({
     accountBalance,
     inputToken,
     estimatedPoints,
+    protocol,
   ]);
 
   const onChangeInputOutput = () => {
@@ -404,33 +405,33 @@ const Swap: React.FC<Props> = ({
               inputAmount: inputAmount || '',
               swapRoute: '',
               netPrice: Number(
-                protocol === 'dexhunter'
+                protocol === ProtocolType.DEXHUNTER
                   ? estimatedPoints?.dexhunter?.netPrice
                   : estimatedPoints?.minswap?.netPrice
               ),
               minReceive: Number(
-                protocol === 'dexhunter'
+                protocol === ProtocolType.DEXHUNTER
                   ? estimatedPoints?.dexhunter?.minReceive
                   : estimatedPoints?.minswap?.minReceive
               ),
               dexFee: Number(
-                protocol === 'dexhunter'
+                protocol === ProtocolType.DEXHUNTER
                   ? estimatedPoints?.dexhunter?.dexFee
                   : estimatedPoints?.minswap?.dexFee
               ),
               dexDeposits: Number(
-                protocol === 'dexhunter'
+                protocol === ProtocolType.DEXHUNTER
                   ? estimatedPoints?.dexhunter?.dexDeposits
                   : estimatedPoints?.minswap?.dexDeposits
               ),
               totalDeposits: Number(
-                protocol === 'dexhunter'
+                protocol === ProtocolType.DEXHUNTER
                   ? estimatedPoints?.dexhunter?.totalDeposits
                   : estimatedPoints?.minswap?.totalDeposits
               ),
             }}
             paths={
-              protocol === 'dexhunter'
+              protocol === ProtocolType.DEXHUNTER
                 ? estimatedPoints?.dexhunter?.paths
                 : estimatedPoints?.minswap?.paths
             }

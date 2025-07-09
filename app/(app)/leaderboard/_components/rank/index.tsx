@@ -26,57 +26,108 @@ import React, { useState } from 'react';
 const Rank: React.FC = () => {
   const { data, loading, userRank, orderBy, setOrderBy } = useLeaderboard();
   const changeOrderBy = (orderBy: 'point' | 'referral') => {
-    console.log("🚀 ~ changeOrderBy ~ orderBy:", orderBy)
     setOrderBy(orderBy);
   };
   return (
-    <div>
+    <div className="overflow-auto">
       {loading ? (
         <div className="w-full">
           <Skeleton className="h-20 w-full" />
         </div>
       ) : (
         <Table className="rounded-lg">
-          <TableHeader className="border border-neutral-200 dark:border-border-main text-white [&_tr:first-child]:rounded-t-lg overflow-hidden">
-            <TableHead className="text-center text-[10px] md:text-base text-white border-r border-neutral-200 dark:border-border-main">
-              Rank
-            </TableHead>
-            <TableHead className="text-left text-[10px] md:text-base text-white border-r border-neutral-200 dark:border-border-main px-1 md:px-4">
-              Username
-            </TableHead>
-            <TableHead className="text-center text-[10px] md:text-base text-white border-r border-neutral-200 dark:border-border-main">
-              Address
-            </TableHead>
-            <TableHead className="text-center text-[10px] md:text-base flex justify-center items-center text-white border-r border-neutral-200 dark:border-border-main">
-              <div className="flex gap-1 cursor-pointer" onClick={() => changeOrderBy('point')}>
-                <div>Total Silk Points</div>
-                <div className="table-sort-icon">
-                  {orderBy === 'point' ? (
-                    <img src="/icons/icon-sort-desc.svg" alt="sort" className='w-2' />
-                  ) : (
-                    <>
-                      <img src="/icons/icon-sort-desc.svg" alt="sort" className='w-2' />
-                      <img src="/icons/icon-sort-desc.svg" alt="sort" className='w-2' />
-                    </>
-                  )}
+          <TableHeader className="sticky top-0 z-10 bg-background border border-neutral-200 dark:border-border-main text-white [&_tr:first-child]:rounded-t-lg overflow-hidden">
+            <TableRow className="bg-black border-b border-neutral-200 dark:border-border-main hover:!bg-black">
+              <TableHead className="text-center text-[10px] md:text-base text-white border-r border-neutral-200 dark:border-border-main">
+                Rank
+              </TableHead>
+              <TableHead className="text-left text-[10px] md:text-base text-white border-r border-neutral-200 dark:border-border-main px-1 md:px-4">
+                Username
+              </TableHead>
+              <TableHead className="text-center text-[10px] md:text-base text-white border-r border-neutral-200 dark:border-border-main">
+                Address
+              </TableHead>
+              <TableHead className="text-center text-[10px] md:text-base flex justify-center items-center text-white border-r border-neutral-200 dark:border-border-main">
+                <div
+                  className="flex gap-1 cursor-pointer"
+                  onClick={() => changeOrderBy('point')}
+                >
+                  <div>Total Silk Points</div>
+
+                  <TooltipProvider>
+                    <Tooltip delayDuration={0}>
+                      <TooltipTrigger asChild>
+                        <div className="table-sort-icon">
+                          {orderBy === 'point' ? (
+                            <img
+                              src="/icons/icon-sort-desc.svg"
+                              alt="sort"
+                              className="w-3"
+                            />
+                          ) : (
+                            <>
+                              <img
+                                src="/icons/icon-sort-desc.svg"
+                                alt="sort"
+                                className="w-3"
+                              />
+                              <img
+                                src="/icons/icon-sort-desc.svg"
+                                alt="sort"
+                                className="w-3"
+                              />
+                            </>
+                          )}
+                        </div>
+                      </TooltipTrigger>
+                      <TooltipContent side="top">
+                        Ranking by Total SILK Points
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
                 </div>
-              </div>
-            </TableHead>
-            <TableHead className="text-center text-[10px] md:text-base text-white">
-              <div className="flex justify-center gap-1 cursor-pointer" onClick={() => changeOrderBy('referral')}>
-                <div>Total Referral</div>
-                <div className="table-sort-icon">
-                  {orderBy === 'referral' ? (
-                    <img src="/icons/icon-sort-desc.svg" alt="sort" className='w-2' />
-                  ) : (
-                    <>
-                      <img src="/icons/icon-sort-desc.svg" alt="sort" className='w-2' />
-                      <img src="/icons/icon-sort-desc.svg" alt="sort" className='w-2' />
-                    </>
-                  )}
+              </TableHead>
+              <TableHead className="text-center text-[10px] md:text-base text-white">
+                <div
+                  className="flex justify-center gap-1 cursor-pointer"
+                  onClick={() => changeOrderBy('referral')}
+                >
+                  <div>Total Referral</div>
+
+                  <TooltipProvider>
+                    <Tooltip delayDuration={0}>
+                      <TooltipTrigger asChild>
+                        <div className="table-sort-icon">
+                          {orderBy === 'referral' ? (
+                            <img
+                              src="/icons/icon-sort-desc.svg"
+                              alt="sort"
+                              className="w-3"
+                            />
+                          ) : (
+                            <>
+                              <img
+                                src="/icons/icon-sort-desc.svg"
+                                alt="sort"
+                                className="w-3"
+                              />
+                              <img
+                                src="/icons/icon-sort-desc.svg"
+                                alt="sort"
+                                className="w-3"
+                              />
+                            </>
+                          )}
+                        </div>
+                      </TooltipTrigger>
+                      <TooltipContent side="top">
+                        Ranking by Total Referral
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
                 </div>
-              </div>
-            </TableHead>
+              </TableHead>
+            </TableRow>
           </TableHeader>
 
           <TableBody className="border border-neutral-200 dark:border-border-main [&_tr:last-child]:rounded-b-lg overflow-hidden">
@@ -123,13 +174,16 @@ const Rank: React.FC = () => {
                         alt={userRank?.user.username}
                         className="w-4 h-4 md:w-6 md:h-6 rounded-full justify-self-center"
                       />
-                      <div className='text-[10px] md:text-base'>{`${userRank?.user.username} (You)`}</div>
+                      <div className="text-[10px] md:text-base">{`${userRank?.user.username} (You)`}</div>
                     </div>
                   </div>
                 </TableCell>
                 <TableCell className="text-left border-r border-neutral-200 dark:border-border-main p-2 md:p-4">
-                  <div className='flex justify-center'>
-                    <TruncateAddress address={userRank?.user.address} className='text-[10px] md:text-base' />
+                  <div className="flex justify-center">
+                    <TruncateAddress
+                      address={userRank?.user.address}
+                      className="text-[10px] md:text-base"
+                    />
                   </div>
                 </TableCell>
                 <TableCell className="text-center text-[10px] md:text-base border-r border-neutral-200 dark:border-border-main p-2 md:p-4">
@@ -192,7 +246,9 @@ const Rank: React.FC = () => {
                       />
                     </div>
                   ) : (
-                    <div className="text-[10px] md:text-base text-white py-1">{item?.rank}</div>
+                    <div className="text-[10px] md:text-base text-white py-1">
+                      {item?.rank}
+                    </div>
                   )}
                 </TableCell>
 
@@ -204,14 +260,17 @@ const Rank: React.FC = () => {
                         alt={item.user.username}
                         className="w-4 h-4 md:w-6 md:h-6 rounded-full justify-self-center"
                       />
-                      <div className='text-[10px] md:text-base'>{`${item.user.username} ${item.user.id === userRank?.user.id ? '(You)' : ''}`}</div>
+                      <div className="text-[10px] md:text-base">{`${item.user.username} ${item.user.id === userRank?.user.id ? '(You)' : ''}`}</div>
                     </div>
                   </div>
                 </TableCell>
                 <TableCell className="text-left border-r border-neutral-200 dark:border-border-main p-1 md:p-4">
-                 <div className='flex justify-center'>
-                  <TruncateAddress address={item.user.address} className='text-[10px] md:text-base' />
-                 </div>
+                  <div className="flex justify-center">
+                    <TruncateAddress
+                      address={item.user.address}
+                      className="text-[10px] md:text-base"
+                    />
+                  </div>
                 </TableCell>
                 <TableCell className="text-center text-[10px] md:text-base border-r border-neutral-200 dark:border-border-main p-2 md:p-4">
                   {formatNumber(Number(item.totalPoint))}

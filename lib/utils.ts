@@ -29,4 +29,5 @@ export const formatNumber = (num: number, decimalPlaces?: number): string => {
   return num.toLocaleString('en-US', options);
 };
 
-export const DEXHUNTER_SAVE_FEE = 5;
+export const DEXHUNTER_SAVE_FEE = 10;
+export const MINSWAP_SAVE_FEE = 3;
