@@ -52,6 +52,27 @@ export interface SwapPayload {
   blacklistedDexes: string[];
 }
 
+export interface SwapRequestDexHunterPayload {
+  addresses: string[];
+  tokenIn: string;
+  tokenOut: string;
+  slippage: number;
+  amountIn: number;
+  txOptimization: boolean;
+  blacklistedDexes: string[];
+}
+
+export interface SwapRequestMinswapPayload {
+  sender: string;
+  min_amount_out: string;
+  estimate: {
+    amount: string;
+    token_in: string;
+    token_out: string;
+    slippage: number;
+  }
+}
+
 export interface BuildSwapResponse {
   cbor: string;
   splits: Split[];
@@ -99,22 +120,30 @@ export interface SubmitSwapResponse {
   cbor: string;
   strat_id: string;
 }
+
+export interface IPath {
+  amountIn: string;
+  amountOut: string; 
+  batcherFee: string; 
+  minReceive: string;
+  poolId: string;
+  priceImpact: number;
+  protocol: string;
+  refundableDeposits: string;
+}
+export interface IFeeEstimate {
+  dexDeposits: string;
+  dexFee: string;
+  minReceive: string;
+  netPrice: string;
+  totalDeposits: string;
+  paths: IPath[];
+}
 export interface EsitmateSwapResponse {
-  splits: Split[];
-  average_price: number;
-  total_fee: number;
-  total_output: number;
-  deposits: number;
-  total_output_without_slippage: number;
-  possible_routes: PossibleRoutes;
-  dexhunter_fee: number;
-  batcher_fee: number;
-  net_price: number;
-  net_price_reverse: number;
-  partner_fee: number;
-  communications: any[];
-  partner_code: string;
-  estimated_point: number;
+  estimatedPoint: string;
+  dexhunter: IFeeEstimate;
+  minswap: IFeeEstimate; 
+
 }
 
 export interface PoolStatsResponse {

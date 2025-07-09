@@ -18,7 +18,8 @@ import {
   CardanoTokenDetail,
   EsitmateSwapPayload,
   EsitmateSwapResponse,
-  SwapPayload,
+  SwapRequestDexHunterPayload,
+  SwapRequestMinswapPayload,
 } from '@/services/dexhunter/types';
 
 import AuthButton from '@/app/(app)/_components/sidebar/auth-button';
@@ -31,6 +32,7 @@ import { useSpidexCore } from '@/hooks/core/useSpidexCore';
 import { useSelector } from 'react-redux';
 import { selectAuthData } from '@/store/selectors/authSelectors';
 import { DEXHUNTER_SAVE_FEE } from '@/lib/utils';
+import { ProtocolType } from '@/app/_components/swap/select-protocol';
 
 export interface SwapWrapperProps {
   initialInputToken: CardanoTokenDetail | null;
@@ -73,13 +75,13 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
   const {
     getSwapPoolStats,
     estimateSwap,
-    buildSwapRequest,
     submitSwapRequest,
+    buildSwapRequestDexHunter,
+    buildSwapRequestMinswap,
   } = useSpidexCore();
-  const { enabledWallet, unusedAddresses, accountBalance } =
-    useCardano();
-  
-  const auth = useSelector(selectAuthData)
+  const { enabledWallet, unusedAddresses, accountBalance } = useCardano();
+
+  const auth = useSelector(selectAuthData);
 
   const [inputAmount, setInputAmount] = useState<string>(
     initialInputAmount || ''
@@ -105,6 +107,10 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
   const [estimatedPoints, setEstimatedPoints] =
     useState<EsitmateSwapResponse>();
 
+  const [protocol, setProtocol] = useState<ProtocolType>(
+    ProtocolType.DEXHUNTER
+  );
+
   const { balance: inputBalance, isLoading: inputBalanceLoading } =
     useTokenBalance(inputToken?.unit || '');
 
@@ -113,24 +119,29 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
 
   const isInsufficientBalance = useMemo(() => {
     if (Number(inputAmount) > Number(tokenInputBalance)) return true;
+
     if (Number(accountBalance) < DEXHUNTER_SAVE_FEE) return true;
-    let totalDepositADA =
-      Number(estimatedPoints?.deposits) +
-      Number(estimatedPoints?.batcher_fee) +
-      Number(estimatedPoints?.partner_fee);
+
+    let totalDepositADA = Number(
+      protocol === ProtocolType.DEXHUNTER
+        ? estimatedPoints?.dexhunter?.totalDeposits
+        : estimatedPoints?.minswap?.totalDeposits
+    );
+
     if (inputToken?.ticker === 'ADA') {
       totalDepositADA += Number(inputAmount);
     }
-    if (Number(accountBalance) < totalDepositADA + DEXHUNTER_SAVE_FEE) return true;
+
+    if (Number(accountBalance) < totalDepositADA + DEXHUNTER_SAVE_FEE)
+      return true;
+
     return false;
   }, [
     inputAmount,
     tokenInputBalance,
     accountBalance,
     inputToken,
-    estimatedPoints?.deposits,
-    estimatedPoints?.batcher_fee,
-    estimatedPoints?.partner_fee,
+    estimatedPoints,
   ]);
 
   const onChangeInputOutput = () => {
@@ -162,7 +173,7 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
         const unusedAddresses = decodeHexAddress(address);
         addresses.push(unusedAddresses);
       }
-      const payload: SwapPayload = {
+      const payload: SwapRequestDexHunterPayload = {
         addresses: addresses,
         tokenIn: inputToken?.unit
           ? inputToken?.unit
@@ -176,7 +187,29 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
         blacklistedDexes: [],
       };
 
-      const buildSwap = await buildSwapRequest(payload);
+      const payloadMinswap: SwapRequestMinswapPayload = {
+        sender: addresses[0],
+        min_amount_out: outputAmount,
+        estimate: {
+          amount: inputAmount,
+          token_in: inputToken?.unit
+            ? inputToken?.unit
+            : inputToken?.token_id || ' ',
+          token_out: outputToken?.unit
+            ? outputToken?.unit
+            : outputToken?.token_id || ' ',
+          slippage: 0.01,
+        },
+      };
+
+      let buildSwap;
+
+      if (protocol === ProtocolType.DEXHUNTER) {
+        buildSwap = await buildSwapRequestDexHunter(payload);
+      } else {
+        buildSwap = await buildSwapRequestMinswap(payloadMinswap);
+      }
+
       const signatures = await api?.signTx(buildSwap?.cbor, true);
       const submitSwap = await submitSwapRequest({
         txCbor: buildSwap.cbor,
@@ -187,7 +220,7 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
       onSuccess?.(submitTx, inputAmount);
       toast.success('You have swapped successfully!');
       setInputAmount('');
-      setOutputAmount(''); 
+      setOutputAmount('');
     } catch (error) {
       onError?.(error instanceof Error ? error.message : 'Unknown error');
       toast.error('You have swapped failed! Please try again later!');
@@ -212,7 +245,9 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
       const swapEstResponse = await estimateSwap(swapEstPayload);
       if (swapEstResponse) {
         setEstimatedPoints(swapEstResponse);
-        return swapEstResponse?.total_output;
+        return protocol === ProtocolType.DEXHUNTER
+          ? swapEstResponse?.dexhunter?.minReceive
+          : swapEstResponse?.minswap?.minReceive;
       } else {
         setIsNotPool(true);
         return '0';
@@ -360,33 +395,47 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
         ) : (
           <AuthButton />
         )}
-        {estimatedPoints?.estimated_point && inputAmount && (
+        {estimatedPoints?.estimatedPoint && inputAmount && (
           <SwapPoint
             swapDetails={{
               inputToken: inputToken?.ticker || '',
               outputToken: outputToken?.ticker || '',
               inputAmount: inputAmount || '',
-              outputAmount: estimatedPoints?.splits?.[0]?.amount_in
-                ? String(
-                    (
-                      estimatedPoints?.splits?.[0]?.expected_output ||
-                      0 / estimatedPoints?.splits?.[0]?.amount_in ||
-                      0
-                    ).toLocaleString(undefined, {
-                      maximumFractionDigits: 4,
-                    })
-                  )
-                : '',
               swapRoute: '',
-              netPrice: estimatedPoints?.net_price,
-              minReceive: estimatedPoints?.total_output,
-              dexFee: estimatedPoints?.partner_fee,
-              dexDeposits: estimatedPoints?.deposits,
-              serviceFee: estimatedPoints?.partner_fee,
-              batcherFee: estimatedPoints?.batcher_fee,
+              netPrice: Number(
+                protocol === 'dexhunter'
+                  ? estimatedPoints?.dexhunter?.netPrice
+                  : estimatedPoints?.minswap?.netPrice
+              ),
+              minReceive: Number(
+                protocol === 'dexhunter'
+                  ? estimatedPoints?.dexhunter?.minReceive
+                  : estimatedPoints?.minswap?.minReceive
+              ),
+              dexFee: Number(
+                protocol === 'dexhunter'
+                  ? estimatedPoints?.dexhunter?.dexFee
+                  : estimatedPoints?.minswap?.dexFee
+              ),
+              dexDeposits: Number(
+                protocol === 'dexhunter'
+                  ? estimatedPoints?.dexhunter?.dexDeposits
+                  : estimatedPoints?.minswap?.dexDeposits
+              ),
+              totalDeposits: Number(
+                protocol === 'dexhunter'
+                  ? estimatedPoints?.dexhunter?.totalDeposits
+                  : estimatedPoints?.minswap?.totalDeposits
+              ),
             }}
-            splits={estimatedPoints?.splits || []}
-            estimatedPoints={String(estimatedPoints?.estimated_point || '1')}
+            paths={
+              protocol === 'dexhunter'
+                ? estimatedPoints?.dexhunter?.paths
+                : estimatedPoints?.minswap?.paths
+            }
+            estimatedPoints={String(estimatedPoints?.estimatedPoint || '1')}
+            protocol={protocol}
+            onProtocolChange={setProtocol}
           />
         )}
       </div>

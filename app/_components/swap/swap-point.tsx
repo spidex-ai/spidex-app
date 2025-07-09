@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { TextGradient } from '@/components/ui/text';
-import { Split } from '@/services/dexhunter/types';
+import { IPath } from '@/services/dexhunter/types';
 import {
   Tooltip,
   TooltipContent,
@@ -13,29 +13,34 @@ import { TooltipProvider } from '@/components/ui/tooltip';
 import { dexLogoMap } from '@/app/utils/logo';
 import { dexNameMap } from '@/app/utils/dexes';
 import { formatNumber } from '@/lib/utils';
+import { ProtocolType } from './select-protocol';
+import SelectProtocol from './select-protocol';
 
 interface Props {
   swapDetails: {
     inputToken: string;
     outputToken: string;
     inputAmount: string;
-    outputAmount: string;
+    outputAmount?: string;
 
     swapRoute: string;
     netPrice: number;
     minReceive: number;
     dexFee: number;
     dexDeposits: number;
-    serviceFee: number;
-    batcherFee: number;
+    totalDeposits: number;
   };
-  splits: Split[];
+  paths: IPath[];
   estimatedPoints: string;
+  protocol: ProtocolType;
+  onProtocolChange: (protocol: ProtocolType) => void;
 }
 export default function SwapPoint({
   swapDetails,
-  splits,
+  paths,
   estimatedPoints,
+  protocol,
+  onProtocolChange,
 }: Props) {
   const [isOpenSwapDetails, setIsOpenSwapDetails] = useState(true);
   const [isOpenMarketOffers, setIsOpenMarketOffers] = useState(true);
@@ -48,17 +53,13 @@ export default function SwapPoint({
     minReceive,
     dexFee,
     dexDeposits,
-    serviceFee,
-    batcherFee,
+    totalDeposits,
   } = swapDetails;
 
   const totalDepositADA =
     inputToken === 'ADA'
-      ? Number(inputAmount) +
-        Number(dexDeposits) +
-        Number(batcherFee) +
-        Number(serviceFee)
-      : Number(dexDeposits) + Number(batcherFee) + Number(serviceFee);
+      ? Number(inputAmount) + Number(totalDeposits)
+      : Number(totalDeposits);
   const receiveAmount = minReceive.toLocaleString(undefined, {
     maximumFractionDigits: 2,
   });
@@ -139,9 +140,9 @@ export default function SwapPoint({
                       width={5}
                       height={5}
                     />
-                    {splits.length > 1 ? (
+                    {paths.length > 1 ? (
                       <div className="text-green-800 font-bold">
-                        {splits.length} ROUTES
+                        {paths.length} ROUTES
                       </div>
                     ) : (
                       <div>DIRECT</div>
@@ -322,13 +323,17 @@ export default function SwapPoint({
           <div className="text-xs">Market Offers</div>
           <div className="flex items-center gap-2">
             <div className="text-[10px] text-white flex items-center gap-1">
-              <Image
+              {/* <Image
                 src="/icons/dex-hunter.svg"
                 alt="dex-hunter"
                 width={10}
                 height={10}
               />
-              <div className="flex items-end">DexHunter</div>
+              <div className="flex items-end">DexHunter</div> */}
+              <SelectProtocol
+                protocol={protocol}
+                onProtocolChange={onProtocolChange}
+              />
             </div>
             {!isOpenMarketOffers ? (
               <div
@@ -349,30 +354,29 @@ export default function SwapPoint({
         {isOpenMarketOffers && (
           <div className=" my-2 p-2">
             <div className="flex flex-col gap-2">
-              {splits.map((split, key) => (
+              {paths.map((path, key) => (
                 <div className="text-xs gradient-border-market-offer" key={key}>
                   <div className="grid grid-cols-2 p-2">
                     <div className="col-span-1">
                       <div className="flex items-center gap-1">
                         <img
-                          src={dexLogoMap[split.dex] || '/icons/logo-gray.svg'}
+                          src={
+                            dexLogoMap[path.protocol] || '/icons/logo-gray.svg'
+                          }
                           alt="logo-gray"
                           width={20}
                           height={20}
                         />
-                        <div>{dexNameMap[split.dex]}</div>
+                        <div>{dexNameMap[path.protocol]}</div>
                       </div>
                     </div>
 
                     <div className="col-span-1 flex items-center justify-between gap-1">
-                      <div>{`${
-                        split.amount_in
-                      } ${inputToken} = ${split.expected_output.toLocaleString(
-                        undefined,
-                        {
-                          maximumFractionDigits: 2,
-                        }
-                      )} ${outputToken}`}</div>
+                      <div>{`${path.amountIn} ${inputToken} = ${Number(
+                        path.amountOut
+                      ).toLocaleString(undefined, {
+                        maximumFractionDigits: 2,
+                      })} ${outputToken}`}</div>
                       <div className="flex items-center gap-1">
                         <Image
                           src="/icons/fee-gray.svg"
@@ -381,7 +385,7 @@ export default function SwapPoint({
                           height={10}
                         />
                         <div className="text-xs text-text-gray flex gap-1 items-center">
-                          <div>{`A${split.fee}`}</div>
+                          <div>{`A${path.batcherFee}`}</div>
                           <div>
                             <TooltipProvider>
                               <Tooltip delayDuration={0}>
@@ -397,42 +401,22 @@ export default function SwapPoint({
                                   <div className="flex flex-col gap-1 min-w-60">
                                     <div className="flex gap-1 justify-between items-center">
                                       <div>Minimum receive</div>
-                                      <div className="font-semibold">{`${split.expected_output.toLocaleString(
-                                        undefined,
-                                        {
-                                          maximumFractionDigits: 2,
-                                        }
-                                      )}A`}</div>
+                                      <div className="font-semibold">{`${formatNumber(Number(path.amountOut))}A`}</div>
                                     </div>
 
                                     <div className="flex gap-1 justify-between items-center">
                                       <div>Price impact</div>
-                                      <div className="font-semibold">{`${split.price_impact.toLocaleString(
-                                        undefined,
-                                        {
-                                          maximumFractionDigits: 2,
-                                        }
-                                      )}A`}</div>
+                                      <div className="font-semibold">{`${formatNumber(Number(path.priceImpact))}A`}</div>
                                     </div>
 
                                     <div className="flex gap-1 justify-between items-center">
                                       <div>Batcher fee</div>
-                                      <div className="text-text-tooltip font-semibold">{`${split.batcher_fee.toLocaleString(
-                                        undefined,
-                                        {
-                                          maximumFractionDigits: 2,
-                                        }
-                                      )}A`}</div>
+                                      <div className="text-text-tooltip font-semibold">{`${formatNumber(Number(path.batcherFee))}A`}</div>
                                     </div>
 
                                     <div className="flex gap-1 justify-between items-center">
                                       <div>Refundable deposit</div>
-                                      <div className=" font-semibold">{`${split.deposits.toLocaleString(
-                                        undefined,
-                                        {
-                                          maximumFractionDigits: 2,
-                                        }
-                                      )}A`}</div>
+                                      <div className=" font-semibold">{`${formatNumber(Number(path.refundableDeposits))}A`}</div>
                                     </div>
                                   </div>
                                 </TooltipContent>
@@ -485,15 +469,31 @@ export default function SwapPoint({
       </div>
       <div className="flex items-center gap-2 justify-center mt-2 text-xs mb-2">
         <div className="text-text-gray font-medium pt-1">Powered by</div>
-        <Image
-          src="/icons/dex-hunter.svg"
-          alt="dex-hunter"
-          width={15}
-          height={15}
-        />
-        <div className="text-white text-[10px] flex items-center pt-1">
-          DexHunter
-        </div>
+        {protocol === ProtocolType.DEXHUNTER ? (
+          <>
+            <Image
+              src="/icons/dex-hunter.svg"
+              alt="dex-hunter"
+              width={15}
+              height={15}
+            />
+            <div className="text-white text-[10px] flex items-center pt-1">
+              DexHunter
+            </div>
+          </>
+        ) : (
+          <>
+            <Image
+              src="/icons/minswap.svg"
+              alt="minswap"
+              width={15}
+              height={15}
+            />
+            <div className="text-white text-[10px] flex items-center pt-1">
+              Minswap Aggregator
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
