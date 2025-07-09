@@ -12,13 +12,14 @@ import {
 import { cn } from '@/lib/utils';
 import { truncateAddress } from '@/lib/wallet';
 import Image from 'next/image';
-
+import { useIsMobile } from '@/hooks/utils/use-mobile';
 interface Props {
   address: string;
   className?: string;
 }
 
 const Address: React.FC<Props> = ({ address, className }) => {
+  const isMobile = useIsMobile();
   const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {
@@ -43,8 +44,8 @@ const Address: React.FC<Props> = ({ address, className }) => {
             <Image
               src={`/icons/${copied ? 'tick-blue.svg' : 'copy-gray.svg'}`}
               alt="copy"
-              width={15}
-              height={15}
+              width={isMobile ? 12 : 15}
+              height={isMobile ? 12 : 15}
             />
           </p>
         </TooltipTrigger>

@@ -109,25 +109,25 @@ const Information: React.FC<Props> = ({ user }) => {
           <div>Log out</div>
         </div>
       </div>
-      <div className="border boder-1 border-gray-800 p-8 mt-4 rounded-2xl">
+      <div className="border boder-1 border-gray-800 p-3 md:p-8 mt-4 rounded-2xl">
         <div className="flex justify-between">
-          <div className="flex gap-3">
+          <div className="flex flex-col md:flex-row gap-3">
             <div>
               {avatar ? (
                 <img
                   src={avatar}
                   alt="profile"
-                  width={40}
-                  height={40}
-                  className="rounded-full w-[40px] h-[40px] object-cover border border-green-500"
+                  width={isMobile ? 20 : 40}
+                  height={isMobile ? 32 : 40}
+                  className="rounded-full w-[32px] h-[32px] md:w-[40px] md:h-[40px] object-cover border border-green-500"
                 />
               ) : (
                 <Image
                   src="/icons/example-ava.svg"
                   alt="profile"
-                  width={40}
-                  height={40}
-                  className="rounded-full w-[40px] h-[40px] object-cover border border-green-500"
+                  width={isMobile ? 20 : 40}
+                  height={isMobile ? 32 : 40}
+                  className="rounded-full w-[32px] h-[32px] md:w-[40px] md:h-[40px] object-cover border border-green-500"
                 />
               )}
             </div>
@@ -136,13 +136,13 @@ const Information: React.FC<Props> = ({ user }) => {
                 {user?.walletAddress ? (
                   <Address
                     address={user?.walletAddress}
-                    className=" text-sm sm:text-md font-bold"
+                    className=" text-xs sm:text-md font-bold"
                   />
                 ) : (
                   'No wallet connected'
                 )}
               </div>
-              <div className="text-xs text-text-gray">
+              <div className="text-xs text-text-gray mt-1">
                 Joined on{' '}
                 {user?.createdAt
                   ? new Date(user?.createdAt).toLocaleDateString()
@@ -153,26 +153,26 @@ const Information: React.FC<Props> = ({ user }) => {
 
           <div>
             {isMobile ? (
-              <div className="flex flex-col">
-              <div>
-                <GradientBorderButton
-                  className="px-8 py-2 text-xs sm:text-sm"
-                  onClick={handleImageUpload}
-                  disabled={uploading}
-                >
-                  {uploading ? 'Uploading...' : 'Change avatar'}
-                </GradientBorderButton>
+              <div className="flex flex-col gap-2">
+                <div>
+                  <GradientBorderButton
+                    className="px-8 py-2 text-xs sm:text-sm w-full"
+                    onClick={handleImageUpload}
+                    disabled={uploading}
+                  >
+                    {uploading ? 'Uploading...' : 'Change avatar'}
+                  </GradientBorderButton>
+                </div>
+                <div>
+                  <GradientBorderButton
+                    className="px-8 py-2 text-xs sm:text-sm"
+                    onClick={() => setIsOpenChangeUsername(true)}
+                    disabled={uploading}
+                  >
+                    {'Change username'}
+                  </GradientBorderButton>
+                </div>
               </div>
-              <div>
-                <GradientBorderButton
-                  className="px-8 py-2 text-xs sm:text-sm"
-                  onClick={() => setIsOpenChangeUsername(true)}
-                  disabled={uploading}
-                >
-                  {'Change username'}
-                </GradientBorderButton>
-              </div>
-            </div>
             ) : (
               <div className="flex gap-2">
                 <div>
