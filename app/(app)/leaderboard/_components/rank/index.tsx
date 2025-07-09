@@ -41,7 +41,7 @@ const Rank: React.FC = () => {
             <TableHead className="text-center text-[10px] md:text-base text-white border-r border-neutral-200 dark:border-border-main">
               Rank
             </TableHead>
-            <TableHead className="text-center text-[10px] md:text-base text-white border-r border-neutral-200 dark:border-border-main">
+            <TableHead className="text-left text-[10px] md:text-base text-white border-r border-neutral-200 dark:border-border-main px-1 md:px-4">
               Username
             </TableHead>
             <TableHead className="text-center text-[10px] md:text-base text-white border-r border-neutral-200 dark:border-border-main">
@@ -128,7 +128,9 @@ const Rank: React.FC = () => {
                   </div>
                 </TableCell>
                 <TableCell className="text-left border-r border-neutral-200 dark:border-border-main p-2 md:p-4">
-                  <TruncateAddress address={userRank?.user.address} className='text-[10px] md:text-base' />
+                  <div className='flex justify-center'>
+                    <TruncateAddress address={userRank?.user.address} className='text-[10px] md:text-base' />
+                  </div>
                 </TableCell>
                 <TableCell className="text-center text-[10px] md:text-base border-r border-neutral-200 dark:border-border-main p-2 md:p-4">
                   {formatNumber(Number(userRank?.totalPoint))}
@@ -207,7 +209,9 @@ const Rank: React.FC = () => {
                   </div>
                 </TableCell>
                 <TableCell className="text-left border-r border-neutral-200 dark:border-border-main p-1 md:p-4">
+                 <div className='flex justify-center'>
                   <TruncateAddress address={item.user.address} className='text-[10px] md:text-base' />
+                 </div>
                 </TableCell>
                 <TableCell className="text-center text-[10px] md:text-base border-r border-neutral-200 dark:border-border-main p-2 md:p-4">
                   {formatNumber(Number(item.totalPoint))}
