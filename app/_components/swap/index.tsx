@@ -20,13 +20,15 @@ import {
   CardanoTokenDetail,
   EsitmateSwapPayload,
   EsitmateSwapResponse,
-  SwapPayload,
+  SwapRequestDexHunterPayload,
+  SwapRequestMinswapPayload,
 } from '@/services/dexhunter/types';
 import { useCardano } from '@cardano-foundation/cardano-connect-with-wallet';
 import { decodeHexAddress } from '@cardano-foundation/cardano-connect-with-wallet-core';
 import SwapPoint from './swap-point';
 import { toast } from 'react-hot-toast';
 import { useSpidexCore } from '@/hooks/core/useSpidexCore';
+import { ProtocolType } from './select-protocol';
 
 interface Props {
   initialInputToken: CardanoTokenDetail | null;
@@ -72,12 +74,12 @@ const Swap: React.FC<Props> = ({
   const {
     getSwapPoolStats,
     estimateSwap,
-    buildSwapRequest,
+    buildSwapRequestDexHunter,
+    buildSwapRequestMinswap,
     submitSwapRequest,
   } = useSpidexCore();
-  const { enabledWallet, unusedAddresses, accountBalance } =
-    useCardano();
-  const {auth}= useSpidexCore()
+  const { enabledWallet, unusedAddresses, accountBalance } = useCardano();
+  const { auth } = useSpidexCore();
 
   const [inputAmount, setInputAmount] = useState<string>(
     initialInputAmount || ''
@@ -107,17 +109,28 @@ const Swap: React.FC<Props> = ({
   const tokenInputBalance =
     inputToken?.ticker === 'ADA' ? accountBalance : inputBalance;
 
+  const [protocol, setProtocol] = useState<ProtocolType>(
+    ProtocolType.DEXHUNTER
+  );
+
   const isInsufficientBalance = useMemo(() => {
     if (Number(inputAmount) > Number(tokenInputBalance)) return true;
+
     if (Number(accountBalance) < DEXHUNTER_SAVE_FEE) return true;
-    let totalDepositADA =
-      Number(estimatedPoints?.deposits) +
-      Number(estimatedPoints?.batcher_fee) +
-      Number(estimatedPoints?.partner_fee);
+
+    let totalDepositADA = Number(
+      protocol === ProtocolType.DEXHUNTER
+        ? estimatedPoints?.dexhunter?.totalDeposits
+        : estimatedPoints?.minswap?.totalDeposits
+    );
+
     if (inputToken?.ticker === 'ADA') {
       totalDepositADA += Number(inputAmount);
     }
-    if (Number(accountBalance) < totalDepositADA + DEXHUNTER_SAVE_FEE) return true;
+
+    if (Number(accountBalance) < totalDepositADA + DEXHUNTER_SAVE_FEE)
+      return true;
+
     return false;
   }, [
     inputAmount,
@@ -150,14 +163,14 @@ const Swap: React.FC<Props> = ({
       }
 
       const usedAddressesHex = await api.getUsedAddresses();
-      console.log('usedAddressesHex', usedAddressesHex);
+      console.log('inputToken', inputToken);
       const addresses = [];
       for (const address of usedAddressesHex) {
         const unusedAddresses = decodeHexAddress(address);
         addresses.push(unusedAddresses);
       }
 
-      const payload: SwapPayload = {
+      const payload: SwapRequestDexHunterPayload = {
         addresses: addresses,
         tokenIn: inputToken?.unit
           ? inputToken?.unit
@@ -171,7 +184,29 @@ const Swap: React.FC<Props> = ({
         blacklistedDexes: [],
       };
 
-      const buildSwap = await buildSwapRequest(payload);
+      const payloadMinswap: SwapRequestMinswapPayload = {
+        sender: addresses[0],
+        min_amount_out: outputAmount,
+        estimate: {
+          amount: inputAmount,
+          token_in: inputToken?.unit
+            ? inputToken?.unit
+            : inputToken?.token_id || ' ',
+          token_out: outputToken?.unit
+            ? outputToken?.unit
+            : outputToken?.token_id || ' ',
+          slippage: 0.01,
+        },
+      };
+
+      let buildSwap;
+
+      if (protocol === ProtocolType.DEXHUNTER) {
+        buildSwap = await buildSwapRequestDexHunter(payload);
+      } else {
+        buildSwap = await buildSwapRequestMinswap(payloadMinswap);
+      }
+
       const signatures = await api?.signTx(buildSwap?.cbor, true);
       const submitSwap = await submitSwapRequest({
         txCbor: buildSwap.cbor,
@@ -204,10 +239,13 @@ const Swap: React.FC<Props> = ({
       blacklistedDexes: [],
     };
     const swapEstResponse = await estimateSwap(swapEstPayload);
+    console.log('🚀 ~ swapEstResponse:', swapEstResponse);
     if (swapEstResponse) {
       setEstimatedPoints(swapEstResponse);
 
-      return swapEstResponse?.total_output;
+      return protocol === 'dexhunter'
+        ? swapEstResponse?.dexhunter?.minReceive
+        : swapEstResponse?.minswap?.minReceive;
     } else {
       setIsNotPool(true);
       return '0';
@@ -220,9 +258,15 @@ const Swap: React.FC<Props> = ({
       console.log('inputToken', inputToken);
       console.log('outputToken', outputToken);
       if (
-        (inputToken?.token_id === outputToken?.token_id && inputToken?.token_id != null && outputToken?.token_id != null) ||
-        (inputToken?.ticker === outputToken?.ticker && inputToken?.ticker != null && outputToken?.ticker != null) ||
-        (inputToken?.unit === outputToken?.unit && inputToken?.unit != null && outputToken?.unit != null)
+        (inputToken?.token_id === outputToken?.token_id &&
+          inputToken?.token_id != null &&
+          outputToken?.token_id != null) ||
+        (inputToken?.ticker === outputToken?.ticker &&
+          inputToken?.ticker != null &&
+          outputToken?.ticker != null) ||
+        (inputToken?.unit === outputToken?.unit &&
+          inputToken?.unit != null &&
+          outputToken?.unit != null)
       ) {
         setIsNotPool(true);
         return;
@@ -352,33 +396,47 @@ const Swap: React.FC<Props> = ({
           </Button>
         )}
 
-        {estimatedPoints?.estimated_point && inputAmount && (
+        {estimatedPoints?.estimatedPoint && inputAmount && (
           <SwapPoint
             swapDetails={{
               inputToken: inputToken?.ticker || '',
               outputToken: outputToken?.ticker || '',
               inputAmount: inputAmount || '',
-              outputAmount: estimatedPoints?.splits?.[0]?.amount_in
-                ? String(
-                    (
-                      estimatedPoints?.splits?.[0]?.expected_output ||
-                      0 / estimatedPoints?.splits?.[0]?.amount_in ||
-                      0
-                    ).toLocaleString(undefined, {
-                      maximumFractionDigits: 4,
-                    })
-                  )
-                : '',
               swapRoute: '',
-              netPrice: estimatedPoints?.net_price,
-              minReceive: estimatedPoints?.total_output,
-              dexFee: estimatedPoints?.partner_fee,
-              dexDeposits: estimatedPoints?.deposits,
-              serviceFee: estimatedPoints?.partner_fee,
-              batcherFee: estimatedPoints?.batcher_fee,
+              netPrice: Number(
+                protocol === 'dexhunter'
+                  ? estimatedPoints?.dexhunter?.netPrice
+                  : estimatedPoints?.minswap?.netPrice
+              ),
+              minReceive: Number(
+                protocol === 'dexhunter'
+                  ? estimatedPoints?.dexhunter?.minReceive
+                  : estimatedPoints?.minswap?.minReceive
+              ),
+              dexFee: Number(
+                protocol === 'dexhunter'
+                  ? estimatedPoints?.dexhunter?.dexFee
+                  : estimatedPoints?.minswap?.dexFee
+              ),
+              dexDeposits: Number(
+                protocol === 'dexhunter'
+                  ? estimatedPoints?.dexhunter?.dexDeposits
+                  : estimatedPoints?.minswap?.dexDeposits
+              ),
+              totalDeposits: Number(
+                protocol === 'dexhunter'
+                  ? estimatedPoints?.dexhunter?.totalDeposits
+                  : estimatedPoints?.minswap?.totalDeposits
+              ),
             }}
-            splits={estimatedPoints?.splits || []}
-            estimatedPoints={String(estimatedPoints?.estimated_point || '1')}
+            paths={
+              protocol === 'dexhunter'
+                ? estimatedPoints?.dexhunter?.paths
+                : estimatedPoints?.minswap?.paths
+            }
+            estimatedPoints={String(estimatedPoints?.estimatedPoint || '1')}
+            protocol={protocol}
+            onProtocolChange={setProtocol}
           />
         )}
       </div>

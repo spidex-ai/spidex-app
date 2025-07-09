@@ -3,6 +3,8 @@ import {
   EsitmateSwapPayload,
   SubmitSwapPayload,
   SwapPayload,
+  SwapRequestDexHunterPayload,
+  SwapRequestMinswapPayload,
 } from '@/services/dexhunter/types';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import {
@@ -772,6 +774,45 @@ export const useSpidexCore = () => {
     [fetchWithAuth, auth]
   );
 
+  const buildSwapRequestDexHunter = useCallback(
+    async (payload: SwapRequestDexHunterPayload) => {
+      setLoading(true);
+      setError(null);
+      try {
+        const data = await fetchWithAuth(`/swap/build/dexhunter`, {
+          method: 'POST',
+          body: JSON.stringify(payload),
+        });
+        return data.data;
+      } catch (error) {
+        return null;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [fetchWithAuth, auth]
+  ); 
+
+
+  const buildSwapRequestMinswap = useCallback(
+    async (payload: SwapRequestMinswapPayload) => {
+      setLoading(true);
+      setError(null);
+      try {
+        const data = await fetchWithAuth(`/swap/build/minswap`, {
+          method: 'POST',
+          body: JSON.stringify(payload),
+        });
+        return data.data;
+      } catch (error) {
+        return null;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [fetchWithAuth, auth]
+  );  
+
   const estimateSwap = useCallback(
     async (payload: EsitmateSwapPayload) => {
       setLoading(true);
@@ -1060,6 +1101,8 @@ export const useSpidexCore = () => {
     getTokenStats,
     getAchievements,
     getRankLeaderboard,
-    getUserRankLeaderboard
+    getUserRankLeaderboard,
+    buildSwapRequestDexHunter,
+    buildSwapRequestMinswap,
   };
 };
