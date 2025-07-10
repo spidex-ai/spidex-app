@@ -22,7 +22,7 @@ export const useLeaderboard = () => {
 
   useEffect(() => {
     fetchUserRankLeaderboard();
-  }, []);
+  }, [orderBy]);
 
   const fetchLeaderboard = async () => {
     try {
@@ -40,7 +40,7 @@ export const useLeaderboard = () => {
   const fetchUserRankLeaderboard = async () => {
     try {
       setLoading(true);
-      const data = await getUserRankLeaderboard();
+      const data = await getUserRankLeaderboard(orderBy);
       console.log('🚀 ~ fetchUserRankLeaderboard ~ data:', data);
       setUserRank(data);
     } catch (error) {

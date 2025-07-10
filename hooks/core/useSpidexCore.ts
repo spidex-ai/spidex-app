@@ -1048,9 +1048,9 @@ export const useSpidexCore = () => {
     }
   },[])
 
-  const getUserRankLeaderboard = useCallback(async () => {
+  const getUserRankLeaderboard = useCallback(async (orderBy: 'point' | 'referral' = 'point') => {
     try {
-      const data = await fetchWithAuth(`/user-point/me/rank`);
+      const data = await fetchWithAuth(`/user-point/me/rank?orderBy=${orderBy}`);
       return data.data;
     } catch (error) {
       throw error;
