@@ -36,15 +36,15 @@ const Rank: React.FC = () => {
         </div>
       ) : (
         <Table className="rounded-lg">
-          <TableHeader className="sticky top-0 z-10 bg-background border border-neutral-200 dark:border-border-main text-white [&_tr:first-child]:rounded-t-lg overflow-hidden">
+          <TableHeader className="sticky top-0 z-10 bg-background border border-neutral-200 dark:border-border-main text-white">
             <TableRow className="bg-black border-b border-neutral-200 dark:border-border-main hover:!bg-black">
-              <TableHead className="text-center text-[10px] md:text-base text-white border-r border-neutral-200 dark:border-border-main">
+              <TableHead className="text-center text-[10px] md:text-base text-white border border-neutral-200 dark:border-border-main">
                 Rank
               </TableHead>
-              <TableHead className="text-left text-[10px] md:text-base text-white border-r border-neutral-200 dark:border-border-main px-1 md:px-4">
+              <TableHead className="text-left text-[10px] md:text-base text-white border border-neutral-200 dark:border-border-main px-1 md:px-4">
                 Username
               </TableHead>
-              <TableHead className="text-center text-[10px] md:text-base text-white border-r border-neutral-200 dark:border-border-main">
+              <TableHead className="text-center text-[10px] md:text-base text-white border border-neutral-200 dark:border-border-main">
                 Address
               </TableHead>
               <TableHead className="text-center text-[10px] md:text-base flex justify-center items-center text-white border-r border-neutral-200 dark:border-border-main">
@@ -132,7 +132,7 @@ const Rank: React.FC = () => {
 
           <TableBody className="border border-neutral-200 dark:border-border-main [&_tr:last-child]:rounded-b-lg overflow-hidden">
             {userRank && (
-              <TableRow className="bg-[#14271d] border-b border-neutral-100 dark:border-neutral-700">
+              <TableRow className="sticky top-[40px] z-10 bg-background bg-[#14271d] hover:!bg-[#14271d] border-b border-neutral-100 dark:border-neutral-700">
                 <TableCell className="text-left border-r border-neutral-200 dark:border-border-main p-2 md:p-4">
                   <div className="flex items-center justify-center">
                     <div className="w-5 h-5 md:w-7 md:h-7 rounded-full flex items-center justify-center text-sm font-medium relative bg-[#1A1A1A]">
