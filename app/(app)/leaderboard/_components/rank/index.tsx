@@ -60,6 +60,7 @@ const Rank: React.FC = () => {
       align: 'center' as any,
       width: isMobile ? 50 : 100,
       render: (rank: number, row: any) => {
+        console.log("🚀 ~ rank:", rank)
         return (
           <>
             {rank === 1 && !row.isMyRank ? (
@@ -88,9 +89,9 @@ const Rank: React.FC = () => {
               </div>
             ) : row.isMyRank ? (
               <div className=" flex items-center justify-center">
-                <TextBorderGradient className="px-2 md:px-3 py-1 rounded-full">
+                <TextBorderGradient className="px-2 md:px-3 py-1 rounded-full cursor-default">
                   <TextGradient
-                    className={cn(isMobile ? 'text-[10px]' : 'text-base')}
+                    className={cn(isMobile ? 'text-[10px]' : rank && row.rank.toString().length > 1 ? 'text-sm' : 'text-base')}
                   >
                     {rank}
                   </TextGradient>
