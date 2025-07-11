@@ -2,14 +2,14 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-import { SidebarMenuItem, SidebarMenuButton, Badge, useSidebar } from '@/components/ui';
+import { SidebarMenuItem, SidebarMenuButton, useSidebar } from '@/components/ui';
 import Image from 'next/image';
 
 const Leaderboard: React.FC = () => {
   const pathname = usePathname();
   const { isMobile, setOpenMobile } = useSidebar();
   const isActive = pathname?.includes('/leaderboard');
-  const href = process.env.NEXT_PUBLIC_ENVIRONMENT === 'production' ? '#' : '/leaderboard';
+  const href = '/leaderboard';
 
   const handleClick = () => {
     if (isMobile) {
@@ -45,14 +45,14 @@ const Leaderboard: React.FC = () => {
               Leaderboard
             </h1>
 
-            {process.env.NEXT_PUBLIC_ENVIRONMENT === 'production' && (
+            {/* {process.env.NEXT_PUBLIC_ENVIRONMENT === 'production' && (
               <Badge
                 variant="brandOutline"
                 className="text-[10px] h-5 w-fit px-1 rounded-md"
               >
                 Soon
               </Badge>
-            )}
+            )} */}
           </div>
         </SidebarMenuButton>
       </SidebarMenuItem>
