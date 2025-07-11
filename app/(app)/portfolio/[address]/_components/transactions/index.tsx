@@ -52,13 +52,13 @@ const Transactions: React.FC = () => {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className='min-w-[200px]'>Action</TableHead>
-                <TableHead className='min-w-[200px]'>Token A</TableHead>
-                <TableHead className='min-w-[200px]'>Amount A</TableHead>
-                <TableHead className='min-w-[200px]'>Token B</TableHead>
-                <TableHead className='min-w-[200px]'>Amount B</TableHead>
-                <TableHead className='min-w-[200px]'>Time</TableHead>
-                <TableHead className="  min-w-[200px] text-right">TXN</TableHead>
+                <TableHead className='min-w-[60px] sm:min-w-[200px] '>Action</TableHead>
+                <TableHead className='min-w-[60px] sm:min-w-[200px] '>Token A</TableHead>
+                <TableHead className='min-w-[60px] sm:min-w-[200px] '>Amount A</TableHead>
+                <TableHead className='min-w-[60px] sm:min-w-[200px] '>Token B</TableHead>
+                <TableHead className='min-w-[60px] sm:min-w-[200px] '>Amount B</TableHead>
+                <TableHead className='min-w-[60px] sm:min-w-[200px] '>Time</TableHead>
+                <TableHead className="  min-w-[60px] sm:min-w-[200px]  text-right">TXN</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody className="max-h-96 overflow-y-hidden">

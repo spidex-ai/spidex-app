@@ -81,6 +81,19 @@ const ChatsGroup: React.FC = () => {
 
   const isActive = pathname.includes('/chat');
 
+  const handleMainChatClick = () => {
+    if (isMobile) {
+      setOpenMobile(false);
+    }
+  };
+
+  const handleChatItemClick = (chatId: string) => {
+    setChat(chatId);
+    if (isMobile) {
+      setOpenMobile(false);
+    }
+  };
+
   return (
     <Collapsible
       className="group/collapsible"
@@ -88,51 +101,53 @@ const ChatsGroup: React.FC = () => {
       onOpenChange={setIsOpen}
     >
       <SidebarMenuItem>
-        <Link href="/chat">
-          <CollapsibleTrigger asChild>
-            <SidebarMenuButton
-              className="justify-between w-full"
-              isActive={isActive}
-            >
-              <div className="flex items-center justify-between w-full">
-                <div className="flex items-center gap-2">
-                  {isActive ? (
-                    <Image
-                      src="/icons/chat-blink.svg"
-                      alt="Chats"
-                      width={20}
-                      height={20}
-                      className="h-4 w-4"
-                    />
-                  ) : (
-                    <Image
-                      src="/icons/chat.svg"
-                      alt="Chats"
-                      width={20}
-                      height={20}
-                      className="h-4 w-4"
-                    />
-                  )}
-                  <h1 className="text-sm font-semibold">Chats</h1>
+        <CollapsibleTrigger asChild>
+          <SidebarMenuButton
+            className="justify-between w-full"
+            isActive={isActive}
+          >
+            <div className="flex items-center justify-between w-full">
+              <Link
+                href="/chat"
+                onClick={handleMainChatClick}
+                className="flex items-center gap-2 flex-1"
+              >
+                {isActive ? (
+                  <Image
+                    src="/icons/chat-blink.svg"
+                    alt="Chats"
+                    width={20}
+                    height={20}
+                    className="h-4 w-4"
+                  />
+                ) : (
+                  <Image
+                    src="/icons/chat.svg"
+                    alt="Chats"
+                    width={20}
+                    height={20}
+                    className="h-4 w-4"
+                  />
+                )}
+                <h1 className="text-sm font-semibold">Chats</h1>
+              </Link>
+              <div className="flex items-center gap-2">
+                <div
+                  onClick={() => {
+                    resetChat();
+                    if (isMobile) {
+                      setOpenMobile(false);
+                    }
+                  }}
+                  className="h-fit w-fit p-1 hover:bg-neutral-200 dark:hover:bg-neutral-600 rounded-md"
+                >
+                  <Icon name="Plus" />
                 </div>
-                <div className="flex items-center gap-2">
-                  <div
-                    onClick={() => {
-                      resetChat();
-                      if (isMobile) {
-                        setOpenMobile(false);
-                      }
-                    }}
-                    className="h-fit w-fit p-1 hover:bg-neutral-200 dark:hover:bg-neutral-600 rounded-md"
-                  >
-                    <Icon name="Plus" />
-                  </div>
-                  <ChevronDown className="h-[14px] w-[14px] transition-transform group-data-[state=open]/collapsible:rotate-180 text-neutral-500 dark:text-neutral-500" />
-                </div>
+                <ChevronDown className="h-[14px] w-[14px] transition-transform group-data-[state=open]/collapsible:rotate-180 text-neutral-500 dark:text-neutral-500" />
               </div>
-            </SidebarMenuButton>
-          </CollapsibleTrigger>
-        </Link>
+            </div>
+          </SidebarMenuButton>
+        </CollapsibleTrigger>
         <CollapsibleContent>
           <SidebarMenuSub className="flex-1 overflow-hidden relative flex flex-col">
             {isLoading ? (
@@ -141,30 +156,30 @@ const ChatsGroup: React.FC = () => {
               chats.map(chat => (
                 <SidebarMenuSubItem key={chat.id} className="group/chat">
                   <SidebarMenuSubButton
-                    asChild
                     isActive={chat.id === chatId}
-                    onClick={() => setChat(chat.id)}
+                    className="flex items-center justify-between w-full"
                   >
                     <Link
                       href={`/chat`}
-                      className="flex items-center justify-between w-full"
+                      className="flex-1 truncate"
+                      onClick={() => handleChatItemClick(chat.id)}
                     >
                       <span className="truncate">{chat.tagline}</span>
-                      <div
-                        onClick={e => handleDelete(chat.id, e)}
-                        className={cn(
-                          'size-6 shrink-0 dark:hover:bg-neutral-700 hover:bg-neutral-200 rounded-md transition-all duration-300 flex items-center justify-center opacity-0 group-hover/chat:opacity-100',
-                          deletingChatId === chat.id &&
-                            'opacity-50 pointer-events-none'
-                        )}
-                      >
-                        {deletingChatId === chat.id ? (
-                          <Loader2 className="size-4 animate-spin" />
-                        ) : (
-                          <Trash2 className="size-4 text-red-600" />
-                        )}
-                      </div>
                     </Link>
+                    <div
+                      onClick={e => handleDelete(chat.id, e)}
+                      className={cn(
+                        'size-6 shrink-0 dark:hover:bg-neutral-700 hover:bg-neutral-200 rounded-md transition-all duration-300 flex items-center justify-center opacity-0 group-hover/chat:opacity-100',
+                        deletingChatId === chat.id &&
+                          'opacity-50 pointer-events-none'
+                      )}
+                    >
+                      {deletingChatId === chat.id ? (
+                        <Loader2 className="size-4 animate-spin" />
+                      ) : (
+                        <Trash2 className="size-4 text-red-600" />
+                      )}
+                    </div>
                   </SidebarMenuSubButton>
                 </SidebarMenuSubItem>
               ))

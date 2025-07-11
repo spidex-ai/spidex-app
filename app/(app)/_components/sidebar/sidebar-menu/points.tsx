@@ -2,13 +2,22 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-import { SidebarMenuItem, SidebarMenuButton } from '@/components/ui';
+import { SidebarMenuItem, SidebarMenuButton, useSidebar } from '@/components/ui';
 import Image from 'next/image';
+
 const Points: React.FC = () => {
   const pathname = usePathname();
+  const { isMobile, setOpenMobile } = useSidebar();
   const isActive = pathname?.includes('/points');
+
+  const handleClick = () => {
+    if (isMobile) {
+      setOpenMobile(false);
+    }
+  };
+
   return (
-    <Link href="/points">
+    <Link href="/points" onClick={handleClick}>
       <SidebarMenuItem>
         <SidebarMenuButton isActive={pathname?.includes('/points') ?? false}>
           <h1 className="flex items-center gap-2 font-semibold">

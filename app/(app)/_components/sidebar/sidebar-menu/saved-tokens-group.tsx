@@ -31,7 +31,7 @@ const SavedTokensGroup: React.FC = () => {
 
   const { auth } = useSpidexCore();
 
-  const { open: isSidebarOpen } = useSidebar();
+  const { open: isSidebarOpen, isMobile, setOpenMobile } = useSidebar();
 
   const { savedTokens, isLoading } = useSavedTokens();
 
@@ -41,6 +41,18 @@ const SavedTokensGroup: React.FC = () => {
   const isActive =
     pathname.includes('/token') && !pathname.includes(`/token/${tokenTrade}`);
 
+  const handleMainLinkClick = () => {
+    if (isMobile) {
+      setOpenMobile(false);
+    }
+  };
+
+  const handleSubLinkClick = () => {
+    if (isMobile) {
+      setOpenMobile(false);
+    }
+  };
+
   return (
     <Collapsible
       className="group/collapsible"
@@ -48,44 +60,46 @@ const SavedTokensGroup: React.FC = () => {
       onOpenChange={setIsOpen}
     >
       <SidebarMenuItem>
-        <Link href="/token">
-          <CollapsibleTrigger asChild>
-            <SidebarMenuButton
-              className="justify-between w-full"
-              isActive={isActive}
-            >
-              <div className="flex items-center justify-between w-full">
-                <div className="flex items-center gap-2">
-                  {isActive ? (
-                    <Image
-                      src="/icons/token-blink.svg"
-                      alt="Tokens"
-                      width={20}
-                      height={20}
-                      className="h-4 w-4"
-                    />
-                  ) : (
-                    <Image
-                      src="/icons/token-white.svg"
-                      alt="Tokens"
-                      width={20}
-                      height={20}
-                      className={`${!isSidebarOpen ? 'h-5 w-5' : 'h-4 w-4'}`}
-                    />
-                  )}
-                  <h1 className="text-sm font-semibold">Tokens</h1>
-                  <Badge
-                    variant="brandOutline"
-                    className="text-[10px] h-5 w-fit px-1 rounded-md"
-                  >
-                    New
-                  </Badge>
-                </div>
-                <ChevronDown className="h-[14px] w-[14px] transition-transform group-data-[state=open]/collapsible:rotate-180 text-neutral-500 dark:text-neutral-500" />
-              </div>
-            </SidebarMenuButton>
-          </CollapsibleTrigger>
-        </Link>
+        <CollapsibleTrigger asChild>
+          <SidebarMenuButton
+            className="justify-between w-full"
+            isActive={isActive}
+          >
+            <div className="flex items-center justify-between w-full">
+              <Link
+                href="/token"
+                onClick={handleMainLinkClick}
+                className="flex items-center gap-2 flex-1"
+              >
+                {isActive ? (
+                  <Image
+                    src="/icons/token-blink.svg"
+                    alt="Tokens"
+                    width={20}
+                    height={20}
+                    className="h-4 w-4"
+                  />
+                ) : (
+                  <Image
+                    src="/icons/token-white.svg"
+                    alt="Tokens"
+                    width={20}
+                    height={20}
+                    className={`${!isSidebarOpen ? 'h-5 w-5' : 'h-4 w-4'}`}
+                  />
+                )}
+                <h1 className="text-sm font-semibold">Tokens</h1>
+                <Badge
+                  variant="brandOutline"
+                  className="text-[10px] h-5 w-fit px-1 rounded-md"
+                >
+                  New
+                </Badge>
+              </Link>
+              <ChevronDown className="h-[14px] w-[14px] transition-transform group-data-[state=open]/collapsible:rotate-180 text-neutral-500 dark:text-neutral-500" />
+            </div>
+          </SidebarMenuButton>
+        </CollapsibleTrigger>
         <CollapsibleContent>
           <SidebarMenuSub className="flex-1 overflow-hidden relative flex flex-col">
             {isLoading ? (
@@ -94,19 +108,20 @@ const SavedTokensGroup: React.FC = () => {
               savedTokens.map(savedToken => (
                 <SidebarMenuSubItem key={savedToken.id}>
                   <SidebarMenuSubButton
-                    asChild
                     isActive={pathname.includes(`/token/${savedToken.id}`)}
+                    className="w-full flex items-center justify-between"
                   >
                     <Link
                       href={`/token/${savedToken.id}`}
-                      className="w-full flex items-center justify-between"
+                      className="flex-1 truncate"
+                      onClick={handleSubLinkClick}
                     >
                       <span className="truncate">${savedToken.symbol}</span>
-                      <SaveToken
-                        address={savedToken.id}
-                        className="hover:bg-neutral-300 dark:hover:bg-neutral-600"
-                      />
                     </Link>
+                    <SaveToken
+                      address={savedToken.id}
+                      className="hover:bg-neutral-300 dark:hover:bg-neutral-600"
+                    />
                   </SidebarMenuSubButton>
                 </SidebarMenuSubItem>
               ))

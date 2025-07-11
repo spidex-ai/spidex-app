@@ -5,7 +5,7 @@ const ReportBug = () => {
   const [isHovered, setIsHovered] = React.useState(false);
   return (
     <div
-      className="absolute bottom-0 right-5 cursor-pointer flex items-center gap-2"
+      className="absolute sm:bottom-0 bottom-[90%] right-5 cursor-pointer flex items-center gap-2"
       onClick={() => {
         window.open(
           'https://spidex-ai.gitbook.io/spidex-ai-docs/bug-bounty-program',

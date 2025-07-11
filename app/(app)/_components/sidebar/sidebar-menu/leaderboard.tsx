@@ -2,15 +2,23 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-import { SidebarMenuItem, SidebarMenuButton, Badge } from '@/components/ui';
+import { SidebarMenuItem, SidebarMenuButton, Badge, useSidebar } from '@/components/ui';
 import Image from 'next/image';
 
 const Leaderboard: React.FC = () => {
   const pathname = usePathname();
+  const { isMobile, setOpenMobile } = useSidebar();
   const isActive = pathname?.includes('/leaderboard');
   const href = process.env.NEXT_PUBLIC_ENVIRONMENT === 'production' ? '#' : '/leaderboard';
+
+  const handleClick = () => {
+    if (isMobile) {
+      setOpenMobile(false);
+    }
+  };
+
   return (
-    <Link href={href}>
+    <Link href={href} onClick={handleClick}>
       <SidebarMenuItem>
         <SidebarMenuButton
           isActive={pathname?.includes('/leaderboard') ?? false}

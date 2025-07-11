@@ -17,11 +17,18 @@ import Image from 'next/image';
 
 const AccountButton: React.FC = () => {
   const pathname = usePathname();
-  const { open } = useSidebar();
+  const { open, isMobile, setOpenMobile } = useSidebar();
 
   const isActive = pathname.includes('/account');
+
+  const handleClick = () => {
+    if (isMobile) {
+      setOpenMobile(false);
+    }
+  };
+
   return (
-    <Link href="/account">
+    <Link href="/account" onClick={handleClick}>
       <SidebarMenuItem>
         <SidebarMenuButton isActive={pathname?.includes('/account') ?? false}>
           <h1 className="flex items-center gap-2 font-semibold">

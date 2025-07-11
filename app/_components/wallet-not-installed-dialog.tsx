@@ -9,6 +9,8 @@ import {
 } from '@/components/ui';
 import { ArrowLeft } from 'lucide-react';
 import Image from 'next/image';
+import { useIsMobile } from '@/hooks/utils/use-mobile';
+import { useRouter } from 'next/navigation';
 
 interface WalletNotInstalledDialogProps {
   isOpen: boolean;
@@ -17,6 +19,8 @@ interface WalletNotInstalledDialogProps {
   walletLogo: string;
   walletLink: string;
   walletId: string;
+  iosLink?: string;
+  androidLink?: string;
 }
 
 const WalletNotInstalledDialog: React.FC<WalletNotInstalledDialogProps> = ({
@@ -26,7 +30,12 @@ const WalletNotInstalledDialog: React.FC<WalletNotInstalledDialogProps> = ({
   walletLogo,
   walletLink,
   walletId,
+  iosLink,
+  androidLink,
 }) => {
+  const isMobile = useIsMobile();
+  const router = useRouter();
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[425px] !bg-bg-tab">
@@ -60,17 +69,42 @@ const WalletNotInstalledDialog: React.FC<WalletNotInstalledDialogProps> = ({
               height={20}
             />
             <p className="text-white text-sm translate-y-[2px]">
-              Oops! Wallet extension is not installed.
+              {isMobile
+                ? "Download the mobile app to continue"
+                : "Oops! Wallet extension is not installed."
+              }
             </p>
           </div>
-          <div className="w-full text-center">
-            <GradientButton
-              className="w-[302px] py-3 rounded-full"
-              onClick={() => window.open(walletLink, '_blank')}
-            >
-              Get Wallet
-            </GradientButton>
-          </div>
+
+          {isMobile && (iosLink || androidLink) ? (
+            <div className="w-full space-y-3 flex flex-col items-center">
+              {iosLink && (
+                <GradientButton
+                  className="w-[302px] py-3 rounded-full"
+                  onClick={() => router.push(iosLink)}
+                >
+                  Download for iOS
+                </GradientButton>
+              )}
+              {androidLink && (
+                <GradientButton
+                  className="w-[302px] py-3 rounded-full"
+                  onClick={() => router.push(androidLink)}
+                >
+                  Download for Android
+                </GradientButton>
+              )}
+            </div>
+          ) : (
+            <div className="w-full text-center">
+              <GradientButton
+                className="w-[302px] py-3 rounded-full"
+                onClick={() => window.open(walletLink, '_blank')}
+              >
+                Get Wallet
+              </GradientButton>
+            </div>
+          )}
         </div>
       </DialogContent>
     </Dialog>

@@ -34,6 +34,7 @@ import { useAppDispatch } from '@/store/hooks';
 import { selectIsProcessingOAuth } from '@/store/selectors/authSelectors';
 import { useSelector } from 'react-redux';
 import { setIsProcessingOAuth } from '@/store/slices/authSlice';
+import { useIsMobile } from '@/hooks/utils/use-mobile';
 
 // Wallet methods configuration
 const WALLET_METHODS = [
@@ -50,6 +51,8 @@ const WALLET_METHODS = [
     icon: '/icons/yoroi.svg',
     description: 'Yoroi Wallet',
     link: 'https://chromewebstore.google.com/detail/yoroi/ffnbelfdoeiohenkjibnmadjiehjhajb',
+    iosLink: 'https://apps.apple.com/us/app/emurgos-yoroi-cardano-wallet/id1447326389',
+    androidLink: 'https://play.google.com/store/apps/details?id=com.emurgo&hl=en',
   },
   {
     id: 'vespr',
@@ -57,6 +60,8 @@ const WALLET_METHODS = [
     icon: '/icons/vespr.svg',
     description: 'Vespr Wallet',
     link: 'https://chromewebstore.google.com/detail/vespr-wallet/bedogdpgdnifilpgeianmmdabklhfkcn',
+    iosLink: 'https://apps.apple.com/us/app/vespr-cardano-wallet/id1565749376?pt=122988269&ct=s_header_download_c&mt=8',
+    androidLink: 'https://play.google.com/store/apps/details?id=art.nft_craze.gallery.main&utm_source=vespr_website&utm_medium=header_download&pli=1',
   },
   {
     id: 'eternl',
@@ -64,6 +69,8 @@ const WALLET_METHODS = [
     icon: '/icons/eternl.svg',
     description: 'Eternl Wallet',
     link: 'https://chromewebstore.google.com/detail/eternl/kmhcihpebfmpgmihbkipmjlmmioameka',
+    iosLink: 'https://apps.apple.com/de/app/eternl-by-tastenkunst/id1603854385',
+    androidLink: 'https://play.google.com/store/apps/details?id=io.ccvault.v1.main',
   },
   {
     id: 'gerowallet',
@@ -85,6 +92,8 @@ const WALLET_METHODS = [
     icon: '/icons/begin.svg',
     description: 'Begin Wallet',
     link: 'https://chromewebstore.google.com/detail/begin-bitcoin-cardano-wal/nhbicdelgedinnbcidconlnfeionhbml',
+    iosLink: 'https://apps.apple.com/us/app/begin-bitcoin-cardano-wallet/id1642488837',
+    androidLink: 'https://play.google.com/store/apps/details?id=is.begin.app',
   },
   {
     id: 'typhon',
@@ -152,12 +161,21 @@ const LoginModal: React.FC = () => {
     logo: string;
     link: string;
     id: string;
+    iosLink?: string;
+    androidLink?: string;
   } | null>(null);
   const processedCodeRef = useRef<string | null>(null);
   const params = useSearchParams();
   const [isClient, setIsClient] = useState(false);
   const [isPrivacyAccepted, setIsPrivacyAccepted] = useState(false);
   const [isProcessingCallback, setIsProcessingCallback] = useState(false);
+  const isMobile = useIsMobile();
+
+  // Filter wallets for mobile users - only show Vespr, Begin, Yoroi, Eternl
+  const MOBILE_ALLOWED_WALLETS = ['vespr', 'begin', 'yoroi', 'eternl'];
+  const filteredWalletMethods = isMobile
+    ? WALLET_METHODS.filter(wallet => MOBILE_ALLOWED_WALLETS.includes(wallet.id))
+    : WALLET_METHODS;
 
   const {
     signMessage: signMessageSpidex,
@@ -256,6 +274,8 @@ const LoginModal: React.FC = () => {
         logo: wallet?.icon || '',
         link: wallet?.link || '',
         id: wallet?.id || walletName || '',
+        iosLink: wallet?.iosLink,
+        androidLink: wallet?.androidLink,
       });
       setShowWalletNotInstalled(true);
     } else {
@@ -801,6 +821,7 @@ const LoginModal: React.FC = () => {
 
   // Render Metamask option
   const renderMetamaskConnect = () => {
+    if (isMobile) return null;
     const isThisWalletConnecting = walletConnecting === 'metamask';
     const isDisabled =
       (anyConnectionInProgress && !isThisWalletConnecting) ||
@@ -920,7 +941,7 @@ const LoginModal: React.FC = () => {
               </div>
               <div className="space-y-2 max-h-[350px] scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 overflow-y-auto">
                 <div className="space-y-2 flex flex-col gap-2">
-                  {WALLET_METHODS.map(renderWalletOption)}
+                  {filteredWalletMethods.map(renderWalletOption)}
                   {renderMetamaskConnect()}
                 </div>
               </div>
@@ -949,6 +970,8 @@ const LoginModal: React.FC = () => {
         walletLogo={notInstalledWallet?.logo || ''}
         walletLink={notInstalledWallet?.link || ''}
         walletId={notInstalledWallet?.id || ''}
+        iosLink={notInstalledWallet?.iosLink}
+        androidLink={notInstalledWallet?.androidLink}
       />
 
       <Dialog

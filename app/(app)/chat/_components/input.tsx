@@ -71,7 +71,7 @@ const ChatInput: React.FC = () => {
               'focus-visible:outline-none',
               'dark:placeholder:text-neutral-400'
             )}
-            value={input}
+            value={isLoading ? '' : input}
             onChange={e => {
               setInput(e.target.value);
             }}
