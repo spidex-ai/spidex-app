@@ -19,4 +19,22 @@ const TextGradient = (props: TextGradientProps) => {
   );
 };
 
-export { TextGradient };
+const TextBorderGradient = (props: TextGradientProps) => {
+  const { children, className, ...rest } = props;
+  return (
+    <div
+    {...rest}
+
+    className={
+      cn(
+        "gradient-border-text-main cursor-pointer text-white bg-bg-tab flex items-center justify-center gap-1",
+        "hover:shadow-[0_0_10px_#009EFF] transition-shadow duration-300",
+        className
+      )
+    }
+    >
+      {children}
+    </div>
+  );
+};
+export { TextGradient, TextBorderGradient };

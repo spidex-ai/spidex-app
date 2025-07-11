@@ -491,3 +491,109 @@ body {
   mask-composite: exclude;
   z-index: -1;
 }
+
+.table-leaderboard {
+  background-color: #0B1320 !important;
+  max-height: 100%;
+  overflow-y: auto;
+  position: relative;
+  .rc-table-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: black;
+  }
+  table {
+    width: 100% !important;
+    padding: 15px !important;
+    border: 1px solid #5D717D !important;
+
+    .rc-table-cell {
+      border-right: 1px solid #5D717D !important;
+      @apply p-2 md:p-[15px];
+    }
+
+    .table-leaderboard-row-1 {
+      border-left: 3px solid #FBDF73;
+      background: linear-gradient(90deg, rgba(251, 223, 115, 0.3) 0%, rgba(251, 223, 115, 0) 100%) !important;
+    }
+    .table-leaderboard-row-2 {
+      border-left: 3px solid #73D2FB;
+      background: linear-gradient(90deg, rgba(192, 192, 192, 0.3) 0%, rgba(192, 192, 192, 0) 100%) !important;
+    }
+    .table-leaderboard-row-3 {
+      border-left: 3px solid #FB8C73;
+      background: linear-gradient(90deg, rgba(205, 127, 50, 0.3) 0%, rgba(205, 127, 50, 0) 100%) !important;
+    }
+    .table-leaderboard-row-my-rank {
+      position: sticky !important;
+      @apply top-[48px] md:top-[50px];
+      z-index: 200 !important;
+      background-color: #0B1320 !important;
+      background-image: linear-gradient(90deg, rgba(187, 249, 133, 0.3) 0%, rgba(187, 249, 133, 0) 100%) !important;
+      
+      /* Add glow effect */
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      
+      /* Subtle animation */
+      animation: row-glow 3s ease-in-out infinite alternate;
+      
+      /* Enhanced border */
+      border-left-width: 1px;
+      position: relative;
+    }
+    
+  }
+}
+
+@keyframes row-glow {
+  0% {
+    box-shadow: 
+      inset 0 0 15px rgba(187, 249, 133, 0.2),
+      0 2px 8px rgba(187, 249, 133, 0.1);
+  }
+  100% {
+    box-shadow: 
+      inset 0 0 25px rgba(187, 249, 133, 0.3),
+      0 2px 15px rgba(187, 249, 133, 0.15);
+  }
+}
+
+
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+  50% {
+    left: 100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+
+.gradient-border-text-main {
+  position: relative;
+  /* display: inline-block; */
+  /* padding: 9px 52px !important; */
+  color: white;
+  background-color: #010a19;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.gradient-border-text-main::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 2px;
+  background: linear-gradient(90deg, #bbf985, #009eff);
+  border-radius: 50%;
+  -webkit-mask:
+    linear-gradient(white 0 0) content-box,
+    linear-gradient(white 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  z-index: -1;
+}
