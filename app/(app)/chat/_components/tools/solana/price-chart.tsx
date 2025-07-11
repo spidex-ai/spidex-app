@@ -42,7 +42,8 @@ const PriceChart: React.FC<Props> = ({ tool, prevToolAgent }) => {
 };
 
 const PriceChartBody = ({ tokenAddress }: { tokenAddress: string }) => {
-  const { data, isLoading } = useTokenDetail(tokenAddress);
+  console.log("🚀 ~ PriceChartBody ~ tokenAddress:", tokenAddress)
+  const { data, isLoading } = useTokenDetail(tokenAddress || 'ADA');
   const [quote, setQuote] = useState<QuoteType>(QuoteType.USD);
 
   return (
