@@ -450,7 +450,7 @@ body {
 }
 
 .table-sort-icon {
-  padding-top: 2px;
+  /* padding-top: 2px; */
   > img:nth-child(1) {
     rotate: 180deg;
   }

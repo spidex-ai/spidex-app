@@ -1,7 +1,6 @@
 'use client';
 
 import {
-  ButtonBlack,
   Skeleton,
   Tooltip,
   TooltipContent,
@@ -9,42 +8,16 @@ import {
   TooltipTrigger,
 } from '@/components/ui';
 import { AvatarUser } from '@/components/ui/image-fallback';
-import {
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
+
 import { useIsMobile } from '@/hooks';
 import { useLeaderboard } from '@/hooks/leaderboard/use-leaderboard';
 import { cn, formatNumber } from '@/lib/utils';
 import { truncateAddress } from '@/lib/wallet';
 import Image from 'next/image';
 import React, { useState } from 'react';
-import DataTable, { createTheme } from 'react-data-table-component';
+
 import Table from 'rc-table';
 import { TextBorderGradient, TextGradient } from '@/components/ui/text';
-
-// createTheme creates a new theme named solarized that overrides the build in dark theme
-createTheme('solarized', {
-  text: {
-    primary: '#ffffff',
-  },
-  background: {
-    default: '#0B1320',
-  },
-  context: {
-    background: '#cb4b16',
-    text: '#FFFFFF',
-  },
-  divider: {
-    default: '#5D717D',
-  },
-  border: {
-    default: '#fffffff',
-  },
-});
 
 const Rank: React.FC = () => {
   const {
@@ -77,7 +50,11 @@ const Rank: React.FC = () => {
 
   const columns = [
     {
-      title: <div className="text-center text-[10px] md:text-sm font-medium">Rank</div>,
+      title: (
+        <div className="text-center text-[10px] md:text-sm font-medium">
+          Rank
+        </div>
+      ),
       dataIndex: 'rank',
       key: 'rank',
       align: 'center' as any,
@@ -111,9 +88,13 @@ const Rank: React.FC = () => {
               </div>
             ) : row.isMyRank ? (
               <div className=" flex items-center justify-center">
-               <TextBorderGradient className="px-2 md:px-3 py-1 rounded-full">
-                <TextGradient className={cn(isMobile ? 'text-[10px]' : 'text-base')}>{rank}</TextGradient>
-               </TextBorderGradient>
+                <TextBorderGradient className="px-2 md:px-3 py-1 rounded-full">
+                  <TextGradient
+                    className={cn(isMobile ? 'text-[10px]' : 'text-base')}
+                  >
+                    {rank}
+                  </TextGradient>
+                </TextBorderGradient>
               </div>
             ) : (
               <div className="text-[10px] md:text-sm text-white py-1">
@@ -125,7 +106,11 @@ const Rank: React.FC = () => {
       },
     },
     {
-      title: <div className="text-left text-[10px] md:text-sm font-medium">Username</div>,
+      title: (
+        <div className="text-left text-[10px] md:text-sm font-medium">
+          Username
+        </div>
+      ),
       dataIndex: 'username',
       key: 'username',
       align: 'left' as any,
@@ -133,28 +118,33 @@ const Rank: React.FC = () => {
       render: (username: string, row: any) => {
         return (
           <div className="grid grid-cols-[24px_1fr] items-center gap-1 md:gap-2">
-            {
-              !isMobile ? (
-                <AvatarUser
-              src={row.avatar ? row.avatar : 'error'}
-              alt={username}
-              className="w-4 h-4 md:w-6 md:h-6 rounded-full justify-self-center"
-            />
-              ) : null
-            }
+            {!isMobile ? (
+              <AvatarUser
+                src={row.avatar ? row.avatar : 'error'}
+                alt={username}
+                className="w-4 h-4 md:w-6 md:h-6 rounded-full justify-self-center"
+              />
+            ) : null}
             <div className="text-[10px] md:text-sm">{`${username} ${row.rank === userRank?.rank ? '(You)' : ''}`}</div>
           </div>
         );
       },
     },
     {
-      title: <div className="text-center text-[10px] md:text-sm font-medium">Address</div>,
+      title: (
+        <div className="text-center text-[10px] md:text-sm font-medium">
+          Address
+        </div>
+      ),
       dataIndex: 'address',
       key: 'address',
       render: (text: string) => {
         return (
           <div className="flex items-center gap-2 justify-center">
-            <TruncateAddress address={text} className={cn(isMobile ? 'text-[10px]' : 'text-sm')} />
+            <TruncateAddress
+              address={text}
+              className={cn(isMobile ? 'text-[10px]' : 'text-sm')}
+            />
           </div>
         );
       },
@@ -162,18 +152,102 @@ const Rank: React.FC = () => {
     },
 
     {
-      title: <div className="text-center text-[10px] md:text-sm font-medium">Total Silk Points</div>,
+      title: (
+        <div className="text-center text-[10px] md:text-sm font-medium flex items-center justify-center">
+          <div
+            className="flex gap-1 cursor-pointer"
+            onClick={() => changeOrderBy('point')}
+          >
+            <div>Total Silk Points</div>
+
+            <TooltipProvider>
+              <Tooltip delayDuration={0}>
+                <TooltipTrigger asChild>
+                  <div className="table-sort-icon">
+                    {orderBy === 'point' ? (
+                      <img
+                        src="/icons/icon-sort-desc.svg"
+                        alt="sort"
+                        className="w-3"
+                      />
+                    ) : (
+                      <>
+                        <img
+                          src="/icons/icon-sort-desc.svg"
+                          alt="sort"
+                          className="w-3"
+                        />
+                        <img
+                          src="/icons/icon-sort-desc.svg"
+                          alt="sort"
+                          className="w-3"
+                        />
+                      </>
+                    )}
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent side="top">
+                  Ranking by Total SILK Points
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
+        </div>
+      ),
       dataIndex: 'totalPoint',
       key: 'totalPoint',
       useFixedHeader: true,
 
       render: (totalPoint: string) => (
-        <div className="text-center text-[10px] md:text-sm">{formatNumber(Number(totalPoint), 2)}</div>
+        <div className="text-center text-[10px] md:text-sm">
+          {formatNumber(Number(totalPoint), 2)}
+        </div>
       ),
     },
 
     {
-      title: <div className="text-center text-[10px] md:text-sm font-medium">Total Referral</div>,
+      title: (
+        <div className="text-center text-[10px] md:text-sm font-medium flex items-center justify-center">
+          <div
+                  className="flex justify-center gap-1 cursor-pointer"
+                  onClick={() => changeOrderBy('referral')}
+                >
+                  <div>Total Referral</div>
+
+                  <TooltipProvider>
+                    <Tooltip delayDuration={0}>
+                      <TooltipTrigger asChild>
+                        <div className="table-sort-icon">
+                          {orderBy === 'referral' ? (
+                            <img
+                              src="/icons/icon-sort-desc.svg"
+                              alt="sort"
+                              className="w-3"
+                            />
+                          ) : (
+                            <>
+                              <img
+                                src="/icons/icon-sort-desc.svg"
+                                alt="sort"
+                                className="w-3"
+                              />
+                              <img
+                                src="/icons/icon-sort-desc.svg"
+                                alt="sort"
+                                className="w-3"
+                              />
+                            </>
+                          )}
+                        </div>
+                      </TooltipTrigger>
+                      <TooltipContent side="top">
+                        Ranking by Total Referral
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
+        </div>
+      ),
       dataIndex: 'totalReferralCount',
       key: 'totalReferralCount',
       useFixedHeader: true,
