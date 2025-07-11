@@ -7,7 +7,7 @@ const ReminderModal = dynamic(
   () => import('./reminder-modal'),
   { 
     ssr: false,
-    loading: () => <Skeleton className="w-screen h-screen" />
+    loading: () => <Skeleton className="w-full h-[20px]" />
   }
 )
 
