@@ -12,6 +12,8 @@ interface ChangeUserNameModalProps {
   user: UserSpidex;
 }
 
+const MAX_LENGTH_USERNAME = 12;
+
 const ChangeUserNameModal = ({
   isOpen,
   onOpenChange,
@@ -22,9 +24,10 @@ const ChangeUserNameModal = ({
 
   const [isConnecting, setIsConnecting] = useState(false);
 
+  const disabled = newUsername.length < 6;
+
   const handleChangeUsername = useCallback(async () => {
     try {
-        console.log("🚀 ~ newUsername:", newUsername)
         setIsConnecting(true);
         const response = await updateUserInfo({
             fullName: user.fullName || '',
@@ -57,7 +60,12 @@ const ChangeUserNameModal = ({
               type="text"
               autoFocus
               value={newUsername}
-              onChange={e => setNewUsername(e.target.value)}
+              onChange={e => {
+                const value = e.target.value;
+                if (/^[a-zA-Z0-9]*$/.test(value) && value.length <= MAX_LENGTH_USERNAME) {
+                  setNewUsername(value);
+                }
+              }}
               placeholder="Type your new username"
               className="w-full bg-transparent rounded-md p-2 text-white outline-none focus:border-primary"
             />
@@ -66,6 +74,7 @@ const ChangeUserNameModal = ({
             <GradientButton
               onClick={handleChangeUsername}
               isLoading={isConnecting}
+              disabled={disabled}
             >
               Save
             </GradientButton>

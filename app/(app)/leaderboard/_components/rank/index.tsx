@@ -60,7 +60,7 @@ const Rank: React.FC = () => {
       align: 'center' as any,
       width: isMobile ? 50 : 100,
       render: (rank: number, row: any) => {
-        console.log("🚀 ~ rank:", rank)
+        console.log('🚀 ~ rank:', rank);
         return (
           <>
             {rank === 1 && !row.isMyRank ? (
@@ -88,15 +88,29 @@ const Rank: React.FC = () => {
                 />
               </div>
             ) : row.isMyRank ? (
-              <div className=" flex items-center justify-center">
-                <TextBorderGradient className="px-2 md:px-3 py-1 rounded-full cursor-default">
-                  <TextGradient
-                    className={cn(isMobile ? 'text-[10px]' : rank && row.rank.toString().length > 1 ? 'text-sm' : 'text-base')}
-                  >
-                    {rank}
-                  </TextGradient>
-                </TextBorderGradient>
-              </div>
+              <>
+                {rank === -1 ? (
+                  <div>-</div>
+                ) : (
+                  <div className=" flex items-center justify-center">
+                    <TextBorderGradient
+                      className={`px-2 md:px-3 py-1 rounded-full cursor-default ${rank && row.rank.toString().length > 1 ? 'py-1 md:py-2' : 'py-1'}`}
+                    >
+                      <TextGradient
+                        className={cn(
+                          isMobile
+                            ? 'text-[10px]'
+                            : rank && row.rank.toString().length > 1
+                              ? 'text-[12px]'
+                              : 'text-base'
+                        )}
+                      >
+                        {rank}
+                      </TextGradient>
+                    </TextBorderGradient>
+                  </div>
+                )}
+              </>
             ) : (
               <div className="text-[10px] md:text-sm text-white py-1">
                 {rank}
@@ -210,43 +224,43 @@ const Rank: React.FC = () => {
       title: (
         <div className="text-center text-[10px] md:text-sm font-medium flex items-center justify-center">
           <div
-                  className="flex justify-center gap-1 cursor-pointer"
-                  onClick={() => changeOrderBy('referral')}
-                >
-                  <div>Total Referral</div>
+            className="flex justify-center gap-1 cursor-pointer"
+            onClick={() => changeOrderBy('referral')}
+          >
+            <div>Total Referral</div>
 
-                  <TooltipProvider>
-                    <Tooltip delayDuration={0}>
-                      <TooltipTrigger asChild>
-                        <div className="table-sort-icon">
-                          {orderBy === 'referral' ? (
-                            <img
-                              src="/icons/icon-sort-desc.svg"
-                              alt="sort"
-                              className="w-3"
-                            />
-                          ) : (
-                            <>
-                              <img
-                                src="/icons/icon-sort-desc.svg"
-                                alt="sort"
-                                className="w-3"
-                              />
-                              <img
-                                src="/icons/icon-sort-desc.svg"
-                                alt="sort"
-                                className="w-3"
-                              />
-                            </>
-                          )}
-                        </div>
-                      </TooltipTrigger>
-                      <TooltipContent side="top">
-                        Ranking by Total Referral
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                </div>
+            <TooltipProvider>
+              <Tooltip delayDuration={0}>
+                <TooltipTrigger asChild>
+                  <div className="table-sort-icon">
+                    {orderBy === 'referral' ? (
+                      <img
+                        src="/icons/icon-sort-desc.svg"
+                        alt="sort"
+                        className="w-3"
+                      />
+                    ) : (
+                      <>
+                        <img
+                          src="/icons/icon-sort-desc.svg"
+                          alt="sort"
+                          className="w-3"
+                        />
+                        <img
+                          src="/icons/icon-sort-desc.svg"
+                          alt="sort"
+                          className="w-3"
+                        />
+                      </>
+                    )}
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent side="top">
+                  Ranking by Total Referral
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
         </div>
       ),
       dataIndex: 'totalReferralCount',
