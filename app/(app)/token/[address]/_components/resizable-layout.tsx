@@ -9,20 +9,6 @@ interface ResizableLayoutProps {
   sidePanelComponent: React.ReactNode;
 }
 
-// Temporary UI component for collapsed panels
-const TempCollapsedUI = ({ type }: { type: 'chart' | 'side' }) => (
-  <div className="h-full w-full flex items-center justify-center bg-muted/50 rounded-md border-2 border-dashed border-muted-foreground/25">
-    <div className="text-center text-muted-foreground">
-      <div className="text-sm font-medium">
-        {type === 'chart' ? 'Chart Collapsed' : 'Chat Collapsed'}
-      </div>
-      <div className="text-xs mt-1">
-        Resize to expand
-      </div>
-    </div>
-  </div>
-);
-
 const ResizableLayout = ({
   chartComponent,
   tabsComponent,
