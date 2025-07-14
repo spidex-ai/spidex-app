@@ -28,11 +28,11 @@ const MarketStats: React.FC<Props> = ({ tokenId, isLoadingTokenDetail }) => {
     : '--';
 
   return (
-    <div className="grid grid-cols-6 gap-2">
+    <div className="grid grid-cols-3 sm:grid-cols-6 gap-1 sm:gap-2">
       <div className="col-span-1">
         <div className="flex flex-col gap-2">
-          <div className="bg-bg-tab p-2 flex flex-1 justify-center">
-            <div className="min-h-[80px] flex flex-col justify-center items-center gap-3">
+          <div className="bg-bg-tab p-1 sm:p-2 flex flex-1 justify-center">
+            <div className="min-h-[35px] sm:min-h-[80px] flex flex-col justify-center items-center gap-3">
               <div className="text-xs font-semibold text-text-gray">
                 Price USD
               </div>
@@ -40,8 +40,8 @@ const MarketStats: React.FC<Props> = ({ tokenId, isLoadingTokenDetail }) => {
             </div>
           </div>
 
-          <div className="bg-bg-tab p-2 flex flex-1 justify-center">
-            <div className="min-h-[80px] flex flex-col justify-center items-center gap-3">
+          <div className="bg-bg-tab p-1 sm:p-2 flex flex-1 justify-center">
+            <div className="min-h-[35px] sm:min-h-[80px] flex flex-col justify-center items-center gap-3">
               <div className="text-xs font-semibold text-text-gray">
                 Liquidity
               </div>
@@ -55,8 +55,8 @@ const MarketStats: React.FC<Props> = ({ tokenId, isLoadingTokenDetail }) => {
         </div>
       </div>
 
-      <div className="col-span-5 bg-bg-tab rounded-md p-2">
-        <div className="grid grid-cols-4 gap-2">
+      <div className=" col-span-2 sm:col-span-5 bg-bg-tab rounded-md p-0 sm:p-2">
+        <div className="grid grid-cols-2 gap-1 sm:grid-cols-4 sm:gap-2">
           {/* <StatItem
             label="Liquidity"
             value={
@@ -140,7 +140,7 @@ interface StatItemProps {
 const StatItem: React.FC<StatItemProps> = ({ label, value }) => {
   return (
     <div className="col-span-1">
-      <div className="min-h-[88px] flex flex-col gap-3 justify-center items-center rounded-md p-2 bg-bg-secondary">
+      <div className="min-h-[40px] sm:min-h-[88px] flex flex-col gap-1 sm:gap-3 justify-center items-center rounded-md p-1 sm:p-2 bg-bg-secondary">
         <div className="text-xs font-semibold text-text-gray">{label}</div>
         <div className="text-xs text-white">{value}</div>
       </div>

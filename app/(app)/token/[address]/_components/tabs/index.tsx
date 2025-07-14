@@ -9,6 +9,7 @@ import TopHolders from './top-holders';
 import MarketStats from './market-stats';
 import { CardanoTokenDetail } from '@/services/dexhunter/types';
 import TradeHistory from './trade-history';
+import { useIsMobile } from '@/hooks';
 
 interface Props {
   address: string;
@@ -22,8 +23,10 @@ const TokenDashboardTabs: React.FC<Props> = ({
 }) => {
   const [activeTab, setActiveTab] = React.useState('market-stats');
   const tabsRef = useRef<{ [key: string]: HTMLButtonElement }>({});
+  const isMobile = useIsMobile();
 
   const scrollToTab = (value: string) => {
+    if (isMobile) return;
     const tab = tabsRef.current[value];
     if (tab) {
       tab.scrollIntoView({
@@ -38,9 +41,9 @@ const TokenDashboardTabs: React.FC<Props> = ({
     scrollToTab(activeTab);
   }, [activeTab]);
   return (
-    <div className="p-2 h-full flex flex-col w-full min-w-[720px]">
+    <div className="p-2 h-full flex flex-col w-full sm:min-w-[720px]">
       <Tabs
-        className="h-full flex flex-col items-start w-full max-w-full"
+        className="h-full flex flex-col items-start w-full sm:max-w-full overflow-hidden"
         defaultValue="market-stats"
         value={activeTab}
         onValueChange={setActiveTab}

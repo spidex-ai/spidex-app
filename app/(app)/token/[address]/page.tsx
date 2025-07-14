@@ -15,7 +15,6 @@ type tParams = Promise<{ address: string }>;
 const TokenPage = ({ params }: { params: tParams }) => {
   const { address } = use(params);
   const { data, isLoading } = useTokenDetail(address);
-  console.log('🚀 ~ TokenPage ~ data:', data);
   const [quote, setQuote] = useState<QuoteType>(QuoteType.USD);
 
   return (
@@ -47,6 +46,24 @@ const TokenPage = ({ params }: { params: tParams }) => {
             <SidePanel data={data} isLoadingTokenDetail={isLoading} />
           }
         />
+        <div className='flex flex-col sm:hidden gap-10 w-full overflow-x-hidden'>
+          <div className='min-h-[400px]'>
+            <TokenChart
+              data={data}
+              isLoadingTokenDetail={isLoading}
+              quote={quote}
+            />
+          </div>
+          <SidePanel data={data} isLoadingTokenDetail={isLoading} />
+          <div className='h-[400px] w-full'>
+
+            <TokenDashboardTabs
+              address={address}
+              data={data}
+              isLoadingTokenDetail={isLoading}
+            />
+          </div>
+        </div>
       </div>
       <ReportBugIcon />
     </div>

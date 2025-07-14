@@ -34,10 +34,10 @@ const TopHolders: React.FC<Props> = ({ tokenId }) => {
         <Table>
           <TableHeader className="sticky top-0 bg-background z-10">
             <TableRow className="bg-bg-tab hover:!bg-bg-tab">
-              <TableHead className="w-16 pl-4">Address</TableHead>
-              <TableHead className="text-center w-1/3">% Ownership</TableHead>
-              <TableHead className="text-center">Token Balance</TableHead>
-              <TableHead className="text-center">Amount (ADA)</TableHead>
+              <TableHead className="w-16 pl-4 min-w-[200px]">Address</TableHead>
+              <TableHead className="text-center w-1/3 min-w-[200px]">% Ownership</TableHead>
+              <TableHead className="text-center min-w-[200px]">Token Balance</TableHead>
+              <TableHead className="text-center min-w-[200px]">Amount (ADA)</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
