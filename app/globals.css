@@ -514,15 +514,15 @@ body {
     }
 
     .table-leaderboard-row-1 {
-      border-left: 3px solid #FBDF73;
+      box-shadow: inset 3px 0 0 #FBDF73;
       background: linear-gradient(90deg, rgba(251, 223, 115, 0.3) 0%, rgba(251, 223, 115, 0) 100%) !important;
     }
     .table-leaderboard-row-2 {
-      border-left: 3px solid #73D2FB;
+      box-shadow: inset 3px 0 0 #73D2FB;
       background: linear-gradient(90deg, rgba(192, 192, 192, 0.3) 0%, rgba(192, 192, 192, 0) 100%) !important;
     }
     .table-leaderboard-row-3 {
-      border-left: 3px solid #FB8C73;
+      box-shadow: inset 3px 0 0 #FB8C73;
       background: linear-gradient(90deg, rgba(205, 127, 50, 0.3) 0%, rgba(205, 127, 50, 0) 100%) !important;
     }
     .table-leaderboard-row-my-rank {
@@ -533,13 +533,13 @@ body {
       background-image: linear-gradient(90deg, rgba(187, 249, 133, 0.3) 0%, rgba(187, 249, 133, 0) 100%) !important;
       
       /* Add glow effect */
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
       
       /* Subtle animation */
       animation: row-glow 3s ease-in-out infinite alternate;
       
       /* Enhanced border */
-      border-left-width: 1px;
+      /* border-left-width: 1px; */
       position: relative;
     }
     
