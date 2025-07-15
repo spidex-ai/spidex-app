@@ -10,7 +10,7 @@ import { Button, GradientButton, Separator } from '@/components/ui';
 
 import TokenInput from './token-input';
 
-import { useTokenBalance } from '@/hooks';
+import { useDebounce, useTokenBalance } from '@/hooks';
 
 import { type QuoteResponse } from '@jup-ag/api';
 
@@ -86,6 +86,7 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
   const [inputAmount, setInputAmount] = useState<string>(
     initialInputAmount || ''
   );
+  const debouncedInputAmount = useDebounce(inputAmount, 500);
   const [inputToken, setInputToken] = useState<CardanoTokenDetail | null>(
     initialInputToken || adaTokenDetail
   );
@@ -119,7 +120,7 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
 
   const isInsufficientBalance = useMemo(() => {
     const saveFee = protocol === ProtocolType.DEXHUNTER ? DEXHUNTER_SAVE_FEE : MINSWAP_SAVE_FEE;
-    if (Number(inputAmount) > Number(tokenInputBalance)) return true;
+    if (Number(debouncedInputAmount) > Number(tokenInputBalance)) return true;
 
     if (Number(accountBalance) < saveFee) return true;
 
@@ -130,14 +131,14 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
     );
 
     if (inputToken?.ticker === 'ADA') {
-      totalDepositADA += Number(inputAmount);
+      totalDepositADA += Number(debouncedInputAmount);
     }
 
     if (Number(accountBalance) < totalDepositADA + saveFee) return true;
 
     return false;
   }, [
-    inputAmount,
+    debouncedInputAmount,
     tokenInputBalance,
     accountBalance,
     inputToken,
@@ -147,7 +148,7 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
 
   const onChangeInputOutput = () => {
     const tempInputToken = inputToken;
-    const tempInputAmount = inputAmount;
+    const tempInputAmount = debouncedInputAmount;
     setInputToken(outputToken);
     setInputAmount(outputAmount);
     setOutputToken(tempInputToken);
@@ -183,7 +184,7 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
           ? outputToken?.unit
           : outputToken?.token_id || ' ',
         slippage: 5,
-        amountIn: Number(inputAmount),
+        amountIn: Number(debouncedInputAmount),
         txOptimization: true,
         blacklistedDexes: [],
       };
@@ -192,7 +193,7 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
         sender: addresses[0],
         min_amount_out: outputAmount,
         estimate: {
-          amount: inputAmount,
+          amount: debouncedInputAmount,
           token_in: inputToken?.unit
             ? inputToken?.unit
             : inputToken?.token_id || ' ',
@@ -286,7 +287,7 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
       const quote = await getQuoteCardano(
         inputToken?.unit || inputToken?.token_id || '',
         outputToken?.unit || outputToken?.token_id || '',
-        Number(inputAmount)
+        Number(debouncedInputAmount)
       );
       setQuoteResponse(quote);
       setOutputAmount(quote);
@@ -304,14 +305,14 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
 
   useEffect(() => {
     if (inputToken || outputToken) {
-      if (inputAmount && Number(inputAmount) > 0) {
+      if (debouncedInputAmount && Number(debouncedInputAmount) > 0) {
         fetchQuoteAndUpdate();
       } else {
         setQuoteResponse(null);
         setOutputAmount('');
       }
     }
-  }, [inputToken, outputToken, inputAmount]);
+  }, [inputToken, outputToken, debouncedInputAmount]);
 
   return (
     <div className="flex flex-col gap-4 w-[26rem] max-w-full relative">
@@ -378,7 +379,7 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
               !quoteResponse ||
               !inputToken ||
               !outputToken ||
-              !inputAmount ||
+              !debouncedInputAmount ||
               !outputAmount ||
               !tokenInputBalance ||
               inputBalanceLoading ||
@@ -396,12 +397,12 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
         ) : (
           <AuthButton />
         )}
-        {estimatedPoints?.estimatedPoint && inputAmount && (
+        {estimatedPoints?.estimatedPoint && debouncedInputAmount && (
           <SwapPoint
             swapDetails={{
               inputToken: inputToken?.ticker || '',
               outputToken: outputToken?.ticker || '',
-              inputAmount: inputAmount || '',
+              inputAmount: debouncedInputAmount || '',
               swapRoute: '',
               netPrice: Number(
                 protocol === ProtocolType.DEXHUNTER

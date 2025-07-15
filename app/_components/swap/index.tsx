@@ -10,7 +10,7 @@ import LogInButton from '@/app/(app)/_components/log-in-button';
 
 import TokenInput from './token-input';
 
-import { useTokenBalance } from '@/hooks';
+import { useDebounce, useTokenBalance } from '@/hooks';
 
 import { cn, DEXHUNTER_SAVE_FEE, MINSWAP_SAVE_FEE } from '@/lib/utils';
 
@@ -84,6 +84,7 @@ const Swap: React.FC<Props> = ({
   const [inputAmount, setInputAmount] = useState<string>(
     initialInputAmount || ''
   );
+  const debouncedInputAmount = useDebounce(inputAmount, 500);
   const [inputToken, setInputToken] = useState<CardanoTokenDetail | null>(
     initialInputToken || adaTokenDetail
   );
@@ -115,7 +116,7 @@ const Swap: React.FC<Props> = ({
 
   const isInsufficientBalance = useMemo(() => {
     const saveFee = protocol === ProtocolType.DEXHUNTER ? DEXHUNTER_SAVE_FEE : MINSWAP_SAVE_FEE;
-    if (Number(inputAmount) > Number(tokenInputBalance)) return true;
+    if (Number(debouncedInputAmount) > Number(tokenInputBalance)) return true;
 
     if (Number(accountBalance) < saveFee) return true;
 
@@ -126,14 +127,14 @@ const Swap: React.FC<Props> = ({
     );
 
     if (inputToken?.ticker === 'ADA') {
-      totalDepositADA += Number(inputAmount);
+      totalDepositADA += Number(debouncedInputAmount);
     }
 
     if (Number(accountBalance) < totalDepositADA + saveFee) return true;
 
     return false;
   }, [
-    inputAmount,
+    debouncedInputAmount,
     tokenInputBalance,
     accountBalance,
     inputToken,
@@ -143,7 +144,7 @@ const Swap: React.FC<Props> = ({
 
   const onChangeInputOutput = () => {
     const tempInputToken = inputToken;
-    const tempInputAmount = inputAmount;
+    const tempInputAmount = debouncedInputAmount;
     setInputToken(outputToken);
     setInputAmount(outputAmount);
     setOutputToken(tempInputToken);
@@ -180,7 +181,7 @@ const Swap: React.FC<Props> = ({
           ? outputToken?.unit
           : outputToken?.token_id || ' ',
         slippage: 5,
-        amountIn: Number(inputAmount),
+        amountIn: Number(debouncedInputAmount),
         txOptimization: true,
         blacklistedDexes: [],
       };
@@ -189,7 +190,7 @@ const Swap: React.FC<Props> = ({
         sender: addresses[0],
         min_amount_out: outputAmount,
         estimate: {
-          amount: inputAmount,
+          amount: debouncedInputAmount,
           token_in: inputToken?.unit
             ? inputToken?.unit
             : inputToken?.token_id || ' ',
@@ -294,7 +295,7 @@ const Swap: React.FC<Props> = ({
     const quote = await getQuoteCardano(
       inputToken?.unit ? inputToken?.unit : inputToken?.token_id || '',
       outputToken?.unit ? outputToken?.unit : outputToken?.token_id || '',
-      Number(inputAmount)
+      Number(debouncedInputAmount)
     );
     setQuoteResponse(quote);
     setOutputAmount(quote);
@@ -311,14 +312,14 @@ const Swap: React.FC<Props> = ({
 
   useEffect(() => {
     if (inputToken || outputToken) {
-      if (inputAmount && Number(inputAmount) > 0) {
+      if (debouncedInputAmount && Number(debouncedInputAmount) > 0) {
         fetchQuoteAndUpdate();
       } else {
         setQuoteResponse(null);
         setOutputAmount('');
       }
     }
-  }, [inputToken, outputToken, inputAmount]);
+  }, [inputToken, outputToken, debouncedInputAmount]);
 
   return (
     <div className={cn('flex flex-col gap-4 w-96 max-w-full', className)}>
@@ -373,7 +374,7 @@ const Swap: React.FC<Props> = ({
               !quoteResponse ||
               !inputToken ||
               !outputToken ||
-              !inputAmount ||
+              !debouncedInputAmount ||
               !outputAmount ||
               !tokenInputBalance ||
               inputBalanceLoading ||
@@ -397,12 +398,12 @@ const Swap: React.FC<Props> = ({
           </Button>
         )}
 
-        {estimatedPoints?.estimatedPoint && inputAmount && (
+        {estimatedPoints?.estimatedPoint && debouncedInputAmount && (
           <SwapPoint
             swapDetails={{
               inputToken: inputToken?.ticker || '',
               outputToken: outputToken?.ticker || '',
-              inputAmount: inputAmount || '',
+              inputAmount: debouncedInputAmount || '',
               swapRoute: '',
               netPrice: Number(
                 protocol === ProtocolType.DEXHUNTER

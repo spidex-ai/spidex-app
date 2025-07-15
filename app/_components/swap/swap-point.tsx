@@ -349,7 +349,7 @@ export default function SwapPoint({
               </div>
             ) : null}
           </div>
-          <div></div>
+        
         </div>
 
         {isOpenMarketOffers && (
@@ -362,18 +362,18 @@ export default function SwapPoint({
                       <div className="flex items-center gap-1">
                         <img
                           src={
-                            dexLogoMap[path.protocol] || '/icons/logo-gray.svg'
+                            dexLogoMap[path.protocol] || '/icons/unknown.svg'
                           }
                           alt="logo-gray"
                           width={20}
                           height={20}
                         />
-                        <div>{dexNameMap[path.protocol]}</div>
+                        <div>{dexNameMap[path.protocol] || path.protocol}</div>
                       </div>
                     </div>
 
                     <div className="col-span-1 flex items-center justify-between gap-1">
-                      <div>{`${path.amountIn} ${inputToken} = ${formatNumber(Number(path.amountOut))} ${outputToken}`}</div>
+                      <div>{`${path.amountIn} ${inputToken} = ${formatNumber(Number(path.minReceive))} ${outputToken}`}</div>
                       <div className="flex items-center gap-1">
                         <Image
                           src="/icons/fee-gray.svg"

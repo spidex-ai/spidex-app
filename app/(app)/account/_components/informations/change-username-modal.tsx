@@ -62,7 +62,7 @@ const ChangeUserNameModal = ({
               value={newUsername}
               onChange={e => {
                 const value = e.target.value;
-                if (/^[a-zA-Z0-9]*$/.test(value) && value.length <= MAX_LENGTH_USERNAME) {
+                if (/^[\x00-\x7F]*$/.test(value) && /^[a-zA-Z0-9]*$/.test(value) && value.length <= MAX_LENGTH_USERNAME) {
                   setNewUsername(value);
                 }
               }}
