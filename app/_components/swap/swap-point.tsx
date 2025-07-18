@@ -79,15 +79,15 @@ export default function SwapPoint({
   return (
     <div className="mt-2">
       <div className="border-border-main border rounded-lg relative">
-        <div className="flex justify-between items-center gap-2 px-6 py-2 bg-bg-swap rounded-lg">
+        <div className="flex justify-between items-center gap-2 px-4 sm:px-6 py-2 bg-bg-swap rounded-lg">
           <div className="flex items-center gap-2">
             <div className="text-xs">Swap details</div>
-            <div className="text-xs min-w-[50%]">
+            <div className="text-[10px] sm:text-xs min-w-[50%] ">
               <TextGradient>( Spidex AI Fee = 0 )</TextGradient>
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <div className="text-[10px] text-text-gray">{`${formatNumber(parseFloat(inputAmount))} ${inputToken} = ${receiveAmount} ${outputToken}`}</div>
+            <div className="text-[8px] sm:text-[10px] text-text-gray">{`${formatNumber(parseFloat(inputAmount))} ${inputToken} = ${receiveAmount} ${outputToken}`}</div>
             {!isOpenSwapDetails ? (
               <div
                 className="cursor-pointer"
@@ -282,22 +282,20 @@ export default function SwapPoint({
                     </div>
                   </div>
                 }
-                value={`${
-                  swapDetails?.inputToken === 'ADA'
+                value={`${swapDetails?.inputToken === 'ADA'
                     ? `${totalDepositADA.toLocaleString(undefined, {
-                        maximumFractionDigits: 2,
-                      })} ADA`
+                      maximumFractionDigits: 2,
+                    })} ADA`
                     : `${Number(swapDetails.inputAmount).toLocaleString(
-                        undefined,
-                        {
-                          maximumFractionDigits: 2,
-                        }
-                      )} ${
-                        swapDetails.inputToken
-                      } + ${totalDepositADA.toLocaleString(undefined, {
+                      undefined,
+                      {
                         maximumFractionDigits: 2,
-                      })} ADA`
-                }`}
+                      }
+                    )} ${swapDetails.inputToken
+                    } + ${totalDepositADA.toLocaleString(undefined, {
+                      maximumFractionDigits: 2,
+                    })} ADA`
+                  }`}
               />
             </div>
           </div>
@@ -349,7 +347,7 @@ export default function SwapPoint({
               </div>
             ) : null}
           </div>
-        
+
         </div>
 
         {isOpenMarketOffers && (
@@ -357,8 +355,8 @@ export default function SwapPoint({
             <div className="flex flex-col gap-2">
               {paths.map((path, key) => (
                 <div className="text-xs gradient-border-market-offer" key={key}>
-                  <div className="grid grid-cols-2 p-2">
-                    <div className="col-span-1">
+                  <div className="grid grid-cols-12 p-1 sm:p-2">
+                    <div className="col-span-5">
                       <div className="flex items-center gap-1">
                         <img
                           src={
@@ -372,16 +370,16 @@ export default function SwapPoint({
                       </div>
                     </div>
 
-                    <div className="col-span-1 flex items-center justify-between gap-1">
-                      <div>{`${path.amountIn} ${inputToken} = ${formatNumber(Number(path.minReceive))} ${outputToken}`}</div>
-                      <div className="flex items-center gap-1">
+                    <div className="col-span-7 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                      <div className="text-[10px] sm:text-xs break-all">{`${path.amountIn} ${inputToken} = ${formatNumber(Number(path.minReceive))} ${outputToken}`}</div>
+                      <div className="flex items-center gap-1 self-start sm:self-center">
                         <Image
                           src="/icons/fee-gray.svg"
                           alt="fee-gray"
                           width={10}
                           height={10}
                         />
-                        <div className="text-xs text-text-gray flex gap-1 items-center">
+                        <div className="text-[10px] sm:text-xs text-text-gray flex gap-1 items-center">
                           <div>{`A${path.batcherFee}`}</div>
                           <div>
                             <TooltipProvider>

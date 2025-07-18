@@ -49,7 +49,7 @@ const TokenDashboardTabs: React.FC<Props> = ({
         onValueChange={setActiveTab}
       >
         {/* Fixed header section */}
-        <div className="flex gap-4 sticky top-0 z-10 bg-white dark:bg-gray-900 pb-2">
+        <div className="flex gap-4 sticky top-0 z-10 pb-2">
           <div className="flex items-center gap-1 px-4 py-1 bg-bg-tab rounded-md">
             <span className="relative flex h-2 w-2">
               <span className="animate-[ping_3s_ease-in-out_infinite] absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>

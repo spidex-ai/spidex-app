@@ -69,7 +69,7 @@ const Hisotry = ({ pointHistoryHook }: Props) => {
                 results.map(result => (
                   <div
                     key={result.task}
-                    className={`grid grid-cols-3 text-xs sm:text-sm ${
+                    className={`grid grid-cols-3 text-xs sm:text-sm text-center ${
                       result.isBorderBottom
                         ? 'border-b border-border-main py-6'
                         : 'pt-6'

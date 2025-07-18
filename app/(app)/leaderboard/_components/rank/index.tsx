@@ -60,7 +60,6 @@ const Rank: React.FC = () => {
       align: 'center' as any,
       width: isMobile ? 50 : 100,
       render: (rank: number, row: any) => {
-        console.log('🚀 ~ rank:', rank);
         return (
           <>
             {rank === 1 && !row.isMyRank ? (
@@ -212,7 +211,7 @@ const Rank: React.FC = () => {
       dataIndex: 'totalPoint',
       key: 'totalPoint',
       useFixedHeader: true,
-
+      width: isMobile ? 70 : 130,
       render: (totalPoint: string) => (
         <div className="text-center text-[10px] md:text-sm">
           {formatNumber(Number(totalPoint), 2)}

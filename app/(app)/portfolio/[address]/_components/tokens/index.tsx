@@ -58,11 +58,11 @@ const Tokens: React.FC = () => {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-[60px] sm:w-[200px]">Asset</TableHead>
-                  <TableHead className="min-w-[60px] sm:min-w-[200px] text-center">Balance</TableHead>
-                  <TableHead className="min-w-[60px] sm:min-w-[200px] text-center">Price</TableHead>
-                  <TableHead className="min-w-[60px] sm:min-w-[200px] text-center">Value</TableHead>
-                  <TableHead className="min-w-[60px] sm:min-w-[200px] text-right">Actions</TableHead>
+                  <TableHead className="w-[100px] sm:w-[200px] text-center">Asset</TableHead>
+                  <TableHead className="min-w-[100px] sm:min-w-[200px] text-center">Balance</TableHead>
+                  <TableHead className="min-w-[100px] sm:min-w-[200px] text-center">Price</TableHead>
+                  <TableHead className="min-w-[100px] sm:min-w-[200px] text-center">Value</TableHead>
+                  <TableHead className="min-w-[100px] sm:min-w-[200px] text-center">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody className="max-h-96 overflow-y-auto">
@@ -77,7 +77,7 @@ const Tokens: React.FC = () => {
                   )
                   .map(token => (
                     <TableRow key={token.unit}>
-                      <TableCell>
+                      <TableCell className="text-center">
                         <div className="font-medium flex gap-2 items-center">
                           <img
                             src={token.logo}
@@ -96,7 +96,7 @@ const Tokens: React.FC = () => {
                       <TableCell className="text-center">
                         ${formatNumber(Number(token.usdTotalPrice), 2)}
                       </TableCell>
-                      <TableCell className="flex items-center gap-2 justify-end">
+                      <TableCell className="flex items-center gap-2 justify-end text-center">
                         <GradientBorderButton
                           onClick={() => openSell(token.unit)}
                         >

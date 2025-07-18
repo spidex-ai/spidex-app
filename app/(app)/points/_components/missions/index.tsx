@@ -371,10 +371,10 @@ const Missions = ({ onMissionComplete }: Props) => {
               ? results.map(result => (
                   <div className="bg-bg-main rounded-lg p-4" key={result.type}>
                     <div
-                      className={`grid grid-cols-3 cursor-pointer`}
+                      className={`grid grid-cols-12 cursor-pointer`}
                       onClick={() => handleFinish(result)}
                     >
-                      <div className="col-span-1 flex gap-2 items-center cursor-pointer">
+                      <div className="col-span-6 flex gap-2 items-center cursor-pointer">
                         <div
                           className=""
                           onClick={e => {
@@ -396,16 +396,16 @@ const Missions = ({ onMissionComplete }: Props) => {
                         </div>
                         <div className="w-full">
                           <div className="flex items-center gap-2">
-                            <div className="flex items-center">
+                            <div className="flex items-center sm:w-12 sm:h-12">
                               {result.icon}
                             </div>
-                            <div className="text-white text-xs sm:text-lg min-w-[20px]">
+                            <div className="text-white text-xs sm:text-lg min-w-[20px] max-w-[70px] sm:max-w-[80%]">
                               {result.name}
                             </div>{' '}
                           </div>
                         </div>
                       </div>
-                      <div className="col-span-1 text-white text-xs sm:text-lg flex justify-center gap-1 items-center">
+                      <div className="col-span-2 text-white text-xs sm:text-lg flex justify-center gap-1 items-center">
                         <div>+{result.point} </div>
                         <div>
                           <Image
@@ -421,7 +421,7 @@ const Missions = ({ onMissionComplete }: Props) => {
                           <div>/time</div>
                         )}
                       </div>
-                      <div className="col-span-1 text-white flex items-center justify-end">
+                      <div className="col-span-4 text-white flex items-center justify-end">
                         <div className="w-[85px] sm:w-[150px]">
                           {result.step === STEP.COMPLETED ? (
                             <div>
