@@ -13,18 +13,20 @@ import PortfolioWapper from './portfolio-wapper';
 import RefferalProgram from './referral-program';
 import SavedTokensGroup from './saved-tokens-group';
 import Trade from './trade';
+import Event from './event';
+
 const SidebarMenu: React.FC = () => {
   return (
     <SidebarMenuUI>
       <ChatsGroup />
       <SavedTokensGroup />
-
       <Trade />
       <Points />
       <Leaderboard />
       <RefferalProgram />
       <PortfolioWapper />
       <AccountButton />
+      <Event />
     </SidebarMenuUI>
   );
 };
