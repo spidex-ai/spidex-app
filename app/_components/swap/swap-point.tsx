@@ -140,7 +140,7 @@ export default function SwapPoint({
                       width={5}
                       height={5}
                     />
-                    {paths.length > 1 ? (
+                    {paths && paths.length > 1 ? (
                       <div className="text-green-800 font-bold">
                         {paths.length} ROUTES
                       </div>
@@ -353,7 +353,7 @@ export default function SwapPoint({
         {isOpenMarketOffers && (
           <div className=" my-2 p-2">
             <div className="flex flex-col gap-2">
-              {paths.map((path, key) => (
+              {paths && paths.length > 0 && paths.map((path, key) => (
                 <div className="text-xs gradient-border-market-offer" key={key}>
                   <div className="grid grid-cols-12 p-1 sm:p-2">
                     <div className="col-span-5">
