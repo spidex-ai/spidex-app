@@ -8,6 +8,7 @@ import AccountButton from './account-button';
 import ChatsGroup from './chats-group';
 // import PortfolioButton from './portfolio-button';
 import Leaderboard from './leaderboard';
+import NftButton from './nft-button';
 import Points from './points';
 import PortfolioWapper from './portfolio-wapper';
 import RefferalProgram from './referral-program';
@@ -25,6 +26,7 @@ const SidebarMenu: React.FC = () => {
       <RefferalProgram />
       <PortfolioWapper />
       <AccountButton />
+      <NftButton />
     </SidebarMenuUI>
   );
 };
