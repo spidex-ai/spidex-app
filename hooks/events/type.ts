@@ -34,9 +34,17 @@ export interface EventLeaderboardItem {
   avatarUrl: string;
   prizeInfo: {
     points: string;
-    token: string;
+    token: PrizeToken;
     tokenAmount: string;
   } | null;
+}
+
+export interface PrizeToken {
+  decimals: number;
+  logo: string;
+  name: string;
+  ticker: string; 
+  unit: string;
 }
 
 export interface EventMyRank {
@@ -48,7 +56,7 @@ export interface EventMyRank {
   joinedAt: string;
   prizeInfo: {
     points: string;
-    token: string;
+    token: PrizeToken;
     tokenAmount: string;
   } | null;
 

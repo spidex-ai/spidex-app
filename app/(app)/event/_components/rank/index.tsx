@@ -196,7 +196,7 @@ const Rank: React.FC<RankProps> = ({ id }) => {
       render: (prizeInfo: any) => (
         <div className="text-center text-[10px] md:text-sm">
           {prizeInfo?.tokenAmount
-            ? `${formatNumber(Number(prizeInfo?.tokenAmount))}`
+            ? `${formatNumber(Number(prizeInfo?.tokenAmount))} ${prizeInfo?.token?.ticker ? prizeInfo?.token?.ticker : prizeInfo?.token?.name ? prizeInfo?.token?.name : ''}`
             : '-'}
         </div>
       ),

@@ -32,7 +32,7 @@ const settings = {
 };
 
 const Summary: React.FC<SummaryProps> = ({
-  events,
+  events, 
   loading,
   selectedEvent,
   setSelectedEvent,
