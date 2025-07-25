@@ -507,7 +507,7 @@ body {
     width: 100% !important;
     padding: 15px !important;
     border: 1px solid #5D717D !important;
-    border-bottom: none !important;
+    /* border-bottom: none !important; */
 
     .rc-table-cell {
       border-right: 1px solid #5D717D !important;

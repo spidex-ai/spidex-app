@@ -43,6 +43,8 @@ export default {
           gray: '#5D717D',
           icon: '#717A8C',
           tooltip: '#BBF985',
+          black: '#000000', 
+          '10': '#1E0000',
         },
         sidebar: {
           DEFAULT: 'var(--sidebar-background)',

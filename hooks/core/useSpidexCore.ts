@@ -1057,6 +1057,42 @@ export const useSpidexCore = () => {
     }
   }, [fetchWithAuth, auth]); 
 
+  const getEvents = useCallback(async () => {
+    try {
+      const data = await fetchWithAuth(`/events/active`);
+      return data.data;
+    } catch (error) {
+      throw error; 
+    }
+  }, [fetchWithAuth, auth]); 
+  
+  const getEventDetail = useCallback(async (id: number) => {
+    try {
+      const data = await fetchWithAuth(`/events/${id}`);
+      return data.data;
+    } catch (error) {
+      throw error;
+    }
+  }, [fetchWithAuth, auth]); 
+
+  const getLeaderboardEvent = useCallback(async (id: number, limit = 50, offset = 0) => {
+    try {
+      const data = await fetchWithAuth(`/events/${id}/leaderboard?limit=${limit}&offset=${offset}`);
+      return data.data;
+    } catch (error) {
+      throw error;
+    }
+  }, [fetchWithAuth, auth]); 
+
+  const getMyRankLeaderboardEvent = useCallback(async (id: number) => {
+    try {
+      const data = await fetchWithAuth(`/events/${id}/my-stats`);
+      return data.data;
+    } catch (error) {
+      throw error;
+    }
+  }, [fetchWithAuth, auth]); 
+
 
   return {
     auth,
@@ -1104,5 +1140,9 @@ export const useSpidexCore = () => {
     getUserRankLeaderboard,
     buildSwapRequestDexHunter,
     buildSwapRequestMinswap,
+    getEvents,
+    getEventDetail,
+    getLeaderboardEvent,
+    getMyRankLeaderboardEvent,
   };
 };
