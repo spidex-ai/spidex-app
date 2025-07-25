@@ -26,9 +26,9 @@ const SidebarMenu: React.FC = () => {
       <RefferalProgram />
       <PortfolioWapper />
       <AccountButton />
-      <Event />
+      {process.env.NEXT_PUBLIC_ENVIRONMENT !== 'production' && <Event />}
     </SidebarMenuUI>
   );
-};
+};  
 
 export default SidebarMenu;
