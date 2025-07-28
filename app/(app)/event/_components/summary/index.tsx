@@ -1,12 +1,13 @@
 'use client';
 import { GradientButton, Skeleton } from '@/components/ui';
-import { EventItem } from '@/hooks/events/type';
+import { EventItem, EventStatus } from '@/hooks/events/type';
 import { formatNumber } from '@/lib/utils';
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import dayjs from 'dayjs';
 
 interface SummaryProps {
   events: EventItem[];
@@ -32,16 +33,37 @@ const settings = {
 };
 
 const Summary: React.FC<SummaryProps> = ({
-  events, 
+  events,
   loading,
   selectedEvent,
   setSelectedEvent,
 }) => {
+  const date = useMemo(() => {
+    if (!selectedEvent) return;
+    const { startDate, endDate } = selectedEvent;
+    if (dayjs(startDate).isAfter(dayjs())) {
+      return {
+        status: EventStatus.UPCOMING,
+        time: startDate,
+      };
+    }
+    if (dayjs(endDate).isBefore(dayjs())) {
+      return {
+        status: EventStatus.ENDED,
+        time: endDate,
+      };
+    }
+    return {
+      status: EventStatus.LIVE,
+      time: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+      start: startDate,
+      end: endDate,
+    };
+  }, [selectedEvent]);
 
   if (loading || !selectedEvent) {
     return <Skeleton className="h-10 w-full" />;
   }
-
 
   return (
     <div className="flex gap-1">
@@ -56,9 +78,28 @@ const Summary: React.FC<SummaryProps> = ({
               />
             </div>
             <div>
-              <div className="text-sm bg-bg-swap rounded-3xl py-1 px-3 inline-block items-center">
-                Ended
-              </div>
+              {selectedEvent && date?.status === EventStatus.ENDED ? (
+                <div className="text-sm bg-bg-swap rounded-3xl py-1 px-3 inline-block items-center">
+                  Ended at {dayjs(date?.time).format('DD MMM YYYY, HH:mm')}
+                </div>
+              ) : date?.status === EventStatus.LIVE ? (
+                <div className="flex items-center gap-1">
+                  <div className="flex items-center gap-1 py-1 bg-bg-tab rounded-md">
+                    <span className="relative flex h-2 w-2 mb-1">
+                      <span className="animate-[ping_3s_ease-in-out_infinite] absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2 w-2 border-2 border-green-500"></span>
+                    </span>
+                    <span className="text-sm text-green-500 font-bold">Live</span>
+                  </div>
+                  <div className="text-xs text-gray-500 font-bold">
+                     {`${dayjs(date?.start).format('DD MMM YYYY, HH:mm')} - ${dayjs(date?.end).format('DD MMM YYYY, HH:mm')}`}
+                  </div>
+                </div>
+              ) : (
+                <div className="text-sm bg-yellow-500 rounded-3xl py-1 px-3 inline-block items-center">
+                  Coming Soon
+                </div>
+              )}
               <div className="text-[28px] font-medium mt-3">
                 {selectedEvent?.name}
               </div>
@@ -111,7 +152,7 @@ const Summary: React.FC<SummaryProps> = ({
         </div>
       </div>
       <div className="w-36">
-        <div className='h-full'>
+        <div className="h-full">
           <Slider {...settings}>
             {events.map((event, idx) => (
               <div key={idx} className="">

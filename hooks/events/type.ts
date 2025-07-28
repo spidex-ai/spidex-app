@@ -64,3 +64,10 @@ export interface EventMyRank {
   walletAddress: string;
   avatarUrl: string;
 }
+
+
+export enum EventStatus {
+  UPCOMING = 'UPCOMING',
+  LIVE = 'LIVE',
+  ENDED = 'ENDED',
+}
