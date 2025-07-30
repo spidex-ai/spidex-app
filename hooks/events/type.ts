@@ -12,9 +12,18 @@ export interface EventItem {
   totalPrize: string;
   totalTrades: number;
   totalVolumeTraded: string;
-  tradeTokens: any;
+  tradeToken: TradeToken;
   type: string;
   updatedAt: string;
+  url: string;
+}
+
+export interface TradeToken {
+  decimals: number;
+  logo: string;
+  name: string;
+  ticker: string;
+  unit: string;
 }
 
 export interface EventLeaderboard {

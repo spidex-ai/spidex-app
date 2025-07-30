@@ -9,12 +9,10 @@ import Rank from './_components/rank';
 import { useEffect, useState } from 'react';
 import { EventItem } from '@/hooks/events/type';
 
-
 const EventPage: React.FC = () => {
-  const { events, loading } = useEvent(); 
-  console.log("🚀 ~ EventPage ~ events:", events)
+  const { events, loading } = useEvent();
+  console.log('🚀 ~ EventPage ~ events:', events);
   const [selectedEvent, setSelectedEvent] = useState<EventItem | null>(null);
-  
 
   useEffect(() => {
     if (events.length > 0) {
@@ -25,8 +23,8 @@ const EventPage: React.FC = () => {
   return (
     <ProtectedClient>
       <div className="relative h-full max-h-full">
-        <div className="flex flex-col gap-8 max-w-7xl mx-auto w-full h-full max-h-full overflow-y-auto px-1 pr-4">
-        <div className="flex items-center gap-2">
+        <div className="flex flex-col gap-4 max-w-7xl mx-auto w-full h-full max-h-full overflow-y-auto px-1 pr-4">
+          <div className="flex items-center gap-2">
             <Image
               src="/icons/event-blink.svg"
               alt="event"
@@ -35,18 +33,21 @@ const EventPage: React.FC = () => {
               className="w-4 h-4 md:w-6 md:h-6"
             />
             <TextGradient className="text-xl md:text-3xl font-medium leading-none">
-                All Competions
+              All Competions
             </TextGradient>
           </div>
 
-          {
-            selectedEvent && (
-              <>
-                <Summary events={events} loading={loading} selectedEvent={selectedEvent} setSelectedEvent={setSelectedEvent}/>
-                <Rank id={selectedEvent?.id}/>
-              </>
-            )
-          }
+          {selectedEvent && (
+            <>
+              <Summary
+                events={events}
+                loading={loading}
+                selectedEvent={selectedEvent}
+                setSelectedEvent={setSelectedEvent}
+              />
+              <Rank id={selectedEvent?.id} />
+            </>
+          )}
         </div>
       </div>
     </ProtectedClient>

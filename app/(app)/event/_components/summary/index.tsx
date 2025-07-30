@@ -3,11 +3,10 @@ import { GradientButton, Skeleton } from '@/components/ui';
 import { EventItem, EventStatus } from '@/hooks/events/type';
 import { formatNumber } from '@/lib/utils';
 import React, { useMemo } from 'react';
-
-import Slider from 'react-slick';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
 import dayjs from 'dayjs';
+
+import { Slide } from 'react-slideshow-image';
+import 'react-slideshow-image/dist/styles.css';
 
 interface SummaryProps {
   events: EventItem[];
@@ -15,21 +14,25 @@ interface SummaryProps {
   selectedEvent: EventItem | null;
   setSelectedEvent: (event: EventItem) => void;
 }
-
-const settings = {
-  dots: false,
-  infinite: true,
-  speed: 500,
-  slidesToShow: 3,
-  slidesToScroll: 1,
-  vertical: true,
-  verticalSwiping: true,
-  arrows: false,
+const slideProperties = {
+  duration: 3000,
   autoplay: true,
-  autoplaySpeed: 3000,
-  cssEase: 'linear',
-  pauseOnHover: false,
-  pauseOnFocus: true,
+  transitionDuration: 500,
+  arrows: true,
+  infinite: true,
+  easing: 'ease',
+  prevArrow: (
+    <button className={``}>
+      <img src="/icons/arrow-left.svg" alt="arrow-left" className="w-4 h-4" />
+    </button>
+  ),
+  nextArrow: (
+    <button className={``}>
+      <img src="/icons/arrow-right.svg" alt="arrow-right" className="w-4 h-4" />
+    </button>
+  ),
+  slidesToShow: 3,
+  cssClass: 'mx-4',
 };
 
 const Summary: React.FC<SummaryProps> = ({
@@ -66,105 +69,129 @@ const Summary: React.FC<SummaryProps> = ({
   }
 
   return (
-    <div className="flex gap-1">
-      <div className="w-full border border-gray-500 rounded-md  py-6 px-6">
+    <div className="">
+      <div className="w-full border border-gray-500 rounded-md  py-7 px-16">
         <div className="">
-          <div className="flex gap-6 pl-10">
-            <div>
+          <div className="flex gap-20">
+            <div className="rounded-lg">
               <img
                 src={selectedEvent?.icon ?? '/icons/competition.svg'}
                 alt="com-1"
-                className="w-52 h-52"
+                className="w-52 h-52 rounded-lg"
               />
             </div>
             <div>
-              {selectedEvent && date?.status === EventStatus.ENDED ? (
-                <div className="text-sm bg-bg-swap rounded-3xl py-1 px-3 inline-block items-center">
-                  Ended at {dayjs(date?.time).format('DD MMM YYYY, HH:mm')}
+              <div className="flex gap-4">
+                <div
+                  className={`text-sm font-medium py-2 px-5 rounded-3xl ${date?.status === EventStatus.UPCOMING ? 'text-black bg-[#009EFF]' : 'text-white bg-[#233857]'}`}
+                >
+                  Incoming
                 </div>
-              ) : date?.status === EventStatus.LIVE ? (
-                <div className="flex items-center gap-1">
-                  <div className="flex items-center gap-1 py-1 bg-bg-tab rounded-md">
-                    <span className="relative flex h-2 w-2 mb-1">
-                      <span className="animate-[ping_3s_ease-in-out_infinite] absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                      <span className="relative inline-flex rounded-full h-2 w-2 border-2 border-green-500"></span>
-                    </span>
-                    <span className="text-sm text-green-500 font-bold">Live</span>
-                  </div>
-                  <div className="text-xs text-gray-500 font-bold">
-                     {`${dayjs(date?.start).format('DD MMM YYYY, HH:mm')} - ${dayjs(date?.end).format('DD MMM YYYY, HH:mm')}`}
-                  </div>
+                <div
+                  className={`text-sm font-medium py-2 px-5 rounded-3xl ${date?.status === EventStatus.LIVE ? 'text-black bg-[#BBF985]' : 'text-white bg-[#233857]'}`}
+                >
+                  Going on
                 </div>
-              ) : (
-                <div className="text-sm bg-yellow-500 rounded-3xl py-1 px-3 inline-block items-center">
-                  Coming Soon
+                <div
+                  className={`text-sm font-medium py-2 px-5 rounded-3xl ${date?.status === EventStatus.ENDED ? 'text-white bg-[#FF6666]' : 'text-white bg-[#233857]'}`}
+                >
+                  Ended
                 </div>
-              )}
+              </div>
+
               <div className="text-[28px] font-medium mt-3">
                 {selectedEvent?.name}
               </div>
               <div className="text-sm text-gray-500">
                 {selectedEvent?.description}
               </div>
+              <div className="my-5">
+                <div className="flex gap-4">
+                  <div className="flex gap-4">
+                    <div className="flex items-center gap-2">
+                      <img
+                        src={selectedEvent?.tradeToken?.logo}
+                        alt="ada-1"
+                        className="w-12 h-12 rounded-full border border-green-500"
+                      />
+                    </div>
+                    <div>
+                      <div className="text-[28px] font-medium">
+                        {formatNumber(Number(selectedEvent?.totalPrize))}
+                      </div>
+                      <div className="flex gap-1 items-center">
+                        <div>
+                          <img
+                            src="/icons/prize.svg"
+                            alt="prize"
+                            className="w-3 h-3"
+                          />
+                        </div>
+                        <div className="text-sm pt-1">
+                          Total Prize Pool (ADA)
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="border border-white mx-3"></div>
+                  <div>
+                    <div className="text-[28px] font-medium">
+                      {formatNumber(Number(selectedEvent?.totalVolumeTraded))}
+                    </div>
+                    <div className="flex gap-1 items-center">
+                      <div>
+                        <img
+                          src="/icons/user.svg"
+                          alt="user"
+                          className="w-3 h-3"
+                        />
+                      </div>
+                      <div className="text-sm pt-1">Total Volume</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
               <div className="text-lg text-text-10 mt-3 font-medium">
-                <GradientButton className="font-medium">
+                <GradientButton
+                  className="font-medium"
+                  onClick={() => window.open(selectedEvent?.url, '_blank')}
+                >
                   View Details
                 </GradientButton>
               </div>
             </div>
           </div>
         </div>
-        <div className="mt-20 pl-4">
-          <div className="flex gap-4">
-            <div className="flex gap-4">
-              <div>
-                <img src="/icons/ada.svg" alt="ada-1" className="w-16 h-16" />
-              </div>
-              <div>
-                <div className="text-[28px] font-medium">
-                  {formatNumber(Number(selectedEvent?.totalPrize))}
-                </div>
-                <div className="flex gap-1 items-center">
+      </div>
+      <div className="mt-5">
+        <div className="col-span-full">
+          <Slide {...slideProperties}>
+            {events.map((event, index) => (
+              <div
+                key={index}
+                className="each-slide cursor-pointer rounded-xl mx-2"
+                onClick={() => setSelectedEvent(event)}
+              >
+                <div className="flex items-center gap-2 p-2 border border-gray-500 rounded-lg">
                   <div>
                     <img
-                      src="/icons/prize.svg"
-                      alt="prize"
-                      className="w-3 h-3"
+                      src={event.icon}
+                      alt={event.name}
+                      className="w-20 h-20 min-w-20 object-cover mx-auto rounded-lg cursor-pointer hover:opacity-80 transition-opacity"
                     />
                   </div>
-                  <div className="text-sm pt-1">Total Prize Pool (ADA)</div>
+                  <div className="text-sm">
+                    <div className="font-medium text-white text-sm">
+                      {event.name}
+                    </div>
+                    <div className="text-gray-500 text-xs">
+                      {event.description}
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-            <div className="border border-white mx-3"></div>
-            <div>
-              <div className="text-[28px] font-medium">
-                {formatNumber(Number(selectedEvent?.totalVolumeTraded))}
-              </div>
-              <div className="flex gap-1 items-center">
-                <div>
-                  <img src="/icons/user.svg" alt="user" className="w-3 h-3" />
-                </div>
-                <div className="text-sm pt-1">Total Volume</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="w-36">
-        <div className="h-full">
-          <Slider {...settings}>
-            {events.map((event, idx) => (
-              <div key={idx} className="">
-                <img
-                  src={event.icon}
-                  alt={`Event ${idx + 1}`}
-                  className="w-32 h-32 object-cover mx-auto rounded-lg cursor-pointer hover:opacity-80 transition-opacity"
-                  onClick={() => setSelectedEvent(event)}
-                />
               </div>
             ))}
-          </Slider>
+          </Slide>
         </div>
       </div>
     </div>
