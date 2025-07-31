@@ -39,7 +39,7 @@ const PointInformationWrapper = ({ pointInfoHook }: Props) => {
   }
 
   let level = 0;
-  if (achievements.length > 0 && pointInfo?.nextAchievement) {
+  if (achievements.length > 0) {
     let achive = null;
     let index = 0;
     for (let i = 0; i < achievements.length; i++) {
@@ -49,6 +49,11 @@ const PointInformationWrapper = ({ pointInfoHook }: Props) => {
         break;
       }
     }
+    if (achive === null) {
+      achive = achievements[achievements.length - 1];
+      index = achievements.length - 1;
+    }
+
     if (achive) {
       const currentPoint = Number(pointInfo?.point?.amount);
       const currentLevelPoint = Number(achive?.points);
