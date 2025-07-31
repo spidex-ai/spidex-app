@@ -177,7 +177,7 @@ const Rank: React.FC<RankProps> = ({ id }) => {
       width: isMobile ? 70 : 130,
       render: (totalPoint: string) => (
         <div className="text-center text-[10px] md:text-sm">
-          {formatNumber(Number(totalPoint), 2)}
+          ${formatNumber(Number(totalPoint), 2)}
         </div>
       ),
     },
