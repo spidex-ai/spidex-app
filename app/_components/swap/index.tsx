@@ -111,11 +111,12 @@ const Swap: React.FC<Props> = ({
     inputToken?.ticker === 'ADA' ? accountBalance : inputBalance;
 
   const [protocol, setProtocol] = useState<ProtocolType>(
-    ProtocolType.DEXHUNTER
+    ProtocolType.MINSWAP
   );
 
   const isInsufficientBalance = useMemo(() => {
     const saveFee = protocol === ProtocolType.DEXHUNTER ? DEXHUNTER_SAVE_FEE : MINSWAP_SAVE_FEE;
+
     if (Number(debouncedInputAmount) > Number(tokenInputBalance)) return true;
 
     if (Number(accountBalance) < saveFee) return true;

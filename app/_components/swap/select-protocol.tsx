@@ -9,21 +9,21 @@ import {
 } from '@/components/ui';
 
 export enum ProtocolType {
+  MINSWAP = 'minswap',
   DEXHUNTER = 'dexhunter',
-  // MINSWAP = 'minswap',
 }
 
 export const protocolOptions = [
+  {
+    label: 'Minswap Aggregator',
+    value: ProtocolType.MINSWAP,
+    icon: '/icons/minswap.svg',
+  },
   {
     label: 'DexHunter',
     value: ProtocolType.DEXHUNTER,
     icon: '/icons/dex-hunter.svg',
   },
-  // {
-  //   label: 'Minswap Aggregator',
-  //   value: ProtocolType.MINSWAP,
-  //   icon: '/icons/minswap.svg',
-  // },
 ];
 
 interface SelectProtocolProps {

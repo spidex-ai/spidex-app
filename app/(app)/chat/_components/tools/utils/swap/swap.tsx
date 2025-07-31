@@ -109,7 +109,7 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
     useState<EsitmateSwapResponse>();
 
   const [protocol, setProtocol] = useState<ProtocolType>(
-    ProtocolType.DEXHUNTER
+    ProtocolType.MINSWAP
   );
 
   const { balance: inputBalance, isLoading: inputBalanceLoading } =
