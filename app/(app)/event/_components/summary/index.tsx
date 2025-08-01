@@ -121,11 +121,14 @@ const Summary: React.FC<SummaryProps> = ({
                   </div>
                 )}
                 {date?.status === EventStatus.ENDED && (
-                  <div>
+                  <div className="flex gap-4 items-center">
                     <div
                       className={`${isMobile ? 'text-xs' : 'text-sm'} font-medium py-2 px-5 rounded-3xl ${date?.status === EventStatus.ENDED ? 'text-white bg-[#FF6666]' : 'text-white bg-[#233857]'}`}
                     >
                       Ended
+                    </div>
+                    <div className="text-xs text-text-gray font-bold">
+                      End at {dayjs(date?.end).format('DD MMM YYYY HH:mm:ss')}
                     </div>
                   </div>
                 )}
@@ -289,6 +292,8 @@ const Summary: React.FC<SummaryProps> = ({
                   return {
                     status: EventStatus.ENDED,
                     time: endDate,
+                    end: endDate,
+                    start: startDate,
                   };
                 }
                 return {
@@ -351,6 +356,9 @@ const Summary: React.FC<SummaryProps> = ({
                               className={`text-xs font-medium py-1 px-4 rounded-3xl ${dateEvent?.status === EventStatus.ENDED ? 'text-white bg-[#FF6666]' : 'text-white bg-[#233857]'}`}
                             >
                               Ended
+                            </div>
+                            <div className="text-xs text-text-gray font-bold">
+                              End at {dayjs(dateEvent?.end).format('DD MMM YYYY HH:mm:ss')}
                             </div>
                           </div>
                         )}
@@ -421,9 +429,9 @@ const Countdown: React.FC<CountdownProps> = ({ endDate, title }) => {
       <span className="font-bold">{title}</span>
       <span className="font-semibold">
         {timeLeft.days > 0 && `${timeLeft.days}d `}
-        {String(timeLeft.hours).padStart(2, '0')}:
-        {String(timeLeft.minutes).padStart(2, '0')}:
-        {String(timeLeft.seconds).padStart(2, '0')}
+        {`${String(timeLeft.hours).padStart(2, '0')}h`}:
+        {`${String(timeLeft.minutes).padStart(2, '0')}m`}:
+        {`${String(timeLeft.seconds).padStart(2, '0')}s`}
       </span>
     </div>
   );
