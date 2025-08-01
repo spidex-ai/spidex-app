@@ -78,7 +78,7 @@ const Swap: React.FC<Props> = ({
     buildSwapRequestMinswap,
     submitSwapRequest,
   } = useSpidexCore();
-  const { enabledWallet, unusedAddresses, accountBalance } = useCardano();
+  const { enabledWallet, unusedAddresses } = useCardano();
   const { auth } = useSpidexCore();
 
   const [inputAmount, setInputAmount] = useState<string>(
@@ -118,7 +118,7 @@ const Swap: React.FC<Props> = ({
 
     if (Number(debouncedInputAmount) > Number(tokenInputBalance)) return true;
 
-    if (Number(accountBalance) < saveFee) return true;
+    if (Number(tokenInputBalance) < saveFee) return true;
 
     let totalDepositADA = Number(
       protocol === ProtocolType.DEXHUNTER
@@ -130,13 +130,13 @@ const Swap: React.FC<Props> = ({
       totalDepositADA += Number(debouncedInputAmount);
     }
 
-    if (Number(accountBalance) < totalDepositADA + saveFee) return true;
+    if (Number(tokenInputBalance) < totalDepositADA + saveFee) return true;
 
     return false;
   }, [
     debouncedInputAmount,
     tokenInputBalance,
-    accountBalance,
+    tokenInputBalance,
     inputToken,
     estimatedPoints,
     protocol,
