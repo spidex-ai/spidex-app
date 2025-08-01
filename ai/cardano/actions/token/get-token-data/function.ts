@@ -48,22 +48,36 @@ export async function getTokenData(
         },
       };
     } else {
-      const response = await coreService.searchToken(
-        args.search,
-        1,
-        1,
-        true
-      );
+      const response = await coreService.searchToken(args.search, 1, 1, true);
       if (!response) {
         throw new Error('Failed to fetch search results');
       }
 
-      const token = response[0];
+      // Find the first token that matches the search
+      let token = response.find(
+        token =>
+          token.name?.toLowerCase() === args.search.toLowerCase() ||
+          token.ticker.toLowerCase() === args.search.toLowerCase()
+      );
+
+      if (!token) {
+        token = response.find(
+          token =>
+            token.name?.toLowerCase().includes(args.search.toLowerCase()) ||
+            token.ticker.toLowerCase().includes(args.search.toLowerCase())
+        );
+      }
+
+      if (!token) {
+        return {
+          message: `No token found for ${args.search}`,
+        };
+      }
 
       tokenAddress = token.token_id;
 
       const stats = await coreService.getTokenStats(tokenAddress);
-      console.log("🚀 ~ stats:", stats)
+      console.log('🚀 ~ stats:', stats);
 
       const tokenDetail = await coreService.getTokenDetail(tokenAddress);
 
