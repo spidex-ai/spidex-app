@@ -13,6 +13,7 @@ import { TopTokenVolume } from '@/services/taptools/types';
 
 import { Card } from '@/components/ui';
 import SaveToken from '@/app/(app)/_components/save-token';
+import { getLogoUrl } from '@/app/utils/logo';
 
 interface Props {
   tool: ToolInvocation;
@@ -67,7 +68,7 @@ const TokenCard = ({ token }: { token: TopTokenVolume }) => {
           <div className="flex flex-row items-center gap-2">
             {token?.logo ? (
               <img
-                src={token.logo}
+                src={getLogoUrl(token.logo)}
                 alt={token.ticker}
                 className="w-10 h-10 rounded-full"
               />

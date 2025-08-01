@@ -5,6 +5,7 @@ import React from 'react';
 import { Skeleton } from '@/components/ui';
 
 import { usePortfolioToken } from '@/hooks/portfolio';
+import { getLogoUrl } from '@/app/utils/logo';
 
 const Balances: React.FC = () => {
   const { data: portfolio, loading } = usePortfolioToken();
@@ -21,7 +22,7 @@ const Balances: React.FC = () => {
               className="flex flex-row items-center gap-2"
             >
               <img
-                src={token.logo}
+                src={getLogoUrl(token.logo)}
                 alt={token.name}
                 className="w-6 h-6 rounded-full"
               />

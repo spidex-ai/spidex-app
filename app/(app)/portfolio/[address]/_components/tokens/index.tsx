@@ -21,6 +21,7 @@ import { useSwapModal } from '../../_contexts/use-swap-modal';
 // import { usePortfolio } from '@/hooks';
 import { usePortfolioToken } from '@/hooks/portfolio';
 import { formatNumber } from '@/lib/utils';
+import { getLogoUrl } from '@/app/utils/logo';
 
 const Tokens: React.FC = () => {
   const { data: portfolio, loading } = usePortfolioToken();
@@ -58,11 +59,21 @@ const Tokens: React.FC = () => {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-[100px] sm:w-[200px] text-center">Asset</TableHead>
-                  <TableHead className="min-w-[100px] sm:min-w-[200px] text-center">Balance</TableHead>
-                  <TableHead className="min-w-[100px] sm:min-w-[200px] text-center">Price</TableHead>
-                  <TableHead className="min-w-[100px] sm:min-w-[200px] text-center">Value</TableHead>
-                  <TableHead className="min-w-[100px] sm:min-w-[200px] text-center">Actions</TableHead>
+                  <TableHead className="w-[100px] sm:w-[200px] text-center">
+                    Asset
+                  </TableHead>
+                  <TableHead className="min-w-[100px] sm:min-w-[200px] text-center">
+                    Balance
+                  </TableHead>
+                  <TableHead className="min-w-[100px] sm:min-w-[200px] text-center">
+                    Price
+                  </TableHead>
+                  <TableHead className="min-w-[100px] sm:min-w-[200px] text-center">
+                    Value
+                  </TableHead>
+                  <TableHead className="min-w-[100px] sm:min-w-[200px] text-center">
+                    Actions
+                  </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody className="max-h-96 overflow-y-auto">
@@ -80,7 +91,7 @@ const Tokens: React.FC = () => {
                       <TableCell className="text-center">
                         <div className="font-medium flex gap-2 items-center">
                           <img
-                            src={token.logo}
+                            src={getLogoUrl(token.logo)}
                             alt={token.name}
                             className="w-4 h-4 rounded-full border dark:border-border-main"
                           />
