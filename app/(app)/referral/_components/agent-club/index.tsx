@@ -18,7 +18,6 @@ const AgentClub: React.FC = () => {
   const { referralInfo, loading, error } = useRefInfo();
   const { uploadAvatar, updateUserInfo } = useSpidexCore();
   const { auth, getMe } = useSpidexCore();
-  console.log('🚀 ~ auth:', auth);
   const [copied, setCopied] = useState(false);
   const [postModalOpen, setPostModalOpen] = useState(false);
   const [avatar, setAvatar] = useState(

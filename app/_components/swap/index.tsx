@@ -105,10 +105,9 @@ const Swap: React.FC<Props> = ({
     useState<EsitmateSwapResponse>();
 
   const { balance: inputBalance, isLoading: inputBalanceLoading } =
-    useTokenBalance(inputToken?.unit || '');
+    useTokenBalance(inputToken?.unit || 'ADA');
 
-  const tokenInputBalance =
-    inputToken?.ticker === 'ADA' ? accountBalance : inputBalance;
+  const tokenInputBalance = inputBalance;
 
   const [protocol, setProtocol] = useState<ProtocolType>(
     ProtocolType.MINSWAP
@@ -166,7 +165,7 @@ const Swap: React.FC<Props> = ({
       }
 
       const usedAddressesHex = await api.getUsedAddresses();
-      console.log('inputToken', inputToken);
+
       const addresses = [];
       for (const address of usedAddressesHex) {
         const unusedAddresses = decodeHexAddress(address);
@@ -246,7 +245,7 @@ const Swap: React.FC<Props> = ({
       blacklistedDexes: [],
     };
     const swapEstResponse = await estimateSwap(swapEstPayload);
-    console.log('🚀 ~ swapEstResponse:', swapEstResponse);
+
     if (swapEstResponse) {
       setEstimatedPoints(swapEstResponse);
 
@@ -262,8 +261,6 @@ const Swap: React.FC<Props> = ({
   const checkPool = useCallback(async () => {
     try {
       await new Promise(resolve => setTimeout(resolve, 1000));
-      console.log('inputToken', inputToken);
-      console.log('outputToken', outputToken);
       if (
         (inputToken?.token_id === outputToken?.token_id &&
           inputToken?.token_id != null &&
@@ -308,8 +305,6 @@ const Swap: React.FC<Props> = ({
   };
 
   useEffect(() => {
-    console.log('inputToken', inputToken);
-    console.log('outputToken', outputToken);
     if (inputToken?.ticker && outputToken?.ticker) {
       checkPool();
     }

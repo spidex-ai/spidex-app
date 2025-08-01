@@ -113,10 +113,9 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
   );
 
   const { balance: inputBalance, isLoading: inputBalanceLoading } =
-    useTokenBalance(inputToken?.unit || '');
+    useTokenBalance(inputToken?.unit || 'ADA');
 
-  const tokenInputBalance =
-    inputToken?.ticker === 'ADA' ? accountBalance : inputBalance;
+  const tokenInputBalance = inputBalance;
 
   const isInsufficientBalance = useMemo(() => {
     const saveFee = protocol === ProtocolType.DEXHUNTER ? DEXHUNTER_SAVE_FEE : MINSWAP_SAVE_FEE;

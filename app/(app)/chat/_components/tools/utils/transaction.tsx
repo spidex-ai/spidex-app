@@ -31,7 +31,6 @@ interface ListTransactionProps {
 export const ListTransaction: React.FC<ListTransactionProps> = (
   props: ListTransactionProps
 ) => {
-  console.log('🚀 ~ props:', props);
 
   const onClickTxn = (hash: string) => {
     window.open(`https://cexplorer.io/tx/${hash}`, '_blank');
@@ -105,8 +104,6 @@ export const ListTransaction: React.FC<ListTransactionProps> = (
 const Transaction: React.FC<Props> = ({ txHash, blockHeight, blockTime }) => {
   const cardanoScanUrl = process.env.NEXT_PUBLIC_CARDANO_SCAN_URL;
   const onClick = () => {
-    console.log('cardanoScanUrl:::', cardanoScanUrl);
-
     window.open(`${cardanoScanUrl}/transaction/${txHash}`, '_blank');
   };
   return (

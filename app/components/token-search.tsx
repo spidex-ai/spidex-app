@@ -81,7 +81,6 @@ export function TokenSearch() {
                 className="p-4 hover:bg-muted/50 cursor-pointer"
                 onClick={() => {
                   // Handle token selection
-                  console.log('Selected token:', token);
                 }}
               >
                 <div className="flex items-center justify-between">

@@ -32,8 +32,6 @@ export const adaTokenDetail: CardanoTokenDetail = {
 };
 
 const SwapCallBody: React.FC<Props> = ({ toolCallId, args }) => {
-  console.log('🚀 ~ args:', args);
-
   const { addToolResult } = useChat();
 
   const { data: inputTokenData, isLoading: inputTokenLoading } = useTokenDetail(
@@ -56,8 +54,6 @@ const SwapCallBody: React.FC<Props> = ({ toolCallId, args }) => {
           swapText="Swap"
           swappingText="Swapping..."
           onSuccess={(tx, inputAmount) => {
-            console.log("🚀 ~ tx:", tx)
-            console.log("🚀 ~ inputAmount:", inputAmount)
             addToolResult<CardanoTradeResultBodyType>(toolCallId, {
               message: `Swap successful!`,
               body: {

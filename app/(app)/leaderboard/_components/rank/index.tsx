@@ -211,7 +211,7 @@ const Rank: React.FC = () => {
       dataIndex: 'totalPoint',
       key: 'totalPoint',
       useFixedHeader: true,
-      width: isMobile ? 70 : 130,
+      width: isMobile ? 70 : 200,
       render: (totalPoint: string) => (
         <div className="text-center text-[10px] md:text-sm">
           {formatNumber(Number(totalPoint), 2)}

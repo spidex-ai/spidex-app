@@ -268,7 +268,6 @@ const Missions = ({ onMissionComplete }: Props) => {
     result: MissionItem,
     isClickTab: boolean = true
   ) => {
-    console.log('isClickTab', isClickTab);
 
     if (!auth?.user?.xId && (result.type === 0 || result.type === 3)) {
       setIsReminderModalOpen(true);
@@ -288,7 +287,7 @@ const Missions = ({ onMissionComplete }: Props) => {
       return;
     }
 
-    console.log('🚀 ~ handleFinish ~ result.id:', result.id);
+
     setLoadingMissionId(result.id);
     try {
       let data = null;
@@ -322,7 +321,7 @@ const Missions = ({ onMissionComplete }: Props) => {
           break;
         case 10:
           if (result.step !== STEP.COMPLETED) {
-            console.log("🚀 ~ Missions ~ result:", result)
+       
             data = await triggerDailyLogin();
             toast.success('You earned +10 points!');
           }

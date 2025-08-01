@@ -11,7 +11,6 @@ import { EventItem } from '@/hooks/events/type';
 
 const EventPage: React.FC = () => {
   const { events, loading } = useEvent();
-  console.log('🚀 ~ EventPage ~ events:', events);
   const [selectedEvent, setSelectedEvent] = useState<EventItem | null>(null);
 
   useEffect(() => {
