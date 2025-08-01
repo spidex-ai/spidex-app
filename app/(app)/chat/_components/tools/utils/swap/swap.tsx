@@ -79,7 +79,7 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
     buildSwapRequestDexHunter,
     buildSwapRequestMinswap,
   } = useSpidexCore();
-  const { enabledWallet, unusedAddresses, accountBalance } = useCardano();
+  const { enabledWallet, unusedAddresses } = useCardano();
 
   const auth = useSelector(selectAuthData);
 
@@ -114,14 +114,17 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
 
   const { balance: inputBalance, isLoading: inputBalanceLoading } =
     useTokenBalance(inputToken?.unit || 'ADA');
+  console.log('🚀 ~ SwapWrapper ~ balance:', inputBalance);
 
   const tokenInputBalance = inputBalance;
 
   const isInsufficientBalance = useMemo(() => {
     const saveFee = protocol === ProtocolType.DEXHUNTER ? DEXHUNTER_SAVE_FEE : MINSWAP_SAVE_FEE;
+    console.log("🚀 ~ SwapWrapper ~ saveFee:", saveFee)
     if (Number(debouncedInputAmount) > Number(tokenInputBalance)) return true;
+    console.log("🚀 ~ SwapWrapper ~ Number(debouncedInputAmount) > Number(tokenInputBalance):", Number(debouncedInputAmount) > Number(tokenInputBalance))
 
-    if (Number(accountBalance) < saveFee) return true;
+    if (Number(tokenInputBalance) < saveFee) return true;
 
     let totalDepositADA = Number(
       protocol === ProtocolType.DEXHUNTER
@@ -133,13 +136,13 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
       totalDepositADA += Number(debouncedInputAmount);
     }
 
-    if (Number(accountBalance) < totalDepositADA + saveFee) return true;
+    if (Number(tokenInputBalance) < totalDepositADA + saveFee) return true;
 
     return false;
   }, [
     debouncedInputAmount,
     tokenInputBalance,
-    accountBalance,
+    tokenInputBalance,
     inputToken,
     estimatedPoints,
     protocol,
