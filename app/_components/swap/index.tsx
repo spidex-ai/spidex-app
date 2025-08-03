@@ -363,6 +363,18 @@ const Swap: React.FC<Props> = ({
           onChangeToken={token => {
             setIsNotPool(false);
             setInputToken(token);
+            // If both tokens are the same, change output to ADA
+            if (
+              token?.token_id === outputToken?.token_id ||
+              token?.ticker === outputToken?.ticker ||
+              token?.unit === outputToken?.unit
+            ) {
+              setOutputToken(adaTokenDetail);
+            }
+            // If both tokens are ADA, clear output token
+            if (token?.ticker === 'ADA' && outputToken?.ticker === 'ADA') {
+              setOutputToken(null);
+            }
           }}
           address={auth?.user?.stakeAddress || ''}
         />
@@ -381,6 +393,18 @@ const Swap: React.FC<Props> = ({
           onChangeToken={token => {
             setIsNotPool(false);
             setOutputToken(token);
+            // If both tokens are the same, change input to ADA
+            if (
+              token?.token_id === inputToken?.token_id ||
+              token?.ticker === inputToken?.ticker ||
+              token?.unit === inputToken?.unit
+            ) {
+              setInputToken(adaTokenDetail);
+            }
+            // If both tokens are ADA, clear input token
+            if (token?.ticker === 'ADA' && inputToken?.ticker === 'ADA') {
+              setInputToken(null);
+            }
           }}
           address={auth?.user?.stakeAddress || ''}
         />

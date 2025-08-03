@@ -26,7 +26,7 @@ const SelectTrigger = React.forwardRef<
   >
     {children}
     <SelectPrimitive.Icon asChild>
-      <div className="flex items-start justify-center mb-1">
+      <div className="flex items-center justify-center">
         <Image
           src="/icons/arrow-green-down.svg"
           alt="arrow-down"

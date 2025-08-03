@@ -42,7 +42,7 @@ const TokenSelect: React.FC<Props> = ({ value, onChange }) => {
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <div className="w-fit shrink-0 flex items-center bg-neutral-200 dark:bg-transparent hover:bg-neutral-300 dark:hover:bg-transparent rounded-md px-2 py-1 gap-2 cursor-pointer transition-colors duration-200">
-          {value ? (
+          {value && (
             <>
               {value.logo ? (
                 <img
@@ -60,8 +60,6 @@ const TokenSelect: React.FC<Props> = ({ value, onChange }) => {
                 />
               )}
             </>
-          ) : (
-            <div className="w-6 h-6 rounded-full bg-neutral-200 dark:bg-neutral-600" />
           )}
           <p
             className={cn(
@@ -69,7 +67,11 @@ const TokenSelect: React.FC<Props> = ({ value, onChange }) => {
               value ? 'opacity-100' : 'opacity-50'
             )}
           >
-            {value ? (value.name ? value.name : value.token_ascii) : 'Select'}
+            {value
+              ? value.name
+                ? value.name
+                : value.token_ascii
+              : 'Select token'}
           </p>
           <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />
         </div>

@@ -89,7 +89,6 @@ const SearchBar: React.FC<Props> = ({ isTitle = true }) => {
               setIsFocused(false);
             }
           }}
-          autoFocus
         />
         {isFocused && (
           <div

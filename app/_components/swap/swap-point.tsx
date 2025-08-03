@@ -88,19 +88,27 @@ export default function SwapPoint({
           </div>
           <div className="flex items-center gap-2">
             <div className="text-[8px] sm:text-[10px] text-text-gray">{`${formatNumber(parseFloat(inputAmount))} ${inputToken} = ${receiveAmount} ${outputToken}`}</div>
-            {!isOpenSwapDetails ? (
-              <div
-                className="cursor-pointer"
-                onClick={() => setIsOpenSwapDetails(!isOpenSwapDetails)}
-              >
+
+            <div
+              className="cursor-pointer"
+              onClick={() => setIsOpenSwapDetails(!isOpenSwapDetails)}
+            >
+              {isOpenSwapDetails ? (
                 <Image
                   src="/icons/arrow-down-white.svg"
                   alt="arrow-down-white"
                   width={10}
                   height={10}
                 />
-              </div>
-            ) : null}
+              ) : (
+                <Image
+                  src="/icons/arrow-up-white.svg"
+                  alt="arrow-up-white"
+                  width={10}
+                  height={10}
+                />
+              )}
+            </div>
           </div>
         </div>
 
@@ -282,38 +290,26 @@ export default function SwapPoint({
                     </div>
                   </div>
                 }
-                value={`${swapDetails?.inputToken === 'ADA'
+                value={`${
+                  swapDetails?.inputToken === 'ADA'
                     ? `${totalDepositADA.toLocaleString(undefined, {
-                      maximumFractionDigits: 2,
-                    })} ADA`
-                    : `${Number(swapDetails.inputAmount).toLocaleString(
-                      undefined,
-                      {
                         maximumFractionDigits: 2,
-                      }
-                    )} ${swapDetails.inputToken
-                    } + ${totalDepositADA.toLocaleString(undefined, {
-                      maximumFractionDigits: 2,
-                    })} ADA`
-                  }`}
+                      })} ADA`
+                    : `${Number(swapDetails.inputAmount).toLocaleString(
+                        undefined,
+                        {
+                          maximumFractionDigits: 2,
+                        }
+                      )} ${
+                        swapDetails.inputToken
+                      } + ${totalDepositADA.toLocaleString(undefined, {
+                        maximumFractionDigits: 2,
+                      })} ADA`
+                }`}
               />
             </div>
           </div>
         )}
-
-        {isOpenSwapDetails ? (
-          <div
-            className="absolute top-1 right-1 cursor-pointer"
-            onClick={() => setIsOpenSwapDetails(!isOpenSwapDetails)}
-          >
-            <Image
-              src="/icons/close-white.svg"
-              alt="close"
-              width={10}
-              height={10}
-            />
-          </div>
-        ) : null}
       </div>
 
       <div className="border-border-main border rounded-lg relative mt-2">
@@ -321,133 +317,126 @@ export default function SwapPoint({
           <div className="text-xs">Market Offers</div>
           <div className="flex items-center gap-2">
             <div className="text-[10px] text-white flex items-center gap-1">
-              {/* <Image
-                src="/icons/dex-hunter.svg"
-                alt="dex-hunter"
-                width={10}
-                height={10}
-              />
-              <div className="flex items-end">DexHunter</div> */}
               <SelectProtocol
                 protocol={protocol}
                 onProtocolChange={onProtocolChange}
               />
             </div>
-            {!isOpenMarketOffers ? (
-              <div
-                className="cursor-pointer"
-                onClick={() => setIsOpenMarketOffers(!isOpenMarketOffers)}
-              >
+
+            <div
+              className="cursor-pointer"
+              onClick={() => setIsOpenMarketOffers(!isOpenMarketOffers)}
+            >
+              {isOpenMarketOffers ? (
                 <Image
                   src="/icons/arrow-down-white.svg"
                   alt="arrow-down-white"
                   width={10}
                   height={10}
                 />
-              </div>
-            ) : null}
+              ) : (
+                <Image
+                  src="/icons/arrow-up-white.svg"
+                  alt="arrow-up-white"
+                  width={10}
+                  height={10}
+                />
+              )}
+            </div>
           </div>
-
         </div>
 
         {isOpenMarketOffers && (
           <div className=" my-2 p-2">
             <div className="flex flex-col gap-2">
-              {paths && paths.length > 0 && paths.map((path, key) => (
-                <div className="text-xs gradient-border-market-offer" key={key}>
-                  <div className="grid grid-cols-12 p-1 sm:p-2">
-                    <div className="col-span-5">
-                      <div className="flex items-center gap-1">
-                        <img
-                          src={
-                            dexLogoMap[path.protocol] || '/icons/unknown.svg'
-                          }
-                          alt="logo-gray"
-                          width={20}
-                          height={20}
-                        />
-                        <div>{dexNameMap[path.protocol] || path.protocol}</div>
-                      </div>
-                    </div>
-
-                    <div className="col-span-7 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
-                      <div className="text-[10px] sm:text-xs break-all">{`${path.amountIn} ${inputToken} = ${formatNumber(Number(path.minReceive))} ${outputToken}`}</div>
-                      <div className="flex items-center gap-1 self-start sm:self-center">
-                        <Image
-                          src="/icons/fee-gray.svg"
-                          alt="fee-gray"
-                          width={10}
-                          height={10}
-                        />
-                        <div className="text-[10px] sm:text-xs text-text-gray flex gap-1 items-center">
-                          <div>{`A${path.batcherFee}`}</div>
+              {paths &&
+                paths.length > 0 &&
+                paths.map((path, key) => (
+                  <div
+                    className="text-xs gradient-border-market-offer"
+                    key={key}
+                  >
+                    <div className="grid grid-cols-12 p-1 sm:p-2">
+                      <div className="col-span-5">
+                        <div className="flex items-center gap-1">
+                          <img
+                            src={
+                              dexLogoMap[path.protocol] || '/icons/unknown.svg'
+                            }
+                            alt="logo-gray"
+                            width={20}
+                            height={20}
+                          />
                           <div>
-                            <TooltipProvider>
-                              <Tooltip delayDuration={0}>
-                                <TooltipTrigger>
-                                  <Image
-                                    src="/icons/warning-blink.svg"
-                                    alt="ada"
-                                    width={10}
-                                    height={10}
-                                  />
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                  <div className="flex flex-col gap-1 min-w-60">
-                                    <div className="flex gap-1 justify-between items-center">
-                                      <div>Minimum receive</div>
-                                      <div className="font-semibold">{`${formatNumber(Number(path.amountOut))}A`}</div>
-                                    </div>
+                            {dexNameMap[path.protocol] || path.protocol}
+                          </div>
+                        </div>
+                      </div>
 
-                                    <div className="flex gap-1 justify-between items-center">
-                                      <div>Price impact</div>
-                                      <div className="font-semibold">{`${formatNumber(Number(path.priceImpact))}A`}</div>
-                                    </div>
+                      <div className="col-span-7 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                        <div className="text-[10px] sm:text-xs break-all">{`${path.amountIn} ${inputToken} = ${formatNumber(Number(path.minReceive))} ${outputToken}`}</div>
+                        <div className="flex items-center gap-1 self-start sm:self-center">
+                          <Image
+                            src="/icons/fee-gray.svg"
+                            alt="fee-gray"
+                            width={10}
+                            height={10}
+                          />
+                          <div className="text-[10px] sm:text-xs text-text-gray flex gap-1 items-center">
+                            <div>{`A${path.batcherFee}`}</div>
+                            <div>
+                              <TooltipProvider>
+                                <Tooltip delayDuration={0}>
+                                  <TooltipTrigger>
+                                    <Image
+                                      src="/icons/warning-blink.svg"
+                                      alt="ada"
+                                      width={10}
+                                      height={10}
+                                    />
+                                  </TooltipTrigger>
+                                  <TooltipContent>
+                                    <div className="flex flex-col gap-1 min-w-60">
+                                      <div className="flex gap-1 justify-between items-center">
+                                        <div>Minimum receive</div>
+                                        <div className="font-semibold">{`${formatNumber(Number(path.amountOut))}A`}</div>
+                                      </div>
 
-                                    <div className="flex gap-1 justify-between items-center">
-                                      <div>Batcher fee</div>
-                                      <div className="text-text-tooltip font-semibold">{`${formatNumber(Number(path.batcherFee))}A`}</div>
-                                    </div>
+                                      <div className="flex gap-1 justify-between items-center">
+                                        <div>Price impact</div>
+                                        <div className="font-semibold">{`${formatNumber(Number(path.priceImpact))}A`}</div>
+                                      </div>
 
-                                    <div className="flex gap-1 justify-between items-center">
-                                      <div>Refundable deposit</div>
-                                      <div className=" font-semibold">{`${formatNumber(Number(path.refundableDeposits))}A`}</div>
+                                      <div className="flex gap-1 justify-between items-center">
+                                        <div>Batcher fee</div>
+                                        <div className="text-text-tooltip font-semibold">{`${formatNumber(Number(path.batcherFee))}A`}</div>
+                                      </div>
+
+                                      <div className="flex gap-1 justify-between items-center">
+                                        <div>Refundable deposit</div>
+                                        <div className=" font-semibold">{`${formatNumber(Number(path.refundableDeposits))}A`}</div>
+                                      </div>
                                     </div>
-                                  </div>
-                                </TooltipContent>
-                              </Tooltip>
-                            </TooltipProvider>
+                                  </TooltipContent>
+                                </Tooltip>
+                              </TooltipProvider>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
             </div>
           </div>
         )}
-
-        {isOpenMarketOffers ? (
-          <div
-            className="absolute top-1 right-1 cursor-pointer"
-            onClick={() => setIsOpenMarketOffers(!isOpenMarketOffers)}
-          >
-            <Image
-              src="/icons/close-white.svg"
-              alt="close"
-              width={10}
-              height={10}
-            />
-          </div>
-        ) : null}
       </div>
       <div className="bg-bg-swap rounded-lg">
         <div className="gradient-border-market-offer mt-4">
           <div className="flex justify-between items-center py-2 px-4 rounded-lg">
             <TextGradient className="text-sm">Estimated Points</TextGradient>
-            <div className="flex gap-1">
-              <div className="flex items-center  text-sm pt-1">
+            <div className="flex gap-1 items-center">
+              <div className="flex items-center text-sm">
                 {Number(estimatedPoints).toFixed(2)}
               </div>
               <div>
@@ -462,17 +451,17 @@ export default function SwapPoint({
           </div>
         </div>
       </div>
-      <div className="flex items-center gap-2 justify-center mt-2 text-xs mb-2">
-        <div className="text-text-gray font-medium pt-1">Powered by</div>
+      <div className="flex items-center gap-2 justify-center mt-5 text-md mb-2">
+        <div className="text-text-gray font-medium">Powered by</div>
         {protocol === ProtocolType.DEXHUNTER ? (
           <>
             <Image
               src="/icons/dex-hunter.svg"
               alt="dex-hunter"
-              width={15}
-              height={15}
+              width={20}
+              height={20}
             />
-            <div className="text-white text-[10px] flex items-center pt-1">
+            <div className="text-white text-[15px] flex items-center font-medium">
               DexHunter
             </div>
           </>
@@ -481,10 +470,10 @@ export default function SwapPoint({
             <Image
               src="/icons/minswap.svg"
               alt="minswap"
-              width={15}
-              height={15}
+              width={20}
+              height={20}
             />
-            <div className="text-white text-[10px] flex items-center pt-1">
+            <div className="text-white text-[15px] flex items-center font-medium">
               Minswap Aggregator
             </div>
           </>
