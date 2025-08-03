@@ -59,14 +59,14 @@ const TokenDashboardTabs: React.FC<Props> = ({
           </div>
           <DraggableTabsList
             selectedTab={activeTab}
-            className="p bg-neutral-100 dark:bg-bg-tab"
+            className="p bg-neutral-100 dark:bg-bg-tab rounded-md"
           >
             <TabsTrigger
               value="market-stats"
               ref={el => {
                 if (el) tabsRef.current['market-stats'] = el;
               }}
-              className="min-w-fit whitespace-nowrap data-[state=active]:bg-white dark:data-[state=active]:bg-neutral-800"
+              className="min-w-fit whitespace-nowrap data-[state=active]:bg-white dark:data-[state=active]:bg-neutral-800 data-[state=active]:rounded-l-md"
             >
               Stats
             </TabsTrigger>
@@ -85,7 +85,7 @@ const TokenDashboardTabs: React.FC<Props> = ({
               ref={el => {
                 if (el) tabsRef.current['bubble'] = el;
               }}
-              className="min-w-fit whitespace-nowrap data-[state=active]:bg-white dark:data-[state=active]:bg-neutral-800"
+              className="min-w-fit whitespace-nowrap data-[state=active]:bg-white dark:data-[state=active]:bg-neutral-800 data-[state=active]:rounded-r-md"
             >
               Holders
             </TabsTrigger>
