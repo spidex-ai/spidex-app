@@ -7,14 +7,13 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui';
-import { AvatarUser } from '@/components/ui/image-fallback';
 
 import { useIsMobile } from '@/hooks';
 import { useLeaderboard } from '@/hooks/leaderboard/use-leaderboard';
 import { cn, formatNumber } from '@/lib/utils';
 import { truncateAddress } from '@/lib/wallet';
 import Image from 'next/image';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import Table from 'rc-table';
 import { TextBorderGradient, TextGradient } from '@/components/ui/text';
@@ -27,24 +26,28 @@ const Rank: React.FC = () => {
     orderBy,
     setOrderBy,
   } = useLeaderboard();
-  const data = leaderboardData.map((item: any) => ({
-    rank: item.rank,
-    username: item.user.username,
-    address: item.user.address,
-    avatar: item.user.avatar,
-    totalPoint: item.totalPoint,
-    totalReferralCount: item.totalReferralCount,
-    isMyRank: false,
-  }));
-  data.unshift({
-    rank: userRank?.rank,
-    username: userRank?.user.username,
-    address: userRank?.user.address,
-    avatar: userRank?.user.avatar,
-    totalPoint: userRank?.totalPoint,
-    totalReferralCount: userRank?.totalReferralCount,
-    isMyRank: true,
-  });
+
+  const data = useMemo(() => {
+    const result = leaderboardData.map((item: any) => ({
+      rank: item.rank,
+      username: item.user.username,
+      address: item.user.address,
+      avatar: item.user.avatar,
+      totalPoint: item.totalPoint,
+      totalReferralCount: item.totalReferralCount,
+      isMyRank: false,
+    }));
+    result.unshift({
+      rank: userRank?.rank,
+      username: userRank?.user.username,
+      address: userRank?.user.address,
+      avatar: userRank?.user.avatar,
+      totalPoint: userRank?.totalPoint,
+      totalReferralCount: userRank?.totalReferralCount,
+      isMyRank: true,
+    });
+    return result;
+  }, [leaderboardData, userRank]);
 
   const isMobile = useIsMobile();
 
@@ -133,8 +136,8 @@ const Rank: React.FC = () => {
         return (
           <div className="grid grid-cols-[24px_1fr] items-center gap-1 md:gap-2">
             {!isMobile ? (
-              <AvatarUser
-                src={row.avatar ? row.avatar : 'error'}
+              <img
+                src={row.avatar ? row.avatar : '/icons/example-ava.svg'}
                 alt={username}
                 className="w-4 h-4 md:w-6 md:h-6 rounded-full justify-self-center"
               />

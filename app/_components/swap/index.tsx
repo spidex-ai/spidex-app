@@ -104,39 +104,57 @@ const Swap: React.FC<Props> = ({
   const [estimatedPoints, setEstimatedPoints] =
     useState<EsitmateSwapResponse>();
 
-  const { balance: inputBalance, isLoading: inputBalanceLoading } =
-    useTokenBalance(inputToken?.unit || 'ADA');
+  const {
+    balance: inputBalance,
+    isLoading: inputBalanceLoading,
+    adaBalance,
+  } = useTokenBalance(inputToken?.unit || 'ADA');
 
   const tokenInputBalance = inputBalance;
 
-  const [protocol, setProtocol] = useState<ProtocolType>(
-    ProtocolType.MINSWAP
-  );
+  const [protocol, setProtocol] = useState<ProtocolType>(ProtocolType.MINSWAP);
 
   const isInsufficientBalance = useMemo(() => {
-    const saveFee = protocol === ProtocolType.DEXHUNTER ? DEXHUNTER_SAVE_FEE : MINSWAP_SAVE_FEE;
-
+    const saveFee =
+      protocol === ProtocolType.DEXHUNTER
+        ? DEXHUNTER_SAVE_FEE
+        : MINSWAP_SAVE_FEE;
+    console.log("🚀 ~ Swap ~ saveFee:", saveFee)
+    
+    console.log("🚀 ~ Swap ~ Number(debouncedInputAmount) > Number(tokenInputBalance):", Number(debouncedInputAmount) > Number(tokenInputBalance))
     if (Number(debouncedInputAmount) > Number(tokenInputBalance)) return true;
 
-    if (Number(tokenInputBalance) < saveFee) return true;
 
-    let totalDepositADA = Number(
+    const protocolPoints =
       protocol === ProtocolType.DEXHUNTER
         ? estimatedPoints?.dexhunter?.totalDeposits
+          ? estimatedPoints?.dexhunter?.totalDeposits
+          : 0
         : estimatedPoints?.minswap?.totalDeposits
-    );
+          ? estimatedPoints?.minswap?.totalDeposits
+          : 0;
+    console.log("🚀 ~ Swap ~ protocolPoints:", protocolPoints)
+
+    let totalDepositADA = Number(protocolPoints);
 
     if (inputToken?.ticker === 'ADA') {
+      console.log("🚀 ~ Swap ~ inputToken?.ticker === 'ADA':", inputToken?.ticker === 'ADA')
       totalDepositADA += Number(debouncedInputAmount);
-    }
+      console.log("🚀 ~ Swap ~ totalDepositADA:", totalDepositADA)
+      console.log("🚀 ~ Swap ~ Number(tokenInputBalance) < totalDepositADA + saveFee:", Number(tokenInputBalance) < totalDepositADA + saveFee)
+      if (Number(tokenInputBalance) < totalDepositADA + saveFee) return true;
 
-    if (Number(tokenInputBalance) < totalDepositADA + saveFee) return true;
+    } else {
+      console.log("🚀 ~ Swap ~ adaBalance:", adaBalance)
+      console.log("🚀 ~ Swap ~ Number(adaBalance) < totalDepositADA + saveFee:", Number(adaBalance) < totalDepositADA + saveFee)
+      if (Number(adaBalance) < totalDepositADA + saveFee) return true;
+    }
 
     return false;
   }, [
     debouncedInputAmount,
     tokenInputBalance,
-    tokenInputBalance,
+    adaBalance,
     inputToken,
     estimatedPoints,
     protocol,
