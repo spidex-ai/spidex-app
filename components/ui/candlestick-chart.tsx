@@ -56,6 +56,28 @@ export function CandlestickChart({ data }: CandlestickChartProps) {
     if (!container || containerSize.width === 0 || containerSize.height === 0)
       return;
 
+    // Calculate dynamic precision based on data values
+    const calculatePrecision = (data: CandlestickData[]) => {
+      if (data.length === 0) return { precision: 5, minMove: 0.00001 };
+
+      const allValues = data.flatMap(item => [
+        item.open,
+        item.high,
+        item.low,
+        item.close,
+      ]);
+      const minValue = Math.min(...allValues.filter(v => v > 0));
+
+      // Calculate precision based on the smallest value
+      const decimalPlaces = Math.max(2, Math.ceil(-Math.log10(minValue)) + 2);
+      const precision = Math.min(decimalPlaces, 12); // Cap at 12 for performance
+      const minMove = Math.pow(10, -precision);
+
+      return { precision, minMove };
+    };
+
+    const { precision, minMove } = calculatePrecision(data);
+
     const chart = createChart(container, {
       layout: {
         background: { type: ColorType.Solid, color: 'transparent' },
@@ -88,8 +110,8 @@ export function CandlestickChart({ data }: CandlestickChartProps) {
       wickDownColor: colors.wickDownColor,
       priceFormat: {
         type: 'price',
-        precision: 5,
-        minMove: 0.00001,
+        precision,
+        minMove,
       },
     });
 

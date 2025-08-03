@@ -1,12 +1,11 @@
-import { Connection } from '@solana/web3.js';
 import {
-  CARDANO_GET_TOKEN_DATA_NAME,
-  CARDANO_TOP_HOLDERS_NAME,
   CARDANO_GET_TOKEN_ADDRESS_NAME,
-  CARDANO_TOKEN_TOP_TRADERS_NAME,
-  CARDANO_TOKEN_PRICE_CHART_NAME,
+  CARDANO_GET_TOKEN_DATA_NAME,
   CARDANO_TOKEN_HOLDERS_NAME,
+  CARDANO_TOKEN_PRICE_CHART_NAME,
+  CARDANO_TOP_HOLDERS_NAME,
 } from '@/ai/action-names';
+import { Connection } from '@solana/web3.js';
 
 import {
   CardanoGetTokenAddressAction,
@@ -15,7 +14,6 @@ import {
   CardanoTokenPriceChartAction,
   cardanoTool,
   CardanoTopHoldersAction,
-  CardanoTopTokenTradersAction,
 } from '@/ai/cardano';
 
 export const TOKEN_ANALYSIS_TOOLS = {

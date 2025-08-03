@@ -1,13 +1,9 @@
-import { searchTokens } from '@/services/birdeye';
-
+import coreService from '@/services/core';
 import type { CardanoActionResult } from '../../cardano-action';
 import type {
   CardanoGetTokenAddressArgumentsType,
   CardanoGetTokenAddressResultBodyType,
 } from './types';
-import { SearchTokenInfo } from '@/services/dexhunter/types';
-import dexHunterService from '@/services/dexhunter';
-import coreService from '@/services/core';
 
 /**
  * Gets the token data for a given ticker.
@@ -33,20 +29,36 @@ export async function getTokenAddress(
     };
   }
   try {
-    const response = await coreService.searchToken(
-      args.keyword,
-      1,
-      1,
-      true
-    );
-    if (!response) {
+    const response = await coreService.searchToken(args.keyword, 10, 1, true);
+    if (!response || response.length === 0) {
       throw new Error('Failed to fetch search results');
+    }
+
+    // Find the first token that matches the search
+    let token = response.find(
+      token =>
+        token.name?.toLowerCase() === args.keyword.toLowerCase() ||
+        token.ticker.toLowerCase() === args.keyword.toLowerCase()
+    );
+
+    if (!token) {
+      token = response.find(
+        token =>
+          token.name?.toLowerCase().includes(args.keyword.toLowerCase()) ||
+          token.ticker.toLowerCase().includes(args.keyword.toLowerCase())
+      );
+    }
+
+    if (!token) {
+      return {
+        message: `No token found for ${args.keyword}. Please try a different keyword.`,
+      };
     }
 
     return {
       message: `Found token address for ${args.keyword}. The user is shown the following token address in the UI, DO NOT REITERATE THE TOKEN ADDRESS. Ask the user what they want to do next.`,
       body: {
-        address: response[0]?.token_id,
+        address: token.unit ?? '',
       },
     };
   } catch (error) {

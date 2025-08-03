@@ -52,21 +52,35 @@ const Transactions: React.FC = () => {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className='min-w-[100px] sm:min-w-[200px] text-center'>Action</TableHead>
-                <TableHead className='min-w-[100px] sm:min-w-[200px] text-center'>Token A</TableHead>
-                <TableHead className='min-w-[100px] sm:min-w-[200px] text-center'>Amount A</TableHead>
-                <TableHead className='min-w-[100px] sm:min-w-[200px] text-center'>Token B</TableHead>
-                <TableHead className='min-w-[100px] sm:min-w-[200px] text-center'>Amount B</TableHead>
-                <TableHead className='min-w-[100px] sm:min-w-[200px] text-center'>Time</TableHead>
-                <TableHead className="min-w-[100px] sm:min-w-[200px] text-center">TXN</TableHead>
+                <TableHead className="min-w-[50px] sm:min-w-[100px] text-center">
+                  Action
+                </TableHead>
+                <TableHead className="min-w-[100px] sm:min-w-[200px] text-center">
+                  Token A
+                </TableHead>
+                <TableHead className="min-w-[100px] sm:min-w-[200px] text-center">
+                  Amount A
+                </TableHead>
+                <TableHead className="min-w-[100px] sm:min-w-[200px] text-center">
+                  Token B
+                </TableHead>
+                <TableHead className="min-w-[100px] sm:min-w-[200px] text-center">
+                  Amount B
+                </TableHead>
+                <TableHead className="min-w-[100px] sm:min-w-[200px] text-center">
+                  Time
+                </TableHead>
+                <TableHead className="min-w-[50px] sm:min-w-[100px] text-right">
+                  TXN
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody className="max-h-96 overflow-y-hidden">
               {transactions.map((tx: PortfolioTransaction, idx: number) => (
                 <TableRow key={idx}>
-                  <TableCell className='text-center'>{tx.action}</TableCell>
-                  <TableCell className='text-center'>
-                    <div className="font-medium flex gap-2 items-center">
+                  <TableCell className="text-center">{tx.action}</TableCell>
+                  <TableCell className="text-center">
+                    <div className="font-medium flex gap-2 items-center justify-center">
                       <img
                         src={tx.tokenAIcon}
                         alt={tx.tokenAName}
@@ -75,8 +89,10 @@ const Transactions: React.FC = () => {
                       <p>{tx.tokenAName}</p>
                     </div>
                   </TableCell>
-                  <TableCell className='text-center'>{formatNumber(tx.tokenAAmount, 2)}</TableCell>
-                  <TableCell className="flex items-center gap-2 text-center">
+                  <TableCell className="text-center">
+                    {formatNumber(tx.tokenAAmount, 2)}
+                  </TableCell>
+                  <TableCell className="flex items-center gap-2 text-center justify-center">
                     <div className="font-medium flex gap-2 items-center">
                       <img
                         src={tx.tokenBIcon}
@@ -86,8 +102,10 @@ const Transactions: React.FC = () => {
                       <p>{tx.tokenBName}</p>
                     </div>
                   </TableCell>
-                  <TableCell className='text-center'>{formatNumber(tx.tokenBAmount, 2)}</TableCell>
-                  <TableCell text-center>
+                  <TableCell className="text-center">
+                    {formatNumber(tx.tokenBAmount, 2)}
+                  </TableCell>
+                  <TableCell className="text-center justify-center">
                     {formatDate(new Date(tx.time * 1000))}
                   </TableCell>
                   <TableCell

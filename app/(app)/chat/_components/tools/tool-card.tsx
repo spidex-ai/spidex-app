@@ -120,16 +120,15 @@ const ToolCard = <ActionResultBodyType, ActionArgsType>({
   fullWidth = false,
 }: Props<ActionResultBodyType, ActionArgsType> & { fullWidth?: boolean }) => {
   const agentName = getAgentName(tool);
-  console.log('🚀 ~ ToolCard ~ agentName:', agentName);
-
   const agentIcon = getAgentIcon(agentName);
-  console.log('🚀 ~ ToolCard ~ agentIcon:', agentIcon);
-
-  console.log('🚀 ~ ToolCard ~ tool:', tool);
-  console.log('🚀 ~ ToolCard ~ result:', result);
 
   return (
-    <div className={cn(`flex flex-col gap-2 ${fullWidth ? 'w-full' : 'w-fit'}`, className)}>
+    <div
+      className={cn(
+        `flex flex-col gap-2 ${fullWidth ? 'w-full' : 'w-fit'}`,
+        className
+      )}
+    >
       <div
         className={cn(
           'flex items-center gap-2',

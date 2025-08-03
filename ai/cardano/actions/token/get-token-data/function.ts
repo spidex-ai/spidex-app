@@ -48,7 +48,7 @@ export async function getTokenData(
         },
       };
     } else {
-      const response = await coreService.searchToken(args.search, 1, 1, true);
+      const response = await coreService.searchToken(args.search, 10, 1, true);
       if (!response) {
         throw new Error('Failed to fetch search results');
       }

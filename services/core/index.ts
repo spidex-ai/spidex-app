@@ -1,4 +1,3 @@
-
 import { CoreClient } from './client';
 import { ApiResponse, WalletBalances, WalletTransaction } from './types';
 import { Token } from '@/db/types';
@@ -9,7 +8,7 @@ export class CoreService {
   private client: CoreClient;
 
   constructor() {
-    this.client = new CoreClient(); 
+    this.client = new CoreClient();
   }
 
   async getBalances(walletAddress: string): Promise<WalletBalances> {
@@ -66,7 +65,6 @@ export class CoreService {
       throw error;
     }
   }
-  
 
   async getTokenStats(tokenId: string) {
     try {
@@ -77,9 +75,9 @@ export class CoreService {
     } catch (error) {
       throw error;
     }
-  } 
+  }
 
-  async searchToken( query: string,limit = 1, page = 1, verified = true) {
+  async searchToken(query: string, limit = 30, page = 1, verified = true) {
     try {
       const response = await this.client.get<ApiResponse<CardanoTokenDetail[]>>(
         `tokens/search?query=${query}&limit=${limit}&page=${page}&verified=${verified}`
@@ -95,7 +93,7 @@ export class CoreService {
       const response = await this.client.get<ApiResponse<CardanoTokenDetail>>(
         `tokens/${tokenId}`
       );
-      return response.data; 
+      return response.data;
     } catch (error) {
       throw error;
     }
