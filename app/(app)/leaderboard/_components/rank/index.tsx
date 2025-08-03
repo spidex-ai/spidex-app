@@ -99,18 +99,15 @@ const Rank: React.FC = () => {
                       <Tooltip delayDuration={0}>
                         <TooltipTrigger asChild>
                           <TextBorderGradient
-                            className={`rounded-full cursor-default flex items-center justify-center ${
+                            className={`rounded-full cursor-default flex items-center justify-center aspect-square ${
+                              isMobile ? 'min-w-[24px] min-h-[24px]' : 'min-w-[32px] min-h-[32px]'
+                            } ${
                               rank && row.rank.toString().length >= 3
                                 ? 'px-1 md:px-2 py-1'
                                 : rank && row.rank.toString().length > 1
                                   ? 'px-2 md:px-3 py-1'
                                   : 'px-3 md:px-4 py-1'
                             }`}
-                            style={{
-                              minWidth: isMobile ? '24px' : '32px',
-                              minHeight: isMobile ? '24px' : '32px',
-                              aspectRatio: '1/1',
-                            }}
                           >
                             <TextGradient
                               className={cn(
