@@ -95,21 +95,45 @@ const Rank: React.FC = () => {
                   <div>-</div>
                 ) : (
                   <div className=" flex items-center justify-center">
-                    <TextBorderGradient
-                      className={`px-2 md:px-3 py-1 rounded-full cursor-default ${rank && row.rank.toString().length > 1 ? 'py-1 md:py-2' : 'py-1'}`}
-                    >
-                      <TextGradient
-                        className={cn(
-                          isMobile
-                            ? 'text-[10px]'
-                            : rank && row.rank.toString().length > 1
-                              ? 'text-[12px]'
-                              : 'text-base'
+                    <TooltipProvider>
+                      <Tooltip delayDuration={0}>
+                        <TooltipTrigger asChild>
+                          <TextBorderGradient
+                            className={`rounded-full cursor-default flex items-center justify-center ${
+                              rank && row.rank.toString().length >= 3
+                                ? 'px-1 md:px-2 py-1'
+                                : rank && row.rank.toString().length > 1
+                                  ? 'px-2 md:px-3 py-1'
+                                  : 'px-3 md:px-4 py-1'
+                            }`}
+                            style={{
+                              minWidth: isMobile ? '24px' : '32px',
+                              minHeight: isMobile ? '24px' : '32px',
+                              aspectRatio: '1/1',
+                            }}
+                          >
+                            <TextGradient
+                              className={cn(
+                                isMobile
+                                  ? 'text-[10px]'
+                                  : rank && row.rank.toString().length >= 3
+                                    ? 'text-[10px]'
+                                    : rank && row.rank.toString().length > 1
+                                      ? 'text-[12px]'
+                                      : 'text-base'
+                              )}
+                            >
+                              {rank > 99 ? '99+' : rank}
+                            </TextGradient>
+                          </TextBorderGradient>
+                        </TooltipTrigger>
+                        {rank > 99 && (
+                          <TooltipContent side="top">
+                            Rank #{rank}
+                          </TooltipContent>
                         )}
-                      >
-                        {rank}
-                      </TextGradient>
-                    </TextBorderGradient>
+                      </Tooltip>
+                    </TooltipProvider>
                   </div>
                 )}
               </>

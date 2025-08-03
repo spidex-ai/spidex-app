@@ -119,11 +119,13 @@ const Swap: React.FC<Props> = ({
       protocol === ProtocolType.DEXHUNTER
         ? DEXHUNTER_SAVE_FEE
         : MINSWAP_SAVE_FEE;
-    console.log("🚀 ~ Swap ~ saveFee:", saveFee)
-    
-    console.log("🚀 ~ Swap ~ Number(debouncedInputAmount) > Number(tokenInputBalance):", Number(debouncedInputAmount) > Number(tokenInputBalance))
-    if (Number(debouncedInputAmount) > Number(tokenInputBalance)) return true;
+    console.log('🚀 ~ Swap ~ saveFee:', saveFee);
 
+    console.log(
+      '🚀 ~ Swap ~ Number(debouncedInputAmount) > Number(tokenInputBalance):',
+      Number(debouncedInputAmount) > Number(tokenInputBalance)
+    );
+    if (Number(debouncedInputAmount) > Number(tokenInputBalance)) return true;
 
     const protocolPoints =
       protocol === ProtocolType.DEXHUNTER
@@ -133,20 +135,28 @@ const Swap: React.FC<Props> = ({
         : estimatedPoints?.minswap?.totalDeposits
           ? estimatedPoints?.minswap?.totalDeposits
           : 0;
-    console.log("🚀 ~ Swap ~ protocolPoints:", protocolPoints)
+    console.log('🚀 ~ Swap ~ protocolPoints:', protocolPoints);
 
     let totalDepositADA = Number(protocolPoints);
 
     if (inputToken?.ticker === 'ADA') {
-      console.log("🚀 ~ Swap ~ inputToken?.ticker === 'ADA':", inputToken?.ticker === 'ADA')
+      console.log(
+        "🚀 ~ Swap ~ inputToken?.ticker === 'ADA':",
+        inputToken?.ticker === 'ADA'
+      );
       totalDepositADA += Number(debouncedInputAmount);
-      console.log("🚀 ~ Swap ~ totalDepositADA:", totalDepositADA)
-      console.log("🚀 ~ Swap ~ Number(tokenInputBalance) < totalDepositADA + saveFee:", Number(tokenInputBalance) < totalDepositADA + saveFee)
+      console.log('🚀 ~ Swap ~ totalDepositADA:', totalDepositADA);
+      console.log(
+        '🚀 ~ Swap ~ Number(tokenInputBalance) < totalDepositADA + saveFee:',
+        Number(tokenInputBalance) < totalDepositADA + saveFee
+      );
       if (Number(tokenInputBalance) < totalDepositADA + saveFee) return true;
-
     } else {
-      console.log("🚀 ~ Swap ~ adaBalance:", adaBalance)
-      console.log("🚀 ~ Swap ~ Number(adaBalance) < totalDepositADA + saveFee:", Number(adaBalance) < totalDepositADA + saveFee)
+      console.log('🚀 ~ Swap ~ adaBalance:', adaBalance);
+      console.log(
+        '🚀 ~ Swap ~ Number(adaBalance) < totalDepositADA + saveFee:',
+        Number(adaBalance) < totalDepositADA + saveFee
+      );
       if (Number(adaBalance) < totalDepositADA + saveFee) return true;
     }
 
