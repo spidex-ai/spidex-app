@@ -56,8 +56,6 @@ export const POST = async (
   { params }: { params: Promise<{ chatId: string }> }
 ) => {
   const { chatId } = await params;
-  console.log('🚀 ~ chatId:', chatId);
-
   const { messages } = await req.json();
 
   console.log('🚀 ~ messages:', JSON.stringify(messages));
@@ -86,7 +84,6 @@ export const POST = async (
     }
 
     const userData = await user.json();
-    console.log('🚀 ~ userData:', userData);
 
     const chat = await getChat(chatId, userData.data.id);
 

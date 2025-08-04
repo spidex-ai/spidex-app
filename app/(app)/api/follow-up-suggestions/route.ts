@@ -33,29 +33,50 @@ export async function POST(req: NextRequest) {
     default:
       throw new Error('Invalid model');
   }
-
-  const { object } = await generateObject({
-    model,
-    messages: [
-      ...messages,
-      {
-        role: 'user',
-        content: prompt,
-      },
-    ],
-    schema: z.object({
-      suggestions: z.array(
-        z.object({
-          prompt: z.string().describe('A prompt for the suggestion.'),
-          title: z
-            .string()
-            .describe(
-              'A short, concise and complete 3-5 word title for the suggestion'
-            ),
-        })
-      ),
-    }),
+  
+  // Filter out messages with incomplete tool invocations
+  const filteredMessages = messages.map((message: any) => {
+    if (message.toolInvocations) {
+      const completedToolInvocations = message.toolInvocations.filter(
+        (invocation: any) => invocation.state === 'result'
+      );
+      return {
+        ...message,
+        toolInvocations: completedToolInvocations,
+      };
+    }
+    return message;
   });
 
-  return NextResponse.json(object.suggestions);
+  try {
+    const { object } = await generateObject({
+      model,
+      messages: [
+        ...filteredMessages,
+        {
+          role: 'user',
+          content: prompt,
+        },
+      ],
+      schema: z.object({
+        suggestions: z.array(
+          z.object({
+            prompt: z.string().describe('A prompt for the suggestion.'),
+            title: z
+              .string()
+              .describe(
+                'A short, concise and complete 3-5 word title for the suggestion'
+              ),
+          })
+        ),
+      }),
+    });
+    return NextResponse.json(object.suggestions);
+  } catch (error) {
+    console.error('Error generating follow-up suggestions:', error);
+    return NextResponse.json(
+      { error: 'Failed to generate follow-up suggestions' },
+      { status: 500 }
+    );
+  }
 }

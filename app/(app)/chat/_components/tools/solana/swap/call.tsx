@@ -10,7 +10,11 @@ import { useTokenDetail } from '@/hooks';
 
 import { useChat } from '@/app/(app)/chat/_contexts/chat';
 
-import type { CardanoTradeArgumentsType, CardanoTradeResultBodyType } from '@/ai/cardano';
+import type {
+  CardanoTradeArgumentsType,
+  CardanoTradeResultBodyType,
+} from '@/ai/cardano';
+import { TradeInputSchema } from '@/ai/cardano/actions/trade/input-schema';
 import { CardanoTokenDetail } from '@/services/dexhunter/types';
 
 interface Props {
@@ -34,11 +38,19 @@ export const adaTokenDetail: CardanoTokenDetail = {
 const SwapCallBody: React.FC<Props> = ({ toolCallId, args }) => {
   const { addToolResult } = useChat();
 
+  // Parse args to apply transformations and defaults for empty strings
+  const parsedArgs = TradeInputSchema.parse(args);
+  
   const { data: inputTokenData, isLoading: inputTokenLoading } = useTokenDetail(
-    args.inputMint || 'ADA'
+    parsedArgs.inputMint
   );
   const { data: outputTokenData, isLoading: outputTokenLoading } =
-    useTokenDetail(args.outputMint || 'c48cbb3d5e57ed56e276bc45f99ab39abe94e6cd7ac39fb402da47ad0014df105553444d');
+    useTokenDetail(parsedArgs.outputMint);
+
+  console.log('🚀 ~ original args:', args);
+  console.log('🚀 ~ parsed args:', parsedArgs);
+  console.log('🚀 ~ inputTokenData:', inputTokenData);
+  console.log('🚀 ~ outputTokenData:', outputTokenData);
 
   return (
     <div className="p-2 bg-bg-secondary border border-border-main rounded-md">
@@ -50,7 +62,7 @@ const SwapCallBody: React.FC<Props> = ({ toolCallId, args }) => {
           initialOutputToken={outputTokenData}
           inputLabel="Sell"
           outputLabel="Buy"
-          initialInputAmount={args.inputAmount?.toString()}
+          initialInputAmount={parsedArgs.inputAmount?.toString()}
           swapText="Swap"
           swappingText="Swapping..."
           onSuccess={(tx, inputAmount) => {
@@ -58,7 +70,7 @@ const SwapCallBody: React.FC<Props> = ({ toolCallId, args }) => {
               message: `Swap successful!`,
               body: {
                 transaction: tx,
-                inputAmount: Number(inputAmount) || args.inputAmount || 0,
+                inputAmount: Number(inputAmount) || parsedArgs.inputAmount || 0,
                 inputToken: inputTokenData?.unit || '',
                 outputToken: outputTokenData?.unit || '',
               },
