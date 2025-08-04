@@ -90,13 +90,30 @@ export function CandlestickChart({ data }: CandlestickChartProps) {
       width: containerSize.width,
       height: containerSize.height,
       handleScroll: false,
-      handleScale: false,
+      handleScale: true,
       rightPriceScale: {
         borderColor: colors.lineColor,
       },
       timeScale: {
         borderColor: colors.lineColor,
-        visible: false,
+        visible: true,
+        timeVisible: true,
+        fixLeftEdge: true,
+        fixRightEdge: true,
+      },
+      localization: {
+        locale: new Intl.Locale(navigator.language).toString(),
+        timeFormatter: (time: Time) => {
+          const date = new Date((time as number) * 1000);
+          return date.toLocaleString(undefined, {
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false,
+          });
+        },
+        dateFormat: 'MMM dd, yyyy HH:mm',
       },
     });
 

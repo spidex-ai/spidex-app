@@ -18,52 +18,70 @@ const WINDOWS = [
   {
     label: CandleStickInterval.THREE_MINUTES,
     timeframe: CandleStickInterval.THREE_MINUTES,
-    numDays: 1000,
+    numDays: 180,
   },
   {
     label: CandleStickInterval.FIVE_MINUTES,
     timeframe: CandleStickInterval.FIVE_MINUTES,
-    numDays: 1000,
+    numDays: 45,
   },
   {
     label: CandleStickInterval.FIFTEEN_MINUTES,
     timeframe: CandleStickInterval.FIFTEEN_MINUTES,
-    numDays: 1000,
+    numDays: 30,
   },
   {
     label: CandleStickInterval.THIRTY_MINUTES,
     timeframe: CandleStickInterval.THIRTY_MINUTES,
-    numDays: 1000,
+    numDays: 30,
   },
   {
     label: CandleStickInterval.ONE_HOUR,
     timeframe: CandleStickInterval.ONE_HOUR,
-    numDays: 180,
+    numDays: 30,
   },
   {
     label: CandleStickInterval.TWO_HOURS,
     timeframe: CandleStickInterval.TWO_HOURS,
-    numDays: 180,
+    numDays: 30,
   },
   {
     label: CandleStickInterval.FOUR_HOURS,
     timeframe: CandleStickInterval.FOUR_HOURS,
-    numDays: 180,
+    numDays: 30,
   },
   {
     label: CandleStickInterval.TWELVE_HOURS,
     timeframe: CandleStickInterval.TWELVE_HOURS,
-    numDays: 180,
+    numDays: 30,
   },
   {
     label: CandleStickInterval.ONE_DAY,
     timeframe: CandleStickInterval.ONE_DAY,
-    numDays: 180,
+    numDays: 30,
   },
   {
     label: CandleStickInterval.THREE_DAYS,
     timeframe: CandleStickInterval.THREE_DAYS,
-    numDays: 60,
+    numDays: 30,
+  },
+  {
+    label: CandleStickInterval.ONE_WEEK,
+    timeframe: CandleStickInterval.ONE_WEEK,
+    numDays: 30,
+  },
+  {
+    label: CandleStickInterval.ONE_MONTH,
+    timeframe: CandleStickInterval.ONE_MONTH,
+    numDays: 12,
+  },
+];
+
+const wINDOWS_ADA = [
+  {
+    label: CandleStickInterval.ONE_DAY,
+    timeframe: CandleStickInterval.ONE_DAY,
+    numDays: 30,
   },
   {
     label: CandleStickInterval.ONE_WEEK,
@@ -77,24 +95,6 @@ const WINDOWS = [
   },
 ];
 
-const wINDOWS_ADA = [
-  {
-    label: CandleStickInterval.ONE_DAY,
-    timeframe: CandleStickInterval.ONE_DAY,
-    numDays: 180,
-  },
-  {
-    label: CandleStickInterval.ONE_WEEK,
-    timeframe: CandleStickInterval.ONE_WEEK,
-    numDays: 12,
-  },
-  {
-    label: CandleStickInterval.ONE_MONTH,
-    timeframe: CandleStickInterval.ONE_MONTH,
-    numDays: 12,
-  },
-]
-
 interface Props {
   data: CardanoTokenDetail | null;
   isLoadingTokenDetail: boolean;
@@ -106,10 +106,12 @@ const TokenChart: React.FC<Props> = ({
   isLoadingTokenDetail,
   quote,
 }) => {
-  const price24hChange = tokenDetail?.price24hChg ? tokenDetail?.price24hChg * 100 : 0;
+  const price24hChange = tokenDetail?.price24hChg
+    ? tokenDetail?.price24hChg * 100
+    : 0;
   const price24hChg = formatNumber(price24hChange, 2);
   const [timeframe, setTimeframe] = useState<CandleStickInterval>(
-  CandleStickInterval.ONE_DAY
+    CandleStickInterval.ONE_DAY
   );
 
   const [numDays, setNumDays] = useState<number>(180);
@@ -138,7 +140,10 @@ const TokenChart: React.FC<Props> = ({
     return () => clearInterval(interval);
   }, [tokenDetail]);
 
-  const price = quote === QuoteType.USD ? (tokenDetail?.usdPrice ?? 0) : (tokenDetail?.price ?? 0);
+  const price =
+    quote === QuoteType.USD
+      ? (tokenDetail?.usdPrice ?? 0)
+      : (tokenDetail?.price ?? 0);
   const open = data?.length > 0 ? data[0].open : 0;
 
   const currentPrice = price < 0.0001 ? '~0.0001' : formatNumber(price, 4);
@@ -162,7 +167,9 @@ const TokenChart: React.FC<Props> = ({
                 {price && open && (
                   <span
                     className={cn(
-                      tokenDetail?.price24hChg && tokenDetail?.price24hChg > 0 ? 'text-green-500' : 'text-red-500'
+                      tokenDetail?.price24hChg && tokenDetail?.price24hChg > 0
+                        ? 'text-green-500'
+                        : 'text-red-500'
                     )}
                   >
                     {' '}
@@ -231,13 +238,23 @@ const TokenChart: React.FC<Props> = ({
           <>
             {data.length > 0 ? (
               <CandlestickChart
-                data={data.map(price => ({
-                  time: price.time as UTCTimestamp,
-                  open: price.open,
-                  high: price.high,
-                  low: price.low,
-                  close: price.close,
-                }))}
+                data={data.map(price => {
+                  // Convert UTC timestamp to local timezone offset
+                  const utcTime =
+                    typeof price.time === 'number' && price.time > 1000000000000
+                      ? Math.floor(price.time / 1000)
+                      : price.time;
+                  const localOffset = new Date().getTimezoneOffset() * 60;
+                  const adjustedTime = (utcTime as number) - localOffset;
+
+                  return {
+                    time: adjustedTime as UTCTimestamp,
+                    open: price.open,
+                    high: price.high,
+                    low: price.low,
+                    close: price.close,
+                  };
+                })}
               />
             ) : null}
           </>
