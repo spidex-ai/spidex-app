@@ -14,7 +14,7 @@ export const selectWalletAddress = (state: RootState) => state.auth.auth?.user?.
 
 export const selectUserAvatar = (state: RootState) => state.auth.auth?.avatar || null;
 
-export const selectWalletName = (state: RootState) => state.auth.auth?.walletName || null;
+export const selectWalletName = (state: RootState) => state.auth.auth?.user?.lastUsedWallet || state.auth.auth?.walletName || 'lace';
 
 // Token selectors
 export const selectAccessToken = (state: RootState) => state.auth.auth?.accessToken || null;

@@ -30,9 +30,10 @@ import toast from 'react-hot-toast';
 import { decodeHexAddress } from '@cardano-foundation/cardano-connect-with-wallet-core';
 import { useSpidexCore } from '@/hooks/core/useSpidexCore';
 import { useSelector } from 'react-redux';
-import { selectAuthData } from '@/store/selectors/authSelectors';
+import { selectAuthData, selectWalletName } from '@/store/selectors/authSelectors';
 import { DEXHUNTER_SAVE_FEE, MINSWAP_SAVE_FEE } from '@/lib/utils';
 import { ProtocolType } from '@/app/_components/swap/select-protocol';
+import { useAppSelector } from '@/store/hooks';
 
 export interface SwapWrapperProps {
   initialInputToken: CardanoTokenDetail | null;
@@ -80,7 +81,7 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
     buildSwapRequestMinswap,
   } = useSpidexCore();
   const { enabledWallet, unusedAddresses } = useCardano();
-
+  const walletName = useAppSelector(selectWalletName);
   const auth = useSelector(selectAuthData);
 
   const [inputAmount, setInputAmount] = useState<string>(
@@ -158,11 +159,11 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
   };
 
   const onSwap = async () => {
-    if (!unusedAddresses?.[0].toString() || !quoteResponse) return;
-    if (typeof window === 'undefined') return;
-    setIsSwapping(true);
     try {
-      const api = await (window as any).cardano[enabledWallet as any].enable();
+      const api = await (window as any).cardano[(walletName || enabledWallet) as any].enable();
+      if (!unusedAddresses?.[0].toString() || !quoteResponse) return;
+      if (typeof window === 'undefined') return;
+      setIsSwapping(true);
       const utxos = await api?.getUtxos();
 
       if (!utxos || utxos.length === 0) {

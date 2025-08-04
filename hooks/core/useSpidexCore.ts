@@ -43,6 +43,7 @@ export interface SignMessageData {
   referralCode: string;
   role: string;
   nonce: string;
+  walletType: string;
 }
 
 export interface Auth {
@@ -73,6 +74,7 @@ export interface UserSpidex {
   xLink: string | null;
   createdAt: Date;
   stakeAddress: string;
+  lastUsedWallet: string;
 }
 
 export const useSpidexCore = () => {
@@ -104,7 +106,6 @@ export const useSpidexCore = () => {
         console.warn('Attempted to set invalid auth object, ignoring update');
         return;
       }
-
       // Check if the auth data has actually changed to prevent unnecessary updates
       if (newAuth && auth) {
         const currentAuthString = JSON.stringify({
@@ -128,7 +129,6 @@ export const useSpidexCore = () => {
           return;
         }
       }
-
       dispatch(setAuth(newAuth));
     },
     [validateAuth, dispatch, auth]
@@ -357,7 +357,6 @@ export const useSpidexCore = () => {
           setAuthSafely(updatedAuth);
         }
       }
-
       return data.data;
     } catch (err) {
       // Error is already handled in fetchWithAuth
@@ -614,7 +613,7 @@ export const useSpidexCore = () => {
     try {
       const data = await fetchWithAuth(`/user-point/me/info`);
       return data.data;
-    } catch (error) {}
+    } catch (error) { }
   }, [fetchWithAuth, auth]);
 
   const getUserQuests = useCallback(
@@ -791,7 +790,7 @@ export const useSpidexCore = () => {
       }
     },
     [fetchWithAuth, auth]
-  ); 
+  );
 
 
   const buildSwapRequestMinswap = useCallback(
@@ -811,7 +810,7 @@ export const useSpidexCore = () => {
       }
     },
     [fetchWithAuth, auth]
-  );  
+  );
 
   const estimateSwap = useCallback(
     async (payload: EsitmateSwapPayload) => {
@@ -1046,7 +1045,7 @@ export const useSpidexCore = () => {
     } finally {
 
     }
-  },[])
+  }, [])
 
   const getUserRankLeaderboard = useCallback(async (orderBy: 'point' | 'referral' = 'point') => {
     try {
@@ -1055,17 +1054,17 @@ export const useSpidexCore = () => {
     } catch (error) {
       throw error;
     }
-  }, [fetchWithAuth, auth]); 
+  }, [fetchWithAuth, auth]);
 
   const getEvents = useCallback(async () => {
     try {
       const data = await fetchWithAuth(`/events/active`);
       return data.data;
     } catch (error) {
-      throw error; 
+      throw error;
     }
-  }, [fetchWithAuth, auth]); 
-  
+  }, [fetchWithAuth, auth]);
+
   const getEventDetail = useCallback(async (id: number) => {
     try {
       const data = await fetchWithAuth(`/events/${id}`);
@@ -1073,7 +1072,7 @@ export const useSpidexCore = () => {
     } catch (error) {
       throw error;
     }
-  }, [fetchWithAuth, auth]); 
+  }, [fetchWithAuth, auth]);
 
   const getLeaderboardEvent = useCallback(async (id: number, limit = 50, offset = 0) => {
     try {
@@ -1082,7 +1081,7 @@ export const useSpidexCore = () => {
     } catch (error) {
       throw error;
     }
-  }, [fetchWithAuth, auth]); 
+  }, [fetchWithAuth, auth]);
 
   const getMyRankLeaderboardEvent = useCallback(async (id: number) => {
     try {
@@ -1091,7 +1090,7 @@ export const useSpidexCore = () => {
     } catch (error) {
       throw error;
     }
-  }, [fetchWithAuth, auth]); 
+  }, [fetchWithAuth, auth]);
 
 
   return {

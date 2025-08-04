@@ -433,6 +433,7 @@ const LoginModal: React.FC = () => {
           referralCode: ref || '',
           stakeAddress,
           nonce,
+          walletType: walletName
         },
         walletName || '',
       );

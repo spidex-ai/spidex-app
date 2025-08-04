@@ -37,9 +37,10 @@ const AuthButton: React.FC = () => {
   };
 
   useEffect(() => {
-    if (auth?.walletName) {
+    if (auth?.walletName || auth?.user?.lastUsedWallet) {
       setWalletIcon(
-        LOGIN_METHODS.find(method => method.id === auth.walletName)?.icon ||
+        LOGIN_METHODS.find(method => method.id === (auth?.user?.lastUsedWallet ||
+              auth.walletName))?.icon ||
           '/icons/connect-wallet.svg'
       );
     }
