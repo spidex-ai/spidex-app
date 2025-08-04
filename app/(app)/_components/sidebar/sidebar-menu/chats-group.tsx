@@ -6,7 +6,7 @@ import { ChevronDown, Loader2, Trash2 } from 'lucide-react';
 
 import Link from 'next/link';
 
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 import {
   SidebarMenuItem,
@@ -33,6 +33,7 @@ import { useSpidexCore } from '@/hooks/core/useSpidexCore';
 
 const ChatsGroup: React.FC = () => {
   const pathname = usePathname();
+  const router = useRouter();
 
   const { isMobile, setOpenMobile } = useSidebar();
 
@@ -135,6 +136,7 @@ const ChatsGroup: React.FC = () => {
                 <div
                   onClick={() => {
                     resetChat();
+                    router.push('/chat');
                     if (isMobile) {
                       setOpenMobile(false);
                     }

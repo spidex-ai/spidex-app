@@ -95,15 +95,15 @@ export default function SwapPoint({
             >
               {isOpenSwapDetails ? (
                 <Image
-                  src="/icons/arrow-down-white.svg"
-                  alt="arrow-down-white"
+                  src="/icons/arrow-up-white.svg"
+                  alt="arrow-up-white"
                   width={10}
                   height={10}
                 />
               ) : (
                 <Image
-                  src="/icons/arrow-up-white.svg"
-                  alt="arrow-up-white"
+                  src="/icons/arrow-down-white.svg"
+                  alt="arrow-down-white"
                   width={10}
                   height={10}
                 />
@@ -329,15 +329,15 @@ export default function SwapPoint({
             >
               {isOpenMarketOffers ? (
                 <Image
-                  src="/icons/arrow-down-white.svg"
-                  alt="arrow-down-white"
+                  src="/icons/arrow-up-white.svg"
+                  alt="arrow-up-white"
                   width={10}
                   height={10}
                 />
               ) : (
                 <Image
-                  src="/icons/arrow-up-white.svg"
-                  alt="arrow-up-white"
+                  src="/icons/arrow-down-white.svg"
+                  alt="arrow-down-white"
                   width={10}
                   height={10}
                 />
