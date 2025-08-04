@@ -89,7 +89,7 @@ export function CandlestickChart({ data }: CandlestickChartProps) {
       },
       width: containerSize.width,
       height: containerSize.height,
-      handleScroll: false,
+      handleScroll: true,
       handleScale: true,
       rightPriceScale: {
         borderColor: colors.lineColor,
@@ -100,9 +100,59 @@ export function CandlestickChart({ data }: CandlestickChartProps) {
         timeVisible: true,
         fixLeftEdge: true,
         fixRightEdge: true,
+        tickMarkFormatter: (time: Time) => {
+          const date = new Date((time as number) * 1000);
+          const now = new Date();
+          const diffMs = now.getTime() - date.getTime();
+          const diffDays = diffMs / (1000 * 60 * 60 * 24);
+
+          // Adaptive formatting based on time distance
+          if (diffDays < 1) {
+            // Same day - show time only
+            return date.toLocaleTimeString(undefined, {
+              hour: '2-digit',
+              minute: '2-digit',
+              hour12: false,
+            });
+          } else if (diffDays < 7) {
+            // Within a week - show day and time
+            return date.toLocaleDateString(undefined, {
+              weekday: 'short',
+              hour: '2-digit',
+              minute: '2-digit',
+              hour12: false,
+            });
+          } else if (diffDays < 365) {
+            // Within a year - show month and day
+            return date.toLocaleDateString(undefined, {
+              month: 'short',
+              day: 'numeric',
+            });
+          } else {
+            // Older than a year - show month and year
+            return date.toLocaleDateString(undefined, {
+              month: 'short',
+              year: 'numeric',
+            });
+          }
+        },
+      },
+      crosshair: {
+        mode: 1, // Normal crosshair mode
+        vertLine: {
+          color: colors.textColor,
+          width: 1,
+          style: 2, // Dashed
+          labelBackgroundColor: colors.lineColor,
+        },
+        horzLine: {
+          color: colors.textColor,
+          width: 1,
+          style: 2, // Dashed
+          labelBackgroundColor: colors.lineColor,
+        },
       },
       localization: {
-        locale: new Intl.Locale(navigator.language).toString(),
         timeFormatter: (time: Time) => {
           const date = new Date((time as number) * 1000);
           return date.toLocaleString(undefined, {
@@ -113,7 +163,6 @@ export function CandlestickChart({ data }: CandlestickChartProps) {
             hour12: false,
           });
         },
-        dateFormat: 'MMM dd, yyyy HH:mm',
       },
     });
 

@@ -114,7 +114,7 @@ const TokenChart: React.FC<Props> = ({
     CandleStickInterval.ONE_DAY
   );
 
-  const [numDays, setNumDays] = useState<number>(180);
+  const [numDays, setNumDays] = useState<number>(30);
   const { data, isLoading, refetchDataChart } = usePriceChartCore(
     tokenDetail?.unit ?? '',
     timeframe,
@@ -133,12 +133,29 @@ const TokenChart: React.FC<Props> = ({
   };
 
   useEffect(() => {
+    // Adjust interval based on timeframe to avoid timezone issues
+    const getIntervalMs = (timeframe: CandleStickInterval) => {
+      switch (timeframe) {
+        case CandleStickInterval.THREE_MINUTES:
+        case CandleStickInterval.FIVE_MINUTES:
+          return 30 * 1000; // 30 seconds for short intervals
+        case CandleStickInterval.FIFTEEN_MINUTES:
+        case CandleStickInterval.THIRTY_MINUTES:
+          return 60 * 1000; // 1 minute
+        case CandleStickInterval.ONE_HOUR:
+        case CandleStickInterval.TWO_HOURS:
+          return 5 * 60 * 1000; // 5 minutes
+        default:
+          return 10 * 60 * 1000; // 10 minutes for longer intervals
+      }
+    };
+
     const interval = setInterval(() => {
       refetchDataChart();
-    }, 1000 * 60);
+    }, getIntervalMs(timeframe));
 
     return () => clearInterval(interval);
-  }, [tokenDetail]);
+  }, [tokenDetail, timeframe, refetchDataChart]);
 
   const price =
     quote === QuoteType.USD
@@ -238,23 +255,16 @@ const TokenChart: React.FC<Props> = ({
           <>
             {data.length > 0 ? (
               <CandlestickChart
-                data={data.map(price => {
-                  // Convert UTC timestamp to local timezone offset
-                  const utcTime =
-                    typeof price.time === 'number' && price.time > 1000000000000
-                      ? Math.floor(price.time / 1000)
-                      : price.time;
-                  const localOffset = new Date().getTimezoneOffset() * 60;
-                  const adjustedTime = (utcTime as number) - localOffset;
-
-                  return {
-                    time: adjustedTime as UTCTimestamp,
-                    open: price.open,
-                    high: price.high,
-                    low: price.low,
-                    close: price.close,
-                  };
-                })}
+                data={data.map(price => ({
+                  time: (typeof price.time === 'number' &&
+                  price.time > 1000000000000
+                    ? Math.floor(price.time / 1000)
+                    : price.time) as UTCTimestamp,
+                  open: price.open,
+                  high: price.high,
+                  low: price.low,
+                  close: price.close,
+                }))}
               />
             ) : null}
           </>
