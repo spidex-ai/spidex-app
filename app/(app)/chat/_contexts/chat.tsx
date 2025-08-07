@@ -15,13 +15,9 @@ import { generateId } from 'ai';
 import { useUserChats } from '@/hooks';
 
 import {
-  CARDANO_STAKE_NAME,
   CARDANO_TRANSFER_NAME,
-  CARDANO_UNSTAKE_NAME,
   CARDANO_TRADE_NAME,
-  CARDANO_WITHDRAW_LIQUIDITY_NAME,
   CARDANO_GET_WALLET_ADDRESS_NAME,
-  CARDANO_DEPOSIT_LIQUIDITY_NAME,
 } from '@/ai/action-names';
 import { useSpidexCore } from '@/hooks/core/useSpidexCore';
 export enum ColorMode {
@@ -184,14 +180,6 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
             return `Complete or cancel your trade`;
           case CARDANO_TRANSFER_NAME:
             return `Complete or cancel your transfer`;
-          case CARDANO_STAKE_NAME:
-            return `Complete or cancel your stake`;
-          case CARDANO_UNSTAKE_NAME:
-            return `Complete or cancel your unstake`;
-          case CARDANO_DEPOSIT_LIQUIDITY_NAME:
-            return `Complete or cancel your deposit`;
-          case CARDANO_WITHDRAW_LIQUIDITY_NAME:
-            return `Complete or cancel your withdraw`;
           case CARDANO_GET_WALLET_ADDRESS_NAME:
             return `Connect your wallet`;
           default:
