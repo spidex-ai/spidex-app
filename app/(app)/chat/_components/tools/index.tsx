@@ -12,10 +12,8 @@ import {
   Unstake,
   AllBalances,
   LiquidStakingYields,
-  Transfer,
   GetTokenAddress,
   GetTopHolders,
-  BubbleMaps,
   GetPools,
   DepositLiquidity,
   NumHolders,
@@ -26,7 +24,7 @@ import {
   GetTopTokenTraders,
   PriceChart,
   GetSmartMoneyInflows,
-} from './solana';
+} from './cardano';
 import { SearchRecentTweets } from './twitter';
 import { SearchKnowledge } from './knowledge';
 import { InvokeAgent } from './invoke';
@@ -35,12 +33,10 @@ import {
   TWITTER_SEARCH_RECENT_NAME,
   SEARCH_KNOWLEDGE_NAME,
   INVOKE_AGENT_NAME,
-  CARDANO_TRANSFER_NAME,
   CARDANO_LIQUID_STAKING_YIELDS_NAME,
   CARDANO_ALL_BALANCES_NAME,
   CARDANO_GET_TOKEN_ADDRESS_NAME,
   CARDANO_TOP_HOLDERS_NAME,
-  CARDANO_BUBBLE_MAPS_NAME,
   CARDANO_TOKEN_HOLDERS_NAME,
   CARDANO_DEPOSIT_LIQUIDITY_NAME,
   CARDANO_GET_POOLS_NAME,
@@ -88,8 +84,6 @@ const ToolInvocation: React.FC<Props> = ({ tool, prevToolAgent }) => {
       return <Trade tool={tool} prevToolAgent={prevToolAgent} />;
     case CARDANO_LIQUID_STAKING_YIELDS_NAME:
       return <LiquidStakingYields tool={tool} prevToolAgent={prevToolAgent} />;
-    case CARDANO_TRANSFER_NAME:
-      return <Transfer tool={tool} prevToolAgent={prevToolAgent} />;
     case TWITTER_SEARCH_RECENT_NAME:
       return <SearchRecentTweets tool={tool} />;
     case CARDANO_STAKE_NAME:
@@ -110,8 +104,6 @@ const ToolInvocation: React.FC<Props> = ({ tool, prevToolAgent }) => {
       return <GetTokenAddress tool={tool} prevToolAgent={prevToolAgent} />;
     case CARDANO_TOP_HOLDERS_NAME:
       return <GetTopHolders tool={tool} prevToolAgent={prevToolAgent} />;
-    case CARDANO_BUBBLE_MAPS_NAME:
-      return <BubbleMaps tool={tool} prevToolAgent={prevToolAgent} />;
     case CARDANO_TOKEN_HOLDERS_NAME:
       return <NumHolders tool={tool} prevToolAgent={prevToolAgent} />;
     case CARDANO_GET_POOLS_NAME:

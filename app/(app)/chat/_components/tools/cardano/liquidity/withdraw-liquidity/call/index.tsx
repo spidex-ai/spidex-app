@@ -4,14 +4,12 @@ import React, { useEffect } from 'react';
 
 import { Card, Skeleton } from '@/components/ui';
 
-import StandardPool from './standard-pool';
-
 import { useRaydiumPoolByMint } from '@/hooks';
 
 import { useChat } from '@/app/(app)/chat/_contexts/chat';
 
 import type { CardanoWithdrawLiquidityArgumentsType } from '@/ai/cardano';
-import type { ApiV3PoolInfoStandardItem } from '@raydium-io/raydium-sdk-v2';
+
 
 interface Props {
   toolCallId: string;
@@ -39,10 +37,7 @@ const WithdrawLiquidityCall: React.FC<Props> = ({ toolCallId, args }) => {
         <Skeleton className="h-48 w-96" />
       ) : pool ? (
         pool.type === 'Standard' ? (
-          <StandardPool
-            pool={pool as ApiV3PoolInfoStandardItem}
-            toolCallId={toolCallId}
-          />
+          <></>
         ) : (
           <div>
             <p>The Spidex does not support {pool.type} pools yet.</p>
