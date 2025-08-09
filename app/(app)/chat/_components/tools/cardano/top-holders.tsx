@@ -1,18 +1,12 @@
 import React, { useState } from 'react';
 
-// import Image from 'next/image';44444
-
 import { Button, Card } from '@/components/ui';
-
-// import WalletAddress from '@/app/_components/wallet-address';
 
 import ToolCard from '../tool-card';
 
-// import { getStreamsByMint } from '@/services/streamflow';
-
 import type { ToolInvocation } from 'ai';
 import type { CardanoTopHoldersResultBodyType, CardanoTopHoldersResultType } from '@/ai/cardano';
-import type { TokenLargestAccount } from '@/services/helius';
+
 import Address from '@/app/_components/address';
 
 interface Props {
@@ -90,7 +84,7 @@ const TopHolder = ({
   topHolder,
   index,
 }: {
-  topHolder: TokenLargestAccount & { percentageOwned: number; owner: string };
+  topHolder: any & { percentageOwned: number; owner: string };
   index: number;
 }) => {
   return (

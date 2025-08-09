@@ -48,7 +48,6 @@ export * from './cardano-action';
 
 export * from './trade';
 export * from './market';
-export * from './raydium';
 export * from './staking';
 export * from './wallet';
 export * from './token';

@@ -11,7 +11,6 @@ import {
   TableRow,
 } from '@/components/ui';
 
-import WalletAddress from '@/app/_components/wallet-address';
 
 import ToolCard from '../tool-card';
 
@@ -20,6 +19,7 @@ import type {
   CardanoGetTopTradersResultBodyType,
   CardanoGetTopTradersResultType,
 } from '@/ai/cardano';
+import Address from '@/app/_components/address';
 
 interface Props {
   tool: ToolInvocation;
@@ -71,10 +71,7 @@ const TopTraders = ({ body }: { body: CardanoGetTopTradersResultBodyType }) => {
               <TableRow key={trader.address}>
                 <TableCell>{index + 1}</TableCell>
                 <TableCell className="flex flex-col items-center">
-                  <WalletAddress
-                    address={trader.address}
-                    className="font-medium"
-                  />
+                  <Address address={trader.address} className="font-medium" />
                 </TableCell>
                 <TableCell className="text-green-500">
                   $

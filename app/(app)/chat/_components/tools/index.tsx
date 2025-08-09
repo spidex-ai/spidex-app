@@ -14,10 +14,7 @@ import {
   LiquidStakingYields,
   GetTokenAddress,
   GetTopHolders,
-  GetPools,
   NumHolders,
-  GetLpTokens,
-  WithdrawLiquidity,
   GetTopTraders,
   GetTrades,
   GetTopTokenTraders,
@@ -37,9 +34,7 @@ import {
   CARDANO_GET_TOKEN_ADDRESS_NAME,
   CARDANO_TOP_HOLDERS_NAME,
   CARDANO_TOKEN_HOLDERS_NAME,
-  CARDANO_GET_POOLS_NAME,
-  CARDANO_GET_LP_TOKENS_NAME,
-  CARDANO_WITHDRAW_LIQUIDITY_NAME,
+
   CARDANO_GET_TOP_TRADERS_NAME,
   CARDANO_TOKEN_TOP_TRADERS_NAME,
   CARDANO_TOKEN_PRICE_CHART_NAME,
@@ -104,12 +99,6 @@ const ToolInvocation: React.FC<Props> = ({ tool, prevToolAgent }) => {
       return <GetTopHolders tool={tool} prevToolAgent={prevToolAgent} />;
     case CARDANO_TOKEN_HOLDERS_NAME:
       return <NumHolders tool={tool} prevToolAgent={prevToolAgent} />;
-    case CARDANO_GET_POOLS_NAME:
-      return <GetPools tool={tool} prevToolAgent={prevToolAgent} />;
-    case CARDANO_GET_LP_TOKENS_NAME:
-      return <GetLpTokens tool={tool} prevToolAgent={prevToolAgent} />;
-    case CARDANO_WITHDRAW_LIQUIDITY_NAME:
-      return <WithdrawLiquidity tool={tool} prevToolAgent={prevToolAgent} />;
     case CARDANO_GET_TOP_TRADERS_NAME:
       return <GetTopTraders tool={tool} prevToolAgent={prevToolAgent} />;
     case CARDANO_GET_TRADER_TRADES_NAME:

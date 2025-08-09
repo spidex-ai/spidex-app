@@ -13,5 +13,4 @@ export { default as GetTopTokenTraders } from './top-token-traders';
 export { default as PriceChart } from './price-chart';
 export { default as GetSmartMoneyInflows } from './smart-money';
 
-export * from './liquidity';
 export * from './staking';

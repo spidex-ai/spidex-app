@@ -89,6 +89,7 @@ export class CoreService {
   }
 
   async getTokenDetail(tokenId: string) {
+    console.log("🚀 ~ CoreService ~ getTokenDetail ~ tokenId:", tokenId)
     try {
       const response = await this.client.get<ApiResponse<CardanoTokenDetail>>(
         `tokens/${tokenId}`

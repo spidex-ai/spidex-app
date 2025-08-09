@@ -13,8 +13,6 @@ import {
   TableRow,
 } from '@/components/ui';
 
-import WalletAddress from '@/app/_components/wallet-address';
-
 import ToolCard from '../tool-card';
 
 import { knownAddresses } from '@/lib/known-addresses';
@@ -25,6 +23,7 @@ import type {
   CardanoTopTokenTradersResultBodyType,
 } from '@/ai/cardano';
 import { formatNumber } from '@/lib/utils';
+import Address from '@/app/_components/address';
 
 interface Props {
   tool: ToolInvocation;
@@ -90,10 +89,7 @@ const TopTokenTraders = ({ body }: { body: CardanoTopTokenTradersResultBodyType 
                     </div>
                   ) : (
                     <div className="flex flex-col items-center justify-center h-full">
-                      <WalletAddress
-                        address={trader.owner}
-                        className="font-medium"
-                      />
+                      <Address address={trader.owner} className="font-medium" />
                     </div>
                   )}
                 </TableCell>

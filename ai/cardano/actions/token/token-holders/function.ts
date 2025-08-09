@@ -3,7 +3,6 @@ import type {
   CardanoTokenHoldersResultBodyType,
 } from './types';
 import type { CardanoActionResult } from '../../cardano-action';
-import { getTokenAccountsByMint } from '@/services/helius';
 import taptoolsService from '@/services/taptools';
 
 export async function getNumHolders(
