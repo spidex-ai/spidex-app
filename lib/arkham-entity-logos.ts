@@ -10,11 +10,4 @@ export const arkhamEntityLogos = {
   kucoin: '/exchanges/kucoin.png',
   kraken: '/exchanges/kraken.jpg',
   huobi: '/exchanges/huobi.png',
-
-  // Dexes
-  raydium: '/dexes/raydium.png',
-  jupiter: '/dexes/jupiter.png',
-  meteora: '/dexes/meteora.png',
-  orca: '/dexes/orca.png',
-  phoenix: '/dexes/phoenix.png',
 };

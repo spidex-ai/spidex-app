@@ -8,10 +8,7 @@ import {
   GetTrendingTokens,
   GetTokenData,
   Trade,
-  Stake,
-  Unstake,
   AllBalances,
-  LiquidStakingYields,
   GetTokenAddress,
   GetTopHolders,
   NumHolders,
@@ -29,12 +26,10 @@ import {
   TWITTER_SEARCH_RECENT_NAME,
   SEARCH_KNOWLEDGE_NAME,
   INVOKE_AGENT_NAME,
-  CARDANO_LIQUID_STAKING_YIELDS_NAME,
   CARDANO_ALL_BALANCES_NAME,
   CARDANO_GET_TOKEN_ADDRESS_NAME,
   CARDANO_TOP_HOLDERS_NAME,
   CARDANO_TOKEN_HOLDERS_NAME,
-
   CARDANO_GET_TOP_TRADERS_NAME,
   CARDANO_TOKEN_TOP_TRADERS_NAME,
   CARDANO_TOKEN_PRICE_CHART_NAME,
@@ -44,8 +39,6 @@ import {
   CARDANO_GET_TRENDING_TOKENS_NAME,
   CARDANO_GET_TOKEN_DATA_NAME,
   CARDANO_TRADE_NAME,
-  CARDANO_STAKE_NAME,
-  CARDANO_UNSTAKE_NAME,
   CARDANO_TRANSACTION_NAME,
   SEARCH_WEB_KNOWLEDGE_NAME,
   FAQ_KNOWLEDGE_NAME,
@@ -75,14 +68,8 @@ const ToolInvocation: React.FC<Props> = ({ tool, prevToolAgent }) => {
       return <GetTokenData tool={tool} prevToolAgent={prevToolAgent} />;
     case CARDANO_TRADE_NAME:
       return <Trade tool={tool} prevToolAgent={prevToolAgent} />;
-    case CARDANO_LIQUID_STAKING_YIELDS_NAME:
-      return <LiquidStakingYields tool={tool} prevToolAgent={prevToolAgent} />;
     case TWITTER_SEARCH_RECENT_NAME:
       return <SearchRecentTweets tool={tool} />;
-    case CARDANO_STAKE_NAME:
-      return <Stake tool={tool} prevToolAgent={prevToolAgent} />;
-    case CARDANO_UNSTAKE_NAME:
-      return <Unstake tool={tool} prevToolAgent={prevToolAgent} />;
     case CARDANO_ALL_BALANCES_NAME:
       return <AllBalances tool={tool} prevToolAgent={prevToolAgent} />;
     case SEARCH_KNOWLEDGE_NAME:

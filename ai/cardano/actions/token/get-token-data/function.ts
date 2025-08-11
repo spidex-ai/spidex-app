@@ -54,13 +54,12 @@ export async function getTokenData(
       }
 
       // Find the first token that matches the search
-      let token = response.find(
-        token => {
-
-    return token.name?.toLowerCase() === args.search.toLowerCase() ||
-        token.ticker.toLowerCase() === args.search.toLowerCase();
-}
-      );
+      let token = response.find(token => {
+        return (
+          token.name?.toLowerCase() === args.search.toLowerCase() ||
+          token.ticker.toLowerCase() === args.search.toLowerCase()
+        );
+      });
 
       if (!token) {
         token = response.find(
@@ -69,7 +68,7 @@ export async function getTokenData(
             token.ticker.toLowerCase().includes(args.search.toLowerCase())
         );
       }
-      console.log("🚀 ~ getTokenData ~ token:", token)
+      console.log('🚀 ~ getTokenData ~ token:', token);
 
       if (!token) {
         return {
@@ -78,7 +77,7 @@ export async function getTokenData(
       }
 
       tokenAddress = token.token_id;
-      console.log("🚀 ~ getTokenData ~ tokenAddress:", tokenAddress)
+      console.log('🚀 ~ getTokenData ~ tokenAddress:', tokenAddress);
 
       const stats = await coreService.getTokenStats(tokenAddress);
       console.log('🚀 ~ stats:', stats);

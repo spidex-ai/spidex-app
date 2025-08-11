@@ -17,7 +17,6 @@ import Image from 'next/image';
 import {
   KNOWLEDGE_AGENT_NAME,
   MARKET_AGENT_NAME,
-  STAKING_AGENT_NAME,
   PORTFOLIO_AGENT_NAME,
   TOKEN_ANALYSIS_AGENT_NAME,
   TRADING_AGENT_NAME,
@@ -43,15 +42,6 @@ interface Props<ActionResultBodyType, ActionArgsType> {
 
 const getAgentIcon = (agentName: string) => {
   switch (agentName) {
-    case STAKING_AGENT_NAME:
-      return (
-        <Image
-          src="/icons/trading-agent.svg"
-          alt="Chart Candlestick"
-          width={20}
-          height={20}
-        />
-      );
     case PORTFOLIO_AGENT_NAME:
       return (
         <Image

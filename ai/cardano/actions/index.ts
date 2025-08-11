@@ -7,11 +7,6 @@ import {
   CardanoAllBalancesAction,
 } from './wallet';
 import {
-  CardanoStakeAction,
-  CardanoUnstakeAction,
-  CardanoLiquidStakingYieldsAction,
-} from './staking';
-import {
   CardanoGetTokenAddressAction,
   CardanoGetTokenDataAction,
   CardanoTopHoldersAction,
@@ -31,10 +26,7 @@ export const getAllCardanoActions = (): CardanoAction<
     new CardanoGetWalletAddressAction(),
     new CardanoGetTrendingTokensAction(),
     new CardanoGetTokenDataAction(),
-    new CardanoStakeAction(),
-    new CardanoUnstakeAction(),
     new CardanoAllBalancesAction(),
-    new CardanoLiquidStakingYieldsAction(),
     new CardanoGetTokenAddressAction(),
     new CardanoTokenHoldersAction(),
     new CardanoTopHoldersAction(),
@@ -48,6 +40,5 @@ export * from './cardano-action';
 
 export * from './trade';
 export * from './market';
-export * from './staking';
 export * from './wallet';
 export * from './token';
