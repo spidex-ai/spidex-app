@@ -26,8 +26,6 @@ jobs:
           echo "PRIVY_APP_SECRET=${{ secrets.PRIVY_APP_SECRET }}" >> .env
           echo "NEXT_PUBLIC_SOLANA_RPC_URL=${{ secrets.NEXT_PUBLIC_SOLANA_RPC_URL }}" >> .env
           echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> .env
-          echo "FIRECRAWL_API_KEY=${{ secrets.FIRECRAWL_API_KEY }}" >> .env
-          echo "CRAWL_AUTH_CODE=${{ secrets.CRAWL_AUTH_CODE }}" >> .env
           echo "NEXT_PUBLIC_POSTHOG_KEY=${{ secrets.NEXT_PUBLIC_POSTHOG_KEY }}" >> .env
           echo "NEXT_PUBLIC_POSTHOG_HOST=${{ secrets.NEXT_PUBLIC_POSTHOG_HOST }}" >> .env
           echo "TAPTOOLS_API_KEY=${{ secrets.TAPTOOLS_API_KEY }}" >> .env
