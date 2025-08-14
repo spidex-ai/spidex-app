@@ -88,18 +88,16 @@ export async function analyzeTokenPrice(
   token: TokenChatData,
   args: TokenPagePriceAnalysisArgumentsType
 ): Promise<CardanoActionResult<TokenPagePriceAnalysisResultBodyType>> {
-  console.log('🚀 ~ token:', token);
-  console.log('🚀 ~ args:', args);
-  console.log('🚀 ~ token:', token.address);
+
   try {
     const granularity = getGranularity(args.length);
-    console.log('🚀 ~ granularity:', granularity);
+
 
     const tokenStats = await coreService.getTokenStats(token.address);
 
-    console.log('🚀 ~ tokenStats:', tokenStats);
+
     const timeframeMinutes = TIMEFRAME_TO_GRANULARITY[granularity];
-    console.log('🚀 ~ timeframeMinutes:', timeframeMinutes);
+
 
     // Calculate the number of intervals needed based on days and timeframe
     const numIntervals = calculateNumIntervals(args.length, timeframeMinutes);

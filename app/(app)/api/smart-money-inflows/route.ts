@@ -1,6 +1,6 @@
+import { getSmartMoneyInflows } from '@/ai/cardano/actions/market/get-smart-money-inflows/function';
 import { NextRequest, NextResponse } from 'next/server';
 
-import { getSmartMoneyInflows } from '@/services/hellomoon';
 
 export const POST = async (req: NextRequest) => {
   const { granularity } = await req.json();

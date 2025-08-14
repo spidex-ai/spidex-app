@@ -2,20 +2,10 @@ import type {
   CardanoGetSmartMoneyInflowsArgumentsType,
   CardanoGetSmartMoneyInflowsResultBodyType,
 } from './types';
-import type { CardanoActionResult } from '../../cardano-action';
-import taptoolsService from '@/services/taptools';
-import tokenCardanoService from '@/services/token-cardano';
-import { keyBy } from 'lodash';
-import s3Service from '@/services/s3';
+import type { CardanoActionResult } from '../../cardano-action'
 import coreService from '@/services/core';
 
-/**
- * Gets the trending tokens from Birdeye API.
- *
- * @param solanaKit - The Solana agent kit instance
- * @param args - The input arguments for the action
- * @returns A message containing the trending tokens information
- */
+
 export async function getSmartMoneyInflows(
   args: CardanoGetSmartMoneyInflowsArgumentsType
 ): Promise<CardanoActionResult<CardanoGetSmartMoneyInflowsResultBodyType>> {
