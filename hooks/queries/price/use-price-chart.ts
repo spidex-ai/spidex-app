@@ -1,11 +1,11 @@
 'use client';
 
 import useSWR from 'swr';
-import { CandleStickInterval } from './../../../services/hellomoon/types/candlestick';
+import { CandleStickInterval } from './../../../services/chart/types';
 import {
   TokenPriceCandlestick,
   CandlestickGranularity,
-} from '@/services/hellomoon/types';
+} from '@/services/chart/types';
 import { useTaptools } from '@/hooks/useTaptools';
 import { useEffect, useState } from 'react';
 import { QuoteType } from '@/app/(app)/token/[address]/_components/header/select-quote';

@@ -9,7 +9,7 @@ import { usePriceChartCore } from '@/hooks';
 import { cn, formatNumber } from '@/lib/utils';
 
 import type { UTCTimestamp } from 'lightweight-charts';
-import { CandleStickInterval } from '@/services/hellomoon/types';
+import { CandleStickInterval } from '@/services/chart/types';
 import { CardanoTokenDetail } from '@/services/dexhunter/types';
 import { QuoteType } from '../../token/[address]/_components/header/select-quote';
 import toast from 'react-hot-toast';

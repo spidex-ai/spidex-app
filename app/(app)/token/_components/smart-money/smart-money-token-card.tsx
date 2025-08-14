@@ -8,7 +8,7 @@ import { Card } from '@/components/ui';
 
 import SaveToken from '@/app/(app)/_components/save-token';
 
-import type { SmartMoneyTokenInflow } from '@/services/hellomoon/types';
+import type { SmartMoneyTokenInflow } from '@/services/chart/types';
 
 interface Props {
   inflow: SmartMoneyTokenInflow;

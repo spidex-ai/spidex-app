@@ -6,7 +6,7 @@ import Link from 'next/link';
 
 import { Card } from '@/components/ui';
 
-import type { SmartMoneyTokenInflow } from '@/services/hellomoon/types';
+import type { SmartMoneyTokenInflow } from '@/services/chart/types';
 
 import SaveToken from '@/app/(app)/_components/save-token';
 

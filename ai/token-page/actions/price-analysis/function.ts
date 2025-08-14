@@ -9,10 +9,10 @@ import type {
 } from './types';
 
 import {
-  CandlestickGranularity,
-  CardanoCandlestickGranularity,
-  TokenPriceCandlestick,
-} from '@/services/hellomoon/types';
+    CandlestickGranularity,
+    CardanoCandlestickGranularity,
+    TokenPriceCandlestick,
+  } from '@/services/chart/types';
 import taptoolsService from '@/services/taptools';
 
 import { CardanoActionResult } from '@/ai/cardano';
