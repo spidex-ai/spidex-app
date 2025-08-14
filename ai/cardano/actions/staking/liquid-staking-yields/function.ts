@@ -1,7 +1,3 @@
-import { getBestLiquidStaking } from '@/services/staking-rewards';
-
-import { getTokenBySymbol } from '@/db/services';
-
 import type {
   CardanoLiquidStakingYieldsArgumentsType,
   CardanoLiquidStakingYieldsResultBodyType,
@@ -18,23 +14,11 @@ export async function getLiquidStakingYields(
   args: CardanoLiquidStakingYieldsArgumentsType
 ): Promise<CardanoActionResult<CardanoLiquidStakingYieldsResultBodyType>> {
   try {
-    const bestLiquidStaking = await getBestLiquidStaking(6);
+
 
     return {
-      message: `Found ${bestLiquidStaking.data.rewardOptions.length} best liquid staking yields. The user has been shown the options in the UI, ask them which they want to use. DO NOT REITERATE THE OPTIONS IN TEXT.`,
-      body: (
-        await Promise.all(
-          bestLiquidStaking.data.rewardOptions.map(async option => ({
-            name: option.outputAssets[0].name,
-            yield:
-              option.metrics.find(metric => metric.metricKey === 'reward_rate')
-                ?.defaultValue ?? 0,
-            tokenData: await getTokenBySymbol(option.outputAssets[0].symbol),
-          }))
-        )
-      ).filter(
-        item => item.tokenData !== undefined
-      ) as CardanoLiquidStakingYieldsResultBodyType,
+      message: `Found 0 best liquid staking yields. The user has been shown the options in the UI, ask them which they want to use. DO NOT REITERATE THE OPTIONS IN TEXT.`,
+      body:[] as CardanoLiquidStakingYieldsResultBodyType,
     };
   } catch (error) {
     console.error(error);

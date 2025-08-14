@@ -2,12 +2,8 @@
 
 import useSWR from 'swr';
 
-import type { TokenOverview } from '@/services/birdeye/types';
-import { useEffect, useState } from 'react';
-import { SearchTokenInfo, TokenDetail } from '@/services/dexhunter/types';
-
 export const useTokenOverview = (address: string) => {
-  const { data, isLoading, error } = useSWR<TokenOverview | null>(
+  const { data, isLoading, error } = useSWR<any | null>(
     `/api/token/${address}/overview`,
     (url: string) => fetch(url).then(res => res.json()),
     {

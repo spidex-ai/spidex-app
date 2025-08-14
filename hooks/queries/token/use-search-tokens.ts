@@ -4,12 +4,11 @@ import { useState } from 'react';
 
 import useSWR from 'swr';
 
-import type { SearchResultItem } from '@/services/birdeye/types';
 
 export const useSearchTokens = () => {
   const [search, setSearch] = useState('');
 
-  const { data, isLoading, error } = useSWR<SearchResultItem[]>(
+  const { data, isLoading, error } = useSWR<any[]>(
     `/api/token/search?search=${search}`,
     async () => {
       if (!search) return [];

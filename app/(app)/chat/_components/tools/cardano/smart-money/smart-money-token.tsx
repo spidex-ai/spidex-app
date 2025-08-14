@@ -7,13 +7,15 @@ import Link from 'next/link';
 import { Card } from '@/components/ui';
 
 import type { SmartMoneyTokenInflow } from '@/services/hellomoon/types';
-import type { Price, TokenMetadata } from '@/services/birdeye/types';
+
 import SaveToken from '@/app/(app)/_components/save-token';
+
+
 
 interface Props {
   inflow: SmartMoneyTokenInflow;
-  token: TokenMetadata;
-  price: Price;
+  token: any;
+  price: any;
 }
 
 const SmartMoneyToken: React.FC<Props> = ({ inflow, token, price }) => {

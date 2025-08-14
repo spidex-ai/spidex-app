@@ -37,7 +37,7 @@ const SidePanel: React.FC<Props> = ({
     return <Skeleton className="h-[100px] w-full" />;
   }
 
-  const tokenChatData: TokenChatData = {
+  const tokenChatData: TokenChatData | any = {
     address: tokenDetail?.unit ?? '',
     name: tokenDetail?.name ?? '',
     symbol: tokenDetail?.name ?? '',

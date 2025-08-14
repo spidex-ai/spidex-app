@@ -1,20 +1,13 @@
-import { getTopTraders as getTopTradersBirdeye } from '@/services/birdeye';
+
 
 import type {
   CardanoGetTopTradersArgumentsType,
   CardanoGetTopTradersResultBodyType,
 } from './types';
 import { CardanoActionResult } from '@/ai/cardano/actions/cardano-action';
-import taptoolsService from '@/services/taptools';
 import coreService from '@/services/core';
 
-/**
- * Gets the trending tokens from Birdeye API.
- *
- * @param solanaKit - The Solana agent kit instance
- * @param args - The input arguments for the action
- * @returns A message containing the trending tokens information
- */
+
 export async function getTopTraders(
   args: CardanoGetTopTradersArgumentsType
 ): Promise<CardanoActionResult<CardanoGetTopTradersResultBodyType>> {

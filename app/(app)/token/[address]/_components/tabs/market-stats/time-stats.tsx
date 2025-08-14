@@ -8,10 +8,8 @@ import BuySell from '@/app/(app)/_components/buy-sell';
 
 import { cn } from '@/lib/utils';
 
-import type { TokenOverview } from '@/services/birdeye/types';
-
 interface Props {
-  token: TokenOverview;
+  token: any;
 }
 
 enum TimePeriod {

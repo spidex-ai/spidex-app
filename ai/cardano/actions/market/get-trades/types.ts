@@ -2,7 +2,6 @@ import { z } from 'zod';
 
 import type { GetTraderTradesInputSchema } from './input-schema';
 import type { CardanoActionResult } from '../../cardano-action';
-import { Token } from '@/db/types';
 import { WalletTradeToken } from '@/services/taptools/types';
 
 // export type CardanoTokenTraded extends WalletTradeToken {

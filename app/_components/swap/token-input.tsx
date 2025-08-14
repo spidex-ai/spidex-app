@@ -2,14 +2,11 @@
 
 import React from 'react';
 
-import { Skeleton } from '@/components/ui';
-
 import TokenSelect from '@/app/_components/token-select';
 import TokenDisplay from '@/app/_components/token-display';
 
 import TokenBalance from './token-balance';
 
-import { usePrice } from '@/hooks/queries/price';
 
 import { cn } from '@/lib/utils';
 
@@ -114,22 +111,9 @@ export const TokenInputValue = ({
   amount: string;
   token: SearchTokenInfo;
 }) => {
+  console.log(token, amount);
   return null;
-  const { data: price, isLoading: isPriceLoading } = usePrice(token.token_id);
 
-  if (isPriceLoading) return <Skeleton className="w-16 h-4" />;
-
-  if (!price) return null;
-
-  return (
-    <p className="text-[10px] text-neutral-600 dark:text-neutral-400">
-      $
-      {((price as any).value * Number(amount)).toLocaleString(undefined, {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      })}
-    </p>
-  );
 };
 
 export default TokenInput;

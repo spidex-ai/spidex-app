@@ -7,7 +7,6 @@ import type {
 import { CardanoActionResult } from '@/ai/cardano/actions/cardano-action';
 import tokenCardanoService from '@/services/token-cardano';
 import { keyBy } from 'lodash';
-import s3Service from '@/services/s3';
 import coreService from '@/services/core';
 
 /**

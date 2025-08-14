@@ -1,29 +1,9 @@
 'use client';
 
-import useSWR from 'swr';
-
-import type { MarketsResponseData } from '@/services/birdeye/types';
 import { useEffect, useState } from 'react';
 
 import type { TokenStats } from '@/services/taptools/types';
 import { useSpidexCore } from '@/hooks/core/useSpidexCore';
-
-export const useTokenMarkets = (address: string) => {
-  const { data, isLoading, error } = useSWR<MarketsResponseData>(
-    `/api/token/${address}/markets`,
-    (url: string) => fetch(url).then(res => res.json()),
-    {
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false,
-    }
-  );
-
-  return {
-    data: data || null,
-    isLoading,
-    error,
-  };
-};
 
 export const useTokenStats = (tokenId: string | undefined) => {
   const { getTokenStats } = useSpidexCore();

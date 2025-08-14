@@ -12,7 +12,6 @@ import { OptionalLink } from '@/components/ui';
 
 import { cn } from '@/lib/utils';
 
-import type { TokenExtensions } from '@/services/birdeye/types';
 
 const SOCIAL_LINKS = [
   {
@@ -45,8 +44,12 @@ const SOCIAL_LINKS = [
   },
 ] as const;
 
+interface TokenExtensions {
+  [key: string]: string;
+}
+
 interface Props {
-  extensions: TokenExtensions;
+  extensions: TokenExtensions | any;
 }
 
 const Links: React.FC<Props> = ({ extensions }) => {

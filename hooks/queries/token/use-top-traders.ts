@@ -1,9 +1,10 @@
 'use client';
 
 import { useSpidexCore } from '@/hooks/core/useSpidexCore';
-import type { TopTraderByToken } from '@/services/birdeye/types';
+
 import { useEffect } from 'react';
 import { useState } from 'react';
+import { TopTraderByToken } from './type';
 
 export const useTopTraders = (address: string) => {
   const { getTokenTopTraders } = useSpidexCore();

@@ -1,7 +1,7 @@
-import type { TokenOverview } from '@/services/birdeye/types';
+
 
 export type TokenChatData = Pick<
-  TokenOverview,
+  any,
   | 'address'
   | 'name'
   | 'symbol'
