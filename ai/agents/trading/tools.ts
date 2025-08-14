@@ -17,10 +17,10 @@ import {
 export const CARDANO_TRADING_TOOLS = {
   [`trading-${CARDANO_TRADE_NAME}`]: cardanoTool(
     new CardanoTradeAction(),
-    new Connection(process.env.NEXT_PUBLIC_SOLANA_RPC_URL!)
+    null
   ),
   [`trading-${CARDANO_GET_TOKEN_ADDRESS_NAME}`]: cardanoTool(
     new CardanoGetTokenAddressAction(),
-    new Connection(process.env.NEXT_PUBLIC_SOLANA_RPC_URL!)
+    null
   ),
 };

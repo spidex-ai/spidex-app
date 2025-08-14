@@ -1,7 +1,3 @@
-import { Connection } from '@solana/web3.js';
-
-
-
 import {
   CARDANO_ALL_BALANCES_NAME,
   CARDANO_GET_WALLET_ADDRESS_NAME,
@@ -19,14 +15,14 @@ import {
 export const WALLET_TOOLS = {
   [`wallet-${CARDANO_GET_WALLET_ADDRESS_NAME}`]: cardanoTool(
     new CardanoGetWalletAddressAction(),
-    new Connection(process.env.NEXT_PUBLIC_SOLANA_RPC_URL!)
+    null
   ),
   [`wallet-${CARDANO_TRANSACTION_NAME}`]: cardanoTool(
     new CardanoBalanceAction(),
-    new Connection(process.env.NEXT_PUBLIC_SOLANA_RPC_URL!)
+    null
   ),
   [`wallet-${CARDANO_ALL_BALANCES_NAME}`]: cardanoTool(
     new CardanoAllBalancesAction(),
-    new Connection(process.env.NEXT_PUBLIC_SOLANA_RPC_URL!)
+    null
   ),
 };

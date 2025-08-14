@@ -8,7 +8,6 @@ import type {
 /**
  * Gets the token data for a given ticker.
  *
- * @param connection - The Solana connection instance
  * @param args - The input arguments for the action
  * @returns A message containing the token data
  */

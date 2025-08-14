@@ -1,7 +1,5 @@
 import { z } from 'zod';
 
-import { Connection } from '@solana/web3.js';
-
 import { tool } from 'ai';
 
 import { getAllCardanoActions } from './actions';
@@ -18,7 +16,7 @@ export const cardanoTool = <
   TResultBody,
 >(
   action: CardanoAction<TActionSchema, TResultBody>,
-  connection: Connection
+  client: any
 ) => {
   if (!action.func) {
     return tool({
@@ -33,7 +31,7 @@ export const cardanoTool = <
     execute: async args => {
       const result =
         func.length === 2
-          ? await func(connection, args)
+          ? await func(client, args)
           : await (
               func as (
                 args: z.infer<TActionSchema>
@@ -44,12 +42,12 @@ export const cardanoTool = <
   });
 };
 export const cardanoTools = (
-  connection: Connection,
+  client: any,
   actions: CardanoAction<any, any>[] = getAllCardanoActions()
 ) =>
   actions.reduce(
     (acc, action) => {
-      acc[action.name] = cardanoTool(action, connection);
+      acc[action.name] = cardanoTool(action, client);
       return acc;
     },
     {} as Record<string, CoreTool>

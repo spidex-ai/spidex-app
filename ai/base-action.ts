@@ -36,7 +36,7 @@ export interface BaseAction<
    */
   func?:
     | ((
-        client: TClient,
+        client: any,
         args: z.infer<TActionSchema>
       ) => Promise<BaseActionResult<TBody>>)
     | ((args: z.infer<TActionSchema>) => Promise<BaseActionResult<TBody>>);

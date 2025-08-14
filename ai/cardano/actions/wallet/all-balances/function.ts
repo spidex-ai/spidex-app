@@ -1,11 +1,9 @@
-import { LAMPORTS_PER_SOL, PublicKey, Connection } from '@solana/web3.js';
-
 import coreService from '@/services/core';
 import { CardanoActionResult } from '../../cardano-action';
 import { CardanoAllBalancesArgumentsType } from '@/ai/cardano';
 
 export async function getAllBalances(
-  connection: Connection,
+  client: any,
   args: CardanoAllBalancesArgumentsType
 ): Promise<CardanoActionResult<any>> {
   try {

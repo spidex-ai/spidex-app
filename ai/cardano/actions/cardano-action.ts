@@ -1,4 +1,4 @@
-import { Connection } from '@solana/web3.js';
+
 import {
   BaseAction,
   BaseActionResult,
@@ -15,4 +15,4 @@ export type CardanoActionResult<TBody> = BaseActionResult<TBody>;
 export interface CardanoAction<
   TActionSchema extends CardanoActionSchemaAny,
   TBody,
-> extends BaseAction<TActionSchema, TBody, Connection> {}
+> extends BaseAction<TActionSchema, TBody, any> {}
