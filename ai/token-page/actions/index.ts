@@ -1,4 +1,4 @@
-import { SolanaTokenPageTopHoldersAction } from './top-holders';
+import { CardanoTokenPageTopHoldersAction } from './top-holders';
 import { TokenPageNumMentionsAction } from './num-mentions';
 import type {
   TokenPageAction,
@@ -10,7 +10,7 @@ export function getAllTokenPageActions(
   extensions: TokenChatData['extensions']
 ): TokenPageAction<TokenPageActionSchemaAny, any>[] {
   return [
-    new SolanaTokenPageTopHoldersAction(),
+    new CardanoTokenPageTopHoldersAction(),
     ...(extensions?.twitter
       ? [new TokenPageNumMentionsAction(extensions.twitter.split('/').pop()!)]
       : []),

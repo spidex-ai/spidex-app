@@ -1,7 +1,4 @@
-import { Connection } from '@solana/web3.js';
-
 import {
-
   CARDANO_GET_TRENDING_TOKENS_NAME,
   CARDANO_GET_TOP_TRADERS_NAME,
   CARDANO_GET_TRADER_TRADES_NAME,

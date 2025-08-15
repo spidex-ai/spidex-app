@@ -8,10 +8,6 @@ import {
 export type CardanoActionSchemaAny = BaseActionSchemaAny;
 export type CardanoActionResult<TBody> = BaseActionResult<TBody>;
 
-/**
- * Represents the structure for Solana Actions.
- */
-
 export interface CardanoAction<
   TActionSchema extends CardanoActionSchemaAny,
   TBody,

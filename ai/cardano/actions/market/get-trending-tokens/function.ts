@@ -9,13 +9,6 @@ import tokenCardanoService from '@/services/token-cardano';
 import { keyBy } from 'lodash';
 import coreService from '@/services/core';
 
-/**
- * Gets the trending tokens from Birdeye API.
- *
- * @param solanaKit - The Solana agent kit instance
- * @param args - The input arguments for the action
- * @returns A message containing the trending tokens information
- */
 export async function getTrendingTokens(
   args: CardanoGetTrendingTokensArgumentsType
 ): Promise<CardanoActionResult<CardanoGetTrendingTokensResultBodyType>> {

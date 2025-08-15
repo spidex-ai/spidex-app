@@ -3,13 +3,13 @@ import { getAnalytics } from 'firebase/analytics';
 import { getAuth } from 'firebase/auth';
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyDwiC444_f2cxPMPe64e8kP1YcJaU3lQAk',
-  authDomain: 'spidex-30c14.firebaseapp.com',
-  projectId: 'spidex-30c14',
-  storageBucket: 'spidex-30c14.firebasestorage.app',
-  messagingSenderId: '282546013060',
-  appId: '1:282546013060:web:add445901b2df7f6d8d3d1',
-  measurementId: 'G-Y8ZV0KCHL8',
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
 // Initialize Firebase

@@ -6,13 +6,6 @@ import {
   TwitterSearchRecentResultBodyType,
 } from './types';
 
-/**, TwitterSearchRecentArgumentsType, TwitterSearchRecentResultBodyType
- * Gets the balance of a Solana wallet or token account.
- *
- * @param twitterApi - The Twitter API instance
- * @param args - The input arguments for the action
- * @returns A message containing the tweets information
- */
 export async function searchRecent(
   twitterApi: TwitterApi,
   args: TwitterSearchRecentArgumentsType

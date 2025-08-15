@@ -7,13 +7,6 @@ import { TokenStats } from '@/services/taptools/types';
 
 import coreService from '@/services/core';
 
-/**
- * Gets the token data for a given ticker.
- *
- * @param connection - The Solana connection instance
- * @param args - The input arguments for the action
- * @returns A message containing the token data
- */
 export async function getTokenData(
   args: CardanoGetTokenDataArgumentsType
 ): Promise<CardanoActionResult<CardanoGetTokenDataResultBodyType>> {

@@ -1,7 +1,3 @@
-import { Connection } from '@solana/web3.js';
-
-
-
 import {
   CARDANO_GET_TOKEN_ADDRESS_NAME,
   CARDANO_TRADE_NAME,

@@ -10,15 +10,7 @@ import type {
   TokenPageNumMentionsResultBodyType,
   TokenPageNumMentionsArgumentsType,
 } from './types';
-import type { TokenChatData } from '@/types';
 
-/**, TwitterSearchRecentArgumentsType, TwitterSearchRecentResultBodyType
- * Gets the balance of a Solana wallet or token account.
- *
- * @param twitterApi - The Twitter API instance
- * @param args - The input arguments for the action
- * @returns A message containing the tweets information
- */
 export async function getNumMentions(
   username: string,
   _: TokenPageNumMentionsArgumentsType
