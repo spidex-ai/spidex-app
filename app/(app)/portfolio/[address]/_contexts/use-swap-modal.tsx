@@ -1,0 +1,113 @@
+'use client';
+
+import React, { createContext, useContext, ReactNode, useState } from 'react';
+
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui';
+
+import Swap from '@/app/_components/swap';
+
+import { CardanoTokenDetail } from '@/services/dexhunter/types';
+import { useSpidexCore } from '@/hooks/core/useSpidexCore';
+
+interface SwapModalContextType {
+  isOpen: boolean;
+  openSell: (tokenAddress: string) => Promise<void>;
+  openBuy: (tokenAddress: string) => Promise<void>;
+  inputToken: CardanoTokenDetail | null;
+  outputToken: CardanoTokenDetail | null;
+  setInputToken: (token: CardanoTokenDetail) => void;
+  setOutputToken: (token: CardanoTokenDetail) => void;
+}
+
+const SwapModalContextType = createContext<SwapModalContextType>({
+  isOpen: false,
+  openSell: async () => {},
+  openBuy: async () => {},
+  inputToken: null,
+  outputToken: null,
+  setInputToken: () => {},
+  setOutputToken: () => {},
+});
+
+export const SwapModalProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
+  const { getTokenDetailCore } = useSpidexCore();
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
+  const [inputToken, setInputToken] = useState<CardanoTokenDetail | null>(null);
+  const [outputToken, setOutputToken] = useState<CardanoTokenDetail | null>(
+    null
+  );
+
+  const openSell = async (tokenAddress: string) => {
+    const token = await getTokenDetailCore(
+      tokenAddress === 'lovelace' ? 'ADA' : tokenAddress
+    );
+    if (!token) return;
+    setInputToken(token);
+    if (tokenAddress === 'lovelace') {
+      const token = await getTokenDetailCore('c48cbb3d5e57ed56e276bc45f99ab39abe94e6cd7ac39fb402da47ad0014df105553444d'); //usdm
+      setOutputToken(token);
+    } else {
+      setOutputToken(null);
+    }
+    setIsOpen(true);
+  };
+
+  const openBuy = async (tokenAddress: string) => {
+    const token = await getTokenDetailCore(
+      tokenAddress === 'lovelace' ? 'ADA' : tokenAddress
+    );
+    if (!token) return;
+    setOutputToken(token);
+    if (tokenAddress === 'lovelace') {
+      const token = await getTokenDetailCore('c48cbb3d5e57ed56e276bc45f99ab39abe94e6cd7ac39fb402da47ad0014df105553444d'); //usdm
+      setInputToken(token);
+    } else {
+      setInputToken(null);
+    }
+ 
+    setIsOpen(true);
+  };
+
+  return (
+    <SwapModalContextType.Provider
+      value={{
+        isOpen,
+        openSell,
+        openBuy,
+        inputToken,
+        outputToken,
+        setInputToken,
+        setOutputToken,
+      }}
+    >
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <DialogContent className="w-fit dark:bg-bg-secondary">
+          <DialogHeader>
+            <DialogTitle>Swap</DialogTitle>
+          </DialogHeader>
+          <div className="mt-5">
+            <Swap
+              initialInputToken={inputToken}
+              initialOutputToken={outputToken}
+              inputLabel="From"
+              outputLabel="To"
+              onSuccess={() => setIsOpen(false)}
+              onCancel={() => setIsOpen(false)}
+            />
+          </div>
+        </DialogContent>
+      </Dialog>
+      {children}
+    </SwapModalContextType.Provider>
+  );
+};
+
+export const useSwapModal = () => useContext(SwapModalContextType);

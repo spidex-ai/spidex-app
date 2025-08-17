@@ -1,0 +1,33 @@
+import {
+  CARDANO_GET_TRENDING_TOKENS_NAME,
+  CARDANO_GET_TOP_TRADERS_NAME,
+  CARDANO_GET_TRADER_TRADES_NAME,
+  CARDANO_GET_SMART_MONEY_INFLOWS_NAME,
+} from '@/ai/action-names';
+
+import {
+  CardanoGetSmartMoneyInflowsAction,
+  CardanoGetTraderTradesAction,
+  CardanoGetTrendingTokensAction,
+  CardanpGetTopTradersAction,
+} from '@/ai/cardano/actions';
+import { cardanoTool } from '@/ai/cardano/ai-sdk';
+
+export const MARKET_TOOLS = {
+  [`market-${CARDANO_GET_TRENDING_TOKENS_NAME}`]: cardanoTool(
+    new CardanoGetTrendingTokensAction(),
+    null
+  ),
+  [`market-${CARDANO_GET_TOP_TRADERS_NAME}`]: cardanoTool(
+    new CardanpGetTopTradersAction(),
+    null
+  ),
+  [`market-${CARDANO_GET_TRADER_TRADES_NAME}`]: cardanoTool(
+    new CardanoGetTraderTradesAction(),
+    null
+  ),
+  [`market-${CARDANO_GET_SMART_MONEY_INFLOWS_NAME}`]: cardanoTool(
+    new CardanoGetSmartMoneyInflowsAction(),
+    null
+  ),
+};

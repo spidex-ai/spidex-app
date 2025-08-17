@@ -1,0 +1,63 @@
+import { ReferralInfo } from '../referral/type';
+
+export interface PointInfo {
+  point: {
+    id: number;
+    userId: number;
+    amount: string;
+  };
+  referralInfo: ReferralInfo;
+  achievements: any[];
+  nextAchievement: NextAchievement;
+  tradingVolume: number;
+}
+
+export interface Achievement {
+  id: number;
+  name: string;
+  icon: string;
+  description: string;
+  points: string;
+  status: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface NextAchievement {
+  id: number;
+  name: string;
+  icon: string;
+  description: string;
+  points: string;
+  pointsToNextAchievement: string;
+}
+
+export interface Quest {
+  id: number;
+  name: string;
+  createdAt: string;
+  category: number;
+  requirements: {
+    url?: string;
+    token?: string;
+    atLeast?: number;
+  };
+  type: number;
+  icon: string | null;
+  point: string;
+  description: string;
+  status: number;
+  progress: {
+    current: number;
+    target: number;
+  };
+  completedAt: string;
+  verifyingAt: string;
+}
+
+export interface PointHistory {
+  id: number;
+  amount: string;
+  createdAt: string;
+  questName: string;
+}

@@ -1,0 +1,277 @@
+'use client';
+
+import React, { useEffect, useState } from 'react';
+
+import { Button, CandlestickChart, Skeleton } from '@/components/ui';
+
+import { usePriceChartCore } from '@/hooks';
+
+import { cn, formatNumber } from '@/lib/utils';
+
+import type { UTCTimestamp } from 'lightweight-charts';
+import { CandleStickInterval } from '@/services/chart/types';
+import { CardanoTokenDetail } from '@/services/dexhunter/types';
+import { QuoteType } from '../../token/[address]/_components/header/select-quote';
+import toast from 'react-hot-toast';
+
+const WINDOWS = [
+  {
+    label: CandleStickInterval.THREE_MINUTES,
+    timeframe: CandleStickInterval.THREE_MINUTES,
+    numDays: 180,
+  },
+  {
+    label: CandleStickInterval.FIVE_MINUTES,
+    timeframe: CandleStickInterval.FIVE_MINUTES,
+    numDays: 45,
+  },
+  {
+    label: CandleStickInterval.FIFTEEN_MINUTES,
+    timeframe: CandleStickInterval.FIFTEEN_MINUTES,
+    numDays: 30,
+  },
+  {
+    label: CandleStickInterval.THIRTY_MINUTES,
+    timeframe: CandleStickInterval.THIRTY_MINUTES,
+    numDays: 30,
+  },
+  {
+    label: CandleStickInterval.ONE_HOUR,
+    timeframe: CandleStickInterval.ONE_HOUR,
+    numDays: 30,
+  },
+  {
+    label: CandleStickInterval.TWO_HOURS,
+    timeframe: CandleStickInterval.TWO_HOURS,
+    numDays: 30,
+  },
+  {
+    label: CandleStickInterval.FOUR_HOURS,
+    timeframe: CandleStickInterval.FOUR_HOURS,
+    numDays: 30,
+  },
+  {
+    label: CandleStickInterval.TWELVE_HOURS,
+    timeframe: CandleStickInterval.TWELVE_HOURS,
+    numDays: 30,
+  },
+  {
+    label: CandleStickInterval.ONE_DAY,
+    timeframe: CandleStickInterval.ONE_DAY,
+    numDays: 30,
+  },
+  {
+    label: CandleStickInterval.THREE_DAYS,
+    timeframe: CandleStickInterval.THREE_DAYS,
+    numDays: 30,
+  },
+  {
+    label: CandleStickInterval.ONE_WEEK,
+    timeframe: CandleStickInterval.ONE_WEEK,
+    numDays: 30,
+  },
+  {
+    label: CandleStickInterval.ONE_MONTH,
+    timeframe: CandleStickInterval.ONE_MONTH,
+    numDays: 12,
+  },
+];
+
+const wINDOWS_ADA = [
+  {
+    label: CandleStickInterval.ONE_DAY,
+    timeframe: CandleStickInterval.ONE_DAY,
+    numDays: 30,
+  },
+  {
+    label: CandleStickInterval.ONE_WEEK,
+    timeframe: CandleStickInterval.ONE_WEEK,
+    numDays: 12,
+  },
+  {
+    label: CandleStickInterval.ONE_MONTH,
+    timeframe: CandleStickInterval.ONE_MONTH,
+    numDays: 12,
+  },
+];
+
+interface Props {
+  data: CardanoTokenDetail | null;
+  isLoadingTokenDetail: boolean;
+  quote: QuoteType;
+}
+
+const TokenChart: React.FC<Props> = ({
+  data: tokenDetail,
+  isLoadingTokenDetail,
+  quote,
+}) => {
+  const price24hChange = tokenDetail?.price24hChg
+    ? tokenDetail?.price24hChg * 100
+    : 0;
+  const price24hChg = formatNumber(price24hChange, 2);
+  const [timeframe, setTimeframe] = useState<CandleStickInterval>(
+    CandleStickInterval.ONE_DAY
+  );
+
+  const [numDays, setNumDays] = useState<number>(30);
+  const { data, isLoading, refetchDataChart } = usePriceChartCore(
+    tokenDetail?.unit ?? '',
+    timeframe,
+    numDays,
+    quote
+  );
+
+  const onRefetchDataChart = async () => {
+    try {
+      await refetchDataChart();
+      toast.success('Data chart refreshed');
+    } catch (error) {
+      toast.error('Failed to refresh data chart');
+      throw error;
+    }
+  };
+
+  useEffect(() => {
+    // Adjust interval based on timeframe to avoid timezone issues
+    const getIntervalMs = (timeframe: CandleStickInterval) => {
+      switch (timeframe) {
+        case CandleStickInterval.THREE_MINUTES:
+        case CandleStickInterval.FIVE_MINUTES:
+          return 30 * 1000; // 30 seconds for short intervals
+        case CandleStickInterval.FIFTEEN_MINUTES:
+        case CandleStickInterval.THIRTY_MINUTES:
+          return 60 * 1000; // 1 minute
+        case CandleStickInterval.ONE_HOUR:
+        case CandleStickInterval.TWO_HOURS:
+          return 5 * 60 * 1000; // 5 minutes
+        default:
+          return 10 * 60 * 1000; // 10 minutes for longer intervals
+      }
+    };
+
+    const interval = setInterval(() => {
+      refetchDataChart();
+    }, getIntervalMs(timeframe));
+
+    return () => clearInterval(interval);
+  }, [tokenDetail, timeframe, refetchDataChart]);
+
+  const price =
+    quote === QuoteType.USD
+      ? (tokenDetail?.usdPrice ?? 0)
+      : (tokenDetail?.price ?? 0);
+  const open = data?.length > 0 ? data[0].open : 0;
+
+  const currentPrice = price < 0.0001 ? '~0.0001' : formatNumber(price, 4);
+
+  const windows = tokenDetail?.ticker === 'ADA' ? wINDOWS_ADA : WINDOWS;
+
+  return (
+    <div className="flex flex-col h-full w-full">
+      <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-1 bg-neutral-100 dark:bg-bg-secondary p-2">
+        {isLoadingTokenDetail || isLoading ? (
+          <Skeleton className="h-4 w-24" />
+        ) : (
+          <>
+            {data?.length > 0 ? (
+              <p className="text-md md:text-lg font-bold">
+                {quote === QuoteType.USD ? (
+                  <>{`$${currentPrice}`}</>
+                ) : (
+                  <>{`${currentPrice} ${quote}`}</>
+                )}
+                {price && open && (
+                  <span
+                    className={cn(
+                      tokenDetail?.price24hChg && tokenDetail?.price24hChg > 0
+                        ? 'text-green-500'
+                        : 'text-red-500'
+                    )}
+                  >
+                    {' '}
+                    {`(${tokenDetail?.price24hChg && tokenDetail?.price24hChg > 0 ? `+${price24hChg}` : price24hChg}%)`}
+                  </span>
+                )}
+              </p>
+            ) : null}
+          </>
+        )}
+        <div className="flex flex-row gap-1 items-center">
+          {windows.map(window => (
+            <Button
+              key={window.label}
+              onClick={() => {
+                setNumDays(window.numDays);
+                setTimeframe(window.timeframe);
+              }}
+              variant={
+                numDays === window.numDays && timeframe === window.timeframe
+                  ? 'brand'
+                  : 'ghost'
+              }
+              className={cn(
+                'text-sm h-fit w-fit px-1 py-0.5',
+                numDays === window.numDays && timeframe === window.timeframe
+                  ? 'text-black dark:text-black'
+                  : 'text-white dark:text-white'
+              )}
+            >
+              {window.label}
+            </Button>
+          ))}
+          <div
+            className="w-4 h-4 cursor-pointer"
+            onClick={onRefetchDataChart}
+            style={{
+              animation: 'none',
+            }}
+            onMouseDown={e => {
+              const target = e.currentTarget;
+              target.style.animation = 'smooth-spin 1s ease-in-out';
+              setTimeout(() => {
+                target.style.animation = 'none';
+              }, 1500);
+            }}
+          >
+            <img src="/icons/reload.svg" alt="reload" className="w-4 h-4" />
+            <style jsx>{`
+              @keyframes smooth-spin {
+                0% {
+                  transform: rotate(0deg);
+                }
+                100% {
+                  transform: rotate(360deg);
+                }
+              }
+            `}</style>
+          </div>
+        </div>
+      </div>
+      <div className="p-2 flex-1 h-0">
+        {isLoading ? (
+          <Skeleton className="h-full w-full" />
+        ) : (
+          <>
+            {data.length > 0 ? (
+              <CandlestickChart
+                data={data.map(price => ({
+                  time: (typeof price.time === 'number' &&
+                  price.time > 1000000000000
+                    ? Math.floor(price.time / 1000)
+                    : price.time) as UTCTimestamp,
+                  open: price.open,
+                  high: price.high,
+                  low: price.low,
+                  close: price.close,
+                }))}
+              />
+            ) : null}
+          </>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default TokenChart;

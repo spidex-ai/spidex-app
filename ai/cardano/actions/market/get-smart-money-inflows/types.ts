@@ -1,0 +1,17 @@
+import { z } from 'zod';
+
+import type { GetSmartMoneyInflowsInputSchema } from './input-schema';
+import type { CardanoActionResult } from '../../cardano-action';
+
+export type CardanoGetSmartMoneyInflowsSchemaType =
+  typeof GetSmartMoneyInflowsInputSchema;
+
+export type CardanoGetSmartMoneyInflowsArgumentsType =
+  z.infer<CardanoGetSmartMoneyInflowsSchemaType>;
+
+export type CardanoGetSmartMoneyInflowsResultBodyType = {
+  tokens: any[];
+};
+
+export type CardanoGetSmartMoneyInflowsResultType =
+  CardanoActionResult<CardanoGetSmartMoneyInflowsResultBodyType>;
