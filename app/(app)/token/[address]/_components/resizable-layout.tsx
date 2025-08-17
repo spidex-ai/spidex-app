@@ -1,0 +1,46 @@
+'use client';
+
+import { CardTab } from '@/components/ui';
+import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
+
+interface ResizableLayoutProps {
+  chartComponent: React.ReactNode;
+  tabsComponent: React.ReactNode;
+  sidePanelComponent: React.ReactNode;
+}
+
+const ResizableLayout = ({
+  chartComponent,
+  tabsComponent,
+  sidePanelComponent,
+}: ResizableLayoutProps) => {
+  return (
+    <div className="hidden sm:block md:flex-1 md:h-0 overflow-y-auto md:overflow-hidden flex flex-col md:flex-row gap-2">
+      <PanelGroup direction="horizontal" className="flex-1">
+        <Panel defaultSize={60} minSize={30} className="flex flex-col gap-2">
+          <PanelGroup direction="vertical" className="h-full">
+            <Panel defaultSize={60} minSize={20}>
+              <CardTab className="h-full overflow-hidden max-h-full">
+                {chartComponent}
+              </CardTab>
+            </Panel>
+            <PanelResizeHandle className="h-2 hover:bg-accent rounded-sm transition-colors" />
+            <Panel defaultSize={40} minSize={30}>
+              <CardTab className="h-full overflow-y-auto">
+                {tabsComponent}
+              </CardTab>
+            </Panel>
+          </PanelGroup>
+        </Panel>
+        <PanelResizeHandle className="w-2 md:hover:bg-accent rounded-sm transition-colors" />
+        <Panel defaultSize={40} minSize={40}>
+          <CardTab className="h-full w-full flex flex-col gap-2 overflow-hidden">
+            {sidePanelComponent}
+          </CardTab>
+        </Panel>
+      </PanelGroup>
+    </div>
+  );
+};
+
+export default ResizableLayout;

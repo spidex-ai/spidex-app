@@ -1,0 +1,16 @@
+export const dexNameMap: Record<string, string | null> = {
+  SUNDAESWAPV3: 'SundaeSwap V3',
+  SPLASH: 'Splash',
+  MINSWAPV2: 'Minswap V2',
+  MINSWAP: 'Minswap',
+  WINGRIDER: 'WingRiders',
+  WINGRIDERV2: 'WingRiders V2',
+  SNEKFUN: 'Snekfun',
+  SPECTRUM: 'Spectrum',
+  SUNDAESWAP: 'SundaeSwap',
+  VYFI: 'VyFi',
+  CSWAP: 'CSwap',
+  MUESLISWAP: 'MuesliSwap',
+  CERRA: 'Cerra',
+  GENIUS: 'Genius',
+};

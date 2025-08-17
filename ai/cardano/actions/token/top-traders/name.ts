@@ -1,0 +1,1 @@
+export const CARDANO_TOKEN_TOP_TRADERS_NAME = 'token-top-traders';
