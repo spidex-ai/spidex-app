@@ -10,6 +10,11 @@ import {
 import { generateText } from 'ai';
 import { Message } from 'ai';
 import { openai } from '@ai-sdk/openai';
+import { createOpenRouter } from '@openrouter/ai-sdk-provider';
+
+const openrouter = createOpenRouter({
+  apiKey: process.env.OPENROUTER_API_KEY,
+});
 
 export const GET = async (
   req: NextRequest,
@@ -217,8 +222,9 @@ export const DELETE = async (
 };
 
 const generateTagline = async (messages: Omit<Message, 'id'>[]) => {
+  const model = openrouter.languageModel('openai/gpt-4o-mini');
   const { text } = await generateText({
-    model: openai('gpt-4o-mini'),
+    model,
     messages: [
       messages[0],
       {

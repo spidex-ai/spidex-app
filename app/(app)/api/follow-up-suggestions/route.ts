@@ -73,7 +73,10 @@ export async function POST(req: NextRequest) {
     });
     return NextResponse.json(object.suggestions);
   } catch (error) {
-    console.error('Error generating follow-up suggestions:', error);
+    console.error(
+      'Error generating follow-up suggestions:',
+      JSON.stringify(error)
+    );
     return NextResponse.json(
       { error: 'Failed to generate follow-up suggestions' },
       { status: 500 }
