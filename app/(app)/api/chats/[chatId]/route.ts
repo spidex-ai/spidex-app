@@ -2,15 +2,13 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import {
   addChat,
+  deleteChat,
   getChat,
   updateChatMessages,
-  deleteChat,
 } from '@/db/services';
 
-import { generateText } from 'ai';
-import { Message } from 'ai';
-import { openai } from '@ai-sdk/openai';
 import { createOpenRouter } from '@openrouter/ai-sdk-provider';
+import { generateText, Message } from 'ai';
 
 const openrouter = createOpenRouter({
   apiKey: process.env.OPENROUTER_API_KEY,
@@ -224,7 +222,7 @@ export const DELETE = async (
 const generateTagline = async (messages: Omit<Message, 'id'>[]) => {
   const model = openrouter.languageModel('openai/gpt-4o-mini');
   const { text } = await generateText({
-    model,
+    model: model as any,
     messages: [
       messages[0],
       {
