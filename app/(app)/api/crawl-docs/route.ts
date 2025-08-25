@@ -11,6 +11,11 @@ import { embed, generateText } from 'ai';
 import { openai } from '@ai-sdk/openai';
 import { addKnowledge } from '@/db/services/knowledge';
 import { KnowledgeInput } from '@/db/types';
+import { createOpenRouter } from '@openrouter/ai-sdk-provider';
+
+const openrouter = createOpenRouter({
+  apiKey: process.env.OPENROUTER_API_KEY,
+});
 
 export const POST = async (req: NextRequest) => {
   const { url, name, includePaths, excludePaths, authCode } = await req.json();
@@ -76,7 +81,7 @@ export const POST = async (req: NextRequest) => {
         return;
       }
       const { text: summary } = await generateText({
-        model: openai('gpt-4o-mini'),
+        model: openrouter.languageModel('openai/gpt-4o-mini') as any,
         prompt: `Summarize the following documentation page in 1 sentence: ${doc.markdown}. This will be used to search for relevant knowledge. Do not include any other information.`,
       });
       const { embedding: summaryEmbedding } = await embed({
