@@ -69,12 +69,6 @@ export const searchWebKnowledgeFunction = async (
 export const faqKnowledgeFunction = async (
   args: FAQKnowledgeArgumentsType
 ): Promise<FAQKnowledgeResultType> => {
-  const openrouter = createOpenRouter({
-    apiKey: process.env.OPENROUTER_API_KEY,
-  });
-
-  // const model = openrouter.languageModel("openai/gpt-4.1-mini");
-
   const url = 'https://openrouter.ai/api/v1/chat/completions';
 
   const options = {
