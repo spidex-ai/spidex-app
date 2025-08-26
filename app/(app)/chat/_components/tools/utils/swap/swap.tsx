@@ -221,8 +221,13 @@ const SwapWrapper: React.FC<SwapWrapperProps> = ({
         signatures: signatures,
       });
 
-      const submitTx = await api?.submitTx(submitSwap?.cbor);
-      onSuccess?.(submitTx, inputAmount);
+      if (protocol === ProtocolType.DEXHUNTER) {
+        const submitTx = await api?.submitTx(submitSwap?.cbor);
+        onSuccess?.(submitTx, inputAmount);
+      } else {
+        onSuccess?.(submitSwap?.txHash, inputAmount);
+      }
+      // onSuccess?.(submitTx, inputAmount);
       toast.success('You have swapped successfully!');
       setInputAmount('');
       setOutputAmount('');
