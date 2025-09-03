@@ -96,8 +96,6 @@ const GradientBorderButtonMobile = (props: any) => {
   );
 };
 
-
-
 export const GradientButton = (props: any) => {
   const { isLoading, children, disabled, className, ...rest } = props;
   return (
@@ -171,22 +169,25 @@ export const ButtonBlack = (props: any) => {
   const { children, className, isLoading, disabled, ...rest } = props;
   return (
     <button
-    {...rest}
-    disabled={disabled || isLoading}
-    className={
-      cn(
-        "gradient-border-main cursor-pointer text-white bg-bg-tab flex items-center justify-center gap-1",
-        "hover:shadow-[0_0_10px_#009EFF] transition-shadow duration-300",
-        (disabled || isLoading) && "opacity-50 cursor-not-allowed",
+      {...rest}
+      disabled={disabled || isLoading}
+      className={cn(
+        'gradient-border-main cursor-pointer text-white bg-bg-tab flex items-center justify-center gap-1',
+        'hover:shadow-[0_0_10px_#009EFF] transition-shadow duration-300',
+        (disabled || isLoading) && 'opacity-50 cursor-not-allowed',
         className
-      )
-    }
-  >
-    {isLoading && (
-      <div className="w-3 h-3 border-2 pb-2 border-white border-t-transparent rounded-full animate-spin mb-1" />
-    )}
-    {children}
-  </button>
+      )}
+    >
+      {isLoading && (
+        <div className="w-3 h-3 border-2 pb-2 border-white border-t-transparent rounded-full animate-spin mb-1" />
+      )}
+      {children}
+    </button>
   );
 };
-export { Button, buttonVariants, GradientBorderButton, GradientBorderButtonMobile };
+export {
+  Button,
+  buttonVariants,
+  GradientBorderButton,
+  GradientBorderButtonMobile,
+};

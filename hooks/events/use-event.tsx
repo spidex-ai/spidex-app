@@ -2,10 +2,15 @@
 
 import { useEffect, useState } from 'react';
 import { useSpidexCore } from '../core/useSpidexCore';
-import { EventItem, EventLeaderboard, EventLeaderboardItem, EventMyRank } from './type';
+import { EventItem, EventLeaderboard, EventMyRank } from './type';
+export enum EEventStatus {
+  UPCOMING = 'upcoming',
+  LIVE = 'live',
+  ENDED = 'ended',
+  DISTRIBUTED = 'distributed',
+}
 
-
-export const useEvent = () => {
+export const useEvent = (status: EEventStatus) => {
   const { getEvents } = useSpidexCore();
 
   const [events, setEvents] = useState<EventItem[]>([]);
@@ -14,12 +19,12 @@ export const useEvent = () => {
 
   useEffect(() => {
     fetchEvents();
-  }, []);
+  }, [status]);
 
   const fetchEvents = async () => {
     setLoading(true);
     try {
-      const data = await getEvents();
+      const data = await getEvents(status);
       setEvents(data);
     } catch (error) {
       setError(error as string);

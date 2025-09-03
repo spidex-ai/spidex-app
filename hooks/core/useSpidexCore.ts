@@ -26,6 +26,7 @@ import {
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useRef } from 'react';
 import { UpdateUserPayload } from './type';
+import { EEventStatus } from '../events/use-event';
 
 // Global singleton to prevent multiple getMe() calls across different hook instances
 const globalGetMeState = {
@@ -1056,9 +1057,9 @@ export const useSpidexCore = () => {
     }
   }, [fetchWithAuth, auth]);
 
-  const getEvents = useCallback(async () => {
+  const getEvents = useCallback(async (status: EEventStatus) => {
     try {
-      const data = await fetchWithAuth(`/events/active`);
+      const data = await fetchWithAuth(`/events?status=${status}`);
       return data.data;
     } catch (error) {
       throw error;

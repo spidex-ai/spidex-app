@@ -3,40 +3,70 @@
 import ProtectedClient from '@/app/components/protected-client';
 import { TextGradient } from '@/components/ui/text';
 import Image from 'next/image';
-import Summary from './_components/summary';
-import { useEvent } from '@/hooks/events/use-event';
-import Rank from './_components/rank';
-import { useEffect, useState } from 'react';
-import { EventItem } from '@/hooks/events/type';
+import { EEventStatus, useEvent } from '@/hooks/events/use-event';
+import { useState } from 'react';
+import { GradientBorderButton, GradientButton, Skeleton } from '@/components/ui';
+import EventCard from './_components/event-card';
+const statuses = Object.values(EEventStatus);
 
 const EventPage: React.FC = () => {
-  const { events, loading } = useEvent();
-  const [selectedEvent, setSelectedEvent] = useState<EventItem | null>(null);
+  const [status, setStatus] = useState<EEventStatus>(EEventStatus.LIVE);
+  const { events, loading } = useEvent(status);
 
-  useEffect(() => {
-    if (events.length > 0) {
-      setSelectedEvent(events[0]);
-    }
-  }, [events]);
 
   return (
     <ProtectedClient>
       <div className="relative h-full max-h-full">
         <div className="flex flex-col gap-4 max-w-7xl mx-auto w-full h-full max-h-full overflow-y-auto px-1 pr-4">
-          <div className="flex items-center gap-2">
-            <Image
-              src="/icons/event-blink.svg"
-              alt="event"
-              width={5}
-              height={5}
-              className="w-4 h-4 md:w-6 md:h-6"
-            />
-            <TextGradient className="text-xl md:text-3xl font-medium leading-none">
-              All Competions
-            </TextGradient>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Image
+                src="/icons/event-blink.svg"
+                alt="event"
+                width={5}
+                height={5}
+                className="w-4 h-4 md:w-6 md:h-6"
+              />
+              <TextGradient className="text-xl md:text-3xl font-medium leading-none">
+                Event
+              </TextGradient>
+            </div>
+            <div className="flex items-center gap-2">
+              {statuses.map(item => (
+                <div key={item} onClick={() => setStatus(item)} className="cursor-pointer w-32">
+                  {
+                    item === status ? (
+                      <GradientButton className="md:py-2 py-1 capitalize font-medium text-base w-full">
+                        {item}
+                      </GradientButton>
+                    ) : (
+                      <GradientBorderButton className="capitalize w-full">
+                        {item}
+                      </GradientBorderButton>
+                    )
+                  }
+                </div>
+              ))}
+            </div>
           </div>
 
-          {selectedEvent && (
+          {
+            loading ? (
+              <div className="">
+                <Skeleton className="h-20 w-full" />
+              </div>
+            ) : events?.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                {events.map(event => (
+                  <EventCard key={event.id} item={event} />
+                ))}
+              </div>
+            ) : (
+              <div>No event found</div>
+            )
+          }
+
+          {/* {selectedEvent && (
             <>
               <Summary
                 events={events}
@@ -46,7 +76,7 @@ const EventPage: React.FC = () => {
               />
               <Rank id={selectedEvent?.id} />
             </>
-          )}
+          )} */}
         </div>
       </div>
     </ProtectedClient>

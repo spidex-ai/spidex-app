@@ -45,6 +45,7 @@ export default {
           tooltip: '#BBF985',
           black: '#000000', 
           '10': '#1E0000',
+          '20': '#7589A5',
         },
         sidebar: {
           DEFAULT: 'var(--sidebar-background)',
