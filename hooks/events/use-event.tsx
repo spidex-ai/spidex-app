@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useSpidexCore } from '../core/useSpidexCore';
-import { EventItem, EventLeaderboard, EventMyRank } from './type';
+import { EventDetail, EventItem, EventLeaderboard, EventMyRank } from './type';
 export enum EEventStatus {
   UPCOMING = 'upcoming',
   LIVE = 'live',
@@ -90,3 +90,32 @@ export const useEventLeaderboard = (id: number) => {
     error,
   };
 };
+
+export const  useEventDetail = (id: string) => {
+  const { getEventDetail } = useSpidexCore();
+  const [eventDetail, setEventDetail] = useState<EventDetail>();
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {   
+    fetchEventDetail();
+  }, [id]);
+
+  const fetchEventDetail = async () => {
+    setLoading(true);
+    try {
+      const data = await getEventDetail(+id);
+      setEventDetail(data);
+    } catch (error) {
+      setError(error as string);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return {
+    eventDetail,
+    loading,
+    error,
+  };
+}

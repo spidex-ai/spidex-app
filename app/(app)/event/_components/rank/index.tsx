@@ -167,7 +167,7 @@ const Rank: React.FC<RankProps> = ({ id }) => {
       title: (
         <div className="text-center text-[10px] md:text-sm font-medium flex items-center justify-center">
           <div className="flex gap-1 cursor-pointer">
-            <div>Total Volume</div>
+            <div>Volume</div>
           </div>
         </div>
       ),
