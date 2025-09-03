@@ -193,7 +193,7 @@ const Rank: React.FC = () => {
       title: (
         <div className="text-center text-[10px] md:text-sm font-medium flex items-center justify-center">
           <div
-            className="flex gap-1 cursor-pointer"
+            className="flex items-center gap-1 cursor-pointer"
             onClick={() => changeOrderBy('point')}
           >
             <div>Total Silk Points</div>
@@ -201,24 +201,24 @@ const Rank: React.FC = () => {
             <TooltipProvider>
               <Tooltip delayDuration={0}>
                 <TooltipTrigger asChild>
-                  <div className="table-sort-icon">
+                  <div className="table-sort-icon flex flex-col items-center justify-center w-4 h-4">
                     {orderBy === 'point' ? (
                       <img
                         src="/icons/icon-sort-desc.svg"
                         alt="sort"
-                        className="w-3"
+                        className="w-3 h-3"
                       />
                     ) : (
                       <>
                         <img
                           src="/icons/icon-sort-desc.svg"
                           alt="sort"
-                          className="w-3"
+                          className="w-3 h-3"
                         />
                         <img
                           src="/icons/icon-sort-desc.svg"
                           alt="sort"
-                          className="w-3"
+                          className="w-3 h-3"
                         />
                       </>
                     )}
@@ -247,7 +247,7 @@ const Rank: React.FC = () => {
       title: (
         <div className="text-center text-[10px] md:text-sm font-medium flex items-center justify-center">
           <div
-            className="flex justify-center gap-1 cursor-pointer"
+            className="flex items-center gap-1 cursor-pointer"
             onClick={() => changeOrderBy('referral')}
           >
             <div>Total Referral</div>
@@ -255,24 +255,24 @@ const Rank: React.FC = () => {
             <TooltipProvider>
               <Tooltip delayDuration={0}>
                 <TooltipTrigger asChild>
-                  <div className="table-sort-icon">
+                  <div className="table-sort-icon flex flex-col items-center justify-center w-4 h-4">
                     {orderBy === 'referral' ? (
                       <img
                         src="/icons/icon-sort-desc.svg"
                         alt="sort"
-                        className="w-3"
+                        className="w-3 h-3"
                       />
                     ) : (
                       <>
                         <img
                           src="/icons/icon-sort-desc.svg"
                           alt="sort"
-                          className="w-3"
+                          className="w-3 h-3 translate-y-0.5"
                         />
                         <img
                           src="/icons/icon-sort-desc.svg"
                           alt="sort"
-                          className="w-3"
+                          className="w-3 h-3"
                         />
                       </>
                     )}
