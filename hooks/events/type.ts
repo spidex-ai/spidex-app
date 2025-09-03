@@ -8,6 +8,7 @@ export interface EventItem {
   participantCount: number;
   rankPrizes: any;
   startDate: string;
+  distributionDate: string;
   status: string;
   totalPrize: string;
   totalTrades: number;
@@ -16,6 +17,25 @@ export interface EventItem {
   type: string;
   updatedAt: string;
   url: string;
+  banner: string | null;
+}
+
+export interface EventDetail extends EventItem {
+  top3Prizes: {
+    firstPlace: PrizePlace,
+    secondPlace: PrizePlace,
+    thirdPlace: PrizePlace,
+  }
+
+}
+
+export interface PrizePlace {
+  "unit": string,
+  "logo": string,
+  "name": string,
+  "ticker": string,
+  "tokenAmount": string,
+  "point": string
 }
 
 export interface TradeToken {

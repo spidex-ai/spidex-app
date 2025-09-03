@@ -1,12 +1,11 @@
-// app/(app)/event/_components/event-card/index.tsx
-// Purpose: Display an event card with an image that stays sharp at the top and gradually blurs toward the bottom, overlaying event name and description
+'use client'
 import React from 'react';
-import Image from 'next/image';
 import { EventItem } from '@/hooks/events/type';
 import { TextGradient } from '@/components/ui/text';
 import { GradientBorderButton } from '@/components/ui/button';
 import { formatNumber } from '@/lib/utils';
 import dayjs from 'dayjs';
+import { useRouter } from 'next/navigation';
 
 interface EventCardProps {
   item: EventItem;
@@ -14,19 +13,17 @@ interface EventCardProps {
 
 const EventCard: React.FC<EventCardProps> = ({ item }) => {
   const imageUrl = item.icon || item.url || '/logo-200.png';
+  const router = useRouter();
 
   return (
     <div className="w-full rounded-xl overflow-hidden bg-neutral-900/20">
       <div className="relative h-48 md:h-56">
         {/* Blurred base image */}
         <div className="absolute inset-0">
-          <Image
+          <img
             src={imageUrl}
             alt={item.name}
-            fill
-            sizes="(max-width: 768px) 100vw, 33vw"
-            className="object-cover scale-[1.02] blur-md"
-            priority={false}
+            className="w-full h-full object-cover scale-[1.02] blur-md"
           />
         </div>
 
@@ -40,13 +37,10 @@ const EventCard: React.FC<EventCardProps> = ({ item }) => {
               'linear-gradient(to bottom, rgba(0,0,0,1) 55%, rgba(0,0,0,0) 100%)',
           }}
         >
-          <Image
+          <img
             src={imageUrl}
             alt={item.name}
-            fill
-            sizes="(max-width: 768px) 100vw, 33vw"
-            className="object-cover"
-            priority={false}
+            className="w-full h-full object-cover"
           />
         </div>
 
@@ -91,7 +85,7 @@ const EventCard: React.FC<EventCardProps> = ({ item }) => {
             </div>
           </div>
         </div>
-        <div className="mt-8 flex justify-center">
+        <div className="mt-8 flex justify-center" onClick={() => router.push(`/event/${item.id}`)}>
           <GradientBorderButton>View Details</GradientBorderButton>
         </div>
       </div>
