@@ -18,6 +18,7 @@ export interface EventItem {
   updatedAt: string;
   url: string;
   banner: string | null;
+  tradeDex: string;
 }
 
 export interface EventDetail extends EventItem {

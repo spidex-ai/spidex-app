@@ -18,7 +18,7 @@ const EventPage: React.FC = () => {
     <ProtectedClient>
       <div className="relative h-full max-h-full">
         <div className="flex flex-col gap-4 max-w-7xl mx-auto w-full h-full max-h-full overflow-y-auto px-1 pr-4">
-          <div className="flex items-center justify-between">
+          <div className="md:flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Image
                 src="/icons/event-blink.svg"
@@ -31,16 +31,16 @@ const EventPage: React.FC = () => {
                 Event
               </TextGradient>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mt-2 md:mt-0">
               {statuses.map(item => (
-                <div key={item} onClick={() => setStatus(item)} className="cursor-pointer w-32">
+                <div key={item} onClick={() => setStatus(item)} className="cursor-pointer md:w-32">
                   {
                     item === status ? (
-                      <GradientButton className="md:py-2 py-1 capitalize font-medium text-base w-full">
+                      <GradientButton className="md:py-2 py-2 capitalize font-medium md:text-base text-sm w-full">
                         {item}
                       </GradientButton>
                     ) : (
-                      <GradientBorderButton className="capitalize w-full">
+                      <GradientBorderButton className="capitalize w-full md:text-base text-sm">
                         {item}
                       </GradientBorderButton>
                     )
@@ -56,7 +56,7 @@ const EventPage: React.FC = () => {
                 <Skeleton className="h-20 w-full" />
               </div>
             ) : events?.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-6 mb-10 md:mb-2">
                 {events.map(event => (
                   <EventCard key={event.id} item={event} />
                 ))}

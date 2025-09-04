@@ -16,7 +16,7 @@ const EventCard: React.FC<EventCardProps> = ({ item }) => {
   const router = useRouter();
 
   return (
-    <div className="w-full rounded-xl overflow-hidden bg-neutral-900/20">
+    <div className="w-full rounded-xl overflow-hidden bg-neutral-900/20 border border-border-main">
       <div className="relative h-48 md:h-56">
         {/* Blurred base image */}
         <div className="absolute inset-0">
@@ -84,6 +84,14 @@ const EventCard: React.FC<EventCardProps> = ({ item }) => {
               A{formatNumber(Number(item.totalPrize))}
             </div>
           </div>
+          <div className="flex items-center justify-between gap-2 text-sm border-b border-border-main pb-2 mt-2">
+            <div className="text-text-20 text-sm tracking-wide font-regular">
+              Dex
+            </div>
+            <div className="text-white">
+             <DexItem dexOption={item.tradeDex} />
+            </div>
+          </div>
         </div>
         <div className="mt-8 flex justify-center" onClick={() => router.push(`/event/${item.id}`)}>
           <GradientBorderButton>View Details</GradientBorderButton>
@@ -92,5 +100,48 @@ const EventCard: React.FC<EventCardProps> = ({ item }) => {
     </div>
   );
 };
+
+export const ProtocolType = {
+  MINSWAP: 'minswap',
+  DEXHUNTER: 'dexhunter',
+  CARDEXSCAN: 'cardexscan',
+}
+
+
+export const protocolOptions = [
+  {
+    label: 'Minswap',
+    value: ProtocolType.MINSWAP,
+    icon: '/icons/minswap.svg',
+  },
+  {
+    label: 'DexHunter',
+    value: ProtocolType.DEXHUNTER,
+    icon: '/icons/dex-hunter.svg',
+  },
+  {
+    label: 'CardexScan',
+    value: ProtocolType.CARDEXSCAN,
+    icon: '/icons/cardexscan.svg',
+  },
+];
+
+export const DexItem = ({ dexOption }: { dexOption: string }) => {
+  if (dexOption === 'ALL_DEX') {
+    return (
+      <div className="text-white">
+        All Dexs
+      </div>
+    )
+  }
+
+  const dex = protocolOptions.find(option => option.value === dexOption);
+  return (
+    <div className="flex items-center gap-1 justify-center">
+      <div><img src={dex?.icon} alt={dex?.label} className="w-4 h-4" /></div>
+      <div>{dex?.label}</div>
+    </div>
+  )
+}
 
 export default EventCard;
