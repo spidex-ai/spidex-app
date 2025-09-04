@@ -2,7 +2,6 @@
 import { GradientButton } from '@/components/ui';
 import { TextGradient } from '@/components/ui/text';
 import { EventDetail } from '@/hooks/events/type';
-import { EEventStatus } from '@/hooks/events/use-event';
 import { formatNumber } from '@/lib/utils';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/navigation';
